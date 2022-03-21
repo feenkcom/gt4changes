@@ -1,16 +1,16 @@
 Class {
-	#name : #BaselineOfGToolkit4Epicea,
+	#name : #BaselineOfGToolkit4Changes,
 	#superclass : #BaselineOf,
-	#category : #BaselineOfGToolkit4Epicea
+	#category : #BaselineOfGToolkit4Changes
 }
 
 { #category : #baseline }
-BaselineOfGToolkit4Epicea >> baseline: spec [
+BaselineOfGToolkit4Changes >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [ 
 		spec
 			baseline: 'Brick'
 			with: [ spec repository: 'github://feenkcom/Brick:main/src' ].
-		spec package: 'GToolkit4Epica' with: [ spec requires: #( 'Brick' ) ] ]
+		spec package: 'GToolkit4Epicea' with: [ spec requires: #( 'Brick' ) ] ]
 ]
