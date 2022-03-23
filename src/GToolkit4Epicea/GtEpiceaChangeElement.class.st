@@ -44,6 +44,11 @@ GtEpiceaChangeElement >> changeViewModel: aViewModel [
 ]
 
 { #category : #accessing }
+GtEpiceaChangeElement >> defaultLayout [
+	^ BlLinearLayout vertical
+]
+
+{ #category : #accessing }
 GtEpiceaChangeElement >> hasChangeViewModel [
 	^ changeViewModel isNotNil
 ]
