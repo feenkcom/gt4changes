@@ -222,6 +222,7 @@ GtEpicea >> gtDiffsFor: aView [
 GtEpicea >> gtEventsFor: aView [
 
 	<gtView>
+	<gtViewChanges>
 	self hasChanges ifFalse: [ ^ aView empty ].
 
 	^ aView explicit
@@ -283,13 +284,15 @@ GtEpicea >> gtEventsFor: aView [
 GtEpicea >> gtGlobalEntriesIn: aView [
 
 	<gtView>
+	<gtViewChanges>
 	^ aView explicit
 		  title: 'Global Changes';
 		  priority: 20;
 		  stencil: [ 
 			  | aList aGlobalLog |
 			  aGlobalLog := EpMonitor current log entries reversed.
-			  aList := BrColumnedList new items: aGlobalLog.
+			  aList := BrColumnedList new itemsProvider:
+					           (BrListStreamItemsProvider forCollection: aGlobalLog).
 			  aList addEventHandler: GtPhlowListToSelectHandler new.
 			  aList constraintsDo: [ :c | c padding: (BlInsets top: 10) ].
 			  aList column

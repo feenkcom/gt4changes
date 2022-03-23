@@ -47,6 +47,7 @@ GtEpiceaNavigationStencil >> createListFor: aView [
 	^ aView list
 		  title: 'Changes';
 		  items: [ self changes ];
+		  itemText: [:change | change log store globalName ];
 		  send: [ :change | 
 			  self announce: (GtEpiceaChangeSelected new change: change) ]
 ]
