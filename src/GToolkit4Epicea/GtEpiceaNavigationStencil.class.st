@@ -44,10 +44,12 @@ GtEpiceaNavigationStencil >> createListFor: aView [
 
 	<gtEpiceaNavigation>
 	| element |
-	^ aView list
+	^ aView columnedList
 		  title: 'Changes';
 		  items: [ self changes ];
-		  itemText: [:change | change log store globalName ];
+		  column: 'Name' text: [:change | change log store globalName ];
+		  column: 'From' text: [:change | change log startTime];
+		  column: 'To' text: [:change | change log endTime];
 		  send: [ :change | 
 			  self announce: (GtEpiceaChangeSelected new change: change) ]
 ]

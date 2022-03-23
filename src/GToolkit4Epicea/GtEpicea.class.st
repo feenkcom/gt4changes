@@ -225,59 +225,46 @@ GtEpicea >> gtEventsFor: aView [
 	<gtViewChanges>
 	self hasChanges ifFalse: [ ^ aView empty ].
 
-	^ aView explicit
+	^ aView columnedList
 		  title: 'Change List';
 		  priority: 3;
-		  stencil: [ 
-			  | aList |
-			  aList := BrColumnedList new itemsProvider:
-					           (BrListStreamItemsProvider forCollection: self events).
-			  aList addEventHandler: GtPhlowListToSelectHandler new.
-			  aList constraintsDo: [ :c | c padding: (BlInsets top: 10) ].
-			  self announcer
-				  when: GtEpiceaUpdatedAnnouncement
-				  do: [ :anAnnouncement | aList items: self events ].
-			  aList column
-				  title: 'Icon';
-				  width: 16;
-				  stencil: [ :anEpEvent :anIndex | 
-					  (anEpEvent accept: EpIconVisitor new) asElement ].
-			  aList column
-				  title: 'Description';
-				  stencil: [ :anEpEvent :anIndex | 
-					  | aRemoveButton aContainer |
-					  aRemoveButton := BrButton new.
-					  aRemoveButton
-						  layout: BlLinearLayout new;
-						  beSmallSize;
-						  aptitude: BrGlamorousButtonWithIconAptitude;
-						  icon: (BlElement new
-								   layout: BlLinearLayout new;
-								   background: Color lightGray;
-								   size: 10 @ 3);
-						  action: [ 
-							  self removeEvent: anEpEvent.
-							  aRemoveButton enqueueTask: (BlTaskAction new action: [ 
-									   aRemoveButton visibility: BlVisibility hidden ]) ];
-						  visibility: BlVisibility hidden.
-					  aContainer := BlElement new
-						                layout: BlLinearLayout horizontal;
-						                addChildren:
-							                (anEpEvent accept: GtEpiceaBrickVisitor new);
-						                addChild: aRemoveButton;
-						                constraintsDo: [ :c | 
-							                c horizontal fitContent.
-							                c vertical fitContent ].
-					  aContainer
-						  when: BlMouseEnterEvent
-						  do: [ :anEvent | 
-						  aRemoveButton visibility: BlVisibility visible ].
-					  aContainer
-						  when: BlMouseLeaveEvent
-						  do: [ :anEvent | 
-						  aRemoveButton visibility: BlVisibility hidden ].
-					  aContainer ].
-			  aList ]
+		  itemsProvider: [ 
+			  BrListStreamItemsProvider forCollection: self entries ];
+		  column: 'Icon' icon: [ :anEpEvent :anIndex | 
+			  (anEpEvent content accept: EpIconVisitor new) asElement ]
+		  width: 32;
+		  column: 'Description' stencil: [ :anEpEvent :anIndex | 
+			  | aRemoveButton aContainer |
+			  aRemoveButton := BrButton new.
+			  aRemoveButton
+				  layout: BlLinearLayout new;
+				  beSmallSize;
+				  aptitude: BrGlamorousButtonWithIconAptitude;
+				  icon: (BlElement new
+						   layout: BlLinearLayout new;
+						   background: Color lightGray;
+						   size: 10 @ 3);
+				  action: [ 
+					  self removeEvent: anEpEvent content.
+					  aRemoveButton enqueueTask: (BlTaskAction new action: [ 
+							   aRemoveButton visibility: BlVisibility hidden ]) ];
+				  visibility: BlVisibility hidden.
+			  aContainer := BlElement new
+				                layout: BlLinearLayout horizontal;
+				                addChildren:
+					                (anEpEvent content accept: GtEpiceaBrickVisitor new);
+				                addChild: aRemoveButton;
+				                constraintsDo: [ :c | 
+					                c horizontal fitContent.
+					                c vertical fitContent ].
+			  aContainer
+				  when: BlMouseEnterEvent
+				  do: [ :anEvent | aRemoveButton visibility: BlVisibility visible ].
+			  aContainer
+				  when: BlMouseLeaveEvent
+				  do: [ :anEvent | aRemoveButton visibility: BlVisibility hidden ].
+			  aContainer ];
+	column: 'Timestamp' text: [:anEpEvent :anIndex | epiceaLog timeAt: anEpEvent ]
 ]
 
 { #category : #'gt-extension' }
@@ -285,54 +272,49 @@ GtEpicea >> gtGlobalEntriesIn: aView [
 
 	<gtView>
 	<gtViewChanges>
-	^ aView explicit
-		  title: 'Global Changes';
-		  priority: 20;
-		  stencil: [ 
-			  | aList aGlobalLog |
-			  aGlobalLog := EpMonitor current log entries reversed.
-			  aList := BrColumnedList new itemsProvider:
-					           (BrListStreamItemsProvider forCollection: aGlobalLog).
-			  aList addEventHandler: GtPhlowListToSelectHandler new.
-			  aList constraintsDo: [ :c | c padding: (BlInsets top: 10) ].
-			  aList column
-				  title: 'Icon';
-				  width: 16;
-				  stencil: [ :anOmEntry :anIndex | 
-					  (anOmEntry content accept: EpIconVisitor new) asElement ].
-			  aList column
-				  title: 'Description';
-				  stencil: [ :anOmEntry :anIndex | 
-					  | anAddButton aContainer |
-					  anAddButton := BrButton new.
-					  anAddButton
-						  layout: BlLinearLayout new;
-						  beSmallSize;
-						  aptitude: BrGlamorousButtonWithIconAptitude;
-						  icon: GtInspectorPlusIconStencil new asElement;
-						  action: [ 
-							  self addEvent: anOmEntry content.
-							  anAddButton enqueueTask: (BlTaskAction new action: [ 
-											   anAddButton visibility: BlVisibility hidden ]) ];
-						  visibility: BlVisibility hidden.
-					  aContainer := BlElement new
-						                layout: BlLinearLayout horizontal;
-						                addChildren:
-							                (anOmEntry content accept:
-									                 GtEpiceaBrickVisitor new);
-						                addChild: anAddButton;
-						                constraintsDo: [ :c | 
-							                c horizontal fitContent.
-							                c vertical fitContent.
-							                c linear vertical alignCenter ].
-					  aContainer
-						  when: BlMouseEnterEvent
-						  do: [ :anEvent | anAddButton visibility: BlVisibility visible ].
-					  aContainer
-						  when: BlMouseLeaveEvent
-						  do: [ :anEvent | anAddButton visibility: BlVisibility hidden ].
-					  aContainer ].
-			  aList ]
+	self hasChanges ifFalse: [ ^ aView empty ].
+
+	^ aView columnedList
+		  title: 'Change List';
+		  priority: 3;
+		  itemsProvider: [ 
+			  BrListStreamItemsProvider forCollection:
+					  EpMonitor current log entries reversed ];
+		  column: 'Icon' icon: [ :anEpEvent :anIndex | 
+			  (anEpEvent content accept: EpIconVisitor new) asElement ]
+		  width: 32;
+		  column: 'Description' stencil: [ :anOmEntry :anIndex | 
+			  | anAddButton aContainer |
+			  anAddButton := BrButton new.
+			  anAddButton
+				  layout: BlLinearLayout new;
+				  beSmallSize;
+				  aptitude: BrGlamorousButtonWithIconAptitude;
+				  icon: GtInspectorPlusIconStencil new asElement;
+				  action: [ 
+					  self addEvent: anOmEntry content.
+					  anAddButton enqueueTask: (BlTaskAction new action: [ 
+									   anAddButton visibility: BlVisibility hidden ]) ];
+				  visibility: BlVisibility hidden.
+			  aContainer := BlElement new
+				                layout: BlLinearLayout horizontal;
+				                addChildren:
+					                (anOmEntry content accept:
+							                 GtEpiceaBrickVisitor new);
+				                addChild: anAddButton;
+				                constraintsDo: [ :c | 
+					                c horizontal fitContent.
+					                c vertical fitContent.
+					                c linear vertical alignCenter ].
+			  aContainer
+				  when: BlMouseEnterEvent
+				  do: [ :anEvent | anAddButton visibility: BlVisibility visible ].
+			  aContainer
+				  when: BlMouseLeaveEvent
+				  do: [ :anEvent | anAddButton visibility: BlVisibility hidden ].
+			  aContainer ];
+		  column: 'Timestamp'
+		  text: [ :anEpEvent :anIndex | epiceaLog timeAt: anEpEvent ]
 ]
 
 { #category : #'gt-extension' }
