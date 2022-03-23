@@ -1,6 +1,42 @@
 Extension { #name : #OmEntry }
 
 { #category : #'*GToolkit4Epicea' }
+OmEntry >> diffElements [
+
+	| elements previous builder new element |
+	elements := OrderedCollection new.
+
+	previous := self content accept:
+		            ((GtEpiceaCurrentStateVisitor inEnvironment:
+			              self class environment) showClassNameInMethodSource:
+			             false).
+	new := self content accept: EpNewStateVisitor new.
+	previous = new ifFalse: [ 
+		builder := (GtEpiceaDiffBuilder from: previous to: new) isMethod:
+			           (self content isKindOf: EpMethodChange).
+		element := BrVerticalPane new.
+		element margin: (BlInsets all: 3).
+		element hMatchParent.
+		element vFitContent.
+		element addChild:
+			((GtEpiceaDiffElement on: builder) aptitude: GtDiffFlatAptitude)
+				vFitContent beSmallSize.
+		element addChild: (BrButton new
+				 aptitude: BrGlamorousButtonWithIconAptitude;
+				 icon: BrGlamorousVectorIcons accept;
+				 label: 'Accept';
+				 margin: (BlInsets
+						  top: 0
+						  left: 5
+						  bottom: 5
+						  right: 0);
+				 action: [ self content applyCodeChange ]).
+		element addAptitude: (BrShadowAptitude new width: 1).
+		elements add: element ].
+	^ elements
+]
+
+{ #category : #'*GToolkit4Epicea' }
 OmEntry >> gtDiffFor: aView [
 	<gtView>
 	^ aView explicit
