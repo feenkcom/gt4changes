@@ -226,7 +226,7 @@ GtEpicea >> gtEventsFor: aView [
 	self hasChanges ifFalse: [ ^ aView empty ].
 
 	^ aView columnedList
-		  title: 'Change List';
+		  title: 'Global Changes';
 		  priority: 3;
 		  itemsProvider: [ 
 			  BrListStreamItemsProvider forCollection: self entries ];
