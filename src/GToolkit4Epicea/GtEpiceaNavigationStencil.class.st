@@ -47,6 +47,18 @@ GtEpiceaNavigationStencil >> createListFor: aView [
 	^ aView columnedList
 		  title: 'Changes';
 		  items: [ self changes ];
+		  column: 'Active' stencil: [ :item | 
+			  EpMonitor current log store globalName = item log store globalName
+				  ifTrue: [ 
+					  BlElement new
+						  background: BrGlamorousColors selectedListItemColor;
+						  aptitude:
+							  (BrGlamorousWithLabelTooltipAptitude new text: 'Active');
+						  size: 12 @ 12;
+						  geometry: (BlRoundedRectangleGeometry cornerRadius: 6);
+						  margin: (BlInsets left: 14) ]
+				  ifFalse: [ BlElement new size: 12 @ 12 ] ]
+		  width: 38;
 		  column: 'Name' text: [ :change | change log store globalName ];
 		  column: 'From' text: [ :change | change log startTime ];
 		  column: 'To' text: [ :change | change log endTime ];
@@ -59,9 +71,9 @@ GtEpiceaNavigationStencil >> createListFor: aView [
 			  s := GtEpiceaAddLogStencil new.
 			  s dropdown: aDropdown.
 			  s onCreated: [ :log | 
-					  aTarget viewContentElement phlow update.
-					  self announcer announce:
-							  (GtEpiceaChangeSelected new change: log) ].
+				  aTarget viewContentElement phlow update.
+				  self announcer announce:
+					  (GtEpiceaChangeSelected new change: log) ].
 			  s ];
 		  actionButtonIcon: BrGlamorousVectorIcons refresh
 		  tooltip: 'Reload'
