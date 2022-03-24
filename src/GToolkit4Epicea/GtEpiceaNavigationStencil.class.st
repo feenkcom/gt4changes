@@ -47,11 +47,25 @@ GtEpiceaNavigationStencil >> createListFor: aView [
 	^ aView columnedList
 		  title: 'Changes';
 		  items: [ self changes ];
-		  column: 'Name' text: [:change | change log store globalName ];
-		  column: 'From' text: [:change | change log startTime];
-		  column: 'To' text: [:change | change log endTime];
+		  column: 'Name' text: [ :change | change log store globalName ];
+		  column: 'From' text: [ :change | change log startTime ];
+		  column: 'To' text: [ :change | change log endTime ];
 		  send: [ :change | 
-			  self announce: (GtEpiceaChangeSelected new change: change) ]
+			  self announce: (GtEpiceaChangeSelected new change: change) ];
+		  actionDropdownButtonIcon: BrGlamorousVectorIcons add
+		  tooltip: 'New Log'
+		  content: [ :aDropdown :aTarget | 
+			  | s |
+			  s := GtEpiceaAddLogStencil new.
+			  s dropdown: aDropdown.
+			  s onCreated: [ :log | 
+					  aTarget viewContentElement phlow update.
+					  self announcer announce:
+							  (GtEpiceaChangeSelected new change: log) ].
+			  s ];
+		  actionButtonIcon: BrGlamorousVectorIcons refresh
+		  tooltip: 'Reload'
+		  action: [ :aButton :aTab | aTab viewContentElement phlow update ]
 ]
 
 { #category : #accessing }
