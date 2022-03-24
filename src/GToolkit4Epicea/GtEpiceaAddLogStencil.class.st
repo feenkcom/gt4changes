@@ -9,6 +9,23 @@ Class {
 }
 
 { #category : #accessing }
+GtEpiceaAddLogStencil >> changeActionWith: input [
+
+	^ [ 
+	  | change name |
+	  name := input text asString.
+	  change := EpLog newWithSessionStore.
+	  name ifNotEmpty: [ change store resetWithStoreNamed: name ].
+	  EpMonitor current disable.
+	  EpMonitor current: (EpMonitor newWithLog: change) enable.
+	  dropdown ifNotNil: [ 
+		  dropdown enqueueTask: (BlTaskAction new action: [ 
+				   dropdown dispatchEvent:
+					   (BrDropdownHideWish new anchor: dropdown) ]) ].
+	  onCreated value: (GtEpicea new log: change) ]
+]
+
+{ #category : #accessing }
 GtEpiceaAddLogStencil >> create [
 
 	| container button input label |
@@ -31,23 +48,7 @@ GtEpiceaAddLogStencil >> create [
 	button := BrButton new
 		          aptitude: BrGlamorousButtonWithIconAptitude;
 		          icon: BrGlamorousVectorIcons accept;
-		          action: [ 
-			          | change name |
-			          name := input text asString.
-			          change := name
-				                    ifEmpty: [ EpMonitor current basicLog ]
-				                    ifNotEmpty: [ 
-					                    EpLog newWithStore: (OmFileStore
-								                     named: input text asString
-								                     inDirectory:
-									                     EpMonitor current sessionStore
-										                     baseLocator) ].
-			          EpMonitor current: (EpMonitor newWithLog: change).
-			          dropdown ifNotNil: [ 
-					          dropdown enqueueTask: (BlTaskAction new action: [ 
-									           dropdown dispatchEvent:
-											           (BrDropdownHideWish new anchor: dropdown) ]) ].
-			          onCreated value: (GtEpicea new log: change) ].
+		          action: (self changeActionWith: input).
 
 	container := BrVerticalPane new vFitContent
 		             width: 150;

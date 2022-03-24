@@ -145,11 +145,8 @@ GtEpiceaChangeElement >> updateTitleElement [
 { #category : #accessing }
 GtEpiceaChangeElement >> updateToolbarElement [
 
-	| localDelete |
 	(self hasChangeViewModel not or: [ 
 		 self changeViewModel hasChange not ]) ifTrue: [ ^ self ].
-
-	localDelete := false.
 
 	toolbarElement removeAllItems.
 	toolbarElement
@@ -161,9 +158,7 @@ GtEpiceaChangeElement >> updateToolbarElement [
 				 icon: BrGlamorousVectorIcons remove;
 				 label: 'Remove';
 				 changeAction: [ :aButton | 
-					 localDelete
-						 ifTrue: [ self changeViewModel remove ]
-						 ifFalse: [ self changeViewModel forget ].
+					 self changeViewModel remove.
 					 navigationModel announce:
 							 (GtEpiceaChangeSelected new change: nil).
 					 aButton phlow fireUpdateWish ];
@@ -174,20 +169,7 @@ GtEpiceaChangeElement >> updateToolbarElement [
 						 margin: (BlInsets all: 10);
 						 addChild: (BrLabel new
 								  aptitude: BrGlamorousLabelAptitude new glamorousRegularFont;
-								  text: 'Remove change?' asRopedText);
-						 addChild: (BrHorizontalPane new
-								  hFitContent;
-								  vFitContent;
-								  alignCenterLeft;
-								  margin: (BlInsets top: 5);
-								  addChild: (BrCheckbox new
-										   aptitude: BrGlamorousCheckboxAptitude;
-										   whenCheckedDo: [ localDelete := true ];
-										   margin: (BlInsets right: 8);
-										   whenUncheckedDo: [ localDelete := false ]);
-								  addChild: (BrLabel new
-										   aptitude: BrLabelAptitude new glamorousRegularFont;
-										   text: 'Remove change from disk')) ]);
+								  text: 'Remove change?' asRopedText) ]);
 		addItem: (BrFrame new
 				 vFitContent;
 				 hMatchParent);
@@ -196,6 +178,5 @@ GtEpiceaChangeElement >> updateToolbarElement [
 				 icon: BrGlamorousVectorIcons inspect;
 				 label: 'Inspect';
 				 action: [ :aButton | 
-					 aButton phlow spawnObject:
-							 self changeViewModel changeModel ])
+					 aButton phlow spawnObject: self changeViewModel changeModel ])
 ]

@@ -26,3 +26,8 @@ GtChangeViewModel >> hasChange [
 GtChangeViewModel >> name [
 	^ self changeModel log store globalName
 ]
+
+{ #category : #accessing }
+GtChangeViewModel >> remove [
+	^ self changeModel log store fileReference ensureDelete
+]
