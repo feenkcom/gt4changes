@@ -174,12 +174,12 @@ GtEpicea >> gtDiffsFor: aView [
 
 	<gtView>
 	<gtViewChanges>
-	self hasChanges ifFalse: [ ^ aView empty ].
+	self hasImpact ifFalse: [ ^ aView empty ].
 
 	^ aView explicit
 		  title: 'Diff';
 		  priority: 1;
-		  updateWhen: GtEpiceaUpdatedAnnouncement in: self;
+		  updateWhen: GtEpiceaUpdatedAnnouncement in: self announcer;
 		  actionUpdateButton;
 		  actionButtonIcon: BrGlamorousVectorIcons accept
 		  tooltip: 'Apply changes'
@@ -226,10 +226,10 @@ GtEpicea >> gtEventsFor: aView [
 	self hasChanges ifFalse: [ ^ aView empty ].
 
 	^ aView columnedList
-		  title: 'Global Changes';
+		  title: 'Change List';
 		  priority: 3;
 		  itemsProvider: [ 
-			  BrListStreamItemsProvider forCollection: self entries ];
+			  BrListStreamItemsProvider forCollection: self entries reversed ];
 		  column: 'Icon' icon: [ :anEpEvent :anIndex | 
 			  (anEpEvent content accept: EpIconVisitor new) asElement ]
 		  width: 32;
@@ -272,11 +272,11 @@ GtEpicea >> gtGlobalEntriesIn: aView [
 
 	<gtView>
 	<gtViewChanges>
-	self hasChanges ifFalse: [ ^ aView empty ].
 
 	^ aView columnedList
-		  title: 'Change List';
+		  title: 'Global Changes';
 		  priority: 3;
+		  updateWhen: GtEpiceaUpdatedAnnouncement in: self announcer;
 		  itemsProvider: [ 
 			  BrListStreamItemsProvider forCollection:
 					  EpMonitor current log entries reversed ];
