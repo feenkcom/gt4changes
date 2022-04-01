@@ -22,7 +22,7 @@ GtEpiceaAddLogStencil >> changeActionWith: input [
 		  dropdown enqueueTask: (BlTaskAction new action: [ 
 				   dropdown dispatchEvent:
 					   (BrDropdownHideWish new anchor: dropdown) ]) ].
-	  onCreated value: (GtEpicea new log: change) ]
+	  onCreated value: (GtEpiceaLog new log: change) ]
 ]
 
 { #category : #accessing }

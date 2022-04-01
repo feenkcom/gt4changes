@@ -8,8 +8,14 @@ EpLog >> endTime [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+EpLog >> entriesStream [
+	^ store entriesStream
+]
+
+{ #category : #'*GToolkit4Epicea' }
 EpLog >> startTime [
 
-	self entries ifEmpty: [ ^ nil ].
-	^ self timeAt: self entries first
+	^ store entriesStream next wait
+		  ifSome: [ :aValue | self timeAt: aValue ]
+		  ifNone: [ nil ]
 ]
