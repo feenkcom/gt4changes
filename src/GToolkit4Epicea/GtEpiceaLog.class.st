@@ -36,23 +36,37 @@ GtEpiceaLog >> gtEventsFor: aView [
 
 	<gtView>
 	<gtViewChanges>
-	^ aView columnedList
-		  title: 'Change List';
-		  priority: 3;
-		  itemsProvider: [ self log entriesStream ];
-		  column: 'Icon' icon: [ :anEpEvent :anIndex | 
-			  (anEpEvent content accept: EpIconVisitor new) asElement ]
-		  width: 32;
-		  column: 'Description' stencil: [ :anEpEvent :anIndex | 
-			  BlElement new
-				  layout: BlLinearLayout horizontal;
-				  addChildren:
-					  (anEpEvent content accept: GtEpiceaBrickVisitor new);
-				                constraintsDo: [ :c | 
-					                c horizontal fitContent.
-					                c vertical fitContent ] ];
-		  column: 'Timestamp'
-		  text: [ :anEpEvent :anIndex | log timeAt: anEpEvent ]
+	| view |
+	view := aView columnedList
+		        title: 'Change List';
+		        priority: 3;
+		        itemsProvider: [ self log entriesStream ];
+		        column: 'Icon' icon: [ :anEpEvent :anIndex | 
+			        (anEpEvent content accept: EpIconVisitor new) asElement ]
+		        width: 32;
+		        column: 'Description' stencil: [ :anEpEvent :anIndex | 
+			        BlElement new
+				        layout: BlLinearLayout horizontal;
+				        addChildren:
+					        (anEpEvent content accept: GtEpiceaBrickVisitor new);
+				        constraintsDo: [ :c | 
+					        c horizontal fitContent.
+					        c vertical fitContent ] ];
+		        column: 'Timestamp'
+		        text: [ :anEpEvent :anIndex | log timeAt: anEpEvent ];
+		        actionButtonLabel: 'Show Latest'
+		        action: [ :aButton :aTab | 
+			        aTab viewContentElement children first children second 
+				        itemsProvider:
+				        (self log entriesStream filter: self latestFilter)
+					        asBrItemsProvider ].
+	^ view
+]
+
+{ #category : #accessing }
+GtEpiceaLog >> latestFilter [
+
+	^ [ :aChange | aChange content affectedMarker]
 ]
 
 { #category : #accessing }
