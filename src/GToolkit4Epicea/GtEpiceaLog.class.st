@@ -58,7 +58,7 @@ GtEpiceaLog >> gtEventsFor: aView [
 		        action: [ :aButton :aTab | 
 			        aTab viewContentElement children first children second 
 				        itemsProvider:
-				        (self log entriesStream filter: self latestFilter)
+				        (self log entriesStream withoutDuplicatesBasedOn: self latestFilter)
 					        asBrItemsProvider ].
 	^ view
 ]
