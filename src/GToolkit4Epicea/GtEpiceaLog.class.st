@@ -27,6 +27,15 @@ GtEpiceaLog class >> allInSessionStore [
 ]
 
 { #category : #accessing }
+GtEpiceaLog >> additionFilter: aStream [
+
+	<gtChangeFilter>
+	^ aStream filter: [ :aChange | 
+		  aChange content isCodeChange and: [ 
+			  aChange content class name endsWith: #Addition ] ]
+]
+
+{ #category : #accessing }
 GtEpiceaLog >> endTime [
 	^ self log endTime
 ]
@@ -36,7 +45,7 @@ GtEpiceaLog >> gtEventsFor: aView [
 
 	<gtView>
 	<gtViewChanges>
-	| view |
+	| view selected |
 	view := aView columnedList
 		        title: 'Change List';
 		        priority: 3;
@@ -54,19 +63,64 @@ GtEpiceaLog >> gtEventsFor: aView [
 					        c vertical fitContent ] ];
 		        column: 'Timestamp'
 		        text: [ :anEpEvent :anIndex | log timeAt: anEpEvent ];
-		        actionButtonLabel: 'Show Latest'
-		        action: [ :aButton :aTab | 
-			        aTab viewContentElement children first children second 
-				        itemsProvider:
-				        (self log entriesStream withoutDuplicatesBasedOn: self latestFilter)
-					        asBrItemsProvider ].
+		        actionDropdownButtonLabel: 'Filters'
+		        tooltip: 'Apply and remove filters from the list'
+		        content: [ :aDropdown :aTab | 
+			        | filters aList aContainer |
+			        selected := Set new.
+			        aContainer := BrVerticalPane new fitContent
+				                      alignCenterRight.
+			        filters := GtPhlowCollector new
+				                   fromObject: self;
+				                   pragmaName: #gtChangeFilter;
+				                   collectAllPragmas.
+			        aList := BrColumnedList new
+				                 padding: (BlInsets all: 5);
+				                 fitContent;
+				                 items: filters.
+			        aList column
+				        title: 'Active';
+				        width: 50;
+				        stencil: [ :item | 
+					        BrCheckbox new
+						        aptitude: BrGlamorousCheckboxAptitude
+							        +
+								        (BrGlamorousWithLabelTooltipAptitude new text:
+										         'Select for Commit');
+						        margin: (BlInsets left: 10);
+						        whenCheckedDo: [ selected add: item ];
+						        whenUncheckedDo: [ selected remove: item ] ].
+			        aList column
+				        title: 'Name';
+				        stencil: [ :aFilter | 
+					        BrLabel new
+						        aptitude: BrGlamorousLabelAptitude;
+						        text: (aFilter method selector removeSuffix: 'Filter:') ].
+			        aList addAptitude: BrColumnedListHeaderAptitude.
+			        aContainer
+				        addChild: aList;
+				        addChild: (BrButton new
+						         aptitude: BrGlamorousButtonWithIconAptitude;
+						         icon: BrGlamorousVectorIcons accept;
+						         margin: (BlInsets all: 5);
+						         action: [ :aButton | 
+							         | newItems |
+							         newItems := self log entriesStream.
+							         selected do: [ :aPragma | 
+									         newItems := self
+										                     perform: aPragma methodSelector
+										                     withArguments: { newItems } ].
+							         aTab viewContentElement children first children second 
+								         itemsProvider: newItems asBrItemsProvider.
+							         aButton fireEvent: BrDropdownHideWish new ]) ].
 	^ view
 ]
 
 { #category : #accessing }
-GtEpiceaLog >> latestFilter [
+GtEpiceaLog >> latestFilter: aStream [
+	<gtChangeFilter>
 
-	^ [ :aChange | aChange content affectedMarker]
+	^ aStream withoutDuplicatesBasedOn: [ :aChange | aChange content affectedMarker]
 ]
 
 { #category : #accessing }
