@@ -48,7 +48,7 @@ GtEpiceaNavigationStencil >> createListFor: aView [
 		  title: 'Changes';
 		  items: [ self changes ];
 		  column: 'Active' stencil: [ :item | 
-			  EpMonitor current log store globalName = item log store globalName
+			  EpMonitor current log store globalName = item name
 				  ifTrue: [ 
 					  BlElement new
 						  background: BrGlamorousColors selectedListItemColor;
@@ -59,9 +59,8 @@ GtEpiceaNavigationStencil >> createListFor: aView [
 						  margin: (BlInsets left: 14) ]
 				  ifFalse: [ BlElement new size: 12 @ 12 ] ]
 		  width: 38;
-		  column: 'Name' text: [ :change | change log store globalName ];
-		  column: 'From' text: [ :change | change log startTime ];
-		  column: 'To' text: [ :change | change log endTime ];
+		  column: 'Name' text: [ :change | change name ];
+		  column: 'From' text: [ :change | change startTime ];
 		  send: [ :change | 
 			  self announce: (GtEpiceaChangeSelected new change: change) ];
 		  actionDropdownButtonIcon: BrGlamorousVectorIcons add
