@@ -107,10 +107,7 @@ GtEpicea >> createChangeList [
 				layout: BlLinearLayout new;
 				beSmallSize;
 				aptitude: BrGlamorousButtonWithIconAptitude;
-				icon: (BlElement new
-						 layout: BlLinearLayout new;
-						 background: Color lightGray;
-						 size: 10 @ 3);
+				icon: BrGlamorousVectorIcons remove;
 				action: [ 
 					self removeEvent: anEpEvent content.
 					aRemoveButton enqueueTask: (BlTaskAction new action: [ 
@@ -130,12 +127,62 @@ GtEpicea >> createChangeList [
 				constraintsDo: [ :c | 
 					c horizontal fitContent.
 					c vertical fitContent ] ].
-	^ aList
+	^ aList fitContent margin: (BlInsets top: 5)
+]
+
+{ #category : #'gt-extension' }
+GtEpicea >> createChangeTabs [
+	| aTabGroup |
+	aTabGroup := BrTabGroup new aptitude: BrGlamorousTabGroupAptitude.
+	
+	aTabGroup addTab: (BrTab new	aptitude: BrGlamorousTabAptitude new; label: 'Changes'; stencil: [self createChangeList]).
+	aTabGroup addTab: (BrTab new	aptitude: BrGlamorousTabAptitude new; label: 'Global Changes'; stencil: [self createGlobalChangeList]).
+	
+	^ aTabGroup
 		  hExact: 400;
 		  padding: (BlInsets all: 5);
 		  addAptitude: BrGlamorousWithVerticalResizerAptitude;
 		  addAptitude: BrGlamorousWithHorizontalResizerAptitude;
 		  vFitContent
+]
+
+{ #category : #'gt-extension' }
+GtEpicea >> createGlobalChangeList [
+
+	| aList |
+	aList := BrColumnedList new itemsProvider:
+		         EpMonitor current log entries reversed asBrItemsProvider.
+	aList column
+		title: 'Select';
+		width: 32;
+		stencil: [ :anOmEntry :anIndex | 
+			| anAddButton aContainer |
+			anAddButton := BrButton new.
+			anAddButton
+				layout: BlLinearLayout new;
+				beSmallSize;
+				aptitude: BrGlamorousButtonWithIconAptitude;
+				icon: BrGlamorousVectorIcons add;
+				action: [ 
+					self addEvent: anOmEntry content.
+					anAddButton enqueueTask: (BlTaskAction new action: [ 
+									 anAddButton visibility: BlVisibility hidden ]) ] ].
+	aList column
+		title: 'Icon';
+		width: 32;
+		stencil: [ :anEpEvent :anIndex | 
+			(anEpEvent content accept: EpIconVisitor new) asElement margin:
+					(BlInsets left: 5 right: 5) ].
+	aList column
+		title: 'Description';
+		stencil: [ :anEpEvent :anIndex | 
+			BlElement new
+				layout: BlLinearLayout horizontal;
+				addChildren: (anEpEvent content accept: GtEpiceaBrickVisitor new);
+				constraintsDo: [ :c | 
+					c horizontal fitContent.
+					c vertical fitContent ] ].
+	^ aList fitContent margin: (BlInsets top: 5)
 ]
 
 { #category : #accessing }
@@ -231,7 +278,7 @@ GtEpicea >> gtDiffsFor: aView [
 		  action: [ self applyChanges ];
 		  actionDropdownButtonIcon: BrGlamorousVectorIcons filter
 		  tooltip: 'Select'
-		  content: [ self createChangeList ];
+		  content: [ self createChangeTabs ];
 		  stencil: [ 
 			  | element headerElement label diffElement |
 			  element := BrVerticalPane new.
@@ -285,8 +332,6 @@ GtEpicea >> gtTutorialFor: aView [
 	| code |
 	code := self tutorialStateRope.
 
-	code ifEmpty: [ ^ aView empty ].
-
 	^ aView textEditor
 		  title: 'Code';
 		  priority: 0;
@@ -296,6 +341,9 @@ GtEpicea >> gtTutorialFor: aView [
 		  actionButtonIcon: BrGlamorousVectorIcons accept
 		  tooltip: 'Apply changes'
 		  action: [ self applyChanges ];
+		  actionDropdownButtonIcon: BrGlamorousVectorIcons filter
+		  tooltip: 'Select'
+		  content: [ self createChangeList ];
 		  text: [ :anEditor | code ]
 ]
 
