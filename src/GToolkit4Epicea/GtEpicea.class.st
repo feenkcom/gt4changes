@@ -343,7 +343,7 @@ GtEpicea >> gtTutorialFor: aView [
 		  action: [ self applyChanges ];
 		  actionDropdownButtonIcon: BrGlamorousVectorIcons filter
 		  tooltip: 'Select'
-		  content: [ self createChangeList ];
+		  content: [ self createChangeTabs ];
 		  text: [ :anEditor | code ]
 ]
 
