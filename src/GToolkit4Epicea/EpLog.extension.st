@@ -13,6 +13,11 @@ EpLog >> entriesStream [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+EpLog >> gtReset [
+	store reset
+]
+
+{ #category : #'*GToolkit4Epicea' }
 EpLog >> startTime [
 
 	^ store entriesStream next wait

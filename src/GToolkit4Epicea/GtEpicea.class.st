@@ -46,6 +46,7 @@ GtEpicea class >> constants [
 GtEpicea >> addEvent: anEpEvent [
 	self log addEntryWith: anEpEvent tags: [ :tags | "ignore" ].
 	self log store flush.
+	self notifyEpiceaChanged.
 ]
 
 { #category : #accessing }
@@ -108,8 +109,9 @@ GtEpicea >> createChangeList [
 				beSmallSize;
 				aptitude: BrGlamorousButtonWithIconAptitude;
 				icon: BrGlamorousVectorIcons remove;
+				label: 'Remove';
 				action: [ 
-					self removeEvent: anEpEvent content.
+					self removeEntry: anEpEvent.
 					aRemoveButton enqueueTask: (BlTaskAction new action: [ 
 							 aRemoveButton visibility: BlVisibility hidden ]) ] ].
 	aList column
@@ -140,10 +142,10 @@ GtEpicea >> createChangeTabs [
 	
 	^ aTabGroup
 		  hExact: 400;
+		  vExact: 250;
 		  padding: (BlInsets all: 5);
 		  addAptitude: BrGlamorousWithVerticalResizerAptitude;
-		  addAptitude: BrGlamorousWithHorizontalResizerAptitude;
-		  vFitContent
+		  addAptitude: BrGlamorousWithHorizontalResizerAptitude
 ]
 
 { #category : #'gt-extension' }
@@ -163,6 +165,7 @@ GtEpicea >> createGlobalChangeList [
 				beSmallSize;
 				aptitude: BrGlamorousButtonWithIconAptitude;
 				icon: BrGlamorousVectorIcons add;
+				label: 'Add';
 				action: [ 
 					self addEvent: anOmEntry content.
 					anAddButton enqueueTask: (BlTaskAction new action: [ 
@@ -252,18 +255,6 @@ GtEpicea >> events [
 ]
 
 { #category : #'gt-extension' }
-GtEpicea >> gtDiffFor: aView [
-	"<gtView>
-	<gtViewChanges>"
-	^ aView textEditor
-		title: 'Diff';
-		priority: 1;
-		aptitude: BrGlamorousCodeEditorAptitude;
-		updateWhen: GtEpiceaUpdatedAnnouncement in: self;
-		text: [ :anEditor | self diff ]
-]
-
-{ #category : #'gt-extension' }
 GtEpicea >> gtDiffsFor: aView [
 
 	<gtView>
@@ -315,13 +306,14 @@ GtEpicea >> gtDiffsFor: aView [
 
 { #category : #'gt-extension' }
 GtEpicea >> gtPreviewFor: aView [
+
 	^ aView composite
-		title: 'Document Preview';
-		priority: 50;
-		collectorDo: [ :aCollector |
-			aCollector 
-				pragmaName: #gtViewChanges;
-				fromObject: self ]
+		  title: 'Document Preview';
+		  priority: 50;
+		  collectorDo: [ :aCollector | 
+			  aCollector
+				  pragmaName: #gtViewChanges;
+				  fromObject: self ]
 ]
 
 { #category : #'gt-extension' }
@@ -329,8 +321,6 @@ GtEpicea >> gtTutorialFor: aView [
 
 	<gtView>
 	<gtViewChanges>
-	| code |
-	code := self tutorialStateRope.
 
 	^ aView textEditor
 		  title: 'Code';
@@ -344,7 +334,7 @@ GtEpicea >> gtTutorialFor: aView [
 		  actionDropdownButtonIcon: BrGlamorousVectorIcons filter
 		  tooltip: 'Select'
 		  content: [ self createChangeTabs ];
-		  text: [ :anEditor | code ]
+		  text: [ :anEditor | self tutorialStateRope ]
 ]
 
 { #category : #'announcement handling' }
@@ -459,15 +449,15 @@ GtEpicea >> privateEvents: aCollection [
 	diff := nil.
 ]
 
-{ #category : #modification }
-GtEpicea >> removeEvent: anEpEvent [
-	| aNewEvents |
-	aNewEvents := self events reject: [ :eachEvent | eachEvent = anEpEvent ].
+{ #category : #'gt-extension' }
+GtEpicea >> removeEntry: anEpEntry [
+	| aNewEntries |
+	aNewEntries := self entries reject: [ :eachEntry | eachEntry = anEpEntry ].
 	self log gtReset.
-	aNewEvents do: [ :eachEvent | 
-		self log addEntryWith: eachEvent tags: [ :tags | "ignore" ] ].
+	aNewEntries do: [ :eachEvent | 
+		self log addEntryWith: eachEvent content tags: [ :tags | "ignore" ] ].
 	self log store flush.
-	self privateEvents: aNewEvents.
+	self privateEvents: (aNewEntries collect: #content).
 	self notifyEpiceaChanged.
 ]
 
