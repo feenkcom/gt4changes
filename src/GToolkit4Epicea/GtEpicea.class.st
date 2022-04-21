@@ -185,7 +185,7 @@ GtEpicea >> createGlobalChangeList [
 				constraintsDo: [ :c | 
 					c horizontal fitContent.
 					c vertical fitContent ] ].
-	^ aList fitContent margin: (BlInsets top: 5)
+	^ aList matchParent margin: (BlInsets top: 5)
 ]
 
 { #category : #accessing }
