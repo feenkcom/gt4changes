@@ -35,7 +35,7 @@ GtEpiceaAction >> asDropdown [
 		^ aContainer ].
 
 	aList := BrColumnedList new itemsProvider:
-		         (BrListStreamItemsProvider forCollection: self events).
+		         self events asBrItemsProvider.
 
 	aList column
 		title: 'Icon';
