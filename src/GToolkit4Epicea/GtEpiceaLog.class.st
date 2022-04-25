@@ -46,23 +46,61 @@ GtEpiceaLog >> gtEventsFor: aView [
 	<gtView>
 	<gtViewChanges>
 	| view selected |
+	selected := self log entries
+		            select: [ :anEntry | anEntry content isCodeChange ]
+		            thenCollect: #content.
 	view := aView columnedList
 		        title: 'Change List';
 		        priority: 3;
 		        itemsProvider: [ self log entriesStream ];
+		        itemContextMenuStencil: [ :element :item | 
+			        item content isCodeChange
+				        ifTrue: [ 
+					        BrGlamorousSimpleContextMenuContent new
+						        items: { 
+								        ('Apply' -> [ :e | 
+									         item content applyCodeChange.
+									         element phlow fireUpdateWish ]).
+								        ('Revert' -> [ :e | 
+									         item asRevertedCodeChange content applyCodeChange.
+									         element phlow fireUpdateWish ]) };
+						        yourself ]
+				        ifFalse: [ BrGlamorousSimpleContextMenuContent new ] ];
+		        column: 'Selected' stencil: [ :anEpEvent :anIndex | 
+			        anEpEvent content isCodeChange
+				        ifTrue: [ 
+					        BrCheckbox new
+						        aptitude: BrGlamorousCheckboxAptitude
+							        +
+								        (BrGlamorousWithLabelTooltipAptitude new text:
+										         'Select');
+						        checked: true;
+						        whenCheckedDo: [ selected add: anEpEvent content ];
+						        margin: (BlInsets right: 8);
+						        whenUncheckedDo: [ selected remove: anEpEvent content ] ]
+				        ifFalse: [ BlElement new size: 1 @ 1 ] ]
+		        width: 32;
 		        column: 'Icon' icon: [ :anEpEvent :anIndex | 
 			        (anEpEvent content accept: EpIconVisitor new) asElement ]
 		        width: 32;
 		        column: 'Description' stencil: [ :anEpEvent :anIndex | 
-			        BlElement new
-				        layout: BlLinearLayout horizontal;
-				        addChildren:
-					        (anEpEvent content accept: GtEpiceaBrickVisitor new);
-				        constraintsDo: [ :c | 
-					        c horizontal fitContent.
-					        c vertical fitContent ] ];
+		        BlElement new
+			        layout: BlLinearLayout horizontal;
+			        addChildren:
+				        (anEpEvent content accept: GtEpiceaBrickVisitor new);
+			        constraintsDo: [ :c | 
+				        c horizontal fitContent.
+				        c vertical fitContent ] ];
 		        column: 'Timestamp'
 		        text: [ :anEpEvent :anIndex | log timeAt: anEpEvent ];
+		        actionDropdownButtonLabel: 'Apply'
+		        tooltip: 'Apply Selected Changes'
+		        content: [ :aButton | 
+		        (GtEpiceaApplyAction on: selected) asDropdown ];
+		        actionDropdownButtonLabel: 'Revert'
+		        tooltip: 'Revert Selected Changes'
+		        content: [ :aButton | 
+		        (GtEpiceaRevertAction on: selected) asDropdown ];
 		        actionDropdownButtonLabel: 'Filters'
 		        tooltip: 'Apply and remove filters from the list'
 		        content: [ :aDropdown :aTab | 
