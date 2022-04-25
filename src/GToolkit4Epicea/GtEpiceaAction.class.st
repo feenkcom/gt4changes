@@ -19,6 +19,52 @@ GtEpiceaAction >> action [
 ]
 
 { #category : #accessing }
+GtEpiceaAction >> asDropdown [
+
+	| aList aContainer |
+	aContainer := BrVerticalPane new
+		              hExact: 300;
+		              vMatchParent;
+		              alignCenterRight;
+		              padding: (BlInsets all: 5).
+
+	events ifEmpty: [ 
+		aContainer addChild: (BrLabel new
+				 aptitude: BrGlamorousLabelAptitude;
+				 text: 'No relevant changes').
+		^ aContainer ].
+
+	aList := BrColumnedList new itemsProvider:
+		         (BrListStreamItemsProvider forCollection: self events).
+
+	aList column
+		title: 'Icon';
+		stencil: [ :anEpEvent :anIndex | 
+			(anEpEvent accept: EpIconVisitor new) asElement ];
+		width: 32.
+	aList column
+		title: 'Description';
+		stencil: [ :anEpEvent :anIndex | 
+			BlElement new
+				layout: BlLinearLayout horizontal;
+				addChildren: (anEpEvent accept: GtEpiceaBrickVisitor new);
+				constraintsDo: [ :c | 
+					c horizontal fitContent.
+					c vertical fitContent ] ].
+	aContainer addChild: aList matchParent.
+
+	aContainer addChild: (BrButton new
+			 aptitude: BrGlamorousButtonWithLabelAptitude new
+				 +
+					 (BrGlamorousWithLabelTooltipAptitude new text: 'Confirm action');
+			 label: 'Confirm';
+			 action: [ self action ];
+			 margin: (BlInsets top: 5)).
+
+	^ aContainer
+]
+
+{ #category : #accessing }
 GtEpiceaAction >> events [
 	^ events
 ]

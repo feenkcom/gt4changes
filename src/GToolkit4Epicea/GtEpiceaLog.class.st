@@ -47,7 +47,8 @@ GtEpiceaLog >> gtEventsFor: aView [
 	<gtViewChanges>
 	| view selected |
 	selected := self log entries
-		             select: [ :anEntry | anEntry content isCodeChange ] thenCollect: #content.
+		            select: [ :anEntry | anEntry content isCodeChange ]
+		            thenCollect: #content.
 	view := aView columnedList
 		        title: 'Change List';
 		        priority: 3;
@@ -92,12 +93,14 @@ GtEpiceaLog >> gtEventsFor: aView [
 				        c vertical fitContent ] ];
 		        column: 'Timestamp'
 		        text: [ :anEpEvent :anIndex | log timeAt: anEpEvent ];
-		        actionButtonLabel: 'Apply'
+		        actionDropdownButtonLabel: 'Apply'
 		        tooltip: 'Apply Selected Changes'
-		        action: [ :aButton | aButton phlow spawnObject: (GtEpiceaApplyAction on: selected) ];
-		        actionButtonLabel: 'Revert'
+		        content: [ :aButton | 
+		        (GtEpiceaApplyAction on: selected) asDropdown ];
+		        actionDropdownButtonLabel: 'Revert'
 		        tooltip: 'Revert Selected Changes'
-		        action: [ :aButton | aButton phlow spawnObject: (GtEpiceaRevertAction on: selected) ];
+		        content: [ :aButton | 
+		        (GtEpiceaRevertAction on: selected) asDropdown ];
 		        actionDropdownButtonLabel: 'Filters'
 		        tooltip: 'Apply and remove filters from the list'
 		        content: [ :aDropdown :aTab | 
