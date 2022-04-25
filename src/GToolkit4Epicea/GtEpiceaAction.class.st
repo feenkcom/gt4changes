@@ -24,9 +24,13 @@ GtEpiceaAction >> asDropdown [
 	| aList aContainer |
 	aContainer := BrVerticalPane new
 		              hExact: 300;
-		              vMatchParent;
+		              vExact: 500;
 		              alignCenterRight;
-		              padding: (BlInsets all: 5).
+		              padding: (BlInsets all: 5);
+		              addAptitude:
+			              BrGlamorousWithHorizontalResizerAptitude new
+			              + BrGlamorousWithHorizontalResizerAptitude new beLeft
+			              + BrGlamorousWithVerticalResizerAptitude new.
 
 	events ifEmpty: [ 
 		aContainer addChild: (BrLabel new
@@ -35,7 +39,7 @@ GtEpiceaAction >> asDropdown [
 		^ aContainer ].
 
 	aList := BrColumnedList new itemsProvider:
-		         self events asBrItemsProvider.
+		         (BrListStreamItemsProvider forCollection: self events).
 
 	aList column
 		title: 'Icon';
@@ -100,16 +104,12 @@ GtEpiceaAction >> gtEventsFor: aView [
 
 { #category : #accessing }
 GtEpiceaAction >> latestEventsFrom: previewEventsTheOldestFirst [
-	
-	| aLog filter logBrowserModel |
-	aLog := EpLog newWithStore: (OmMemoryStore withAllContents: previewEventsTheOldestFirst).
-	logBrowserModel := EpLogBrowserPresenter newWithLog: aLog.
-	filter := EpLatestCodeChangeFilter new
-		logBrowserModel: logBrowserModel;
-		yourself.
-	^ aLog entries 
-		select: [ :each | filter accepts: each ] 
-		thenCollect: [ :each | each content ]
+
+	| aDictionary |
+	aDictionary := Dictionary new.
+	previewEventsTheOldestFirst do: [ :each | 
+		aDictionary at: each affectedMarker put: each ].
+	^ aDictionary values
 ]
 
 { #category : #accessing }
