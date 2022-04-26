@@ -48,7 +48,7 @@ GtEpiceaNavigationStencil >> createListFor: aView [
 		  title: 'Changes';
 		  items: [ self changes ];
 		  column: 'Active' stencil: [ :item | 
-			  EpMonitor current log store globalName = item name
+			  item isActive
 				  ifTrue: [ 
 					  BlElement new
 						  background: BrGlamorousColors selectedListItemColor;
