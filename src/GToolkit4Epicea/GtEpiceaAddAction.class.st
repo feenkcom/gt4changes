@@ -79,8 +79,17 @@ GtEpiceaAddAction >> asDropdown [
 ]
 
 { #category : #accessing }
-GtEpiceaAddAction >> events: aCollectionOfEvents [ 
-	events := aCollectionOfEvents select: #isCodeChange.
+GtEpiceaAddAction >> events: aCollectionOfEvents [
+
+	events := OrderedCollection new.
+	aCollectionOfEvents
+		select: [ :entry | entry content isCodeChange ]
+		thenDo: [ :entry | 
+			self log store
+				entryFor:
+				(entry tags at: self log store selfReferenceKey ifAbsent: [ '' ])
+				ifPresent: [ :anEntry |  ]
+				ifAbsent: [ events add: entry content ] ]
 ]
 
 { #category : #accessing }

@@ -107,8 +107,9 @@ GtEpiceaLog >> gtEventsFor: aView [
 			actionDropdownButtonIcon: BrGlamorousVectorIcons add
 			tooltip: 'Add Selected Changes'
 			content: [ :aButton | 
-				((GtEpiceaAddAction on: (EpMonitor current log entries collect: #content)) log:
-					 self log) asDropdown ] ].
+				(GtEpiceaAddAction new
+					 log: self log;
+					 events: EpMonitor current log entries) asDropdown ] ].
 	view
 		actionDropdownButtonLabel: 'Apply'
 		tooltip: 'Apply Selected Changes'
