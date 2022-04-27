@@ -13,7 +13,7 @@ OmEntry >> diffElements [
 	new := self content accept: EpNewStateVisitor new.
 	previous = new ifFalse: [ 
 		builder := (GtEpiceaDiffBuilder from: previous to: new) isMethod:
-			           (self content isKindOf: EpMethodChange).
+			           (self content isEpMethodChange).
 		element := BrVerticalPane new.
 		element margin: (BlInsets all: 3).
 		element hMatchParent.
@@ -41,6 +41,7 @@ OmEntry >> gtDiffFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Diff';
+		priority: 1;
 		stencil: [
 			  | element headerElement label diffElement |
 			  element := BrVerticalPane new.
@@ -73,4 +74,26 @@ OmEntry >> gtDiffFor: aView [
 			  diffElement addChildren: self diffElements.
 			  element addChild: diffElement asScrollableElement.
 			  element]
+]
+
+{ #category : #'*GToolkit4Epicea' }
+OmEntry >> gtNewSourceFor: aView [
+	<gtView>
+	^ aView textEditor
+		title: 'New Source';
+		aptitude: BrGlamorousCodeEditorAptitude;
+		styler: (GtEpiceaRBTextStyler new isForWorkspace: (self content isEpMethodChange not));
+		priority: 41;
+		text: [ self content accept: EpNewStateVisitor new ]
+]
+
+{ #category : #'*GToolkit4Epicea' }
+OmEntry >> gtOldSourceFor: aView [
+	<gtView>
+	^ aView textEditor
+		title: 'Old Source';
+		aptitude: BrGlamorousCodeEditorAptitude;
+		styler: (GtEpiceaRBTextStyler new isForWorkspace: (self content isEpMethodChange not));
+		priority: 42;
+		text: [ self content accept: EpOldStateVisitor new ]
 ]

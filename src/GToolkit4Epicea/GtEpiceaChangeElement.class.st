@@ -144,39 +144,63 @@ GtEpiceaChangeElement >> updateTitleElement [
 
 { #category : #accessing }
 GtEpiceaChangeElement >> updateToolbarElement [
-
-	(self hasChangeViewModel not or: [ 
-		 self changeViewModel hasChange not ]) ifTrue: [ ^ self ].
-
+	(self hasChangeViewModel not or: [ self changeViewModel hasChange not ]) ifTrue: [ ^ self ].
 	toolbarElement removeAllItems.
 	toolbarElement
-		addItem: (labelElement := BrLabel new
-				                 aptitude: BrGlamorousLabelAptitude new bold;
-				                 beHugeSize;
-				                 text: '');
-		addItem: (GtPreviewChangeButton new
-				 icon: BrGlamorousVectorIcons remove;
-				 label: 'Remove';
-				 changeAction: [ :aButton | 
-					 self changeViewModel remove.
-					 navigationModel announce:
-							 (GtEpiceaChangeSelected new change: nil).
-					 aButton phlow fireUpdateWish ];
-				 changeStencil: [ 
-					 BrVerticalPane new
-						 hFitContent;
-						 vFitContent;
-						 margin: (BlInsets all: 10);
-						 addChild: (BrLabel new
-								  aptitude: BrGlamorousLabelAptitude new glamorousRegularFont;
-								  text: 'Remove change?' asRopedText) ]);
-		addItem: (BrFrame new
-				 vFitContent;
-				 hMatchParent);
-		addItem: (BrButton new
-				 aptitude: BrGlamorousButtonWithIconAptitude;
-				 icon: BrGlamorousVectorIcons inspect;
-				 label: 'Inspect';
-				 action: [ :aButton | 
-					 aButton phlow spawnObject: self changeViewModel changeModel ])
+		addItem:
+				(labelElement := (BrLabel new)
+						aptitude: BrGlamorousLabelAptitude new bold;
+						beHugeSize;
+						text: '');
+		addItem:
+				((GtPreviewChangeButton new)
+						icon: BrGlamorousVectorIcons remove;
+						label: 'Remove';
+						changeAction:
+								[ :aButton | 
+									self changeViewModel remove.
+									navigationModel announce: (GtEpiceaChangeSelected new change: nil).
+									aButton phlow fireUpdateWish ];
+						changeStencil:
+								[ (BrVerticalPane new)
+										hFitContent;
+										vFitContent;
+										margin: (BlInsets all: 10);
+										addChild:
+												((BrLabel new)
+														aptitude: BrGlamorousLabelAptitude new glamorousRegularFont;
+														text: 'Remove change?' asRopedText) ]);
+		addItem:
+				((BrFrame new)
+						vFitContent;
+						hMatchParent);
+		addItem:
+				((BrButton new)
+						aptitude: BrGlamorousButtonWithIconAptitude;
+						icon: BrGlamorousVectorIcons inspect;
+						label: 'Inspect';
+						action: [ :aButton | aButton phlow spawnObject: self changeViewModel changeModel ]).
+	self changeViewModel changeModel isActive
+		ifFalse:
+			[ self changeViewModel changeModel isFrozen
+				ifTrue:
+					[ toolbarElement
+						addItem:
+							((BrButton new)
+								aptitude: BrGlamorousButtonWithLabelAptitude;
+								label: 'Thaw';
+								action:
+										[ :aButton | 
+											self changeViewModel changeModel thaw.
+											aButton phlow fireUpdateWish ]) ]
+				ifFalse:
+					[ toolbarElement
+						addItem:
+							((BrButton new)
+								aptitude: BrGlamorousButtonWithLabelAptitude;
+								label: 'Freeze';
+								action:
+										[ :aButton | 
+											self changeViewModel changeModel freeze.
+											aButton phlow fireUpdateWish ]) ] ]
 ]
