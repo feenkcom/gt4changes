@@ -28,6 +28,14 @@ GtEpiceaLog class >> allInSessionStore [
 ]
 
 { #category : #accessing }
+GtEpiceaLog >> addEntryWith: anEntry tags: aTagsBlock [
+
+	self isFrozen ifTrue: [ 
+		self error: 'Cannot add to frozen change set.' ].
+	^ self log addEntryWith: anEntry tags: aTagsBlock
+]
+
+{ #category : #accessing }
 GtEpiceaLog >> additionFilter: aStream [
 
 	<gtChangeFilter>
@@ -43,6 +51,9 @@ GtEpiceaLog >> endTime [
 
 { #category : #accessing }
 GtEpiceaLog >> freeze [
+
+	self isActive ifTrue: [ 
+		self error: 'Cannot freeze an active change set.' ].
 	frozen := true
 ]
 
@@ -102,13 +113,13 @@ GtEpiceaLog >> gtEventsFor: aView [
 				        c vertical fitContent ] ];
 		        column: 'Timestamp'
 		        text: [ :anEpEvent :anIndex | log timeAt: anEpEvent ].
-	self isFrozen ifFalse: [ 
+	(self isFrozen or: [ self isActive ]) ifFalse: [ 
 		view
 			actionDropdownButtonIcon: BrGlamorousVectorIcons add
 			tooltip: 'Add Selected Changes'
 			content: [ :aButton | 
 				(GtEpiceaAddAction new
-					 log: self log;
+					 log: self;
 					 events: EpMonitor current log entries) asDropdown ] ].
 	view
 		actionDropdownButtonLabel: 'Apply'
@@ -217,6 +228,11 @@ GtEpiceaLog >> ombuFile: aFile [
 GtEpiceaLog >> startTime [
 
 	^ self log startTime
+]
+
+{ #category : #accessing }
+GtEpiceaLog >> store [
+	^ self log store
 ]
 
 { #category : #accessing }

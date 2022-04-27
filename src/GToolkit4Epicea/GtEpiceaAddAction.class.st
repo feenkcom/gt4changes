@@ -11,7 +11,7 @@ Class {
 GtEpiceaAddAction >> actionOn: aListOfEvents [
 
 	aListOfEvents do: [ :each | 
-		self log addEntryWith: each content tags: [ :tags | "ignore" ] ].
+		self log addEntryWith: each tags: [ :tags | "ignore" ] ].
 	self log store flush
 ]
 
