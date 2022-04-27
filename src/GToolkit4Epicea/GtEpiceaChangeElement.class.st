@@ -14,6 +14,15 @@ Class {
 }
 
 { #category : #accessing }
+GtEpiceaChangeElement >> addToolbarButtons [
+
+	| methods |
+	methods := (Pragma allNamed: #gtChangeAction in: self class) 
+		           collect: #methodSelector.
+	methods do: [ :aSelector | self perform: aSelector ]
+]
+
+{ #category : #accessing }
 GtEpiceaChangeElement >> changeViewItems [
 
 	| aChange collector context |
@@ -46,6 +55,28 @@ GtEpiceaChangeElement >> changeViewModel: aViewModel [
 { #category : #accessing }
 GtEpiceaChangeElement >> defaultLayout [
 	^ BlLinearLayout vertical
+]
+
+{ #category : #accessing }
+GtEpiceaChangeElement >> freezeThawButton [
+	<gtChangeAction>
+
+	self changeViewModel changeModel isActive ifFalse: [ 
+		self changeViewModel changeModel isFrozen
+			ifTrue: [ 
+				toolbarElement addItem: (BrButton new
+						 aptitude: BrGlamorousButtonWithLabelAptitude;
+						 label: 'Thaw';
+						 action: [ :aButton | 
+							 self changeViewModel changeModel thaw.
+							 aButton phlow fireUpdateWish ]) ]
+			ifFalse: [ 
+				toolbarElement addItem: (BrButton new
+						 aptitude: BrGlamorousButtonWithLabelAptitude;
+						 label: 'Freeze';
+						 action: [ :aButton | 
+							 self changeViewModel changeModel freeze.
+							 aButton phlow fireUpdateWish ]) ] ]
 ]
 
 { #category : #accessing }
@@ -82,6 +113,18 @@ GtEpiceaChangeElement >> initializeToolbarElement [
 		                  vFitContent;
 		                  hMatchParent;
 		                  margin: (BlInsets bottom: 5)
+]
+
+{ #category : #accessing }
+GtEpiceaChangeElement >> inspectButton [
+	<gtChangeAction>
+	
+	toolbarElement addItem:
+				((BrButton new)
+						aptitude: BrGlamorousButtonWithIconAptitude;
+						icon: BrGlamorousVectorIcons inspect;
+						label: 'Inspect';
+						action: [ :aButton | aButton phlow spawnObject: self changeViewModel changeModel ]).
 ]
 
 { #category : #accessing }
@@ -173,34 +216,7 @@ GtEpiceaChangeElement >> updateToolbarElement [
 		addItem:
 				((BrFrame new)
 						vFitContent;
-						hMatchParent);
-		addItem:
-				((BrButton new)
-						aptitude: BrGlamorousButtonWithIconAptitude;
-						icon: BrGlamorousVectorIcons inspect;
-						label: 'Inspect';
-						action: [ :aButton | aButton phlow spawnObject: self changeViewModel changeModel ]).
-	self changeViewModel changeModel isActive
-		ifFalse:
-			[ self changeViewModel changeModel isFrozen
-				ifTrue:
-					[ toolbarElement
-						addItem:
-							((BrButton new)
-								aptitude: BrGlamorousButtonWithLabelAptitude;
-								label: 'Thaw';
-								action:
-										[ :aButton | 
-											self changeViewModel changeModel thaw.
-											aButton phlow fireUpdateWish ]) ]
-				ifFalse:
-					[ toolbarElement
-						addItem:
-							((BrButton new)
-								aptitude: BrGlamorousButtonWithLabelAptitude;
-								label: 'Freeze';
-								action:
-										[ :aButton | 
-											self changeViewModel changeModel freeze.
-											aButton phlow fireUpdateWish ]) ] ]
+						hMatchParent).
+						
+		self addToolbarButtons.
 ]
