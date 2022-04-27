@@ -36,7 +36,7 @@ GtEpiceaAction >> asDropdown [
 		aContainer addChild: (BrLabel new
 				 aptitude: BrGlamorousLabelAptitude;
 				 text: 'No relevant changes').
-		^ aContainer ].
+		^ aContainer alignCenter ].
 
 	aList := BrColumnedList new itemsProvider:
 		         (BrListStreamItemsProvider forCollection: self events).
