@@ -1,27 +1,26 @@
 Class {
-	#name : #GtEpiceaAction,
-	#superclass : #Object,
+	#name : #GtEpiceaAddAction,
+	#superclass : #GtEpiceaAction,
 	#instVars : [
-		'events'
+		'log'
 	],
 	#category : #'GToolkit4Epicea-GToolkit4Epicea'
 }
 
-{ #category : #'instance creation' }
-GtEpiceaAction class >> on: aCollectionOfEvents [
+{ #category : #accessing }
+GtEpiceaAddAction >> actionOn: aListOfEvents [
 
-	^ self new events: aCollectionOfEvents
+	aListOfEvents do: [ :each | 
+		self log addEntryWith: each tags: [ :tags | "ignore" ] ].
+	self log store flush
 ]
 
 { #category : #accessing }
-GtEpiceaAction >> action [
-	events do: [:each | each applyCodeChange ]
-]
+GtEpiceaAddAction >> asDropdown [
 
-{ #category : #accessing }
-GtEpiceaAction >> asDropdown [
+	| aList aContainer selected |
+	selected := OrderedCollection new.
 
-	| aList aContainer |
 	aContainer := BrVerticalPane new
 		              hExact: 300;
 		              vExact: 500;
@@ -41,6 +40,17 @@ GtEpiceaAction >> asDropdown [
 	aList := BrColumnedList new itemsProvider:
 		         (BrListStreamItemsProvider forCollection: self events).
 
+	aList column
+		title: 'Select';
+		stencil: [ :anEpEvent :anIndex | 
+			BrCheckbox new
+				aptitude: BrGlamorousCheckboxAptitude
+					+ (BrGlamorousWithLabelTooltipAptitude new text: 'Select');
+				checked: false;
+				whenCheckedDo: [ selected add: anEpEvent ];
+				margin: (BlInsets right: 8);
+				whenUncheckedDo: [ selected remove: anEpEvent ] ];
+		width: 32.
 	aList column
 		title: 'Icon';
 		stencil: [ :anEpEvent :anIndex | 
@@ -62,57 +72,32 @@ GtEpiceaAction >> asDropdown [
 				 +
 					 (BrGlamorousWithLabelTooltipAptitude new text: 'Confirm action');
 			 label: 'Confirm';
-			 action: [ self action ];
+			 action: [ self actionOn: selected ];
 			 margin: (BlInsets top: 5)).
 
 	^ aContainer
 ]
 
 { #category : #accessing }
-GtEpiceaAction >> events [
-	^ events
+GtEpiceaAddAction >> events: aCollectionOfEvents [
+
+	events := OrderedCollection new.
+	aCollectionOfEvents
+		select: [ :entry | entry content isCodeChange ]
+		thenDo: [ :entry | 
+			self log store
+				entryFor:
+				(entry tags at: self log store selfReferenceKey ifAbsent: [ '' ])
+				ifPresent: [ :anEntry |  ]
+				ifAbsent: [ events add: entry content ] ]
 ]
 
 { #category : #accessing }
-GtEpiceaAction >> events: aCollectionOfEvents [ 
-	events := self treatEvents: (self latestEventsFrom: aCollectionOfEvents reversed).
+GtEpiceaAddAction >> log [
+	^ log
 ]
 
 { #category : #accessing }
-GtEpiceaAction >> gtEventsFor: aView [
-
-	<gtView>
-	^ aView columnedList
-		  title: 'Selected Changes';
-		  priority: 3;
-		  itemsProvider: [ self events asBrItemsProvider ];
-		  column: 'Icon' icon: [ :anEpEvent :anIndex | 
-			  (anEpEvent accept: EpIconVisitor new) asElement ]
-		  width: 32;
-		  column: 'Description' stencil: [ :anEpEvent :anIndex | 
-			  BlElement new
-				  layout: BlLinearLayout horizontal;
-				  addChildren:
-					  (anEpEvent accept: GtEpiceaBrickVisitor new);
-				  constraintsDo: [ :c | 
-					  c horizontal fitContent.
-					  c vertical fitContent ] ];
-		 actionButtonLabel: 'Confirm'
-		 tooltip: 'Confirm action'
-		 action: [ self action ]
-]
-
-{ #category : #accessing }
-GtEpiceaAction >> latestEventsFrom: previewEventsTheOldestFirst [
-
-	| aDictionary |
-	aDictionary := Dictionary new.
-	previewEventsTheOldestFirst do: [ :each | 
-		aDictionary at: each affectedMarker put: each ].
-	^ aDictionary values
-]
-
-{ #category : #accessing }
-GtEpiceaAction >> treatEvents: aCollectionOfEvents [
-	^ self subclassResponsibility
+GtEpiceaAddAction >> log: aLog [
+	log := aLog
 ]
