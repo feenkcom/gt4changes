@@ -176,7 +176,7 @@ GtEpiceaLog >> gtEventsFor: aView [
 										             perform: aPragma methodSelector
 										             withArguments: { newItems } ].
 							 aTab viewContentElement children first children second 
-								 itemsProvider: newItems asBrItemsProvider.
+								 itemsProvider: (BrListStreamItemsProvider forCollection: newItems toArray wait reversed).
 							 aButton fireEvent: BrDropdownHideWish new ]) ].
 
 	^ view
