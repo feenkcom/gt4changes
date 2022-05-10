@@ -45,6 +45,14 @@ GtEpiceaLog >> additionFilter: aStream [
 ]
 
 { #category : #accessing }
+GtEpiceaLog >> codeEvents [
+
+	^ self log entries
+		  select: [ :anEntry | anEntry content isCodeChange ]
+		  thenCollect: #content
+]
+
+{ #category : #accessing }
 GtEpiceaLog >> endTime [
 	^ self log endTime
 ]
@@ -63,9 +71,7 @@ GtEpiceaLog >> gtEventsFor: aView [
 	<gtView>
 	<gtViewChanges>
 	| view selected |
-	selected := self log entries
-		            select: [ :anEntry | anEntry content isCodeChange ]
-		            thenCollect: #content.
+	selected := self codeEvents.
 
 	view := aView columnedList
 		        title: 'Change List';
