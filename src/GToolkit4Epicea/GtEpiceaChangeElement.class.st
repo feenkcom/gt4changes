@@ -8,7 +8,9 @@ Class {
 		'changeViewModel',
 		'toolbarElement',
 		'lazyTabsElement',
-		'labelElement'
+		'labelElement',
+		'headerElement',
+		'titleElement'
 	],
 	#category : #'GToolkit4Epicea-Element'
 }
@@ -85,15 +87,34 @@ GtEpiceaChangeElement >> hasChangeViewModel [
 ]
 
 { #category : #accessing }
+GtEpiceaChangeElement >> headerElement [
+	^ headerElement
+]
+
+{ #category : #accessing }
 GtEpiceaChangeElement >> initialize [
 	super initialize.
-	self initializeToolbarElement.
+	self initializeHeaderElement.
 	self initializeLazyTabsElement.
 	
-	self addChild: self toolbarElement as: #toolbar.
+	self addChild: self headerElement as: #header.
 	self addChild: self lazyTabsElement as: #lazyTabs.
 	
 	self matchParent.
+]
+
+{ #category : #accessing }
+GtEpiceaChangeElement >> initializeHeaderElement [
+
+	headerElement := BrHorizontalPane new
+		                 vFitContent;
+		                 hMatchParent.
+
+	self initializeTitleElement.
+	self initializeToolbarElement.
+
+	headerElement addChild: titleElement as: #title.
+	headerElement addChild: toolbarElement as: #toolbar
 ]
 
 { #category : #accessing }
@@ -105,13 +126,45 @@ GtEpiceaChangeElement >> initializeLazyTabsElement [
 ]
 
 { #category : #accessing }
+GtEpiceaChangeElement >> initializeTitleElement [
+
+	titleElement := BrHorizontalPane new
+		                vFitContent;
+		                hMatchParent;
+		                addChild: (labelElement := BrLabel new
+				                                 aptitude:
+					                                 BrGlamorousLabelAptitude new
+						                                 bold;
+				                                 beHugeSize;
+				                                 text: '');
+		                addChild: (GtPreviewChangeButton new
+				                 icon: BrGlamorousVectorIcons remove;
+				                 label: 'Remove';
+						         margin: (BlInsets all: 7);
+				                 changeAction: [ :aButton | 
+					                 self changeViewModel remove.
+					                 navigationModel announce:
+							                 (GtEpiceaChangeSelected new change: nil).
+					                 aButton phlow fireUpdateWish ];
+				                 changeStencil: [ 
+					                 BrVerticalPane new
+						                 hFitContent;
+						                 vFitContent;
+						                 margin: (BlInsets all: 10);
+						                 addChild: (BrLabel new
+								                  aptitude:
+									                  BrGlamorousLabelAptitude new
+										                  glamorousRegularFont;
+								                  text: 'Remove change?' asRopedText) ])
+]
+
+{ #category : #accessing }
 GtEpiceaChangeElement >> initializeToolbarElement [
 
 	toolbarElement := BrToolbar new
 		                  aptitude:
-			                  (BrGlamorousToolbarAptitude new spacing: 0);
-		                  vFitContent;
-		                  hMatchParent;
+			                  (BrGlamorousToolbarAptitude new spacing: 5);
+		                  fitContent;
 		                  margin: (BlInsets bottom: 5)
 ]
 
@@ -187,36 +240,10 @@ GtEpiceaChangeElement >> updateTitleElement [
 
 { #category : #accessing }
 GtEpiceaChangeElement >> updateToolbarElement [
-	(self hasChangeViewModel not or: [ self changeViewModel hasChange not ]) ifTrue: [ ^ self ].
+
+	(self hasChangeViewModel not or: [ 
+		 self changeViewModel hasChange not ]) ifTrue: [ ^ self ].
 	toolbarElement removeAllItems.
-	toolbarElement
-		addItem:
-				(labelElement := (BrLabel new)
-						aptitude: BrGlamorousLabelAptitude new bold;
-						beHugeSize;
-						text: '');
-		addItem:
-				((GtPreviewChangeButton new)
-						icon: BrGlamorousVectorIcons remove;
-						label: 'Remove';
-						changeAction:
-								[ :aButton | 
-									self changeViewModel remove.
-									navigationModel announce: (GtEpiceaChangeSelected new change: nil).
-									aButton phlow fireUpdateWish ];
-						changeStencil:
-								[ (BrVerticalPane new)
-										hFitContent;
-										vFitContent;
-										margin: (BlInsets all: 10);
-										addChild:
-												((BrLabel new)
-														aptitude: BrGlamorousLabelAptitude new glamorousRegularFont;
-														text: 'Remove change?' asRopedText) ]);
-		addItem:
-				((BrFrame new)
-						vFitContent;
-						hMatchParent).
-						
-		self addToolbarButtons.
+
+	self addToolbarButtons
 ]
