@@ -135,12 +135,11 @@ GtEpiceaChangeElement >> initializeTitleElement [
 				                                 aptitude:
 					                                 BrGlamorousLabelAptitude new
 						                                 bold;
-				                                 beHugeSize;
 				                                 text: '');
 		                addChild: (GtPreviewChangeButton new
 				                 icon: BrGlamorousVectorIcons remove;
 				                 label: 'Remove';
-						         margin: (BlInsets all: 7);
+						         margin: (BlInsets all: 3);
 				                 changeAction: [ :aButton | 
 					                 self changeViewModel remove.
 					                 navigationModel announce:
