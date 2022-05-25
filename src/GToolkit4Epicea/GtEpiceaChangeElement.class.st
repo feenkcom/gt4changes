@@ -10,7 +10,8 @@ Class {
 		'lazyTabsElement',
 		'labelElement',
 		'headerElement',
-		'titleElement'
+		'titleElement',
+		'removeButton'
 	],
 	#category : #'GToolkit4Epicea-Element'
 }
@@ -127,34 +128,27 @@ GtEpiceaChangeElement >> initializeLazyTabsElement [
 
 { #category : #accessing }
 GtEpiceaChangeElement >> initializeTitleElement [
-
 	titleElement := BrHorizontalPane new
-		                vFitContent;
-		                hMatchParent;
-		                addChild: (labelElement := BrLabel new
-				                                 aptitude:
-					                                 BrGlamorousLabelAptitude new
-						                                 bold;
-				                                 text: '');
-		                addChild: (GtPreviewChangeButton new
-				                 icon: BrGlamorousVectorIcons remove;
-				                 label: 'Remove';
-						         margin: (BlInsets all: 3);
-				                 changeAction: [ :aButton | 
-					                 self changeViewModel remove.
-					                 navigationModel announce:
-							                 (GtEpiceaChangeSelected new change: nil).
-					                 aButton phlow fireUpdateWish ];
-				                 changeStencil: [ 
-					                 BrVerticalPane new
-						                 hFitContent;
-						                 vFitContent;
-						                 margin: (BlInsets all: 10);
-						                 addChild: (BrLabel new
-								                  aptitude:
-									                  BrGlamorousLabelAptitude new
-										                  glamorousRegularFont;
-								                  text: 'Remove change?' asRopedText) ])
+			vFitContent;
+			hMatchParent;
+			addChild: (labelElement := BrLabel new
+						aptitude: BrGlamorousLabelAptitude new bold;
+						text: '').
+	removeButton := GtPreviewChangeButton new
+			icon: BrGlamorousVectorIcons remove;
+			label: 'Remove';
+			margin: (BlInsets all: 3);
+			changeAction: [ :aButton | 
+				self changeViewModel remove.
+				navigationModel announce: (GtEpiceaChangeSelected new change: nil).
+				aButton phlow fireUpdateWish ];
+			changeStencil: [ BrVerticalPane new
+					hFitContent;
+					vFitContent;
+					margin: (BlInsets all: 10);
+					addChild: (BrLabel new
+							aptitude: BrGlamorousLabelAptitude new glamorousRegularFont;
+							text: 'Remove change?' asRopedText) ]
 ]
 
 { #category : #accessing }
@@ -211,6 +205,11 @@ GtEpiceaChangeElement >> subscribeToSignals [
 ]
 
 { #category : #accessing }
+GtEpiceaChangeElement >> titleElement [
+	^ titleElement
+]
+
+{ #category : #accessing }
 GtEpiceaChangeElement >> toolbarElement [
 	^ toolbarElement
 ]
@@ -234,7 +233,11 @@ GtEpiceaChangeElement >> updateTabsElement [
 GtEpiceaChangeElement >> updateTitleElement [
 	(self hasChangeViewModel not or: [ 
 		 self changeViewModel hasChange not ]) ifTrue: [ ^ self ].
-	self labelElement text: self changeViewModel name asString
+	self labelElement text: self changeViewModel name asString.
+	
+	self titleElement removeChildNamed: #removebtn.
+	
+	self titleElement addChild: removeButton as: #removebtn
 ]
 
 { #category : #accessing }
