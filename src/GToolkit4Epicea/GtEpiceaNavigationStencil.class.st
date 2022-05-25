@@ -41,42 +41,42 @@ GtEpiceaNavigationStencil >> create [
 
 { #category : #accessing }
 GtEpiceaNavigationStencil >> createListFor: aView [
-
 	<gtEpiceaNavigation>
+	
 	| element |
 	^ aView columnedList
-		  title: 'Changes';
-		  items: [ self changes ];
-		  column: 'Active' stencil: [ :item | 
-			  item isActive
-				  ifTrue: [ 
-					  BlElement new
-						  background: BrGlamorousColors selectedListItemColor;
-						  aptitude:
-							  (BrGlamorousWithLabelTooltipAptitude new text: 'Active');
-						  size: 12 @ 12;
-						  geometry: (BlRoundedRectangleGeometry cornerRadius: 6);
-						  margin: (BlInsets left: 14) ]
-				  ifFalse: [ BlElement new size: 12 @ 12 ] ]
-		  width: 38;
-		  column: 'Name' text: [ :change | change name ];
-		  column: 'From' text: [ :change | change startTime ];
-		  send: [ :change | 
-			  self announce: (GtEpiceaChangeSelected new change: change) ];
-		  actionDropdownButtonIcon: BrGlamorousVectorIcons add
-		  tooltip: 'New Log'
-		  content: [ :aDropdown :aTarget | 
-			  | s |
-			  s := GtEpiceaAddLogStencil new.
-			  s dropdown: aDropdown.
-			  s onCreated: [ :log | 
-				  aTarget viewContentElement phlow update.
-				  self announcer announce:
-					  (GtEpiceaChangeSelected new change: log) ].
-			  s ];
-		  actionButtonIcon: BrGlamorousVectorIcons refresh
-		  tooltip: 'Reload'
-		  action: [ :aButton :aTab | aTab viewContentElement phlow update ]
+		title: 'Changes';
+		items: [ self changes ];
+		updateWhen: GtEpiceaChangeChanged in: self announcer;
+		column: 'Active'
+			stencil: [ :item | 
+				item isActive
+					ifTrue: [ BlElement new
+							background: BrGlamorousColors selectedListItemColor;
+							aptitude: (BrGlamorousWithLabelTooltipAptitude new text: 'Active');
+							size: 12 @ 12;
+							geometry: (BlRoundedRectangleGeometry cornerRadius: 6);
+							margin: (BlInsets left: 14) ]
+					ifFalse: [ BlElement new size: 12 @ 12 ] ]
+			width: 38;
+		column: 'Name' text: [ :change | change name ];
+		column: 'From' text: [ :change | change startTime ];
+		send: [ :change | self announce: (GtEpiceaChangeSelected new change: change) ];
+		actionDropdownButtonIcon: BrGlamorousVectorIcons add
+			tooltip: 'New Log'
+			content: [ :aDropdown :aTarget | 
+				| s |
+				s := GtEpiceaAddLogStencil new.
+				s dropdown: aDropdown.
+				s
+					onCreated: [ :log | 
+						aTarget viewContentElement phlow update.
+						self announce: GtEpiceaChangeAdded new.
+						self announce: (GtEpiceaChangeSelected new change: log) ].
+				s ];
+		actionButtonIcon: BrGlamorousVectorIcons refresh
+			tooltip: 'Reload'
+			action: [ :aButton :aTab | aTab viewContentElement phlow update ]
 ]
 
 { #category : #accessing }
