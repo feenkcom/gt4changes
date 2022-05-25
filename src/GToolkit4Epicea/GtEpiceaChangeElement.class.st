@@ -141,6 +141,7 @@ GtEpiceaChangeElement >> initializeTitleElement [
 			changeAction: [ :aButton | 
 				self changeViewModel remove.
 				navigationModel announce: (GtEpiceaChangeSelected new change: nil).
+				navigationModel announce: GtEpiceaChangeRemoved new.
 				aButton phlow fireUpdateWish ];
 			changeStencil: [ BrVerticalPane new
 					hFitContent;

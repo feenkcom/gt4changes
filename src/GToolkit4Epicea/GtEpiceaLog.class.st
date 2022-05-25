@@ -88,7 +88,7 @@ GtEpiceaLog >> gtEventsFor: aView [
 									         item content applyCodeChange.
 									         element phlow fireUpdateWish ]).
 								        ('Revert' -> [ :e | 
-									         item asRevertedCodeChange content applyCodeChange.
+									         item content asRevertedCodeChange applyCodeChange.
 									         element phlow fireUpdateWish ]) };
 						        yourself ]
 				        ifFalse: [ BrGlamorousSimpleContextMenuContent new ] ];
