@@ -98,6 +98,7 @@ GtEpiceaChangeElement >> initialize [
 	self initializeHeaderElement.
 	self initializeLazyTabsElement.
 	
+	self addChild: self makeLabel as: #label.
 	self addChild: self headerElement as: #header.
 	self addChild: self lazyTabsElement as: #lazyTabs.
 	
@@ -182,6 +183,15 @@ GtEpiceaChangeElement >> labelElement [
 { #category : #accessing }
 GtEpiceaChangeElement >> lazyTabsElement [
 	^ lazyTabsElement
+]
+
+{ #category : #accessing }
+GtEpiceaChangeElement >> makeLabel [
+	^ BrLabel new
+		aptitude: (BrGlamorousLabelAptitude new glamorousRegularFontAndSize
+				foreground: Color gray;
+				fontSize: 12);
+		text: 'Changes'
 ]
 
 { #category : #accessing }
