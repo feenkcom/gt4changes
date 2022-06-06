@@ -138,8 +138,8 @@ GtEpiceaLog >> gtEventsFor: aView [
 		actionDropdownButtonLabel: 'Filters'
 		tooltip: 'Apply and remove filters from the list'
 		content: [ :aDropdown :aTab | 
-			| filters aList aContainer |
-			selected := Set new.
+			| filters aList aContainer selectedFilters |
+			selectedFilters := Set new.
 			aContainer := BrVerticalPane new fitContent alignCenterRight.
 			filters := GtPhlowCollector new
 				           fromObject: self;
@@ -159,8 +159,8 @@ GtEpiceaLog >> gtEventsFor: aView [
 								(BrGlamorousWithLabelTooltipAptitude new text:
 										 'Select for Commit');
 						margin: (BlInsets left: 10);
-						whenCheckedDo: [ selected add: item ];
-						whenUncheckedDo: [ selected remove: item ] ].
+						whenCheckedDo: [ selectedFilters add: item ];
+						whenUncheckedDo: [ selectedFilters remove: item ] ].
 			aList column
 				title: 'Name';
 				stencil: [ :aFilter | 
@@ -177,7 +177,7 @@ GtEpiceaLog >> gtEventsFor: aView [
 						 action: [ :aButton | 
 							 | newItems |
 							 newItems := self log entriesStream.
-							 selected do: [ :aPragma | 
+							 selectedFilters do: [ :aPragma | 
 									 newItems := self
 										             perform: aPragma methodSelector
 										             withArguments: { newItems } ].
