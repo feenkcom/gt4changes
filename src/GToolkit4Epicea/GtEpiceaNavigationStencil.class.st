@@ -74,9 +74,7 @@ GtEpiceaNavigationStencil >> createListFor: aView [
 						self announce: GtEpiceaChangeAdded new.
 						self announce: (GtEpiceaChangeSelected new change: log) ].
 				s ];
-		actionButtonIcon: BrGlamorousVectorIcons refresh
-			tooltip: 'Reload'
-			action: [ :aButton :aTab | aTab viewContentElement phlow update ]
+		actionUpdateButtonTooltip: 'Reload list of changes'
 ]
 
 { #category : #accessing }
