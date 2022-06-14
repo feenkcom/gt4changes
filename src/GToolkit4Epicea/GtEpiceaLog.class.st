@@ -46,10 +46,7 @@ GtEpiceaLog >> additionFilter: aStream [
 
 { #category : #accessing }
 GtEpiceaLog >> codeEvents [
-
-	^ self log entries
-		  select: [ :anEntry | anEntry content isCodeChange ]
-		  thenCollect: #content
+	^ self log entries select: [ :anEntry | anEntry content isCodeChange ]
 ]
 
 { #category : #accessing }
@@ -126,13 +123,13 @@ GtEpiceaLog >> gtEventsFor: aView [
 		actionDropdownButtonLabel: 'Apply'
 			tooltip: 'Apply Selected Changes'
 			content: [ :aButton | 
-				(GtEpiceaApplyAction on: selected)
+				(GtEpiceaApplyAction on: (self orderEvents: selected))
 					anchor: aButton;
 					asDropdown ];
 		actionDropdownButtonLabel: 'Revert'
 			tooltip: 'Revert Selected Changes'
 			content: [ :aButton | 
-				(GtEpiceaRevertAction on: selected)
+				(GtEpiceaRevertAction on: (self orderEvents: selected))
 					anchor: aButton;
 					asDropdown ];
 		actionDropdownButtonLabel: 'Filters'
@@ -224,6 +221,11 @@ GtEpiceaLog >> name [
 { #category : #accessing }
 GtEpiceaLog >> ombuFile: aFile [
 	self log: (EpLog fromFile: aFile)
+]
+
+{ #category : #accessing }
+GtEpiceaLog >> orderEvents: aCollectionOfEvents [
+	^ (aCollectionOfEvents sorted: [:a :b | (log timeAt: a) > (log timeAt: b)]) collect: #content
 ]
 
 { #category : #accessing }
