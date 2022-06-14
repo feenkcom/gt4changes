@@ -82,8 +82,10 @@ GtEpiceaAction >> events [
 ]
 
 { #category : #accessing }
-GtEpiceaAction >> events: aCollectionOfEvents [ 
-	events := self treatEvents: (self latestEventsFrom: aCollectionOfEvents reversed).
+GtEpiceaAction >> events: aCollectionOfEvents [
+	events := (self
+			treatEvents: (self latestEventsFrom: aCollectionOfEvents reversed))
+			select: [ :eachEvent | eachEvent accept: (EpHasImpactVisitor inEnvironment: self class environment) ]
 ]
 
 { #category : #accessing }
