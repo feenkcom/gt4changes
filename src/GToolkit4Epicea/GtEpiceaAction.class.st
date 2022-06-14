@@ -2,7 +2,8 @@ Class {
 	#name : #GtEpiceaAction,
 	#superclass : #Object,
 	#instVars : [
-		'events'
+		'events',
+		'anchor'
 	],
 	#category : #'GToolkit4Epicea-GToolkit4Epicea'
 }
@@ -15,7 +16,14 @@ GtEpiceaAction class >> on: aCollectionOfEvents [
 
 { #category : #accessing }
 GtEpiceaAction >> action [
-	events do: [:each | each applyCodeChange ]
+	events do: [:each | each applyCodeChange ].
+	anchor fireEvent: BrDropdownHideWish new.
+	anchor phlow fireUpdateWish
+]
+
+{ #category : #accessing }
+GtEpiceaAction >> anchor: aButton [
+	anchor := aButton
 ]
 
 { #category : #accessing }
