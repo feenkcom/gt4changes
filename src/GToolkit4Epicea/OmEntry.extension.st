@@ -7,9 +7,7 @@ OmEntry >> diffElements [
 	elements := OrderedCollection new.
 
 	previous := self content accept:
-		            ((GtEpiceaCurrentStateVisitor inEnvironment:
-			              self class environment) showClassNameInMethodSource:
-			             false).
+		            EpOldStateVisitor new.
 	new := self content accept: EpNewStateVisitor new.
 	previous = new ifFalse: [ 
 		builder := (GtEpiceaDiffBuilder from: previous to: new) isMethod:
@@ -34,6 +32,24 @@ OmEntry >> diffElements [
 		element addAptitude: (BrShadowAptitude new width: 1).
 		elements add: element ].
 	^ elements
+]
+
+{ #category : #'*GToolkit4Epicea' }
+OmEntry >> gtActionBrowseEntryFor: anAction [
+	<gtAction>
+	self content isCodeChange ifFalse: [ ^ anAction noAction ].
+
+	(self content isKindOf: EpMethodChange)
+		ifTrue: [ ^ anAction button
+				label: 'Browse';
+				action: [ :button | self content methodAffected compiledMethod gtBrowseFrom: button ] ].
+
+	(self content isKindOf: EpClassChange)
+		ifTrue: [ ^ anAction button
+				label: 'Browse';
+				action: [ :button | self content behaviorAffected realClass gtBrowseFrom: button ] ].
+
+	^ anAction noAction
 ]
 
 { #category : #'*GToolkit4Epicea' }
