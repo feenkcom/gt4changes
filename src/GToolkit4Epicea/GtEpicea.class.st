@@ -102,7 +102,7 @@ GtEpicea >> createChangeList [
 		title: 'Select';
 		width: 32;
 		stencil: [ :anEpEvent :anIndex | 
-			| aRemoveButton aContainer |
+			| aRemoveButton |
 			aRemoveButton := BrButton new.
 			aRemoveButton
 				layout: BlLinearLayout new;
@@ -158,7 +158,7 @@ GtEpicea >> createGlobalChangeList [
 		title: 'Select';
 		width: 32;
 		stencil: [ :anOmEntry :anIndex | 
-			| anAddButton aContainer |
+			| anAddButton |
 			anAddButton := BrButton new.
 			anAddButton
 				layout: BlLinearLayout new;
