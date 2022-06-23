@@ -43,7 +43,6 @@ GtEpiceaNavigationStencil >> create [
 GtEpiceaNavigationStencil >> createListFor: aView [
 	<gtEpiceaNavigation>
 	
-	| element |
 	^ aView columnedList
 		title: 'Changes';
 		items: [ self changes ];
