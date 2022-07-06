@@ -1,6 +1,9 @@
 Class {
 	#name : #GtEpiceaCompositeLog,
-	#superclass : #Object,
+	#superclass : #GtEpiceaAbstractLog,
+	#instVars : [
+		'logs'
+	],
 	#category : #'GToolkit4Epicea-GToolkit4Epicea'
 }
 
@@ -26,23 +29,6 @@ GtEpiceaCompositeLog class >> onLogs: aCollectionOfLogs [
 	^ self new
 		logs: aCollectionOfLogs
 	
-]
-
-{ #category : #accessing }
-GtEpiceaCompositeLog >> allInSessionStore [
-	<script>
-	| monitor directory currentGlobalName |
-	monitor := EpMonitor current.
-	directory := monitor sessionStore baseLocator.
-	currentGlobalName := monitor sessionStore store globalName.
-	^ self onLogs: ((EpFileLogNode fromAllLogsIn: directory)
-		sort: [ :a :b | a modificationTime >= b modificationTime ];
-		collect: [ :n | 
-			| node |
-			node := n globalName = currentGlobalName
-				ifTrue: [ EpMonitorLogNode for: monitor ]
-				ifFalse: [ n ].
-			node log ])
 ]
 
 { #category : #accessing }
