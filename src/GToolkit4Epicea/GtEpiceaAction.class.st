@@ -84,7 +84,7 @@ GtEpiceaAction >> events [
 { #category : #accessing }
 GtEpiceaAction >> events: aCollectionOfEvents [
 	events := (self
-			treatEvents: (self latestEventsFrom: aCollectionOfEvents reversed))
+			treatEvents: (self latestEventsFrom: aCollectionOfEvents))
 			select: [ :eachEvent | eachEvent accept: (EpHasImpactVisitor inEnvironment: self class environment) ]
 ]
 
@@ -113,13 +113,13 @@ GtEpiceaAction >> gtEventsFor: aView [
 ]
 
 { #category : #accessing }
-GtEpiceaAction >> latestEventsFrom: previewEventsTheOldestFirst [
+GtEpiceaAction >> latestEventsFrom: previewEventsTheNewestFirst [
 
-	| aDictionary |
-	aDictionary := Dictionary new.
-	previewEventsTheOldestFirst do: [ :each | 
-		aDictionary at: each affectedMarker put: each ].
-	^ aDictionary values
+	| result |
+	result := OrderedCollection new.
+	previewEventsTheNewestFirst do: [ :each | 
+		(result anySatisfy: [:resultElement | resultElement affectedMarker = each affectedMarker ]) ifFalse: [ result add: each ] ].
+	^ result reverse
 ]
 
 { #category : #accessing }

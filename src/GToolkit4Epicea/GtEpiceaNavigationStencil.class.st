@@ -43,10 +43,12 @@ GtEpiceaNavigationStencil >> create [
 GtEpiceaNavigationStencil >> createListFor: aView [
 	<gtEpiceaNavigation>
 	
-	^ aView columnedList
+	^ aView columnedTree
 		title: 'Changes';
 		items: [ self changes ];
+		children: #gtChildren;
 		updateWhen: GtEpiceaChangeChanged in: self announcer;
+		column: 'Name' text: [ :change | change name ];
 		column: 'Active'
 			stencil: [ :item | 
 				item isActive
@@ -58,7 +60,6 @@ GtEpiceaNavigationStencil >> createListFor: aView [
 							margin: (BlInsets left: 14) ]
 					ifFalse: [ BlElement new size: 12 @ 12 ] ]
 			width: 38;
-		column: 'Name' text: [ :change | change name ];
 		column: 'From' text: [ :change | change startTime ];
 		send: [ :change | self announce: (GtEpiceaChangeSelected new change: change) ];
 		actionDropdownButtonIcon: BrGlamorousVectorIcons add
