@@ -24,7 +24,7 @@ GtChangeViewModel >> hasChange [
 
 { #category : #accessing }
 GtChangeViewModel >> name [
-	^ self changeModel log store globalName
+	^ self changeModel name
 ]
 
 { #category : #accessing }

@@ -128,7 +128,7 @@ GtEpiceaElement >> refreshView [
 { #category : #accessing }
 GtEpiceaElement >> shortTitle [
 
-	^ change ifNil: [ '' ] ifNotNil: [ change log store globalName ]
+	^ change ifNil: [ '' ] ifNotNil: [ change name ]
 ]
 
 { #category : #accessing }

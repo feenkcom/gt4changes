@@ -16,5 +16,5 @@ GtEpiceaNavigationModel >> announcer [
 
 { #category : #accessing }
 GtEpiceaNavigationModel >> changes [
-	^ GtEpiceaLog allInSessionStore
+	^ { GtEpiceaCompositeLog forAllInSessionStore }
 ]
