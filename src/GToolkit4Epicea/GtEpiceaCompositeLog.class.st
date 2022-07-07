@@ -80,7 +80,7 @@ GtEpiceaCompositeLog >> onLogs: aCollectionOfLogs [
 
 { #category : #accessing }
 GtEpiceaCompositeLog >> startTime [
-	^ self logs first startTime
+	^ self logs ifEmpty: [ nil ] ifNotEmpty: [ :logCollection | logCollection last startTime ]
 ]
 
 { #category : #accessing }
