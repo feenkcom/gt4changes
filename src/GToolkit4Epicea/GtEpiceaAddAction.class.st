@@ -38,7 +38,7 @@ GtEpiceaAddAction >> asDropdown [
 		^ aContainer alignCenter ].
 
 	aList := BrColumnedList new itemsProvider:
-		         (BrListStreamItemsProvider forCollection: self events).
+		         (BrStreamItemsProvider forCollection: self events).
 
 	aList column
 		title: 'Select';

@@ -29,7 +29,7 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 	view := aView columnedList
 			title: 'Change List';
 			priority: 3;
-			itemsProvider: [ BrListStreamItemsProvider forCollection: self entries reversed ];
+			itemsProvider: [ BrStreamItemsProvider forCollection: self entries reversed ];
 			itemContextMenuStencil: [ :element :item | 
 				item content isCodeChange
 					ifTrue: [ BrGlamorousSimpleContextMenuContent new
@@ -132,7 +132,7 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 								selectedFilters
 									do: [ :aPragma | newItems := self perform: aPragma methodSelector withArguments: {newItems} ].
 								aTab viewContentElement children first children second
-									itemsProvider: (BrListStreamItemsProvider forCollection: newItems toArray wait reversed).
+									itemsProvider: (BrStreamItemsProvider forCollection: newItems toArray wait reversed).
 								aButton fireEvent: BrDropdownHideWish new ]) ].
 
 	^ view
