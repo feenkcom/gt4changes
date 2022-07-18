@@ -17,35 +17,31 @@ GtEpiceaAddAction >> actionOn: aListOfEvents [
 
 { #category : #accessing }
 GtEpiceaAddAction >> asDropdown [
-
 	| aList aContainer selected |
 	selected := OrderedCollection new.
 
 	aContainer := BrVerticalPane new
-		              hExact: 300;
-		              vExact: 500;
-		              alignCenterRight;
-		              padding: (BlInsets all: 5);
-		              addAptitude:
-			              BrGlamorousWithHorizontalResizerAptitude new
-			              + BrGlamorousWithHorizontalResizerAptitude new beLeft
-			              + BrGlamorousWithVerticalResizerAptitude new.
+			hExact: 300;
+			vExact: 500;
+			alignCenterRight;
+			padding: (BlInsets all: 5);
+			addAptitude: BrGlamorousWithHorizontalResizerAptitude new
+					+ BrGlamorousWithHorizontalResizerAptitude new beLeft
+					+ BrGlamorousWithVerticalResizerAptitude new.
 
-	events ifEmpty: [ 
-		aContainer addChild: (BrLabel new
-				 aptitude: BrGlamorousLabelAptitude;
-				 text: 'No relevant changes').
-		^ aContainer alignCenter ].
+	events
+		ifEmpty: [ aContainer addChild: (BrLabel new text: 'No relevant changes').
+			^ aContainer alignCenter ].
 
-	aList := BrColumnedList new itemsProvider:
-		         (BrStreamItemsProvider forCollection: self events).
+	aList := BrColumnedList new
+			itemsProvider: (BrStreamItemsProvider forCollection: self events).
 
 	aList column
 		title: 'Select';
 		stencil: [ :anEpEvent :anIndex | 
 			BrCheckbox new
 				aptitude: BrGlamorousCheckboxAptitude
-					+ (BrGlamorousWithLabelTooltipAptitude new text: 'Select');
+						+ (BrGlamorousWithLabelTooltipAptitude new text: 'Select');
 				checked: false;
 				whenCheckedDo: [ selected add: anEpEvent ];
 				margin: (BlInsets right: 8);
@@ -53,8 +49,7 @@ GtEpiceaAddAction >> asDropdown [
 		width: 32.
 	aList column
 		title: 'Icon';
-		stencil: [ :anEpEvent :anIndex | 
-			(anEpEvent accept: EpIconVisitor new) asElement ];
+		stencil: [ :anEpEvent :anIndex | (anEpEvent accept: EpIconVisitor new) asElement ];
 		width: 32.
 	aList column
 		title: 'Description';
@@ -67,13 +62,13 @@ GtEpiceaAddAction >> asDropdown [
 					c vertical fitContent ] ].
 	aContainer addChild: aList matchParent.
 
-	aContainer addChild: (BrButton new
-			 aptitude: BrGlamorousButtonWithLabelAptitude new
-				 +
-					 (BrGlamorousWithLabelTooltipAptitude new text: 'Confirm action');
-			 label: 'Confirm';
-			 action: [ self actionOn: selected ];
-			 margin: (BlInsets top: 5)).
+	aContainer
+		addChild: (BrButton new
+				aptitude: BrGlamorousButtonWithLabelAptitude new
+						+ (BrGlamorousWithLabelTooltipAptitude new text: 'Confirm action');
+				label: 'Confirm';
+				action: [ self actionOn: selected ];
+				margin: (BlInsets top: 5)).
 
 	^ aContainer
 ]
