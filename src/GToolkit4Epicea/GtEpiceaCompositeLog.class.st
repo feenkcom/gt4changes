@@ -32,6 +32,30 @@ GtEpiceaCompositeLog class >> onLogs: aCollectionOfLogs [
 ]
 
 { #category : #accessing }
+GtEpiceaCompositeLog >> createListFor: aView [
+	<gtView>
+	
+	^ aView columnedTree
+		title: 'Changes';
+		items: [  { self } ];
+		children: #gtChildren;
+		column: 'Name' text: [ :change | change name ];
+		column: 'Active'
+			stencil: [ :item | 
+				item isActive
+					ifTrue: [ BlElement new
+							background: BrGlamorousColors selectedListItemColor;
+							aptitude: (BrGlamorousWithLabelTooltipAptitude new text: 'Active');
+							size: 12 @ 12;
+							geometry: (BlRoundedRectangleGeometry cornerRadius: 6);
+							margin: (BlInsets left: 14) ]
+					ifFalse: [ BlElement new size: 12 @ 12 ] ]
+			width: 38;
+		column: 'From' text: [ :change | change startTime ];
+		actionUpdateButtonTooltip: 'Reload list of changes'
+]
+
+{ #category : #accessing }
 GtEpiceaCompositeLog >> entries [
 		^ self logs flatCollect: #entries
 ]

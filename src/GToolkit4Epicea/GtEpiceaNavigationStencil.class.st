@@ -30,51 +30,13 @@ GtEpiceaNavigationStencil >> create [
 		  navigationModel: self navigationModel;
 		  addChild: (GtPhlowCompositeView new
 				   views: (GtPhlowViewsCollector new
-						    fromObject: self;
+						    fromObject: self navigationModel;
 						    pragmaName: #gtEpiceaNavigation;
 						    collect);
 				   asElementDo: [ :aTabGroup | 
 					   aTabGroup
 						   background: BrGlamorousColors neutralBackgroundColor;
 						   matchParent ])
-]
-
-{ #category : #accessing }
-GtEpiceaNavigationStencil >> createListFor: aView [
-	<gtEpiceaNavigation>
-	
-	^ aView columnedTree
-		title: 'Changes';
-		items: [ self changes ];
-		children: #gtChildren;
-		updateWhen: GtEpiceaChangeChanged in: self announcer;
-		column: 'Name' text: [ :change | change name ];
-		column: 'Active'
-			stencil: [ :item | 
-				item isActive
-					ifTrue: [ BlElement new
-							background: BrGlamorousColors selectedListItemColor;
-							aptitude: (BrGlamorousWithLabelTooltipAptitude new text: 'Active');
-							size: 12 @ 12;
-							geometry: (BlRoundedRectangleGeometry cornerRadius: 6);
-							margin: (BlInsets left: 14) ]
-					ifFalse: [ BlElement new size: 12 @ 12 ] ]
-			width: 38;
-		column: 'From' text: [ :change | change startTime ];
-		send: [ :change | self announce: (GtEpiceaChangeSelected new change: change) ];
-		actionDropdownButtonIcon: BrGlamorousVectorIcons add
-			tooltip: 'New Log'
-			content: [ :aDropdown :aTarget | 
-				| s |
-				s := GtEpiceaAddLogStencil new.
-				s dropdown: aDropdown.
-				s
-					onCreated: [ :log | 
-						aTarget viewContentElement phlow update.
-						self announce: GtEpiceaChangeAdded new.
-						self announce: (GtEpiceaChangeSelected new change: log) ].
-				s ];
-		actionUpdateButtonTooltip: 'Reload list of changes'
 ]
 
 { #category : #accessing }
