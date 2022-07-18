@@ -28,26 +28,31 @@ GtEpiceaAction >> anchor: aButton [
 
 { #category : #accessing }
 GtEpiceaAction >> asDropdown [
+
 	| aList aContainer |
 	aContainer := BrVerticalPane new
-			hExact: 300;
-			vExact: 500;
-			alignCenterRight;
-			padding: (BlInsets all: 5);
-			addAptitude: BrGlamorousWithHorizontalResizerAptitude new
-					+ BrGlamorousWithHorizontalResizerAptitude new beLeft
-					+ BrGlamorousWithVerticalResizerAptitude new.
+		              hExact: 300;
+		              vExact: 500;
+		              alignCenterRight;
+		              padding: (BlInsets all: 5);
+		              addAptitude:
+			              BrGlamorousWithHorizontalResizerAptitude new
+			              + BrGlamorousWithHorizontalResizerAptitude new beLeft
+			              + BrGlamorousWithVerticalResizerAptitude new.
 
-	events
-		ifEmpty: [ aContainer addChild: (BrLabel new text: 'No relevant changes').
-			^ aContainer alignCenter ].
+	events ifEmpty: [ 
+		aContainer addChild: (BrLabel new
+				 aptitude: BrGlamorousLabelAptitude;
+				 text: 'No relevant changes').
+		^ aContainer alignCenter ].
 
-	aList := BrColumnedList new
-			itemsProvider: (BrStreamItemsProvider forCollection: self events).
+	aList := BrColumnedList new itemsProvider:
+		         (BrStreamItemsProvider forCollection: self events).
 
 	aList column
 		title: 'Icon';
-		stencil: [ :anEpEvent :anIndex | (anEpEvent accept: EpIconVisitor new) asElement ];
+		stencil: [ :anEpEvent :anIndex | 
+			(anEpEvent accept: EpIconVisitor new) asElement ];
 		width: 32.
 	aList column
 		title: 'Description';
@@ -60,13 +65,13 @@ GtEpiceaAction >> asDropdown [
 					c vertical fitContent ] ].
 	aContainer addChild: aList matchParent.
 
-	aContainer
-		addChild: (BrButton new
-				aptitude: BrGlamorousButtonWithLabelAptitude new
-						+ (BrGlamorousWithLabelTooltipAptitude new text: 'Confirm action');
-				label: 'Confirm';
-				action: [ self action ];
-				margin: (BlInsets top: 5)).
+	aContainer addChild: (BrButton new
+			 aptitude: BrGlamorousButtonWithLabelAptitude new
+				 +
+					 (BrGlamorousWithLabelTooltipAptitude new text: 'Confirm action');
+			 label: 'Confirm';
+			 action: [ self action ];
+			 margin: (BlInsets top: 5)).
 
 	^ aContainer
 ]
