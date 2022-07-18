@@ -18,6 +18,7 @@ GtEpiceaAddLogStencil >> changeActionWith: input [
 	  name ifNotEmpty: [ change store resetWithStoreNamed: name ].
 	  EpMonitor current disable.
 	  EpMonitor current: (EpMonitor newWithLog: change) enable.
+	  GtEpiceaMonitor current announce: GtEpiceaLogAnnouncement new.
 	  dropdown ifNotNil: [ 
 		  dropdown enqueueTask: (BlTaskAction new action: [ 
 				   dropdown dispatchEvent:

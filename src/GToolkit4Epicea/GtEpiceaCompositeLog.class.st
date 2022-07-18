@@ -103,6 +103,11 @@ GtEpiceaCompositeLog >> onLogs: aCollectionOfLogs [
 ]
 
 { #category : #accessing }
+GtEpiceaCompositeLog >> shouldUpdate [
+	^ logs anySatisfy: #isActive
+]
+
+{ #category : #accessing }
 GtEpiceaCompositeLog >> startTime [
 	^ self logs ifEmpty: [ nil ] ifNotEmpty: [ :logCollection | logCollection last startTime ]
 ]

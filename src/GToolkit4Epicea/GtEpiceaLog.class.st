@@ -36,12 +36,18 @@ GtEpiceaLog >> addEntryWith: anEntry tags: aTagsBlock [
 ]
 
 { #category : #accessing }
-GtEpiceaLog >> additionFilter: aStream [
-
+GtEpiceaLog >> additionFilter [
 	<gtChangeFilter>
-	^ aStream filter: [ :aChange | 
-		  aChange content isCodeChange and: [ 
-			  aChange content class name endsWith: #Addition ] ]
+	^ GtFilterDescriptor new
+		creator: [ :aStream | 
+			aStream
+				filter: [ :anEntry | 
+					anEntry content isCodeChange
+						and: [ anEntry content class name endsWith: #Addition ] ] ];
+		named: 'Addition';
+		order: 12;
+		valueNotRequired;
+		beNotDefault
 ]
 
 { #category : #accessing }
@@ -88,10 +94,14 @@ GtEpiceaLog >> isFrozen [
 ]
 
 { #category : #accessing }
-GtEpiceaLog >> latestFilter: aStream [
+GtEpiceaLog >> latestFilter [
 	<gtChangeFilter>
-
-	^ aStream withoutDuplicatesBasedOn: [ :aChange | aChange content affectedMarker]
+	^ GtFilterDescriptor new
+		creator: [ :aStream | aStream withoutDuplicatesBasedOn: [ :aChange | aChange content affectedMarker ] ];
+		named: 'Latest';
+		order: 12;
+		valueNotRequired;
+		beNotDefault
 ]
 
 { #category : #accessing }
@@ -112,6 +122,11 @@ GtEpiceaLog >> name [
 { #category : #accessing }
 GtEpiceaLog >> ombuFile: aFile [
 	self log: (EpLog fromFile: aFile)
+]
+
+{ #category : #accessing }
+GtEpiceaLog >> shouldUpdate [
+	^ self isActive
 ]
 
 { #category : #accessing }
