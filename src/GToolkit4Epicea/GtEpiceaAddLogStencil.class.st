@@ -28,6 +28,7 @@ GtEpiceaAddLogStencil >> changeActionWith: input [
 
 { #category : #accessing }
 GtEpiceaAddLogStencil >> create [
+
 	| container button input label |
 	label := BrLabel new.
 	label
@@ -36,31 +37,33 @@ GtEpiceaAddLogStencil >> create [
 		margin: (BlInsets bottom: 5).
 
 	input := BrEditableLabel new
-			aptitude: BrGlamorousEditableLabelAptitude new glamorousRegularFontAndSize;
-			text: '';
-			switchToEditor;
-			hMatchParent;
-			vExact: 23;
-			constraintsDo: [ :c | c grid vertical alignCenter ].
+		         aptitude:
+			         BrGlamorousEditableLabelAptitude new
+				         glamorousRegularFontAndSize;
+		         text: '';
+		         switchToEditor;
+		         hMatchParent;
+		         vExact: 23;
+		         constraintsDo: [ :c | c grid vertical alignCenter ].
 
 	button := BrButton new
-			aptitude: BrGlamorousButtonWithIconAptitude;
-			icon: BrGlamorousVectorIcons accept;
-			action: (self changeActionWith: input).
+		          aptitude: BrGlamorousButtonWithIconAptitude;
+		          icon: BrGlamorousVectorIcons accept;
+		          action: (self changeActionWith: input).
 
 	container := BrVerticalPane new vFitContent
-			width: 150;
-			padding: (BlInsets all: 5).
+		             width: 150;
+		             padding: (BlInsets all: 5).
 	container addChild: label.
-	container
-		addChild: (BrHorizontalPane new matchParent
-				margin: (BlInsets bottom: 5);
-				addChild: (BrLabel new text: 'Name');
-				addChild: input).
-	container
-		addChild: (BrHorizontalPane new matchParent
-				layout: BlLinearLayout horizontal alignCenterRight;
-				addChild: button).
+	container addChild: (BrHorizontalPane new matchParent
+			 margin: (BlInsets bottom: 5);
+			 addChild: (BrLabel new
+					  aptitude: BrGlamorousLabelAptitude;
+					  text: 'Name');
+			 addChild: input).
+	container addChild: (BrHorizontalPane new matchParent
+			 layout: BlLinearLayout horizontal alignCenterRight;
+			 addChild: button).
 	^ container
 ]
 
