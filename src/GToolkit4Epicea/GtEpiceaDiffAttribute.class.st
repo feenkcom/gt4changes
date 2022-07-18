@@ -18,7 +18,6 @@ GtEpiceaDiffAttribute class >> constants [
 GtEpiceaDiffAttribute >> affect: aTBrTextEditorTextualPiece in: anEditorElement [
 	^ BrLabel new
 		text: self text;
-		aptitude: BrGlamorousLabelAptitude new;
 		background: Color gray;
 		padding: (BlInsets all: 3)
 ]

@@ -115,10 +115,7 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 							whenUncheckedDo: [ selectedFilters remove: item ] ].
 				aList column
 					title: 'Name';
-					stencil: [ :aFilter | 
-						BrLabel new
-							aptitude: BrGlamorousLabelAptitude;
-							text: (aFilter method selector removeSuffix: 'Filter:') ].
+					stencil: [ :aFilter | BrLabel new text: (aFilter method selector removeSuffix: 'Filter:') ].
 				aList addAptitude: BrColumnedListHeaderAptitude.
 				aContainer
 					addChild: aList;
