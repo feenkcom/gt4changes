@@ -135,6 +135,9 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 									itemsProvider: (BrStreamItemsProvider forCollection: newItems toArray wait reversed).
 								aButton fireEvent: BrDropdownHideWish new ]) ].
 
+	self isActive
+		ifTrue: [ aView updateWhen: GtEpiceaLogAnnouncement in: GtEpiceaMonitor current ].
+
 	^ view
 ]
 

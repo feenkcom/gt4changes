@@ -38,6 +38,9 @@ GtEpiceaElement >> initialize [
 	self addAptitude: BrLayoutResizerAptitude inherit.
 	self initializeView.
 	self navigationModel: self defaultNavigationModel.
+	
+	"TODO: put in proper place"
+	GtEpiceaMonitor current enable.
 ]
 
 { #category : #accessing }
