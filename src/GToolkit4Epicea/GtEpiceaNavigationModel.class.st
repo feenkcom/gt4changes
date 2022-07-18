@@ -27,6 +27,17 @@ GtEpiceaNavigationModel >> createListFor: aView [
 		title: 'Changes';
 		send: [ :change | self announce: (GtEpiceaChangeSelected new change: change) ];
 		updateWhen: GtEpiceaLogAnnouncement in: GtEpiceaMonitor current;
+		actionDropdownButtonIcon: BrGlamorousVectorIcons folder
+			tooltip: 'Select change directory'
+			content: [ :aDropdown | 
+				BrFileSelector new
+					folder: EpMonitor current sessionStore baseLocator;
+					okAction: [ :srcFolder | 
+						EpMonitor
+							current: (EpMonitor
+									newWithLog: (EpLog newWithStore: (OmSessionStore newWithBaseLocator: srcFolder))).
+						aDropdown fireEvent: BrDropdownHideWish new.
+						GtEpiceaMonitor current announce: GtEpiceaLogAnnouncement new ] ];
 		actionDropdownButtonIcon: BrGlamorousVectorIcons add
 			tooltip: 'New Log'
 			content: [ :aDropdown :aTarget | 
@@ -36,7 +47,7 @@ GtEpiceaNavigationModel >> createListFor: aView [
 				s
 					onCreated: [ :log | 
 						aTarget viewContentElement phlow update.
-						self announce: GtEpiceaChangeAdded new.
+						GtEpiceaMonitor current announce: GtEpiceaLogAnnouncement new.
 						self announce: (GtEpiceaChangeSelected new change: log) ].
 				s ];
 		object: [ self changes ];
