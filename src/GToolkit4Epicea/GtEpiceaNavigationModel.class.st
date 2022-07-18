@@ -16,5 +16,28 @@ GtEpiceaNavigationModel >> announcer [
 
 { #category : #accessing }
 GtEpiceaNavigationModel >> changes [
-	^ { GtEpiceaCompositeLog forAllInSessionStore }
+	^ GtEpiceaCompositeLog forAllInSessionStore
+]
+
+{ #category : #accessing }
+GtEpiceaNavigationModel >> createListFor: aView [
+	<gtView>
+	<gtEpiceaNavigation>
+	^ aView forward
+		title: 'Changes';
+		send: [ :change | self announce: (GtEpiceaChangeSelected new change: change) ];
+		actionDropdownButtonIcon: BrGlamorousVectorIcons add
+			tooltip: 'New Log'
+			content: [ :aDropdown :aTarget | 
+				| s |
+				s := GtEpiceaAddLogStencil new.
+				s dropdown: aDropdown.
+				s
+					onCreated: [ :log | 
+						aTarget viewContentElement phlow update.
+						self announce: GtEpiceaChangeAdded new.
+						self announce: (GtEpiceaChangeSelected new change: log) ].
+				s ];
+		object: [ self changes ];
+		view: #createListFor:
 ]
