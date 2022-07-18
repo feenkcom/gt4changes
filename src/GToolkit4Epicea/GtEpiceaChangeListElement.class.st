@@ -28,13 +28,12 @@ GtEpiceaChangeListElement >> initialize [
 	
 	self layout: BlLinearLayout vertical.
 	
-	selection := OrderedCollection new.
-	
 	self initializeFilters.
 	self initializeList.
 	
 	self addChild: self filters as: #filters.
 	self addChild: self list as: #list.
+	self addChild: self pendingBlock as: #pending.
 	
 	self matchParent
 ]
@@ -50,7 +49,7 @@ GtEpiceaChangeListElement >> initializeFilters [
 			event filterElement
 				filtersDo: [ :descriptor :ignored | items := descriptor newFilterWithValue: items ].
 			list
-				itemsProvider: (BrStreamItemsProvider forCollection: items toArray wait reversed) ]
+				itemsProvider: (BrStreamItemsProvider forCollection: items asArray reversed) ]
 ]
 
 { #category : #accessing }
@@ -133,8 +132,22 @@ GtEpiceaChangeListElement >> log [
 { #category : #accessing }
 GtEpiceaChangeListElement >> log: anEpLog [
 	log := anEpLog.
-	selection := log entries.
-	self updateElement
+	selection := log entriesStream toArray
+			then: [ :value | 
+				selection := value asOrderedCollection.
+				self removeChildNamed: #pending.
+				self updateElement ].
+	selection await
+]
+
+{ #category : #accessing }
+GtEpiceaChangeListElement >> pendingBlock [
+	^ BrLabel new
+		matchParent;
+		alignCenter;
+		aptitude: (BrGlamorousLabelAptitude new
+				foreground: BrGlamorousColors disabledButtonTextColor);
+		text: 'Computing changes...'
 ]
 
 { #category : #accessing }
@@ -160,5 +173,5 @@ GtEpiceaChangeListElement >> updateFilters [
 
 { #category : #accessing }
 GtEpiceaChangeListElement >> updateList [
-	list itemsProvider: (BrStreamItemsProvider forCollection: self log entries reversed)
+	list itemsProvider: (BrStreamItemsProvider forCollection: selection reversed)
 ]
