@@ -115,6 +115,11 @@ GtEpiceaLog >> ombuFile: aFile [
 ]
 
 { #category : #accessing }
+GtEpiceaLog >> shouldUpdate [
+	^ self isActive
+]
+
+{ #category : #accessing }
 GtEpiceaLog >> startTime [
 
 	^ self log startTime

@@ -11,7 +11,8 @@ Class {
 		'labelElement',
 		'headerElement',
 		'titleElement',
-		'removeButton'
+		'removeButton',
+		'updater'
 	],
 	#category : #'GToolkit4Epicea-Element'
 }
@@ -80,6 +81,14 @@ GtEpiceaChangeElement >> freezeThawButton [
 						 action: [ :aButton | 
 							 self changeViewModel changeModel freeze.
 							 aButton phlow fireUpdateWish ]) ] ]
+]
+
+{ #category : #accessing }
+GtEpiceaChangeElement >> handleAnnouncement: anAnnouncement [
+	(self changeViewModel hasChange not
+		or: [ self changeViewModel shouldUpdate not ]) ifTrue: [ ^ self ].
+
+	updater requestUpdate
 ]
 
 { #category : #accessing }
@@ -213,6 +222,17 @@ GtEpiceaChangeElement >> newChangeViewTabs [
 
 { #category : #accessing }
 GtEpiceaChangeElement >> subscribeToSignals [
+
+	updater := BrElementUpdater new.
+	updater postponedDuration: 1 seconds.
+	updater element: self.
+	updater action: [ :e | 
+		e updateElement.
+		updater resetUpdateRequested ].
+	GtEpiceaMonitor current weak
+		when: GtEpiceaLogAnnouncement
+		send: #handleAnnouncement:
+		to: self
 ]
 
 { #category : #accessing }

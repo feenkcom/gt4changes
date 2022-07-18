@@ -31,3 +31,8 @@ GtChangeViewModel >> name [
 GtChangeViewModel >> remove [
 	^ self changeModel log store fileReference ensureDelete
 ]
+
+{ #category : #accessing }
+GtChangeViewModel >> shouldUpdate [
+	^ changeModel shouldUpdate
+]

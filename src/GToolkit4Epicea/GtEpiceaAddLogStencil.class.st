@@ -10,19 +10,18 @@ Class {
 
 { #category : #accessing }
 GtEpiceaAddLogStencil >> changeActionWith: input [
-
-	^ [ 
-	  | change name |
-	  name := input text asString.
-	  change := EpLog newWithSessionStore.
-	  name ifNotEmpty: [ change store resetWithStoreNamed: name ].
-	  EpMonitor current disable.
-	  EpMonitor current: (EpMonitor newWithLog: change) enable.
-	  dropdown ifNotNil: [ 
-		  dropdown enqueueTask: (BlTaskAction new action: [ 
-				   dropdown dispatchEvent:
-					   (BrDropdownHideWish new anchor: dropdown) ]) ].
-	  onCreated value: (GtEpiceaLog new log: change) ]
+	^ [ | change name |
+	name := input text asString.
+	change := EpLog newWithSessionStore.
+	name ifNotEmpty: [ change store resetWithStoreNamed: name ].
+	EpMonitor current disable.
+	EpMonitor current: (EpMonitor newWithLog: change) enable.
+	GtEpiceaMonitor current announce: GtEpiceaLogAnnouncement new.
+	dropdown
+		ifNotNil: [ dropdown
+				enqueueTask: (BlTaskAction new
+						action: [ dropdown dispatchEvent: (BrDropdownHideWish new anchor: dropdown) ]) ].
+	onCreated value: (GtEpiceaLog new log: change) ]
 ]
 
 { #category : #accessing }
