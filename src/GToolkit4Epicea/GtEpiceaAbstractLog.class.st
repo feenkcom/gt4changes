@@ -45,13 +45,13 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 		actionDropdownButtonLabel: 'Apply'
 			tooltip: 'Apply Selected Changes'
 			content: [ :aButton | 
-				(GtEpiceaApplyAction on: (self orderEvents: element selection))
+				(GtEpiceaApplyAction on: (self orderEvents: element selectedCodeEvents))
 					anchor: aButton;
 					asDropdown ];
 		actionDropdownButtonLabel: 'Revert'
 			tooltip: 'Revert Selected Changes'
 			content: [ :aButton | 
-				(GtEpiceaRevertAction on: (self orderEvents: element selection))
+				(GtEpiceaRevertAction on: (self orderEvents: element selectedCodeEvents))
 					anchor: aButton;
 					asDropdown ].
 

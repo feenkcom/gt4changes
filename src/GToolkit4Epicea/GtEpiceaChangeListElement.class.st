@@ -151,6 +151,11 @@ GtEpiceaChangeListElement >> pendingBlock [
 ]
 
 { #category : #accessing }
+GtEpiceaChangeListElement >> selectedCodeEvents [
+	^ selection select: [ :event | event content isCodeChange ]
+]
+
+{ #category : #accessing }
 GtEpiceaChangeListElement >> selection [
 	^ selection
 ]
