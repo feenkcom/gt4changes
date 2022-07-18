@@ -26,6 +26,7 @@ GtEpiceaNavigationModel >> createListFor: aView [
 	^ aView forward
 		title: 'Changes';
 		send: [ :change | self announce: (GtEpiceaChangeSelected new change: change) ];
+		updateWhen: GtEpiceaLogAnnouncement in: GtEpiceaMonitor current;
 		actionDropdownButtonIcon: BrGlamorousVectorIcons add
 			tooltip: 'New Log'
 			content: [ :aDropdown :aTarget | 

@@ -62,7 +62,8 @@ GtEpiceaCompositeLog >> entries [
 
 { #category : #accessing }
 GtEpiceaCompositeLog >> entriesStream [
-	^ (self logs collect: #entriesStream) flatten
+	^ (AsyncSequenceStream forCollection: (self logs collect: #entriesStream))
+		flatten
 ]
 
 { #category : #accessing }
@@ -104,7 +105,7 @@ GtEpiceaCompositeLog >> onLogs: aCollectionOfLogs [
 
 { #category : #accessing }
 GtEpiceaCompositeLog >> shouldUpdate [
-	^ logs anySatisfy: #isActive
+	^ logs anySatisfy: [:log | EpMonitor current log store globalName = log store globalName ]
 ]
 
 { #category : #accessing }
