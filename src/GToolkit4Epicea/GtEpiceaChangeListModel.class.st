@@ -53,6 +53,13 @@ GtEpiceaChangeListModel >> filterDescriptors [
 ]
 
 { #category : #accessing }
+GtEpiceaChangeListModel >> initialize [
+	all := OrderedCollection new.
+	selection := OrderedCollection new.
+	available := OrderedCollection new
+]
+
+{ #category : #accessing }
 GtEpiceaChangeListModel >> log [
 	^ log
 ]

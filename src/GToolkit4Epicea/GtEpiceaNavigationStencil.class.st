@@ -42,8 +42,6 @@ GtEpiceaNavigationStencil >> create [
 { #category : #accessing }
 GtEpiceaNavigationStencil >> initialize [
 	super initialize.
-	
-	viewModel := GtEpiceaNavigationViewModel new
 ]
 
 { #category : #accessing }
