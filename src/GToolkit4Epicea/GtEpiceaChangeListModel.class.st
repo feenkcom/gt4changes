@@ -30,7 +30,7 @@ GtEpiceaChangeListModel >> applyFiltersFrom: aFilterElement [
 		filtersDo: [ :descriptor :ignored | items := descriptor newFilterWithValue: items ].
 	items := items toArray wait.
 	available := items.
-	selection := items.
+	selection := items asOrderedCollection.
 ]
 
 { #category : #accessing }
@@ -65,7 +65,7 @@ GtEpiceaChangeListModel >> log: anEpLog [
 				promise := nil.
 				available := aValue reversed.
 				all := available.
-				selection := available.
+				selection := available asOrderedCollection.
 				self whenReadyBlock ifNotNil: [ self whenReadyBlock value ] ].
 	promise await
 ]
