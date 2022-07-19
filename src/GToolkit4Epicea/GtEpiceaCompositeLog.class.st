@@ -67,8 +67,19 @@ GtEpiceaCompositeLog >> entriesStream [
 ]
 
 { #category : #accessing }
+GtEpiceaCompositeLog >> freeze [
+	self error: 'Cannot freeze a composite change'
+]
+
+{ #category : #accessing }
 GtEpiceaCompositeLog >> gtChildren [
 	^ self logs collect: [:aLog | GtEpiceaLog new log: aLog]
+]
+
+{ #category : #accessing }
+GtEpiceaCompositeLog >> initialize [
+	super initialize.
+	logs := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -111,6 +122,10 @@ GtEpiceaCompositeLog >> shouldUpdate [
 { #category : #accessing }
 GtEpiceaCompositeLog >> startTime [
 	^ self logs ifEmpty: [ nil ] ifNotEmpty: [ :logCollection | logCollection last startTime ]
+]
+
+{ #category : #accessing }
+GtEpiceaCompositeLog >> thaw [
 ]
 
 { #category : #accessing }
