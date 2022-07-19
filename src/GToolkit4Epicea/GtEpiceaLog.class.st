@@ -36,21 +36,6 @@ GtEpiceaLog >> addEntryWith: anEntry tags: aTagsBlock [
 ]
 
 { #category : #accessing }
-GtEpiceaLog >> additionFilter [
-	<gtChangeFilter>
-	^ GtFilterDescriptor new
-		creator: [ :aStream | 
-			aStream
-				filter: [ :anEntry | 
-					anEntry content isCodeChange
-						and: [ anEntry content class name endsWith: #Addition ] ] ];
-		named: 'Addition';
-		order: 12;
-		valueNotRequired;
-		beNotDefault
-]
-
-{ #category : #accessing }
 GtEpiceaLog >> endTime [
 	^ self log endTime
 ]
@@ -91,17 +76,6 @@ GtEpiceaLog >> isActive [
 { #category : #accessing }
 GtEpiceaLog >> isFrozen [
 	^ frozen
-]
-
-{ #category : #accessing }
-GtEpiceaLog >> latestFilter [
-	<gtChangeFilter>
-	^ GtFilterDescriptor new
-		creator: [ :aStream | aStream withoutDuplicatesBasedOn: [ :aChange | aChange content affectedMarker ] ];
-		named: 'Latest';
-		order: 12;
-		valueNotRequired;
-		beNotDefault
 ]
 
 { #category : #accessing }

@@ -5,6 +5,21 @@ Class {
 }
 
 { #category : #accessing }
+GtEpiceaAbstractLog >> additionFilter [
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream | 
+			aStream
+				filter: [ :anEntry | 
+					anEntry content isCodeChange
+						and: [ anEntry content class name endsWith: #Addition ] ] ];
+		named: 'Addition';
+		order: 12;
+		valueNotRequired;
+		beNotDefault
+]
+
+{ #category : #accessing }
 GtEpiceaAbstractLog >> codeEvents [
 	^ self entries select: [ :anEntry | anEntry content isCodeChange ]
 ]
@@ -68,6 +83,17 @@ GtEpiceaAbstractLog >> isActive [
 { #category : #accessing }
 GtEpiceaAbstractLog >> isFrozen [
 	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractLog >> latestFilter [
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream | aStream withoutDuplicatesBasedOn: [ :aChange | aChange content affectedMarker ] ];
+		named: 'Latest';
+		order: 12;
+		valueNotRequired;
+		beNotDefault
 ]
 
 { #category : #accessing }

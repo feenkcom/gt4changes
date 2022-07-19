@@ -49,7 +49,7 @@ GtEpiceaChangeListElement >> initializeFilters [
 			event filterElement
 				filtersDo: [ :descriptor :ignored | items := descriptor newFilterWithValue: items ].
 			list
-				itemsProvider: (BrStreamItemsProvider forCollection: items asArray reversed) ]
+				itemsProvider: (BrStreamItemsProvider forCollection: items toArray wait reversed) ]
 ]
 
 { #category : #accessing }
