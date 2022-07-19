@@ -7,14 +7,15 @@ Class {
 		'log',
 		'filters',
 		'list',
-		'selection'
+		'selection',
+		'model'
 	],
 	#category : #'GToolkit4Epicea-Element'
 }
 
 { #category : #'instance creation' }
-GtEpiceaChangeListElement class >> onLog: anEpLog [
-	^ self new log: anEpLog
+GtEpiceaChangeListElement class >> forModel: aListModel [
+	^ self new model: aListModel
 ]
 
 { #category : #accessing }
@@ -44,12 +45,8 @@ GtEpiceaChangeListElement >> initializeFilters [
 	filters
 		when: GtFiltersChangedEvent
 		do: [ :event | 
-			| items |
-			items := self log entriesStream.
-			event filterElement
-				filtersDo: [ :descriptor :ignored | items := descriptor newFilterWithValue: items ].
-			list
-				itemsProvider: (BrStreamItemsProvider forCollection: items toArray wait reversed) ]
+			model applyFiltersFrom: event filterElement.
+			self updateList ]
 ]
 
 { #category : #accessing }
@@ -63,9 +60,9 @@ GtEpiceaChangeListElement >> initializeList [
 						aptitude: BrGlamorousCheckboxAptitude
 								+ (BrGlamorousWithLabelTooltipAptitude new text: 'Select');
 						checked: true;
-						whenCheckedDo: [ selection add: anEpEvent ];
+						whenCheckedDo: [ model select: anEpEvent ];
 						margin: (BlInsets left: 20);
-						whenUncheckedDo: [ selection remove: anEpEvent ] ]
+						whenUncheckedDo: [ model deselect: anEpEvent ] ]
 				ifFalse: [ BlElement new size: 1 @ 1 ] ];
 		width: 56.
 
@@ -88,7 +85,7 @@ GtEpiceaChangeListElement >> initializeList [
 		width: 250;
 		title: 'Timestamp';
 		cellStencil: [ :each | BrLabel new aptitude: BrGlamorousLabelAptitude new ];
-		dataBinder: [ :aLabel :anEpEvent | aLabel text: (self log timeAt: anEpEvent) asString ].
+		dataBinder: [ :aLabel :anEpEvent | aLabel text: (model timeAt: anEpEvent) asString ].
 
 	list
 		when: BrSelectionChanged
@@ -125,19 +122,11 @@ GtEpiceaChangeListElement >> list [
 ]
 
 { #category : #accessing }
-GtEpiceaChangeListElement >> log [
-	^ log
-]
-
-{ #category : #accessing }
-GtEpiceaChangeListElement >> log: anEpLog [
-	log := anEpLog.
-	selection := log entriesStream toArray
-			then: [ :value | 
-				selection := value asOrderedCollection.
+GtEpiceaChangeListElement >> model: aListModel [
+	model := aListModel.
+	model whenReady: [
 				self removeChildNamed: #pending.
-				self updateElement ].
-	selection await
+				self updateElement ]
 ]
 
 { #category : #accessing }
@@ -151,16 +140,6 @@ GtEpiceaChangeListElement >> pendingBlock [
 ]
 
 { #category : #accessing }
-GtEpiceaChangeListElement >> selectedCodeEvents [
-	^ selection select: [ :event | event content isCodeChange ]
-]
-
-{ #category : #accessing }
-GtEpiceaChangeListElement >> selection [
-	^ selection
-]
-
-{ #category : #accessing }
 GtEpiceaChangeListElement >> updateElement [
 	self updateFilters.
 	self updateList
@@ -168,15 +147,10 @@ GtEpiceaChangeListElement >> updateElement [
 
 { #category : #accessing }
 GtEpiceaChangeListElement >> updateFilters [
-	filters
-		descriptors: ((GtPhlowCollector new
-				fromObject: self log;
-				pragmaName: #gtChangeFilter;
-				collectAllPragmas)
-				collect: [ :aPragma | self log perform: aPragma methodSelector ])
+	filters descriptors: model filterDescriptors
 ]
 
 { #category : #accessing }
 GtEpiceaChangeListElement >> updateList [
-	list itemsProvider: (BrStreamItemsProvider forCollection: selection reversed)
+	list itemsProvider: model availableProvider
 ]
