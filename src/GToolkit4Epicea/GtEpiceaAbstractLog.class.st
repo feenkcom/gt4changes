@@ -1,6 +1,9 @@
 Class {
 	#name : #GtEpiceaAbstractLog,
 	#superclass : #Object,
+	#instVars : [
+		'frozen'
+	],
 	#category : #'GToolkit4Epicea-GToolkit4Epicea'
 }
 
@@ -32,6 +35,14 @@ GtEpiceaAbstractLog >> entries [
 { #category : #accessing }
 GtEpiceaAbstractLog >> entriesStream [
 	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractLog >> freeze [
+
+	self isActive ifTrue: [ 
+		self error: 'Cannot freeze an active change set.' ].
+	frozen := true
 ]
 
 { #category : #accessing }
@@ -76,13 +87,18 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 ]
 
 { #category : #accessing }
+GtEpiceaAbstractLog >> initialize [
+	frozen := false
+]
+
+{ #category : #accessing }
 GtEpiceaAbstractLog >> isActive [
 	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
 GtEpiceaAbstractLog >> isFrozen [
-	^ self subclassResponsibility
+	^ frozen
 ]
 
 { #category : #accessing }
@@ -104,6 +120,11 @@ GtEpiceaAbstractLog >> log [
 { #category : #accessing }
 GtEpiceaAbstractLog >> orderEvents: aCollectionOfEvents [
 	^ (aCollectionOfEvents sorted: [:a :b | (self timeAt: a) > (self timeAt: b)]) collect: #content
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractLog >> thaw [
+	frozen := false
 ]
 
 { #category : #accessing }

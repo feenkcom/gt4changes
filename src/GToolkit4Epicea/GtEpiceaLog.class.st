@@ -2,8 +2,7 @@ Class {
 	#name : #GtEpiceaLog,
 	#superclass : #GtEpiceaAbstractLog,
 	#instVars : [
-		'log',
-		'frozen'
+		'log'
 	],
 	#category : #'GToolkit4Epicea-GToolkit4Epicea'
 }
@@ -42,20 +41,12 @@ GtEpiceaLog >> endTime [
 
 { #category : #accessing }
 GtEpiceaLog >> entries [
-	^  self log entries
+	^ log ifNil: [ {} ] ifNotNil: [ self log entries ]
 ]
 
 { #category : #accessing }
 GtEpiceaLog >> entriesStream [
-	^ self log entriesStream
-]
-
-{ #category : #accessing }
-GtEpiceaLog >> freeze [
-
-	self isActive ifTrue: [ 
-		self error: 'Cannot freeze an active change set.' ].
-	frozen := true
+	^ log ifNil: [ AsyncEmptyStream new ] ifNotNil: [ log entriesStream ]
 ]
 
 { #category : #accessing }
@@ -64,18 +55,8 @@ GtEpiceaLog >> gtChildren [
 ]
 
 { #category : #accessing }
-GtEpiceaLog >> initialize [
-	frozen := false
-]
-
-{ #category : #accessing }
 GtEpiceaLog >> isActive [
 	^ EpMonitor current log store globalName = self name
-]
-
-{ #category : #accessing }
-GtEpiceaLog >> isFrozen [
-	^ frozen
 ]
 
 { #category : #accessing }
@@ -90,7 +71,7 @@ GtEpiceaLog >> log: aLog [
 
 { #category : #accessing }
 GtEpiceaLog >> name [
-	^ log store globalName
+	^ log ifNil: [ '' ] ifNotNil: [ log store globalName ]
 ]
 
 { #category : #accessing }
@@ -112,11 +93,6 @@ GtEpiceaLog >> startTime [
 { #category : #accessing }
 GtEpiceaLog >> store [
 	^ self log store
-]
-
-{ #category : #accessing }
-GtEpiceaLog >> thaw [
-	frozen := false
 ]
 
 { #category : #accessing }
