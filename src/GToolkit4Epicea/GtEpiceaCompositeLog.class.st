@@ -62,7 +62,7 @@ GtEpiceaCompositeLog >> entries [
 
 { #category : #accessing }
 GtEpiceaCompositeLog >> entriesStream [
-	^ (AsyncSequenceStream forCollection: (self logs collect: #entriesStream))
+	^ (AsyncSequenceStream forCollection: (self logs reverse collect: #entriesStream))
 		flatten
 ]
 
