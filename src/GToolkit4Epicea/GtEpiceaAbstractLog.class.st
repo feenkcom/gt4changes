@@ -38,13 +38,13 @@ GtEpiceaAbstractLog >> entriesStream [
 GtEpiceaAbstractLog >> gtEventsFor: aView [
 	<gtView>
 	<gtViewChanges>
-	| view element |
-	element := GtEpiceaChangeListElement onLog: self.
+	| view changeListModel |
+	changeListModel := GtEpiceaChangeListModel onLog: self.
 
 	view := aView explicit
 			title: 'Change List';
 			priority: 3;
-			stencil: [ element padding: (BlInsets top: 5)].
+			stencil: [ (GtEpiceaChangeListElement forModel: changeListModel) padding: (BlInsets top: 5)].
 
 	(self isFrozen or: [ self isActive ])
 		ifFalse: [ view
@@ -60,13 +60,13 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 		actionDropdownButtonLabel: 'Apply'
 			tooltip: 'Apply Selected Changes'
 			content: [ :aButton | 
-				(GtEpiceaApplyAction on: (self orderEvents: element selectedCodeEvents))
+				(GtEpiceaApplyAction on: (self orderEvents: changeListModel selectedCodeEvents))
 					anchor: aButton;
 					asDropdown ];
 		actionDropdownButtonLabel: 'Revert'
 			tooltip: 'Revert Selected Changes'
 			content: [ :aButton | 
-				(GtEpiceaRevertAction on: (self orderEvents: element selectedCodeEvents))
+				(GtEpiceaRevertAction on: (self orderEvents: changeListModel selectedCodeEvents))
 					anchor: aButton;
 					asDropdown ].
 
