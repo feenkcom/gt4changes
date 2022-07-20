@@ -42,6 +42,12 @@ GtEpicea class >> constants [
 	^ LepiterConstants
 ]
 
+{ #category : #accessing }
+GtEpicea class >> current [
+	<script>
+	^ self new log: (EpMonitorLogNode for: EpMonitor current) log
+]
+
 { #category : #modification }
 GtEpicea >> addEvent: anEpEvent [
 	self log addEntryWith: anEpEvent tags: [ :tags | "ignore" ].
