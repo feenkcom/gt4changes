@@ -32,6 +32,9 @@ GtEpiceaNavigationModel >> createListFor: aView [
 			content: [ :aDropdown | 
 				BrFileSelector new
 					folder: EpMonitor current sessionStore baseLocator;
+					addAptitude: BrGlamorousWithHorizontalResizerAptitude new
+							+ BrGlamorousWithHorizontalResizerAptitude new beLeft
+							+ BrGlamorousWithVerticalResizerAptitude new;
 					okAction: [ :srcFolder | 
 						EpMonitor
 							current: (EpMonitor
