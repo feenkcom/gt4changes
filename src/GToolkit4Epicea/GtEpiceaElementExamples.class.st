@@ -18,6 +18,7 @@ GtEpiceaElementExamples >> expandedElement [
 { #category : #accessing }
 GtEpiceaElementExamples >> scripterFreezeLog [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self scripterOnExpandedElementWithSelectedSimpleLog.
 	aScripter
@@ -54,6 +55,7 @@ GtEpiceaElementExamples >> scripterOnExpandedElement [
 { #category : #accessing }
 GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedActiveLog [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self scripterOnExpandedElement.
 	aScripter
@@ -85,7 +87,7 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedActiveLog [
 ]
 
 { #category : #accessing }
-GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedLog [
+GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedCompositeLog [
 	<gtExample>
 	| aScripter |
 	aScripter := self scripterOnExpandedElement.
@@ -113,6 +115,7 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedLog [
 { #category : #accessing }
 GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedSimpleLog [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self scripterOnExpandedElement.
 	aScripter
