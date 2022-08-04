@@ -64,23 +64,23 @@ GtEpiceaChangeElement >> defaultLayout [
 { #category : #accessing }
 GtEpiceaChangeElement >> freezeThawButton [
 	<gtChangeAction>
-
-	self changeViewModel changeModel isActive ifFalse: [ 
-		self changeViewModel changeModel isFrozen
-			ifTrue: [ 
-				toolbarElement addItem: (BrButton new
-						 aptitude: BrGlamorousButtonWithLabelAptitude;
-						 label: 'Thaw';
-						 action: [ :aButton | 
-							 self changeViewModel changeModel thaw.
-							 aButton phlow fireUpdateWish ]) ]
-			ifFalse: [ 
-				toolbarElement addItem: (BrButton new
-						 aptitude: BrGlamorousButtonWithLabelAptitude;
-						 label: 'Freeze';
-						 action: [ :aButton | 
-							 self changeViewModel changeModel freeze.
-							 aButton phlow fireUpdateWish ]) ] ]
+	self changeViewModel changeModel isActive
+		ifFalse: [ self changeViewModel changeModel canBeFrozen
+				ifTrue: [ self changeViewModel changeModel isFrozen
+						ifTrue: [ toolbarElement
+								addItem: (BrButton new
+										aptitude: BrGlamorousButtonWithLabelAptitude;
+										label: 'Thaw';
+										action: [ :aButton | 
+											self changeViewModel changeModel thaw.
+											aButton phlow fireUpdateWish ]) ]
+						ifFalse: [ toolbarElement
+								addItem: (BrButton new
+										aptitude: BrGlamorousButtonWithLabelAptitude;
+										label: 'Freeze';
+										action: [ :aButton | 
+											self changeViewModel changeModel freeze.
+											aButton phlow fireUpdateWish ]) ] ] ]
 ]
 
 { #category : #accessing }
@@ -170,18 +170,6 @@ GtEpiceaChangeElement >> initializeToolbarElement [
 			                  (BrGlamorousToolbarAptitude new spacing: 5);
 		                  fitContent;
 		                  margin: (BlInsets bottom: 5)
-]
-
-{ #category : #accessing }
-GtEpiceaChangeElement >> inspectButton [
-	<gtChangeAction>
-	
-	toolbarElement addItem:
-				((BrButton new)
-						aptitude: BrGlamorousButtonWithIconAptitude;
-						icon: BrGlamorousVectorIcons inspect;
-						label: 'Inspect';
-						action: [ :aButton | aButton phlow spawnObject: self changeViewModel changeModel ]).
 ]
 
 { #category : #accessing }
