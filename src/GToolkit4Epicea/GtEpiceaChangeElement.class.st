@@ -173,18 +173,6 @@ GtEpiceaChangeElement >> initializeToolbarElement [
 ]
 
 { #category : #accessing }
-GtEpiceaChangeElement >> inspectButton [
-	<gtChangeAction>
-	
-	toolbarElement addItem:
-				((BrButton new)
-						aptitude: BrGlamorousButtonWithIconAptitude;
-						icon: BrGlamorousVectorIcons inspect;
-						label: 'Inspect';
-						action: [ :aButton | aButton phlow spawnObject: self changeViewModel changeModel ]).
-]
-
-{ #category : #accessing }
 GtEpiceaChangeElement >> labelElement [
 	^ labelElement
 ]
