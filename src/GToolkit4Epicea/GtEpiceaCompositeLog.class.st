@@ -32,6 +32,11 @@ GtEpiceaCompositeLog class >> onLogs: aCollectionOfLogs [
 ]
 
 { #category : #accessing }
+GtEpiceaCompositeLog >> canBeFrozen [
+	^ false
+]
+
+{ #category : #accessing }
 GtEpiceaCompositeLog >> createListFor: aView [
 	<gtView>
 	

@@ -23,6 +23,11 @@ GtEpiceaAbstractLog >> additionFilter [
 ]
 
 { #category : #accessing }
+GtEpiceaAbstractLog >> canBeFrozen [
+	^ true
+]
+
+{ #category : #accessing }
 GtEpiceaAbstractLog >> codeEvents [
 	^ self entries select: [ :anEntry | anEntry content isCodeChange ]
 ]
