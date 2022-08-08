@@ -93,7 +93,17 @@ GtEpiceaCompositeLog >> isActive [
 ]
 
 { #category : #accessing }
+GtEpiceaCompositeLog >> isComposite [
+	^ true
+]
+
+{ #category : #accessing }
 GtEpiceaCompositeLog >> isFrozen [
+	^ false
+]
+
+{ #category : #accessing }
+GtEpiceaCompositeLog >> isSimple [
 	^ false
 ]
 

@@ -58,58 +58,85 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedActiveLog [
 	<noTest>
 	| aScripter |
 	aScripter := self scripterOnExpandedElement.
-	aScripter
-		substep: 'Click on changes'
-		do: [ :aStep | 
-			aStep check
-				label: 'Check no change';
-				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ].
 
-			aStep click
-				label: 'Click change expander';
-				id: #sidebar;
-				id: #content;
-				id: #scrollable;
-				id: #toggle.
+	aScripter check
+		label: 'Check no change';
+		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ];
+		play.
 
-			aStep click
-				label: 'Click first simple change';
-				id: #sidebar;
-				id: #content;
-				id: #scrollable;
-				onChildAt: 2.
+	aScripter click
+		label: 'Click change expander';
+		id: #sidebar;
+		id: #content;
+		id: #scrollable;
+		id: #toggle;
+		play.
 
-			aStep check
-				label: 'Check change selected';
-				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ] ].
+	aScripter click
+		label: 'Click active change';
+		id: #sidebar;
+		id: #content;
+		id: #scrollable;
+		onChildAt: 2;
+		play.
 
-	^ aScripter syncContinue
+	aScripter check
+		label: 'Check change selected';
+		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ];
+		play.
+
+	aScripter check
+		label: 'Check change selected';
+		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isSimple ];
+		play.
+
+	aScripter check
+		label: 'Check change is active';
+		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isActive ];
+		play.
+
+	^ aScripter
 ]
 
 { #category : #accessing }
 GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedCompositeLog [
 	<gtExample>
+	<noTest>
 	| aScripter |
 	aScripter := self scripterOnExpandedElement.
-	aScripter
-		substep: 'Click on changes'
-		do: [ :aStep | 
-			aStep check
-				label: 'Check no change';
-				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ].
 
-			aStep click
-				label: 'Click change';
-				id: #sidebar;
-				id: #content;
-				id: #scrollable;
-				onChildAt: 1.
+	aScripter check
+		label: 'Check no change';
+		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ];
+		play.
 
-			aStep check
-				label: 'Check change selected';
-				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ] ].
+	aScripter click
+		label: 'Click change expander';
+		id: #sidebar;
+		id: #content;
+		id: #scrollable;
+		id: #toggle;
+		play.
 
-	^ aScripter syncContinue
+	aScripter click
+		label: 'Click composite change';
+		id: #sidebar;
+		id: #content;
+		id: #scrollable;
+		onChildAt: 1;
+		play.
+
+	aScripter check
+		label: 'Check change selected';
+		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ];
+		play.
+
+	aScripter check
+		label: 'Check change is composite';
+		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isComposite ];
+		play.
+
+	^ aScripter
 ]
 
 { #category : #accessing }
@@ -118,32 +145,44 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedSimpleLog [
 	<noTest>
 	| aScripter |
 	aScripter := self scripterOnExpandedElement.
-	aScripter
-		substep: 'Click on changes'
-		do: [ :aStep | 
-			aStep check
-				label: 'Check no change';
-				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ].
 
-			aStep click
-				label: 'Click change expander';
-				id: #sidebar;
-				id: #content;
-				id: #scrollable;
-				id: #toggle.
+	aScripter check
+		label: 'Check no change';
+		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ];
+		play.
 
-			aStep click
-				label: 'Click first simple change';
-				id: #sidebar;
-				id: #content;
-				id: #scrollable;
-				onChildAt: 3.
+	aScripter click
+		label: 'Click change expander';
+		id: #sidebar;
+		id: #content;
+		id: #scrollable;
+		id: #toggle;
+		play.
 
-			aStep check
-				label: 'Check change selected';
-				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ] ].
+	aScripter click
+		label: 'Click composite change';
+		id: #sidebar;
+		id: #content;
+		id: #scrollable;
+		onChildAt: 3;
+		play.
 
-	^ aScripter syncContinue
+	aScripter check
+		label: 'Check change selected';
+		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ];
+		play.
+
+	aScripter check
+		label: 'Check change is composite';
+		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isSimple ];
+		play.
+
+	aScripter check
+		label: 'Check change is not active';
+		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isActive not ];
+		play.
+
+	^ aScripter
 ]
 
 { #category : #accessing }
