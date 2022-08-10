@@ -60,6 +60,16 @@ GtEpiceaLog >> isActive [
 ]
 
 { #category : #accessing }
+GtEpiceaLog >> isComposite [
+	^ false
+]
+
+{ #category : #accessing }
+GtEpiceaLog >> isSimple [
+	^ true
+]
+
+{ #category : #accessing }
 GtEpiceaLog >> log [
 	^ log
 ]
