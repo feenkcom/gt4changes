@@ -36,6 +36,9 @@ GtEpiceaNavigationModel >> createListFor: aView [
 					addAptitude: BrGlamorousWithHorizontalResizerAptitude new
 							+ BrGlamorousWithHorizontalResizerAptitude new beLeft
 							+ BrGlamorousWithVerticalResizerAptitude new;
+					fileFilterBlock: [ :aFileReference | 
+						aFileReference isDirectory
+							and: [ (FileSystemDirectoryEntry reference: aFileReference) isHidden not ] ];
 					okAction: [ :srcFolder | 
 						EpMonitor
 							current: (EpMonitor
