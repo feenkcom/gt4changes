@@ -8,20 +8,24 @@ Class {
 }
 
 { #category : #accessing }
-GtEpiceaCompositeLog class >> forAllInSessionStore [
-	<script>
+GtEpiceaCompositeLog class >> allInSessionStore [
 	| monitor directory currentGlobalName |
 	monitor := EpMonitor current.
 	directory := monitor sessionStore baseLocator.
 	currentGlobalName := monitor sessionStore store globalName.
-	^ self onLogs: ((EpFileLogNode fromAllLogsIn: directory)
+	^ (EpFileLogNode fromAllLogsIn: directory)
 		sort: [ :a :b | a modificationTime >= b modificationTime ];
 		collect: [ :n | 
 			| node |
 			node := n globalName = currentGlobalName
-				ifTrue: [ EpMonitorLogNode for: monitor ]
-				ifFalse: [ n ].
-			node log ])
+					ifTrue: [ EpMonitorLogNode for: monitor ]
+					ifFalse: [ n ].
+			node log ]
+]
+
+{ #category : #accessing }
+GtEpiceaCompositeLog class >> forAllInSessionStore [
+	^ self onLogs: self allInSessionStore
 ]
 
 { #category : #accessing }
@@ -39,10 +43,9 @@ GtEpiceaCompositeLog >> canBeFrozen [
 { #category : #accessing }
 GtEpiceaCompositeLog >> createListFor: aView [
 	<gtView>
-	
 	^ aView columnedTree
 		title: 'Changes';
-		items: [  { self } ];
+		items: [ {self} ];
 		children: #gtChildren;
 		column: 'Name' text: [ :change | change name ];
 		column: 'Active'
@@ -57,7 +60,11 @@ GtEpiceaCompositeLog >> createListFor: aView [
 					ifFalse: [ BlElement new size: 12 @ 12 ] ]
 			width: 38;
 		column: 'From' text: [ :change | change startTime ];
-		actionUpdateButtonTooltip: 'Reload list of changes'
+		actionButtonIcon: BrGlamorousVectorIcons refresh
+			tooltip: 'Reload list of changes'
+			action: [ :aButton :aTab | 
+				self recompute.
+				aTab viewContentElement phlow update ]
 ]
 
 { #category : #accessing }
@@ -123,10 +130,8 @@ GtEpiceaCompositeLog >> name [
 ]
 
 { #category : #accessing }
-GtEpiceaCompositeLog >> onLogs: aCollectionOfLogs [
-	^ self new
-		logs: aCollectionOfLogs
-	
+GtEpiceaCompositeLog >> recompute [
+	^ self logs: self class allInSessionStore
 ]
 
 { #category : #accessing }
