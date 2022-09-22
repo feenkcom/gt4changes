@@ -222,7 +222,7 @@ GtEpicea >> diffElements [
 						showClassNameInMethodSource: false).
 			new := each accept: EpNewStateVisitor new.
 			previous = new
-				ifFalse: [ builder := (GtEpiceaDiffBuilder from: previous to: new)
+				ifFalse: [ builder := (GtCodeDiffBuilder from: previous to: new)
 						isMethod: (each isKindOf: EpMethodChange).
 					element := BrVerticalPane new.
 					element margin: (BlInsets all: 3).
