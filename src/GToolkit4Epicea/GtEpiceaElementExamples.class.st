@@ -46,7 +46,7 @@ GtEpiceaElementExamples >> scripterOnExpandedElement [
 	<gtExample>
 	| aScripter |
 	
-	aScripter := BlDevScripter new.
+	aScripter := BlScripter new.
 	aScripter element: self expandedElement.
 	
 	^ aScripter
