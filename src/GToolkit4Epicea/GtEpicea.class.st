@@ -250,13 +250,13 @@ GtEpicea >> diffElements [
 
 { #category : #accessing }
 GtEpicea >> entries [
-	<return: #OrderedeCollection of: #OmEntry>
+	<return: #OrderedCollection of: #OmEntry>
 	^ self log entries
 ]
 
 { #category : #accessing }
 GtEpicea >> events [
-	<return: #OrderedeCollection of: #EpEvent>
+	<return: #OrderedCollection of: #EpEvent>
 	^ events
 ]
 
