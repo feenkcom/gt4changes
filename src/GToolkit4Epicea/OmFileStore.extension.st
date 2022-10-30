@@ -1,6 +1,12 @@
 Extension { #name : #OmFileStore }
 
 { #category : #'*GToolkit4Epicea' }
+OmFileStore >> directory [
+
+	^ fileReference parent
+]
+
+{ #category : #'*GToolkit4Epicea' }
 OmFileStore >> entriesStream [
 
 	| stream |

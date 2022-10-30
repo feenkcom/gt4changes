@@ -85,3 +85,13 @@ OmEntry >> gtOldSourceFor: aView [
 		priority: 42;
 		text: [ self content accept: EpOldStateVisitor new ]
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+OmEntry >> gtTagsFor: aView [
+	<gtView>
+	
+	^ aView forward
+		title: 'Tags';
+		priority: 45;
+		object: [ tags ]
+]
