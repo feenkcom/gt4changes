@@ -1,6 +1,16 @@
 Extension { #name : #OmEntry }
 
 { #category : #'*GToolkit4Epicea' }
+OmEntry >> gtActionApplyFor: anAction [
+	<gtAction>
+	self content isCodeChange ifFalse: [ ^ anAction noAction ].
+
+	^ anAction button
+		label: 'Apply';
+		action: [ :button | self content applyCodeChange ]
+]
+
+{ #category : #'*GToolkit4Epicea' }
 OmEntry >> gtActionBrowseEntryFor: anAction [
 	<gtAction>
 	self content isCodeChange ifFalse: [ ^ anAction noAction ].
@@ -16,6 +26,16 @@ OmEntry >> gtActionBrowseEntryFor: anAction [
 				action: [ :button | self content behaviorAffected realClass gtBrowseFrom: button ] ].
 
 	^ anAction noAction
+]
+
+{ #category : #'*GToolkit4Epicea' }
+OmEntry >> gtActionRevertFor: anAction [
+	<gtAction>
+	self content isCodeChange ifFalse: [ ^ anAction noAction ].
+
+	^ anAction button
+		label: 'Revert';
+		action: [ :button | self content asRevertedCodeChange applyCodeChange ]
 ]
 
 { #category : #'*GToolkit4Epicea' }
