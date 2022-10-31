@@ -30,7 +30,7 @@ GtEpEventSequencer >> chronologicalEntriesFrom: anEpEntryCollection [
 GtEpEventSequencer >> filteredEntriesFrom: chronologicalEntries [
 	"Select only the events which:
 	- are a code change
-	- aren't overridden by a later change.
+	- if not a class or trait definition (isEpBehaviorChange): aren't overridden by a later change.
 	- aren't the same as the current image
 	Based on the code in EpLatestCodeChangeFilter>>accepts: (which is unfortunately tied to the Morphic UI"
 	| currentEntry filteredEntries |
@@ -39,7 +39,8 @@ GtEpEventSequencer >> filteredEntriesFrom: chronologicalEntries [
 	1 to: chronologicalEntries size - 1 do: [ :index |
 		currentEntry := chronologicalEntries at: index.
 		(currentEntry content isCodeChange and:
-			[ (self isEvent: currentEntry notOverriddenIn: chronologicalEntries startingFrom: index + 1) and:
+			[ (currentEntry content isEpBehaviorChange or:
+				[ self isEvent: currentEntry notOverriddenIn: chronologicalEntries startingFrom: index + 1 ]) and:
 			[ impactFilter accepts: currentEntry ] ]) ifTrue:
 				[ filteredEntries add: currentEntry ] ].
 	filteredEntries add: chronologicalEntries last.
@@ -77,14 +78,14 @@ GtEpEventSequencer >> sequence: anEpEntryCollection [
 
 { #category : #private }
 GtEpEventSequencer >> sortedEntriesFrom: filteredEntries [
-	"Sort the supplied events so that class definitions come before everything else (to avoid a method being applied to a class that doesn't yet exist"
-	| classDefinitions other |
+	"Sort the supplied events so that class and trait definitions come before everything else (to avoid a method being applied to a class that doesn't yet exist"
+	| behaviorDefinitions other |
 
-	classDefinitions := OrderedCollection new.
+	behaviorDefinitions := OrderedCollection new.
 	other := OrderedCollection new.
 	filteredEntries do: [ :entry |
-		entry content isEpClassChange
-			ifTrue: [ classDefinitions add: entry ]
+		entry content isEpBehaviorChange
+			ifTrue: [ behaviorDefinitions add: entry ]
 			ifFalse: [ other add: entry ] ].
-	^ classDefinitions, other.
+	^ behaviorDefinitions, other.
 ]

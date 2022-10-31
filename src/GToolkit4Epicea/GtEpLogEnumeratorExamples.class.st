@@ -6,7 +6,7 @@ Class {
 	#category : #'GToolkit4Epicea-Examples'
 }
 
-{ #category : #enumerating }
+{ #category : #examples }
 GtEpLogEnumeratorExamples >> entriesFromStartTo [
 	"Demonstrate retrieving all a subset of entries"
 	<gtExample>
@@ -25,7 +25,7 @@ GtEpLogEnumeratorExamples >> entriesFromStartTo [
 	self assert: reference globalName equals: 'Pharo10-SNAPSHOT-64bit-fec28a6.7699qwkejd20k4j8pduw5i4uz'.
 ]
 
-{ #category : #enumerating }
+{ #category : #examples }
 GtEpLogEnumeratorExamples >> priorEntriesFromHead [
 	"Demonstrate retrieving all entries from the head reference"
 	<gtExample>
@@ -40,6 +40,25 @@ GtEpLogEnumeratorExamples >> priorEntriesFromHead [
 	reference := entries last tagAt: #self.
 	self assert: reference localName equals: '1'.
 	self assert: reference globalName equals: 'Pharo10-SNAPSHOT-64bit-fec28a6.7699qwkejd20k4j8pduw5i4uz'.
+]
+
+{ #category : #examples }
+GtEpLogEnumeratorExamples >> priorEntriesFromHeadForTestTrait2 [
+	"Demonstrate retrieving all entries from the head reference"
+	<gtExample>
+	| entries epLog reference |
+
+	epLog := GtEpLogEnumerator fromFile: self testDataRoot / 'testTrait2' / 'Pharo10-SNAPSHOT-64bit-fec28a6.313x18caa4oyvcekylktb7i4k.ombu'.
+	entries := GtEpEventSequencer uniqueInstance sequence: epLog priorEntriesFromHead.
+	self assert: entries size equals: 7.
+	reference := entries first tagAt: #self.
+	self assert: reference localName equals: '1'.
+	self assert: reference globalName equals: 'Pharo10-SNAPSHOT-64bit-fec28a6.313x18caa4oyvcekylktb7i4k'.
+	self assert: ((entries first: 3) collect: [ :each | each content behaviorAffectedName ]) asArray
+		equals: #(TTestTrait2 TestClass2 TTestTrait2).
+	reference := entries last tagAt: #self.
+	self assert: reference localName equals: '10'.
+	self assert: reference globalName equals: 'Pharo10-SNAPSHOT-64bit-fec28a6.313x18caa4oyvcekylktb7i4k'.
 ]
 
 { #category : #'private - helpers' }
