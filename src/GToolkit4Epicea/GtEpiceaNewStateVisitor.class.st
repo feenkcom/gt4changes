@@ -1,7 +1,7 @@
 Class {
 	#name : #GtEpiceaNewStateVisitor,
 	#superclass : #EpNewStateVisitor,
-	#category : #GToolkit4Epicea
+	#category : #'GToolkit4Epicea-Visitor'
 }
 
 { #category : #printing }

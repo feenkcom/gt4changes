@@ -7,7 +7,7 @@ Class {
 		'from',
 		'to'
 	],
-	#category : #GToolkit4Epicea
+	#category : #'GToolkit4Epicea-Element'
 }
 
 { #category : #accessing }
