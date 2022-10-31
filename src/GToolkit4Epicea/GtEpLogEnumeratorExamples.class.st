@@ -64,5 +64,10 @@ GtEpLogEnumeratorExamples >> priorEntriesFromHeadForTestTrait2 [
 { #category : #'private - helpers' }
 GtEpLogEnumeratorExamples >> testDataRoot [
 
+	Stdio stdout
+		lf;
+		<< 'GtEpLogEnumeratorExamples package: ';
+		print: self class package;
+		lf; lf.
 	^ (IceRepository registeredRepositoryIncludingPackage: self class package) location / 'test' / self class name.
 ]
