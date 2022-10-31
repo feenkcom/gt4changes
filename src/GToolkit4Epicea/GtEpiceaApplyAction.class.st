@@ -1,7 +1,7 @@
 Class {
 	#name : #GtEpiceaApplyAction,
 	#superclass : #GtEpiceaAction,
-	#category : #'GToolkit4Epicea-GToolkit4Epicea'
+	#category : #'GToolkit4Epicea-Model'
 }
 
 { #category : #accessing }

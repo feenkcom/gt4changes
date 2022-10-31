@@ -1,5 +1,5 @@
 "
-GtEpEventSequencer takes a chronological sequence of events and filters it and orders it ready for replay, allowing an image to be synced up to a later image.
+GtEpEventSequencer takes a chronological sequence of events and filters and orders it ready for replay, allowing an image to be synced up to a later image.
 "
 Class {
 	#name : #GtEpEventSequencer,
@@ -9,7 +9,7 @@ Class {
 	#instVars : [
 		'impactFilter'
 	],
-	#category : #'GToolkit4Epicea-ImageSync'
+	#category : #'GToolkit4Epicea-Model'
 }
 
 { #category : #private }
@@ -27,11 +27,11 @@ GtEpEventSequencer >> chronologicalEntriesFrom: anEpEntryCollection [
 ]
 
 { #category : #private }
-GtEpEventSequencer >> filteredEntriesFrom: chronologicalEntries [
+GtEpEventSequencer >> filteredEntriesFrom: chronologicalEntries includeCurrent: currentBoolean [
 	"Select only the events which:
 	- are a code change
-	- aren't overridden by a later change.
-	- aren't the same as the current image
+	- if not a class or trait definition (isEpBehaviorChange): aren't overridden by a later change.
+	- if currentBoolean is false, aren't the same as the current image
 	Based on the code in EpLatestCodeChangeFilter>>accepts: (which is unfortunately tied to the Morphic UI"
 	| currentEntry filteredEntries |
 
@@ -39,8 +39,9 @@ GtEpEventSequencer >> filteredEntriesFrom: chronologicalEntries [
 	1 to: chronologicalEntries size - 1 do: [ :index |
 		currentEntry := chronologicalEntries at: index.
 		(currentEntry content isCodeChange and:
-			[ (self isEvent: currentEntry notOverriddenIn: chronologicalEntries startingFrom: index + 1) and:
-			[ impactFilter accepts: currentEntry ] ]) ifTrue:
+			[ (currentEntry content isEpBehaviorChange or:
+				[ self isEvent: currentEntry notOverriddenIn: chronologicalEntries startingFrom: index + 1 ]) and:
+			[ currentBoolean or: [ impactFilter accepts: currentEntry ] ] ]) ifTrue:
 				[ filteredEntries add: currentEntry ] ].
 	filteredEntries add: chronologicalEntries last.
 	^ filteredEntries
@@ -67,24 +68,32 @@ GtEpEventSequencer >> isEvent: currentEntry notOverriddenIn: chronologicalEntrie
 
 { #category : #sequencing }
 GtEpEventSequencer >> sequence: anEpEntryCollection [
+
+	^ self sequence: anEpEntryCollection withCurrent: false.
+]
+
+{ #category : #sequencing }
+GtEpEventSequencer >> sequence: anEpEntryCollection withCurrent: currentBoolean [
+	"Sequence the supplied collection of OmEntries for replay.
+	If currentBoolean is true, include entries that don't change the running system, if false filter them out."
 	| sortedEntries chronologicalEntries filteredEntries |
 
 	chronologicalEntries := self chronologicalEntriesFrom: anEpEntryCollection.
-	filteredEntries := self filteredEntriesFrom: chronologicalEntries.
+	filteredEntries := self filteredEntriesFrom: chronologicalEntries includeCurrent: currentBoolean.
 	sortedEntries := self sortedEntriesFrom: filteredEntries.
 	^ sortedEntries
 ]
 
 { #category : #private }
 GtEpEventSequencer >> sortedEntriesFrom: filteredEntries [
-	"Sort the supplied events so that class definitions come before everything else (to avoid a method being applied to a class that doesn't yet exist"
-	| classDefinitions other |
+	"Sort the supplied events so that class and trait definitions come before everything else (to avoid a method being applied to a class that doesn't yet exist"
+	| behaviorDefinitions other |
 
-	classDefinitions := OrderedCollection new.
+	behaviorDefinitions := OrderedCollection new.
 	other := OrderedCollection new.
 	filteredEntries do: [ :entry |
-		entry content isEpClassChange
-			ifTrue: [ classDefinitions add: entry ]
+		entry content isEpBehaviorChange
+			ifTrue: [ behaviorDefinitions add: entry ]
 			ifFalse: [ other add: entry ] ].
-	^ classDefinitions, other.
+	^ behaviorDefinitions, other.
 ]

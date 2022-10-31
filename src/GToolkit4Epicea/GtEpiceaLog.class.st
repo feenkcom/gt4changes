@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'log'
 	],
-	#category : #'GToolkit4Epicea-GToolkit4Epicea'
+	#category : #'GToolkit4Epicea-Model'
 }
 
 { #category : #'instance creation' }
