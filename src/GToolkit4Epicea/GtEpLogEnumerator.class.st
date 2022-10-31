@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'latestLog'
 	],
-	#category : #'GToolkit4Epicea-ImageSync'
+	#category : #'GToolkit4Epicea-Model'
 }
 
 { #category : #'instance creation' }
