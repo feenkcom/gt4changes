@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'frozen'
 	],
-	#category : #'GToolkit4Epicea-GToolkit4Epicea'
+	#category : #'GToolkit4Epicea-Model'
 }
 
 { #category : #accessing }

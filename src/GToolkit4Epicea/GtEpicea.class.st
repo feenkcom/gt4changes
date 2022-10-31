@@ -15,7 +15,7 @@ Class {
 	#classVars : [
 		'DebugMode'
 	],
-	#category : #GToolkit4Epicea
+	#category : #'GToolkit4Epicea-Model'
 }
 
 { #category : #accessing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtEpiceaBrickVisitor,
 	#superclass : #EpEntryContentVisitor,
-	#category : #GToolkit4Epicea
+	#category : #'GToolkit4Epicea-Visitor'
 }
 
 { #category : #private }
