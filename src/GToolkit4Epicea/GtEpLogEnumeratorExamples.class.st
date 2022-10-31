@@ -6,13 +6,25 @@ Class {
 	#category : #'GToolkit4Epicea-Examples'
 }
 
+{ #category : #'private - helpers' }
+GtEpLogEnumeratorExamples class >> testDataRoot [
+
+	Stdio stdout
+		lf;
+		<< 'GtEpLogEnumeratorExamples package: ';
+		print: self package;
+		lf; lf.
+	^ (IceRepository registeredRepositoryIncludingPackage: self package) location / 'test' / self name.
+]
+
 { #category : #examples }
 GtEpLogEnumeratorExamples >> entriesFromStartTo [
 	"Demonstrate retrieving all a subset of entries"
 	<gtExample>
+	<noTest>
 	| entries epLog start end reference |
 
-	epLog := GtEpLogEnumerator fromFile: self testDataRoot / 'testClass01' / 'Pharo10-SNAPSHOT-64bit-fec28a6.em8gtmjvf6qouoyjm5tk4q4dm.ombu'.
+	epLog := GtEpLogEnumerator fromFile: self class testDataRoot / 'testClass01' / 'Pharo10-SNAPSHOT-64bit-fec28a6.em8gtmjvf6qouoyjm5tk4q4dm.ombu'.
 	start := (epLog priorEntriesFromHead reversed at: 2) tagAt: #self.
 	end := (epLog priorEntriesFromHead reversed last) tagAt: #self.
 	entries := epLog entriesFrom: start to: end.
@@ -29,9 +41,10 @@ GtEpLogEnumeratorExamples >> entriesFromStartTo [
 GtEpLogEnumeratorExamples >> priorEntriesFromHead [
 	"Demonstrate retrieving all entries from the head reference"
 	<gtExample>
+	<noTest>
 	| entries epLog reference |
 
-	epLog := GtEpLogEnumerator fromFile: self testDataRoot / 'testClass01' / 'Pharo10-SNAPSHOT-64bit-fec28a6.em8gtmjvf6qouoyjm5tk4q4dm.ombu'.
+	epLog := GtEpLogEnumerator fromFile: self class testDataRoot / 'testClass01' / 'Pharo10-SNAPSHOT-64bit-fec28a6.em8gtmjvf6qouoyjm5tk4q4dm.ombu'.
 	entries := epLog priorEntriesFromHead.
 	self assert: entries size equals: 11.
 	reference := entries first tagAt: #self.
@@ -46,9 +59,10 @@ GtEpLogEnumeratorExamples >> priorEntriesFromHead [
 GtEpLogEnumeratorExamples >> priorEntriesFromHeadForTestTrait2 [
 	"Demonstrate retrieving all entries from the head reference"
 	<gtExample>
+	<noTest>
 	| entries epLog reference |
 
-	epLog := GtEpLogEnumerator fromFile: self testDataRoot / 'testTrait2' / 'Pharo10-SNAPSHOT-64bit-fec28a6.313x18caa4oyvcekylktb7i4k.ombu'.
+	epLog := GtEpLogEnumerator fromFile: self class testDataRoot / 'testTrait2' / 'Pharo10-SNAPSHOT-64bit-fec28a6.313x18caa4oyvcekylktb7i4k.ombu'.
 	entries := GtEpEventSequencer uniqueInstance sequence: epLog priorEntriesFromHead.
 	self assert: entries size equals: 7.
 	reference := entries first tagAt: #self.
@@ -59,15 +73,4 @@ GtEpLogEnumeratorExamples >> priorEntriesFromHeadForTestTrait2 [
 	reference := entries last tagAt: #self.
 	self assert: reference localName equals: '10'.
 	self assert: reference globalName equals: 'Pharo10-SNAPSHOT-64bit-fec28a6.313x18caa4oyvcekylktb7i4k'.
-]
-
-{ #category : #'private - helpers' }
-GtEpLogEnumeratorExamples >> testDataRoot [
-
-	Stdio stdout
-		lf;
-		<< 'GtEpLogEnumeratorExamples package: ';
-		print: self class package;
-		lf; lf.
-	^ (IceRepository registeredRepositoryIncludingPackage: self class package) location / 'test' / self class name.
 ]
