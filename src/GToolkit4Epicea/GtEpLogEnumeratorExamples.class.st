@@ -9,12 +9,9 @@ Class {
 { #category : #'private - helpers' }
 GtEpLogEnumeratorExamples class >> testDataRoot [
 
-	Stdio stdout
-		lf;
-		<< 'GtEpLogEnumeratorExamples package: ';
-		print: self package;
-		lf; lf.
-	^ (IceRepository registeredRepositoryIncludingPackage: self package) location / 'test' / self name.
+	^ FileLocator gtResource 
+		/ 'feenkcom/gt4changes/data'
+		/ self name.
 ]
 
 { #category : #examples }
