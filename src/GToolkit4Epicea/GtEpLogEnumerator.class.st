@@ -47,6 +47,12 @@ GtEpLogEnumerator >> headReference [
 ]
 
 { #category : #accessing }
+GtEpLogEnumerator >> latestEntriesCount [
+
+	^ latestLog entriesCount
+]
+
+{ #category : #accessing }
 GtEpLogEnumerator >> latestLog [
 
 	^ latestLog
