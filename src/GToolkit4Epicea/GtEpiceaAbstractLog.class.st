@@ -92,6 +92,15 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 ]
 
 { #category : #accessing }
+GtEpiceaAbstractLog >> gtImpactFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Impact';
+		priority: 1;
+		stencil: [ (GtEpiceaShowAction on: self entries) asViewFor: self ]
+]
+
+{ #category : #accessing }
 GtEpiceaAbstractLog >> initialize [
 	frozen := false
 ]
