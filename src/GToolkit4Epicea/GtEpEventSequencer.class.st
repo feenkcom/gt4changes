@@ -78,6 +78,7 @@ GtEpEventSequencer >> sequence: anEpEntryCollection withCurrent: currentBoolean 
 	If currentBoolean is true, include entries that don't change the running system, if false filter them out."
 	| sortedEntries chronologicalEntries filteredEntries |
 
+	anEpEntryCollection ifEmpty: [ ^ anEpEntryCollection ].
 	chronologicalEntries := self chronologicalEntriesFrom: anEpEntryCollection.
 	filteredEntries := self filteredEntriesFrom: chronologicalEntries includeCurrent: currentBoolean.
 	sortedEntries := self sortedEntriesFrom: filteredEntries.
