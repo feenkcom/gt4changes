@@ -80,6 +80,12 @@ GtEpiceaLog >> log: aLog [
 ]
 
 { #category : #accessing }
+GtEpiceaLog >> logs [
+
+	^ { log. }
+]
+
+{ #category : #accessing }
 GtEpiceaLog >> name [
 	^ log ifNil: [ '' ] ifNotNil: [ log store globalName ]
 ]

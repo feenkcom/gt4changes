@@ -43,7 +43,9 @@ GtEpEventSequencer >> filteredEntriesFrom: chronologicalEntries includeCurrent: 
 				[ self isEvent: currentEntry notOverriddenIn: chronologicalEntries startingFrom: index + 1 ]) and:
 			[ currentBoolean or: [ impactFilter accepts: currentEntry ] ] ]) ifTrue:
 				[ filteredEntries add: currentEntry ] ].
-	filteredEntries add: chronologicalEntries last.
+	currentEntry := chronologicalEntries last.
+	(currentBoolean or: [ impactFilter accepts: currentEntry ]) ifTrue:
+		[ filteredEntries add: currentEntry ].
 	^ filteredEntries
 ]
 
