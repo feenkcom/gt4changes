@@ -132,8 +132,30 @@ GtEpiceaAbstractLog >> log [
 ]
 
 { #category : #accessing }
+GtEpiceaAbstractLog >> logs [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
 GtEpiceaAbstractLog >> orderEvents: aCollectionOfEvents [
 	^ (aCollectionOfEvents sorted: [:a :b | (self timeAt: a) > (self timeAt: b)]) collect: #content
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractLog >> sequenceFilter [
+	"Filter the events down to only those that were present in the system  at the time of the latest change and which would change the current system (i.e. need to be applied).
+	This works across multiple log files in the event that an old image is being used to recover changes."
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream | | epLog sorted |
+			epLog := GtEpLogEnumerator new latestLog: self logs first.
+			sorted := GtEpEventSequencer uniqueInstance 
+				sequence: epLog priorEntriesFromHead withCurrent: false.
+			AsyncSequenceStream forCollection: sorted ];
+		named: 'Sequence';
+		order: 20;
+		valueNotRequired;
+		beNotDefault
 ]
 
 { #category : #accessing }
