@@ -59,7 +59,7 @@ GtEpiceaChangeListElement >> initializeList [
 				ifTrue: [ BrCheckbox new
 						aptitude: BrGlamorousCheckboxAptitude
 								+ (BrGlamorousWithLabelTooltipAptitude new text: 'Select');
-						checked: true;
+						checked: (model isSelected: anEpEvent);
 						whenCheckedDo: [ model select: anEpEvent ];
 						margin: (BlInsets left: 20);
 						whenUncheckedDo: [ model deselect: anEpEvent ] ]
