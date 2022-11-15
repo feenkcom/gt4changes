@@ -58,7 +58,7 @@ GtEpiceaChangeListElement >> initializeList [
 			anEpEvent content isCodeChange
 				ifTrue: [ BrCheckbox new
 						aptitude: BrGlamorousCheckboxAptitude
-								+ (BrGlamorousWithLabelTooltipAptitude new text: 'Select');
+								+ (BrGlamorousWithLabelTooltipAptitude new text: 'Toggle Selection');
 						checked: (model isSelected: anEpEvent);
 						whenCheckedDo: [ model select: anEpEvent ];
 						margin: (BlInsets left: 20);
@@ -69,18 +69,19 @@ GtEpiceaChangeListElement >> initializeList [
 
 	list column
 		title: 'Icon';
-		stencil: [ :anEpEvent :anIndex | (anEpEvent content accept: EpIconVisitor new) asElement ];
+		icon: [ :anEpEvent :anIndex | (anEpEvent content accept: EpIconVisitor new) asElement ];
 		width: 32.
 	list column
 		title: 'Description';
 		matchParent;
-		stencil: [ :anEpEvent :anIndex | 
+		cellStencil: [
 			BlElement new
 				layout: BlLinearLayout horizontal;
-				addChildren: (anEpEvent content accept: GtEpiceaBrickVisitor new);
 				constraintsDo: [ :c | 
 					c horizontal fitContent.
-					c vertical fitContent ] ].
+					c vertical fitContent ] ];
+		dataBinder: [:anElement :anEpEvent | 
+				anElement addChildren: (anEpEvent content accept: GtEpiceaBrickVisitor new)].
 	list column
 		width: 250;
 		title: 'Timestamp';
