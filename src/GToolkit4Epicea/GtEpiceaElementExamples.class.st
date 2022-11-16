@@ -94,6 +94,16 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedActiveLog [
 		label: 'Check change is active';
 		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isActive ];
 		play.
+		
+	aScripter check
+		label: 'Check change has a list view';
+		satisfies: [ :aChangeView | 
+			(((aChangeView pages last contentElement tool childNamed: #content)
+				childNamed: #tabs) childNamed: #content)
+				childNamed: #list
+				ifFound: [ :element | element isKindOf: BrColumnedList ]
+				ifNone: [ false ] ];
+		play.
 
 	^ aScripter
 ]
@@ -134,6 +144,16 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedCompositeLog [
 	aScripter check
 		label: 'Check change is composite';
 		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isComposite ];
+		play.
+
+	aScripter check
+		label: 'Check change has a list view';
+		satisfies: [ :aChangeView | 
+			(((aChangeView pages last contentElement tool childNamed: #content)
+				childNamed: #tabs) childNamed: #content)
+				childNamed: #list
+				ifFound: [ :element | element isKindOf: BrColumnedList ]
+				ifNone: [ false ] ];
 		play.
 
 	^ aScripter
@@ -182,6 +202,16 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedSimpleLog [
 		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isActive not ];
 		play.
 
+	aScripter check
+		label: 'Check change has a list view';
+		satisfies: [ :aChangeView | 
+			(((aChangeView pages last contentElement tool childNamed: #content)
+				childNamed: #tabs) childNamed: #content)
+				childNamed: #list
+				ifFound: [ :element | element isKindOf: BrColumnedList ]
+				ifNone: [ false ] ];
+		play.
+		
 	^ aScripter
 ]
 
