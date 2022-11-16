@@ -88,7 +88,7 @@ GtEpiceaCompositeLog >> gtChildren [
 	^ self logs collect: [:aLog | GtEpiceaLog new log: aLog]
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 GtEpiceaCompositeLog >> initialize [
 	super initialize.
 	logs := OrderedCollection new

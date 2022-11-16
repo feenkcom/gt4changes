@@ -45,11 +45,13 @@ GtEpiceaChangeListModel >> deselect: anEpEvent [
 
 { #category : #accessing }
 GtEpiceaChangeListModel >> filterDescriptors [
-	^ (GtPhlowCollector new
+	^ ((GtPhlowCollector new
 		fromObject: self log;
 		pragmaName: #gtChangeFilter;
 		collectAllPragmas)
-		collect: [ :aPragma | self log perform: aPragma methodSelector ]
+		collect: [ :aPragma | self log perform: aPragma methodSelector ])
+		sorted: [ :aFilterDescriptor |
+			aFilterDescriptor order ] ascending
 ]
 
 { #category : #accessing }

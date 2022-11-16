@@ -7,7 +7,7 @@ Class {
 	#category : #'GToolkit4Epicea-Model'
 }
 
-{ #category : #accessing }
+{ #category : #'accessing - filters' }
 GtEpiceaAbstractLog >> additionFilter [
 	<gtChangeFilter>
 	^ GtFilterDescriptor new
@@ -18,6 +18,17 @@ GtEpiceaAbstractLog >> additionFilter [
 						and: [ anEntry content class name endsWith: #Addition ] ] ];
 		named: 'Addition';
 		order: 12;
+		valueNotRequired;
+		beNotDefault
+]
+
+{ #category : #'accessing - filters' }
+GtEpiceaAbstractLog >> allEntriesFilter [
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream | aStream ];
+		named: 'All Changes';
+		order: 0;
 		valueNotRequired;
 		beNotDefault
 ]
@@ -42,7 +53,7 @@ GtEpiceaAbstractLog >> entriesStream [
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : #'gt - extensions' }
 GtEpiceaAbstractLog >> freeze [
 
 	self isActive ifTrue: [ 
@@ -91,7 +102,7 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 	^ view
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 GtEpiceaAbstractLog >> initialize [
 	frozen := false
 ]
@@ -106,7 +117,7 @@ GtEpiceaAbstractLog >> isFrozen [
 	^ frozen
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - filters' }
 GtEpiceaAbstractLog >> latestFilter [
 	<gtChangeFilter>
 	^ GtFilterDescriptor new
