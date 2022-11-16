@@ -69,7 +69,16 @@ GtEpiceaChangeListElement >> initializeList [
 
 	list column
 		title: 'Icon';
-		icon: [ :anEpEvent :anIndex | (anEpEvent content accept: EpIconVisitor new) asElement ];
+		cellStencil: [
+			BlElement new
+				layout: BlLinearLayout horizontal;
+				constraintsDo: [ :c | 
+					c horizontal fitContent.
+					c vertical fitContent ] ];
+		dataBinder: [:anElement :anEpEvent | 
+			anElement 
+				removeChildren;
+				addChild: (anEpEvent content accept: EpIconVisitor new) asElement ];
 		width: 32.
 	list column
 		title: 'Description';
@@ -81,7 +90,9 @@ GtEpiceaChangeListElement >> initializeList [
 					c horizontal fitContent.
 					c vertical fitContent ] ];
 		dataBinder: [:anElement :anEpEvent | 
-				anElement addChildren: (anEpEvent content accept: GtEpiceaBrickVisitor new)].
+			anElement 
+				removeChildren;
+				addChildren: (anEpEvent content accept: GtEpiceaBrickVisitor new)].
 	list column
 		width: 250;
 		title: 'Timestamp';
