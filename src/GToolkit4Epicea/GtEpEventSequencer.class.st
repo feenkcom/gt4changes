@@ -18,8 +18,8 @@ GtEpEventSequencer >> chronologicalEntriesFrom: anEpEntryCollection [
 	NOTE: anEpEventCollection is assumed to be either chronological or reverse chronological."
 	| firstTime lastTime |
 
-	firstTime := anEpEntryCollection first tagAt: #time.
-	lastTime := anEpEntryCollection last tagAt: #time.
+	firstTime := anEpEntryCollection first gtTime.
+	lastTime := anEpEntryCollection last gtTime.
 	^ firstTime > lastTime 
 		ifTrue: [ anEpEntryCollection reversed ]
 		ifFalse: [ anEpEntryCollection copy ].
