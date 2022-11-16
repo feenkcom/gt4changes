@@ -62,6 +62,11 @@ GtEpiceaChangeListModel >> initialize [
 ]
 
 { #category : #accessing }
+GtEpiceaChangeListModel >> isSelected: anEpEvent [
+	^ selection includes: anEpEvent
+]
+
+{ #category : #accessing }
 GtEpiceaChangeListModel >> log [
 	^ log
 ]
