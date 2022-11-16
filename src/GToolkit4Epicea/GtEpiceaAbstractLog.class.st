@@ -39,6 +39,18 @@ GtEpiceaAbstractLog >> canBeFrozen [
 ]
 
 { #category : #accessing }
+GtEpiceaAbstractLog >> changedClassNames [
+	| changedClassesVisitor |
+	
+	changedClassesVisitor := GtEpiceaChangedClassNamesVisitor new.
+	self entries do: [ :anEntry |
+		anEntry content ifNotNil: [ :aChange |
+			aChange accept: changedClassesVisitor ] ].
+		
+	^ changedClassesVisitor changedClassNames
+]
+
+{ #category : #accessing }
 GtEpiceaAbstractLog >> codeEvents [
 	^ self entries select: [ :anEntry | anEntry content isCodeChange ]
 ]
