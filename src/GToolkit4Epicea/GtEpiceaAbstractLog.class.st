@@ -101,6 +101,21 @@ GtEpiceaAbstractLog >> gtImpactFor: aView [
 ]
 
 { #category : #accessing }
+GtEpiceaAbstractLog >> historyFilter [
+	"Filter the events down to only those that were present in the system  at the time of the latest change and which would change the current system (i.e. need to be applied).
+	This works across multiple log files in the event that an old image is being used to recover changes."
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream | | epLog |
+			epLog := GtEpLogEnumerator new latestLog: self logs first.
+			AsyncSequenceStream forCollection: epLog priorEntriesFromHead ];
+		named: 'History';
+		order: 20;
+		valueNotRequired;
+		beNotDefault
+]
+
+{ #category : #accessing }
 GtEpiceaAbstractLog >> initialize [
 	frozen := false
 ]
@@ -142,7 +157,7 @@ GtEpiceaAbstractLog >> orderEvents: aCollectionOfEvents [
 ]
 
 { #category : #accessing }
-GtEpiceaAbstractLog >> sequenceFilter [
+GtEpiceaAbstractLog >> recoverFilter [
 	"Filter the events down to only those that were present in the system  at the time of the latest change and which would change the current system (i.e. need to be applied).
 	This works across multiple log files in the event that an old image is being used to recover changes."
 	<gtChangeFilter>
@@ -152,6 +167,24 @@ GtEpiceaAbstractLog >> sequenceFilter [
 			sorted := GtEpEventSequencer uniqueInstance 
 				sequence: epLog priorEntriesFromHead withCurrent: false.
 			AsyncSequenceStream forCollection: sorted ];
+		named: 'Recover';
+		order: 20;
+		valueNotRequired;
+		beNotDefault
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractLog >> sequenceFilter [
+	"Filter the events down to only those that were present in the system  at the time of the latest change and which would change the current system (i.e. need to be applied).
+	This works across multiple log files in the event that an old image is being used to recover changes."
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream | | chronological sorted |
+			chronological := GtEpEventSequencer uniqueInstance
+				chronologicalEntriesFrom: aStream toArray wait.
+			sorted := GtEpEventSequencer uniqueInstance 
+				sortedEntriesFrom: chronological.
+			AsyncSequenceStream forCollection: sorted reversed ];
 		named: 'Sequence';
 		order: 20;
 		valueNotRequired;
