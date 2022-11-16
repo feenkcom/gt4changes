@@ -95,3 +95,8 @@ OmEntry >> gtTagsFor: aView [
 		priority: 45;
 		object: [ tags ]
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+OmEntry >> gtTime [
+	^ self tagAt: #time
+]

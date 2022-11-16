@@ -7,7 +7,7 @@ Class {
 	#category : #'GToolkit4Epicea-Model'
 }
 
-{ #category : #accessing }
+{ #category : #'accessing - filters' }
 GtEpiceaAbstractLog >> additionFilter [
 	<gtChangeFilter>
 	^ GtFilterDescriptor new
@@ -22,9 +22,32 @@ GtEpiceaAbstractLog >> additionFilter [
 		beNotDefault
 ]
 
+{ #category : #'accessing - filters' }
+GtEpiceaAbstractLog >> allEntriesFilter [
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream | aStream ];
+		named: 'All Changes';
+		order: 0;
+		valueNotRequired;
+		beNotDefault
+]
+
 { #category : #accessing }
 GtEpiceaAbstractLog >> canBeFrozen [
 	^ true
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractLog >> changedClassNames [
+	| changedClassesVisitor |
+	
+	changedClassesVisitor := GtEpiceaChangedClassNamesVisitor new.
+	self entries do: [ :anEntry |
+		anEntry content ifNotNil: [ :aChange |
+			aChange accept: changedClassesVisitor ] ].
+		
+	^ changedClassesVisitor changedClassNames
 ]
 
 { #category : #accessing }
@@ -42,7 +65,7 @@ GtEpiceaAbstractLog >> entriesStream [
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : #'gt - extensions' }
 GtEpiceaAbstractLog >> freeze [
 
 	self isActive ifTrue: [ 
@@ -115,7 +138,7 @@ GtEpiceaAbstractLog >> historyFilter [
 		beNotDefault
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 GtEpiceaAbstractLog >> initialize [
 	frozen := false
 ]
@@ -130,7 +153,7 @@ GtEpiceaAbstractLog >> isFrozen [
 	^ frozen
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - filters' }
 GtEpiceaAbstractLog >> latestFilter [
 	<gtChangeFilter>
 	^ GtFilterDescriptor new
