@@ -24,10 +24,11 @@ GtEpiceaChangeListModel >> allStream [
 
 { #category : #accessing }
 GtEpiceaChangeListModel >> applyFiltersFrom: aFilterElement [
+	"this is a hack and should use real filters instead"
 	| items |
 	items := self allStream.
 	aFilterElement
-		filtersDo: [ :descriptor :ignored | items := descriptor newFilterWithValue: items ].
+		filtersDo: [ :descriptor :value | items := descriptor creationBlock cull: items cull: value ].
 	items := items toArray wait.
 	available := items.
 	selection := items asOrderedCollection.

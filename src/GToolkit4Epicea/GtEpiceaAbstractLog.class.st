@@ -51,6 +51,22 @@ GtEpiceaAbstractLog >> changedClassNames [
 ]
 
 { #category : #'accessing - filters' }
+GtEpiceaAbstractLog >> classFilter [
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream :aClass | 
+			aStream
+				filter: [ :anEntry | 
+					anEntry content isCodeChange and: [ anEntry content isEpCategoryChange not
+						and: [ anEntry content behaviorAffectedName = aClass ] ] ] ];
+		named: 'In Class';
+		order: 15;
+		completion: [ GtStringsCompletionStrategy new
+				completions: [ GtPrefixTree withAll: (Smalltalk allClasses collect: #name) ] ];
+		beNotDefault
+]
+
+{ #category : #'accessing - filters' }
 GtEpiceaAbstractLog >> codeChangesFilter [
 	<gtChangeFilter>
 	^ GtFilterDescriptor new
@@ -191,6 +207,22 @@ GtEpiceaAbstractLog >> logs [
 { #category : #accessing }
 GtEpiceaAbstractLog >> orderEvents: aCollectionOfEvents [
 	^ (aCollectionOfEvents sorted: [:a :b | (self timeAt: a) > (self timeAt: b)]) collect: #content
+]
+
+{ #category : #'accessing - filters' }
+GtEpiceaAbstractLog >> packageFilter [
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream :aPackage | 
+			aStream
+				filter: [ :anEntry | 
+					anEntry content isCodeChange
+						and: [ anEntry content affectedPackageName = aPackage ] ] ];
+		named: 'In Package';
+		order: 15;
+		completion: [ GtStringsCompletionStrategy new
+				completions: [ GtPrefixTree withAll: (RPackage organizer packages collect: #name) ] ];
+		beNotDefault
 ]
 
 { #category : #accessing }
