@@ -168,6 +168,20 @@ GtEpiceaAbstractLog >> historyFilter [
 		beNotDefault
 ]
 
+{ #category : #'accessing - filters' }
+GtEpiceaAbstractLog >> impactFilter [
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream | 
+			aStream
+				filter: [ :anEntry | 
+					anEntry content isCodeChange and: [ anEntry content accept: (EpHasImpactVisitor inEnvironment: self class environment)] ] ];
+		named: 'Hide Redundant';
+		order: 15;
+		valueNotRequired;
+		beNotDefault
+]
+
 { #category : #initialization }
 GtEpiceaAbstractLog >> initialize [
 	frozen := false
