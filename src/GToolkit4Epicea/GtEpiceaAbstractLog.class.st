@@ -50,6 +50,20 @@ GtEpiceaAbstractLog >> changedClassNames [
 	^ changedClassesVisitor changedClassNames
 ]
 
+{ #category : #'accessing - filters' }
+GtEpiceaAbstractLog >> codeChangesFilter [
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream | 
+			aStream
+				filter: [ :anEntry | 
+					anEntry content isCodeChange ] ];
+		named: 'Code Changes';
+		order: 15;
+		valueNotRequired;
+		beNotDefault
+]
+
 { #category : #accessing }
 GtEpiceaAbstractLog >> codeEvents [
 	^ self entries select: [ :anEntry | anEntry content isCodeChange ]
