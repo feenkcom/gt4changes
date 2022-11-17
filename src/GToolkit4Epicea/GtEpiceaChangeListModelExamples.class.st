@@ -6,7 +6,7 @@ Class {
 	#category : #'GToolkit4Epicea-Examples'
 }
 
-{ #category : #accessing }
+{ #category : #examples }
 GtEpiceaChangeListModelExamples >> modelWithLog [
 	<gtExample>
 	| model |
@@ -19,7 +19,7 @@ GtEpiceaChangeListModelExamples >> modelWithLog [
 	^ model
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtEpiceaChangeListModelExamples >> simpleModel [
 	<gtExample>
 	| model |

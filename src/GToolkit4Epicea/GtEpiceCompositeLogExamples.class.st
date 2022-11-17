@@ -6,7 +6,7 @@ Class {
 	#category : #'GToolkit4Epicea-Examples'
 }
 
-{ #category : #accessing }
+{ #category : #examples }
 GtEpiceCompositeLogExamples >> simpleLog [
 	<gtExample>
 	| log |
@@ -20,9 +20,12 @@ GtEpiceCompositeLogExamples >> simpleLog [
 	^ log
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtEpiceCompositeLogExamples >> simpleLogFromStore [
 	<gtExample>
+	<noTest>
+	"this only works if we have logs; it does not work with, e.g. --detachChangesFromFileSystem"
+	"it’s not required for testing, and is mostly here for documentation purposes"
 	| log |
 	log := GtEpiceaCompositeLog forAllInSessionStore.
 	
