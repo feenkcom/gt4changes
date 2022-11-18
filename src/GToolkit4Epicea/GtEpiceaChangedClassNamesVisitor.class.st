@@ -11,13 +11,21 @@ Class {
 
 { #category : #adding }
 GtEpiceaChangedClassNamesVisitor >> addClassNamed: aClassName [
-	self changedClassNames add: aClassName
+	aClassName ifNil: [ ^ self ].
+	
+	self changedClassNames 
+		add: (self processClassName: aClassName)
 ]
 
 { #category : #accessing }
 GtEpiceaChangedClassNamesVisitor >> changedClassNames [
 	^ changedClassNames ifNil: [ 
 		changedClassNames := Set new]
+]
+
+{ #category : #accessing }
+GtEpiceaChangedClassNamesVisitor >> processClassName: aClassName [
+	^ aClassName removeSuffix: ' class'
 ]
 
 { #category : #visitor }

@@ -50,6 +50,36 @@ GtEpiceaAbstractLog >> changedClassNames [
 	^ changedClassesVisitor changedClassNames
 ]
 
+{ #category : #'accessing - filters' }
+GtEpiceaAbstractLog >> classFilter [
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream :aClass | 
+			aStream
+				filter: [ :anEntry | 
+					anEntry content isCodeChange and: [ anEntry content isEpCategoryChange not
+						and: [ anEntry content behaviorAffectedName = aClass ] ] ] ];
+		named: 'In Class';
+		order: 15;
+		completion: [ GtStringsCompletionStrategy new
+				completions: [ GtPrefixTree withAll: (Smalltalk allClasses collect: #name) ] ];
+		beNotDefault
+]
+
+{ #category : #'accessing - filters' }
+GtEpiceaAbstractLog >> codeChangesFilter [
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream | 
+			aStream
+				filter: [ :anEntry | 
+					anEntry content isCodeChange ] ];
+		named: 'Code Changes';
+		order: 15;
+		valueNotRequired;
+		beNotDefault
+]
+
 { #category : #accessing }
 GtEpiceaAbstractLog >> codeEvents [
 	^ self entries select: [ :anEntry | anEntry content isCodeChange ]
@@ -138,6 +168,20 @@ GtEpiceaAbstractLog >> historyFilter [
 		beNotDefault
 ]
 
+{ #category : #'accessing - filters' }
+GtEpiceaAbstractLog >> impactFilter [
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream | 
+			aStream
+				filter: [ :anEntry | 
+					anEntry content isCodeChange and: [ anEntry content accept: (EpHasImpactVisitor inEnvironment: self class environment)] ] ];
+		named: 'Hide Redundant';
+		order: 15;
+		valueNotRequired;
+		beNotDefault
+]
+
 { #category : #initialization }
 GtEpiceaAbstractLog >> initialize [
 	frozen := false
@@ -177,6 +221,22 @@ GtEpiceaAbstractLog >> logs [
 { #category : #accessing }
 GtEpiceaAbstractLog >> orderEvents: aCollectionOfEvents [
 	^ (aCollectionOfEvents sorted: [:a :b | (self timeAt: a) > (self timeAt: b)]) collect: #content
+]
+
+{ #category : #'accessing - filters' }
+GtEpiceaAbstractLog >> packageFilter [
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream :aPackage | 
+			aStream
+				filter: [ :anEntry | 
+					anEntry content isCodeChange
+						and: [ anEntry content affectedPackageName = aPackage ] ] ];
+		named: 'In Package';
+		order: 15;
+		completion: [ GtStringsCompletionStrategy new
+				completions: [ GtPrefixTree withAll: (RPackage organizer packages collect: #name) ] ];
+		beNotDefault
 ]
 
 { #category : #accessing }

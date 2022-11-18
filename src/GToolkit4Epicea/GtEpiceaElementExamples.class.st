@@ -6,7 +6,7 @@ Class {
 	#category : #'GToolkit4Epicea-Examples'
 }
 
-{ #category : #accessing }
+{ #category : #examples }
 GtEpiceaElementExamples >> expandedElement [
 	<gtExample>
 	| element |
@@ -15,7 +15,7 @@ GtEpiceaElementExamples >> expandedElement [
 	^ element
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtEpiceaElementExamples >> scripterFreezeLog [
 	<gtExample>
 	<noTest>
@@ -41,7 +41,7 @@ GtEpiceaElementExamples >> scripterFreezeLog [
 	^ aScripter syncContinue
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtEpiceaElementExamples >> scripterOnExpandedElement [
 	<gtExample>
 	| aScripter |
@@ -52,7 +52,7 @@ GtEpiceaElementExamples >> scripterOnExpandedElement [
 	^ aScripter
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedActiveLog [
 	<gtExample>
 	<noTest>
@@ -108,7 +108,7 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedActiveLog [
 	^ aScripter
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedCompositeLog [
 	<gtExample>
 	<noTest>
@@ -159,7 +159,7 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedCompositeLog [
 	^ aScripter
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedSimpleLog [
 	<gtExample>
 	<noTest>
@@ -215,7 +215,7 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedSimpleLog [
 	^ aScripter
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtEpiceaElementExamples >> simpleElement [
 	<gtExample>
 	| element |

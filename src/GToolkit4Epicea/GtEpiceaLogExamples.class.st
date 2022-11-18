@@ -6,7 +6,7 @@ Class {
 	#category : #'GToolkit4Epicea-Examples'
 }
 
-{ #category : #accessing }
+{ #category : #examples }
 GtEpiceaLogExamples >> frozenLog [
 	<gtExample>
 	| log |
@@ -20,7 +20,7 @@ GtEpiceaLogExamples >> frozenLog [
 	^ log
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtEpiceaLogExamples >> simpleLog [
 	<gtExample>
 	| log |
@@ -33,9 +33,12 @@ GtEpiceaLogExamples >> simpleLog [
 	^ log
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtEpiceaLogExamples >> simpleLogFromStore [
 	<gtExample>
+	<noTest>
+	"this only works if we have logs; it does not work with, e.g. --detachChangesFromFileSystem"
+	"it’s not required for testing, and is mostly here for documentation purposes"
 	| logs |
 	logs := GtEpiceaLog allInSessionStore.
 	
