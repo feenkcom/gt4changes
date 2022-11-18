@@ -69,30 +69,28 @@ GtEpiceaChangeListElement >> initializeList [
 
 	list column
 		title: 'Icon';
-		cellStencil: [
-			BlElement new
+		cellStencil: [ BlElement new
 				layout: BlLinearLayout horizontal;
 				constraintsDo: [ :c | 
 					c horizontal fitContent.
 					c vertical fitContent ] ];
-		dataBinder: [:anElement :anEpEvent | 
-			anElement 
+		dataBinder: [ :anElement :anEpEvent | 
+			anElement
 				removeChildren;
 				addChild: (anEpEvent content accept: EpIconVisitor new) asElement ];
 		width: 32.
 	list column
 		title: 'Description';
 		matchParent;
-		cellStencil: [
-			BlElement new
+		cellStencil: [ BlElement new
 				layout: BlLinearLayout horizontal;
 				constraintsDo: [ :c | 
 					c horizontal fitContent.
 					c vertical fitContent ] ];
-		dataBinder: [:anElement :anEpEvent | 
-			anElement 
+		dataBinder: [ :anElement :anEpEvent | 
+			anElement
 				removeChildren;
-				addChildren: (anEpEvent content accept: GtEpiceaBrickVisitor new)].
+				addChildren: (anEpEvent content accept: GtEpiceaBrickVisitor new) ].
 	list column
 		width: 250;
 		title: 'Timestamp';
@@ -121,7 +119,14 @@ GtEpiceaChangeListElement >> initializeList [
 										'Revert'
 											-> [ :e | 
 												item content asRevertedCodeChange applyCodeChange.
-												element phlow fireUpdateWish ]};
+												element phlow fireUpdateWish ].
+										'Browse current version'
+											-> [ :e | 
+												(item content isKindOf: EpMethodChange)
+													ifTrue: [ item content methodAffected compiledMethod gtBrowseFrom: element ].
+
+												(item content isKindOf: EpClassChange)
+													ifTrue: [ item content behaviorAffected realClass gtBrowseFrom: element ] ]};
 								yourself ]
 						ifFalse: [ BrGlamorousSimpleContextMenuContent new ] ]).
 
