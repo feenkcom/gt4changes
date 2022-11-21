@@ -4,7 +4,8 @@ Class {
 	#traits : 'TGtAnnouncer',
 	#classTraits : 'TGtAnnouncer classTrait',
 	#instVars : [
-		'announcer'
+		'announcer',
+		'directory'
 	],
 	#category : #'GToolkit4Epicea-View Model'
 }
@@ -16,7 +17,7 @@ GtEpiceaNavigationModel >> announcer [
 
 { #category : #accessing }
 GtEpiceaNavigationModel >> changes [
-	^ GtEpiceaCompositeLog forAllInSessionStore
+	^ GtEpiceaCompositeLog forAllInStore: directory
 ]
 
 { #category : #accessing }
@@ -26,12 +27,11 @@ GtEpiceaNavigationModel >> createListFor: aView [
 	^ aView forward
 		title: 'Changes';
 		send: [ :change | self announce: (GtEpiceaChangeSelected new change: change) ];
-		updateWhen: GtEpiceaLogAnnouncement in: GtEpiceaMonitor current;
 		actionDropdownButtonIcon: BrGlamorousVectorIcons folder
 			tooltip: 'Select change directory'
 			content: [ :aDropdown | 
 				BrFileSelector new
-					folder: EpMonitor current sessionStore baseLocator;
+					folder: directory;
 					padding: (BlInsets all: 8);
 					addAptitude: BrGlamorousWithHorizontalResizerAptitude new
 							+ BrGlamorousWithHorizontalResizerAptitude new beLeft
@@ -40,9 +40,7 @@ GtEpiceaNavigationModel >> createListFor: aView [
 						aFileReference isDirectory
 							and: [ (FileSystemDirectoryEntry reference: aFileReference) isHidden not ] ];
 					okAction: [ :srcFolder | 
-						EpMonitor
-							current: (EpMonitor
-									newWithLog: (EpLog newWithStore: (OmSessionStore newWithBaseLocator: srcFolder))).
+						directory := srcFolder.
 						aDropdown fireEvent: BrDropdownHideWish new.
 						GtEpiceaMonitor current announce: GtEpiceaLogAnnouncement new ] ];
 		actionDropdownButtonIcon: BrGlamorousVectorIcons add
@@ -59,4 +57,10 @@ GtEpiceaNavigationModel >> createListFor: aView [
 				s ];
 		object: [ self changes ];
 		view: #createListFor:
+]
+
+{ #category : #accessing }
+GtEpiceaNavigationModel >> initialize [
+	super initialize.
+	directory := EpMonitor current sessionStore baseLocator.
 ]

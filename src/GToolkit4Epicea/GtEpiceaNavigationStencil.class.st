@@ -26,17 +26,8 @@ GtEpiceaNavigationStencil >> changes [
 { #category : #accessing }
 GtEpiceaNavigationStencil >> create [
 
-	^ GtGitNavigationElement new
-		  navigationModel: self navigationModel;
-		  addChild: (GtPhlowCompositeView new
-				   views: (GtPhlowViewsCollector new
-						    fromObject: self navigationModel;
-						    pragmaName: #gtEpiceaNavigation;
-						    collect);
-				   asElementDo: [ :aTabGroup | 
-					   aTabGroup
-						   background: BrGlamorousColors neutralBackgroundColor;
-						   matchParent ])
+	^ GtEpiceaNavigationElement new
+		  navigationModel: self navigationModel
 ]
 
 { #category : #accessing }
