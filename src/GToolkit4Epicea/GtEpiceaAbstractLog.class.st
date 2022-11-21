@@ -249,7 +249,7 @@ GtEpiceaAbstractLog >> recoverFilter [
 			epLog := GtEpLogEnumerator new latestLog: self logs first.
 			sorted := GtEpEventSequencer uniqueInstance 
 				sequence: epLog priorEntriesFromHead withCurrent: false.
-			AsyncSequenceStream forCollection: sorted ];
+			AsyncSequenceStream forCollection: sorted reversed ];
 		named: 'Recover';
 		order: 20;
 		valueNotRequired;
