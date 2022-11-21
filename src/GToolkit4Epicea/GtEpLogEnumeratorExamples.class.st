@@ -71,8 +71,8 @@ GtEpLogEnumeratorExamples >> priorEntriesFromHeadForTestTrait2 [
 	reference := entries first tagAt: #self.
 	self assert: reference localName equals: '1'.
 	self assert: reference globalName equals: 'Pharo10-SNAPSHOT-64bit-fec28a6.313x18caa4oyvcekylktb7i4k'.
-	self assert: ((entries first: 3) collect: [ :each | each content behaviorAffectedName ]) asArray
-		equals: #(TTestTrait2 TestClass2 TTestTrait2).
+	self assert: ((entries first: 4) collect: [ :each | each content behaviorAffectedName ]) asArray
+		equals: #(TTestTrait2 TTestTrait2 TestClass2 TTestTrait2).
 	reference := entries last tagAt: #self.
 	self assert: reference localName equals: '10'.
 	self assert: reference globalName equals: 'Pharo10-SNAPSHOT-64bit-fec28a6.313x18caa4oyvcekylktb7i4k'.
