@@ -88,11 +88,11 @@ GtEpiceaShowAction >> asViewFor: aLog [
 ]
 
 { #category : #accessing }
-GtEpiceaShowAction >> events: aCollectionOfEvents [
-	events := self latestEventsFrom: aCollectionOfEvents
+GtEpiceaShowAction >> eventsFromEntries: aCollectionOfEntries [
+	events := self latestEventsFrom: aCollectionOfEntries
 ]
 
 { #category : #accessing }
 GtEpiceaShowAction >> latestEventsFrom: previewEventsTheNewestFirst [
-	^ GtEpEventSequencer new sequence: (previewEventsTheNewestFirst collect: #content) withCurrent: false
+	^ GtEpEventSequencer new sequence: previewEventsTheNewestFirst withCurrent: false
 ]

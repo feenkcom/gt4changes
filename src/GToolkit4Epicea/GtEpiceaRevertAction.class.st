@@ -5,8 +5,10 @@ Class {
 }
 
 { #category : #accessing }
-GtEpiceaRevertAction >> treatEvents: aCollectionOfEvents [
-
-	^ aCollectionOfEvents flatCollect: [ :each | 
-		  each asRevertedCodeChange previewedApplyEvents ]
+GtEpiceaRevertAction >> eventsFromEntries: aCollectionOfEntries [
+	events := ((self
+			latestEventsFrom: (aCollectionOfEntries
+					collect: [ :each | each copy content: each content asRevertedCodeChange ]))
+			flatCollect: [ :each | each previewedApplyEvents ])
+			select: [ :eachEvent | eachEvent accept: (EpHasImpactVisitor inEnvironment: self class environment) ]
 ]
