@@ -24,8 +24,20 @@ GtEpiceaCompositeLog class >> allInSessionStore [
 ]
 
 { #category : #accessing }
+GtEpiceaCompositeLog class >> allInStore: aDirectory [
+	^ (EpFileLogNode fromAllLogsIn: aDirectory)
+		sort: [ :a :b | a modificationTime >= b modificationTime ];
+		collect: #log
+]
+
+{ #category : #accessing }
 GtEpiceaCompositeLog class >> forAllInSessionStore [
 	^ self onLogs: self allInSessionStore
+]
+
+{ #category : #accessing }
+GtEpiceaCompositeLog class >> forAllInStore: aDirectory [
+	^ self onLogs: (self allInStore: aDirectory)
 ]
 
 { #category : #accessing }

@@ -94,13 +94,5 @@ GtEpiceaShowAction >> events: aCollectionOfEvents [
 
 { #category : #accessing }
 GtEpiceaShowAction >> latestEventsFrom: previewEventsTheNewestFirst [
-	| result |
-	result := OrderedDictionary new.
-	previewEventsTheNewestFirst
-		do: [ :each | 
-			result
-				at: each content affectedMarker
-				ifPresent: [  ]
-				ifAbsentPut: [ each ] ].
-	^ result values reverse
+	^ GtEpEventSequencer new sequence: (previewEventsTheNewestFirst collect: #content) withCurrent: false
 ]
