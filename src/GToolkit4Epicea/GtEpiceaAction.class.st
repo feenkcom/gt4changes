@@ -83,8 +83,7 @@ GtEpiceaAction >> events [
 
 { #category : #accessing }
 GtEpiceaAction >> eventsFromEntries: aCollectionOfEntries [
-	events := (self
-			treatEvents: (self latestEventsFrom: aCollectionOfEntries))
+	events := (self latestEventsFrom: aCollectionOfEntries)
 			select: [ :eachEvent | eachEvent accept: (EpHasImpactVisitor inEnvironment: self class environment) ]
 ]
 
@@ -115,9 +114,4 @@ GtEpiceaAction >> gtEventsFor: aView [
 { #category : #accessing }
 GtEpiceaAction >> latestEventsFrom: previewEntriesTheNewestFirst [
 	^ (GtEpEventSequencer new sequence: previewEntriesTheNewestFirst withCurrent: false) collect: #content
-]
-
-{ #category : #accessing }
-GtEpiceaAction >> treatEvents: aCollectionOfEvents [
-	^ self subclassResponsibility
 ]
