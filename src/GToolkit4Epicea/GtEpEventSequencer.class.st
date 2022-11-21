@@ -20,13 +20,13 @@ GtEpEventSequencer >> behaviorEntriesFrom: chronologicalEntries includeCurrent: 
 	entriesDictionary := Dictionary new.
 	1 to: chronologicalEntries size do: [ :index |
 		currentEntry := chronologicalEntries at: index.
-		currentEntry content isEpBehaviorChange ifTrue:
+		(self isBehaviorDefinitionChange: currentEntry content) ifTrue:
 			[ (entriesDictionary at: currentEntry content affectedMarker ifAbsentPut: [ OrderedCollection new ]) add: currentEntry ] ].
 	behaviorEntries := OrderedCollection new.
 	entriesDictionary do: [ :entry |
 		(currentBoolean or: [ impactFilter accepts: entry last ]) ifTrue:
 			[ behaviorEntries addAll: entry ] ].
-	^ behaviorEntries sorted: #gtTime ascending
+	^ behaviorEntries
 ]
 
 { #category : #private }
@@ -52,8 +52,9 @@ GtEpEventSequencer >> filteredEntriesFrom: chronologicalEntries includeCurrent: 
 	As class/trait changes can depend on earlier changes - e.g. add class, add trait, add class to trait - class/trait changes are kept or removed as a block.
 	This also has the side effect of sorting entries in to behaviour and other."
 
-	^ (self behaviorEntriesFrom: chronologicalEntries includeCurrent: currentBoolean),
-		(self otherEntriesFrom: chronologicalEntries includeCurrent: currentBoolean).
+	^ ((self behaviorEntriesFrom: chronologicalEntries includeCurrent: currentBoolean),
+		(self otherEntriesFrom: chronologicalEntries includeCurrent: currentBoolean))
+			sorted: #gtTime ascending.
 ]
 
 { #category : #initialization }
@@ -61,6 +62,13 @@ GtEpEventSequencer >> initialize [
 
 	super initialize.
 	impactFilter := EpImpactCodeChangeFilter new environment: self class environment.
+]
+
+{ #category : #testing }
+GtEpEventSequencer >> isBehaviorDefinitionChange: anEpEvent [
+	"Answer a boolean indicating whether the supplied event is a behavior (class or trait) definition change, and so must be replayed first."
+
+	^ anEpEvent isEpClassChange or: [ anEpEvent isEpTraitChange ].
 ]
 
 { #category : #private }
@@ -84,13 +92,13 @@ GtEpEventSequencer >> otherEntriesFrom: chronologicalEntries includeCurrent: cur
 	1 to: chronologicalEntries size do: [ :index | | currentEntry |
 		currentEntry := chronologicalEntries at: index.
 		(currentEntry content isCodeChange and:
-			[ currentEntry content isEpBehaviorChange not ]) ifTrue:
+			[ (self isBehaviorDefinitionChange: currentEntry content) not ]) ifTrue:
 				[ entriesDictionary at: currentEntry content affectedMarker put: currentEntry ] ].
 	otherEntries := OrderedCollection new.
 	entriesDictionary do: [ :entry |
 		(currentBoolean or: [ impactFilter accepts: entry ]) ifTrue:
 				[ otherEntries add: entry ] ].
-	^ otherEntries sorted: #gtTime ascending
+	^ otherEntries
 ]
 
 { #category : #sequencing }
