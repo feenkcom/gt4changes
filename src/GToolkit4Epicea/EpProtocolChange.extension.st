@@ -7,3 +7,10 @@ EpProtocolChange >> = other [
 		self behaviorAffectedName = other behaviorAffectedName and: [ 
 			self protocol = other protocol ] ]
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpProtocolChange >> affectedMarker [
+	"All protocol changes should be grouped together"
+
+	^ { EpProtocolChange. self behaviorAffectedName }
+]

@@ -13,6 +13,23 @@ Class {
 }
 
 { #category : #private }
+GtEpEventSequencer >> behaviorEntriesFrom: chronologicalEntries includeCurrent: currentBoolean [
+	"Group behaviour changes by name, and if currentBoolean is false, have an impact on the current system and either add or reject the entire group"
+	| entriesDictionary currentEntry behaviorEntries |
+
+	entriesDictionary := Dictionary new.
+	1 to: chronologicalEntries size do: [ :index |
+		currentEntry := chronologicalEntries at: index.
+		currentEntry content isEpBehaviorChange ifTrue:
+			[ (entriesDictionary at: currentEntry content affectedMarker ifAbsentPut: [ OrderedCollection new ]) add: currentEntry ] ].
+	behaviorEntries := OrderedCollection new.
+	entriesDictionary do: [ :entry |
+		(currentBoolean or: [ impactFilter accepts: entry last ]) ifTrue:
+			[ behaviorEntries addAll: entry ] ].
+	^ behaviorEntries sorted: #gtTime ascending
+]
+
+{ #category : #private }
 GtEpEventSequencer >> chronologicalEntriesFrom: anEpEntryCollection [
 	"Answer the supplied collection of events ensuring the oldest is first.
 	NOTE: anEpEventCollection is assumed to be either chronological or reverse chronological."
@@ -31,22 +48,12 @@ GtEpEventSequencer >> filteredEntriesFrom: chronologicalEntries includeCurrent: 
 	"Select only the events which:
 	- are a code change
 	- if not a class or trait definition (isEpBehaviorChange): aren't overridden by a later change.
-	- if currentBoolean is false, aren't the same as the current image
-	Based on the code in EpLatestCodeChangeFilter>>accepts: (which is unfortunately tied to the Morphic UI"
-	| currentEntry filteredEntries |
+	- if currentBoolean is false, aren't the same as the current image.
+	As class/trait changes can depend on earlier changes - e.g. add class, add trait, add class to trait - class/trait changes are kept or removed as a block.
+	This also has the side effect of sorting entries in to behaviour and other."
 
-	filteredEntries := OrderedCollection new.
-	1 to: chronologicalEntries size - 1 do: [ :index |
-		currentEntry := chronologicalEntries at: index.
-		(currentEntry content isCodeChange and:
-			[ (currentEntry content isEpBehaviorChange or:
-				[ self isEvent: currentEntry notOverriddenIn: chronologicalEntries startingFrom: index + 1 ]) and:
-			[ currentBoolean or: [ impactFilter accepts: currentEntry ] ] ]) ifTrue:
-				[ filteredEntries add: currentEntry ] ].
-	currentEntry := chronologicalEntries last.
-	(currentBoolean or: [ impactFilter accepts: currentEntry ]) ifTrue:
-		[ filteredEntries add: currentEntry ].
-	^ filteredEntries
+	^ (self behaviorEntriesFrom: chronologicalEntries includeCurrent: currentBoolean),
+		(self otherEntriesFrom: chronologicalEntries includeCurrent: currentBoolean).
 ]
 
 { #category : #initialization }
@@ -68,6 +75,24 @@ GtEpEventSequencer >> isEvent: currentEntry notOverriddenIn: chronologicalEntrie
 	^ true
 ]
 
+{ #category : #private }
+GtEpEventSequencer >> otherEntriesFrom: chronologicalEntries includeCurrent: currentBoolean [
+	"Filter non-behaviour changes which are the latest code change, and if currentBoolean is false, have an impact on the current system"
+	| entriesDictionary otherEntries |
+
+	entriesDictionary := Dictionary new.
+	1 to: chronologicalEntries size do: [ :index | | currentEntry |
+		currentEntry := chronologicalEntries at: index.
+		(currentEntry content isCodeChange and:
+			[ currentEntry content isEpBehaviorChange not ]) ifTrue:
+				[ entriesDictionary at: currentEntry content affectedMarker put: currentEntry ] ].
+	otherEntries := OrderedCollection new.
+	entriesDictionary do: [ :entry |
+		(currentBoolean or: [ impactFilter accepts: entry ]) ifTrue:
+				[ otherEntries add: entry ] ].
+	^ otherEntries sorted: #gtTime ascending
+]
+
 { #category : #sequencing }
 GtEpEventSequencer >> sequence: anEpEntryCollection [
 
@@ -78,13 +103,12 @@ GtEpEventSequencer >> sequence: anEpEntryCollection [
 GtEpEventSequencer >> sequence: anEpEntryCollection withCurrent: currentBoolean [
 	"Sequence the supplied collection of OmEntries for replay.
 	If currentBoolean is true, include entries that don't change the running system, if false filter them out."
-	| sortedEntries chronologicalEntries filteredEntries |
+	| chronologicalEntries |
 
 	anEpEntryCollection ifEmpty: [ ^ anEpEntryCollection ].
 	chronologicalEntries := self chronologicalEntriesFrom: anEpEntryCollection.
-	filteredEntries := self filteredEntriesFrom: chronologicalEntries includeCurrent: currentBoolean.
-	sortedEntries := self sortedEntriesFrom: filteredEntries.
-	^ sortedEntries
+	^ self filteredEntriesFrom: chronologicalEntries includeCurrent: currentBoolean.
+
 ]
 
 { #category : #private }
