@@ -114,15 +114,7 @@ GtEpiceaAction >> gtEventsFor: aView [
 
 { #category : #accessing }
 GtEpiceaAction >> latestEventsFrom: previewEventsTheNewestFirst [
-	| result |
-	result := OrderedDictionary new.
-	previewEventsTheNewestFirst
-		do: [ :each | 
-			result
-				at: each affectedMarker
-				ifPresent: [  ]
-				ifAbsentPut: [ each ] ].
-	^ result values reverse
+	^ GtEpEventSequencer new sequence: previewEventsTheNewestFirst withCurrent: false
 ]
 
 { #category : #accessing }
