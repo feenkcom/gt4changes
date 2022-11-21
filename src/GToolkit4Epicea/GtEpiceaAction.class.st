@@ -9,9 +9,9 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtEpiceaAction class >> on: aCollectionOfEvents [
+GtEpiceaAction class >> on: aCollectionOfEntries [
 
-	^ self new events: aCollectionOfEvents
+	^ self new eventsFromEntries: aCollectionOfEntries
 ]
 
 { #category : #accessing }
@@ -82,9 +82,9 @@ GtEpiceaAction >> events [
 ]
 
 { #category : #accessing }
-GtEpiceaAction >> events: aCollectionOfEvents [
+GtEpiceaAction >> eventsFromEntries: aCollectionOfEntries [
 	events := (self
-			treatEvents: (self latestEventsFrom: aCollectionOfEvents))
+			treatEvents: (self latestEventsFrom: aCollectionOfEntries))
 			select: [ :eachEvent | eachEvent accept: (EpHasImpactVisitor inEnvironment: self class environment) ]
 ]
 
@@ -113,8 +113,8 @@ GtEpiceaAction >> gtEventsFor: aView [
 ]
 
 { #category : #accessing }
-GtEpiceaAction >> latestEventsFrom: previewEventsTheNewestFirst [
-	^ GtEpEventSequencer new sequence: previewEventsTheNewestFirst withCurrent: false
+GtEpiceaAction >> latestEventsFrom: previewEntriesTheNewestFirst [
+	^ (GtEpEventSequencer new sequence: previewEntriesTheNewestFirst withCurrent: false) collect: #content
 ]
 
 { #category : #accessing }
