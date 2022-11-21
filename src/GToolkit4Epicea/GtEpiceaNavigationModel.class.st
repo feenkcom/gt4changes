@@ -42,6 +42,8 @@ GtEpiceaNavigationModel >> createListFor: aView [
 					okAction: [ :srcFolder | 
 						directory := srcFolder.
 						aDropdown fireEvent: BrDropdownHideWish new.
+						self announce: (GtEpiceaChangeSelected new change: nil).
+						
 						GtEpiceaMonitor current announce: GtEpiceaLogAnnouncement new ] ];
 		actionDropdownButtonIcon: BrGlamorousVectorIcons add
 			tooltip: 'New Log'
