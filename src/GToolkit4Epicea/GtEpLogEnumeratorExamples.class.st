@@ -18,10 +18,12 @@ GtEpLogEnumeratorExamples class >> testDataRoot [
 GtEpLogEnumeratorExamples >> entriesFromStartTo [
 	"Demonstrate retrieving all a subset of entries"
 	<gtExample>
-	<noTest>
-	| entries epLog start end reference |
+	| fileReference entries epLog start end reference |
 
-	epLog := GtEpLogEnumerator fromFile: self class testDataRoot / 'testClass01' / 'Pharo10-SNAPSHOT-64bit-fec28a6.em8gtmjvf6qouoyjm5tk4q4dm.ombu'.
+	fileReference := self class testDataRoot / 'testClass01' / 'Pharo10-SNAPSHOT-64bit-fec28a6.em8gtmjvf6qouoyjm5tk4q4dm.ombu'.
+	self assert: fileReference resolve exists
+		description: [ fileReference fullName, ' not found' ].
+	epLog := GtEpLogEnumerator fromFile: fileReference.
 	start := (epLog priorEntriesFromHead reversed at: 2) tagAt: #self.
 	end := (epLog priorEntriesFromHead reversed last) tagAt: #self.
 	entries := epLog entriesFrom: start to: end.
@@ -38,10 +40,12 @@ GtEpLogEnumeratorExamples >> entriesFromStartTo [
 GtEpLogEnumeratorExamples >> priorEntriesFromHead [
 	"Demonstrate retrieving all entries from the head reference"
 	<gtExample>
-	<noTest>
-	| entries epLog reference |
+	| entries epLog reference fileReference |
 
-	epLog := GtEpLogEnumerator fromFile: self class testDataRoot / 'testClass01' / 'Pharo10-SNAPSHOT-64bit-fec28a6.em8gtmjvf6qouoyjm5tk4q4dm.ombu'.
+	fileReference := self class testDataRoot / 'testClass01' / 'Pharo10-SNAPSHOT-64bit-fec28a6.em8gtmjvf6qouoyjm5tk4q4dm.ombu'.
+	self assert: fileReference resolve exists
+		description: [ fileReference fullName, ' not found' ].
+	epLog := GtEpLogEnumerator fromFile: fileReference.
 	entries := epLog priorEntriesFromHead.
 	self assert: entries size equals: 11.
 	reference := entries first tagAt: #self.
@@ -56,10 +60,12 @@ GtEpLogEnumeratorExamples >> priorEntriesFromHead [
 GtEpLogEnumeratorExamples >> priorEntriesFromHeadForTestTrait2 [
 	"Demonstrate retrieving all entries from the head reference"
 	<gtExample>
-	<noTest>
-	| entries epLog reference |
+	| entries epLog reference fileReference |
 
-	epLog := GtEpLogEnumerator fromFile: self class testDataRoot / 'testTrait2' / 'Pharo10-SNAPSHOT-64bit-fec28a6.313x18caa4oyvcekylktb7i4k.ombu'.
+	fileReference := self class testDataRoot / 'testTrait2' / 'Pharo10-SNAPSHOT-64bit-fec28a6.313x18caa4oyvcekylktb7i4k.ombu'.
+	self assert: fileReference resolve exists
+		description: [ fileReference fullName, ' not found' ].
+	epLog := GtEpLogEnumerator fromFile: fileReference.
 	entries := GtEpEventSequencer uniqueInstance sequence: epLog priorEntriesFromHead.
 	self assert: entries size equals: 7.
 	reference := entries first tagAt: #self.
