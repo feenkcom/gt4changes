@@ -129,13 +129,13 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 		actionDropdownButtonLabel: 'Apply'
 			tooltip: 'Apply Selected Changes'
 			content: [ :aButton | 
-				(GtEpiceaApplyAction on: (self orderEvents: changeListModel selectedCodeEvents))
+				(GtEpiceaApplyAction on: (self orderEntries: changeListModel selectedCodeEvents))
 					anchor: aButton;
 					asDropdown ];
 		actionDropdownButtonLabel: 'Revert'
 			tooltip: 'Revert Selected Changes'
 			content: [ :aButton | 
-				(GtEpiceaRevertAction on: (self orderEvents: changeListModel selectedCodeEvents))
+				(GtEpiceaRevertAction on: (self orderEntries: changeListModel selectedCodeEvents))
 					anchor: aButton;
 					asDropdown ].
 
@@ -219,8 +219,8 @@ GtEpiceaAbstractLog >> logs [
 ]
 
 { #category : #accessing }
-GtEpiceaAbstractLog >> orderEvents: aCollectionOfEvents [
-	^ (aCollectionOfEvents sorted: [:a :b | (self timeAt: a) > (self timeAt: b)]) collect: #content
+GtEpiceaAbstractLog >> orderEntries: aCollectionOfEvents [
+	^ aCollectionOfEvents sorted: [:a :b | (self timeAt: a) > (self timeAt: b)]
 ]
 
 { #category : #'accessing - filters' }
@@ -249,7 +249,7 @@ GtEpiceaAbstractLog >> recoverFilter [
 			epLog := GtEpLogEnumerator new latestLog: self logs first.
 			sorted := GtEpEventSequencer uniqueInstance 
 				sequence: epLog priorEntriesFromHead withCurrent: false.
-			AsyncSequenceStream forCollection: sorted ];
+			AsyncSequenceStream forCollection: sorted reversed ];
 		named: 'Recover';
 		order: 20;
 		valueNotRequired;
