@@ -16,32 +16,6 @@ GtEpiceaElementExamples >> expandedElement [
 ]
 
 { #category : #examples }
-GtEpiceaElementExamples >> scripterFreezeLog [
-	<gtExample>
-	<noTest>
-	| aScripter |
-	aScripter := self scripterOnExpandedElementWithSelectedSimpleLog.
-	aScripter
-		substep: 'Click on freeze button'
-		do: [ :aStep | 
-			aStep check
-				label: 'Check change not frozen';
-				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isFrozen not ].
-
-			aStep click
-				label: 'Click button';
-				id: #content;
-				id: #toolbar;
-				onChildAt: 1.
-
-			aStep check
-				label: 'Check change frozen';
-				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isFrozen ] ].
-
-	^ aScripter syncContinue
-]
-
-{ #category : #examples }
 GtEpiceaElementExamples >> scripterOnExpandedElement [
 	<gtExample>
 	| aScripter |

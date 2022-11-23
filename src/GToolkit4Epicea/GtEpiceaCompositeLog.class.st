@@ -48,11 +48,6 @@ GtEpiceaCompositeLog class >> onLogs: aCollectionOfLogs [
 ]
 
 { #category : #accessing }
-GtEpiceaCompositeLog >> canBeFrozen [
-	^ false
-]
-
-{ #category : #accessing }
 GtEpiceaCompositeLog >> createListFor: aView [
 	<gtView>
 	^ aView columnedTree
@@ -91,11 +86,6 @@ GtEpiceaCompositeLog >> entriesStream [
 ]
 
 { #category : #accessing }
-GtEpiceaCompositeLog >> freeze [
-	self error: 'Cannot freeze a composite change'
-]
-
-{ #category : #accessing }
 GtEpiceaCompositeLog >> gtChildren [
 	^ self logs collect: [:aLog | GtEpiceaLog new log: aLog]
 ]
@@ -114,11 +104,6 @@ GtEpiceaCompositeLog >> isActive [
 { #category : #accessing }
 GtEpiceaCompositeLog >> isComposite [
 	^ true
-]
-
-{ #category : #accessing }
-GtEpiceaCompositeLog >> isFrozen [
-	^ false
 ]
 
 { #category : #accessing }
@@ -154,10 +139,6 @@ GtEpiceaCompositeLog >> shouldUpdate [
 { #category : #accessing }
 GtEpiceaCompositeLog >> startTime [
 	^ self logs ifEmpty: [ nil ] ifNotEmpty: [ :logCollection | logCollection last startTime ]
-]
-
-{ #category : #accessing }
-GtEpiceaCompositeLog >> thaw [
 ]
 
 { #category : #accessing }

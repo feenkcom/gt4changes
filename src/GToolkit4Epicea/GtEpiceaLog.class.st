@@ -28,9 +28,6 @@ GtEpiceaLog class >> allInSessionStore [
 
 { #category : #accessing }
 GtEpiceaLog >> addEntryWith: anEntry tags: aTagsBlock [
-
-	self isFrozen ifTrue: [ 
-		self error: 'Cannot add to frozen change set.' ].
 	^ self log addEntryWith: anEntry tags: aTagsBlock
 ]
 
