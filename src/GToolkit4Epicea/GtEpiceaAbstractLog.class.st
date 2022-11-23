@@ -105,16 +105,6 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 			stencil: [ (GtEpiceaChangeListElement forModel: changeListModel)
 					padding: (BlInsets top: 5) ].
 
-	self isActive
-		ifFalse: [ view
-				actionDropdownButtonIcon: BrGlamorousVectorIcons add
-				tooltip: 'Add Selected Changes'
-				content: [ :aButton | 
-					(GtEpiceaAddAction new
-						log: self;
-						anchor: aButton;
-						events: EpMonitor current log entries) asDropdown ] ].
-
 	view
 		actionDropdownButtonLabel: 'Apply'
 			tooltip: 'Apply Selected Changes'
