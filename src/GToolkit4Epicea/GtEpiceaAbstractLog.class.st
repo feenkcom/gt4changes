@@ -1,9 +1,6 @@
 Class {
 	#name : #GtEpiceaAbstractLog,
 	#superclass : #Object,
-	#instVars : [
-		'frozen'
-	],
 	#category : #'GToolkit4Epicea-Model'
 }
 
@@ -95,14 +92,6 @@ GtEpiceaAbstractLog >> entriesStream [
 	^ self subclassResponsibility
 ]
 
-{ #category : #'gt - extensions' }
-GtEpiceaAbstractLog >> freeze [
-
-	self isActive ifTrue: [ 
-		self error: 'Cannot freeze an active change set.' ].
-	frozen := true
-]
-
 { #category : #accessing }
 GtEpiceaAbstractLog >> gtEventsFor: aView [
 	<gtView>
@@ -113,17 +102,8 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 	view := aView explicit
 			title: 'Change List';
 			priority: 3;
-			stencil: [ (GtEpiceaChangeListElement forModel: changeListModel) padding: (BlInsets top: 5)].
-
-	(self isFrozen or: [ self isActive ])
-		ifFalse: [ view
-				actionDropdownButtonIcon: BrGlamorousVectorIcons add
-				tooltip: 'Add Selected Changes'
-				content: [ :aButton | 
-					(GtEpiceaAddAction new
-						log: self;
-						anchor: aButton;
-						events: EpMonitor current log entries) asDropdown ] ].
+			stencil: [ (GtEpiceaChangeListElement forModel: changeListModel)
+					padding: (BlInsets top: 5) ].
 
 	view
 		actionDropdownButtonLabel: 'Apply'
@@ -135,7 +115,8 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 		actionDropdownButtonLabel: 'Revert'
 			tooltip: 'Revert Selected Changes'
 			content: [ :aButton | 
-				(GtEpiceaRevertAction on: (self orderEntries: changeListModel selectedCodeEvents))
+				(GtEpiceaRevertAction
+					on: (self orderEntries: changeListModel selectedCodeEvents))
 					anchor: aButton;
 					asDropdown ].
 
@@ -190,11 +171,6 @@ GtEpiceaAbstractLog >> initialize [
 { #category : #accessing }
 GtEpiceaAbstractLog >> isActive [
 	^ self subclassResponsibility
-]
-
-{ #category : #accessing }
-GtEpiceaAbstractLog >> isFrozen [
-	^ frozen
 ]
 
 { #category : #'accessing - filters' }
@@ -272,11 +248,6 @@ GtEpiceaAbstractLog >> sequenceFilter [
 		order: 20;
 		valueNotRequired;
 		beNotDefault
-]
-
-{ #category : #accessing }
-GtEpiceaAbstractLog >> thaw [
-	frozen := false
 ]
 
 { #category : #accessing }

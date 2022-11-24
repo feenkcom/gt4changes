@@ -7,27 +7,12 @@ Class {
 }
 
 { #category : #examples }
-GtEpiceaLogExamples >> frozenLog [
-	<gtExample>
-	| log |
-	log := self simpleLog.
-
-	log freeze.
-
-	self assert: log isFrozen.
-	self should: [ log addEntryWith: nil tags: nil ] raise: Error.
-
-	^ log
-]
-
-{ #category : #examples }
 GtEpiceaLogExamples >> simpleLog [
 	<gtExample>
 	| log |
 	log := GtEpiceaLog new.
 	
 	self assert: log name equals: ''.
-	self assert: log isFrozen equals: false.
 	self assert: log entries size equals: 0.
 	
 	^ log

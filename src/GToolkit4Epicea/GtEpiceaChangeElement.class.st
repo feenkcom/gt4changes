@@ -62,28 +62,6 @@ GtEpiceaChangeElement >> defaultLayout [
 ]
 
 { #category : #accessing }
-GtEpiceaChangeElement >> freezeThawButton [
-	<gtChangeAction>
-	self changeViewModel changeModel isActive
-		ifFalse: [ self changeViewModel changeModel canBeFrozen
-				ifTrue: [ self changeViewModel changeModel isFrozen
-						ifTrue: [ toolbarElement
-								addItem: (BrButton new
-										aptitude: BrGlamorousButtonWithLabelAptitude;
-										label: 'Thaw';
-										action: [ :aButton | 
-											self changeViewModel changeModel thaw.
-											aButton phlow fireUpdateWish ]) ]
-						ifFalse: [ toolbarElement
-								addItem: (BrButton new
-										aptitude: BrGlamorousButtonWithLabelAptitude;
-										label: 'Freeze';
-										action: [ :aButton | 
-											self changeViewModel changeModel freeze.
-											aButton phlow fireUpdateWish ]) ] ] ]
-]
-
-{ #category : #accessing }
 GtEpiceaChangeElement >> handleAnnouncement: anAnnouncement [
 	(self changeViewModel hasChange not
 		or: [ self changeViewModel shouldUpdate not ]) ifTrue: [ ^ self ].
