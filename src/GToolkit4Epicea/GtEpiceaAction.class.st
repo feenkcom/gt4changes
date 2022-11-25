@@ -113,5 +113,5 @@ GtEpiceaAction >> gtEventsFor: aView [
 
 { #category : #accessing }
 GtEpiceaAction >> latestEventsFrom: previewEntriesTheNewestFirst [
-	^ (GtEpEventSequencer new sequence: previewEntriesTheNewestFirst withCurrent: false) collect: #content
+	^ (GtEpEventSequencer sequence: previewEntriesTheNewestFirst withCurrent: false) collect: #content
 ]

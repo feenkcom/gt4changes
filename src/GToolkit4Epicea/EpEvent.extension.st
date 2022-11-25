@@ -10,3 +10,9 @@ EpEvent >> applyCodeChange [
 	"noop"
 
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpEvent >> isEpBehaviorCommentChange [
+
+	^ false
+]

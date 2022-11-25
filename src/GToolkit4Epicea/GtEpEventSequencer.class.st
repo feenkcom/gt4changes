@@ -4,13 +4,49 @@ GtEpEventSequencer takes a chronological sequence of events and filters and orde
 Class {
 	#name : #GtEpEventSequencer,
 	#superclass : #Object,
-	#traits : 'TGtUniqueInstance',
-	#classTraits : 'TGtUniqueInstance classTrait',
 	#instVars : [
-		'impactFilter'
+		'impactFilter',
+		'entries',
+		'sequencedEntries',
+		'includeCurrent'
 	],
 	#category : #'GToolkit4Epicea-Model'
 }
+
+{ #category : #sequencing }
+GtEpEventSequencer class >> entries: anEpEntryCollection includeCurrent: currentBoolean [
+
+	^ self new
+		entries: anEpEntryCollection;
+		includeCurrent: currentBoolean
+]
+
+{ #category : #sequencing }
+GtEpEventSequencer class >> sequence: anEpEntryCollection [
+
+	^ self sequence: anEpEntryCollection withCurrent: false.
+]
+
+{ #category : #sequencing }
+GtEpEventSequencer class >> sequence: anEpEntryCollection withCurrent: currentBoolean [
+	"Sequence the supplied collection of OmEntries for replay and answer an OrderedCollection of entries.
+	If currentBoolean is true, include entries that don't change the running system, if false filter them out."
+	| sequencer chronologicalEntries |
+
+	anEpEntryCollection ifEmpty: [ ^ anEpEntryCollection ].
+	sequencer := self new.
+	chronologicalEntries := sequencer chronologicalEntriesFrom: anEpEntryCollection.
+	^ sequencer filteredEntriesFrom: chronologicalEntries includeCurrent: currentBoolean.
+
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> apply [
+	"Apply each of the events in the receiver"
+
+	self sequencedEntries do: [ :each |
+		each content applyCodeChange ].
+]
 
 { #category : #private }
 GtEpEventSequencer >> behaviorEntriesFrom: chronologicalEntries includeCurrent: currentBoolean [
@@ -21,7 +57,7 @@ GtEpEventSequencer >> behaviorEntriesFrom: chronologicalEntries includeCurrent: 
 	1 to: chronologicalEntries size do: [ :index |
 		currentEntry := chronologicalEntries at: index.
 		(self isBehaviorDefinitionChange: currentEntry content) ifTrue:
-			[ (entriesDictionary at: currentEntry content affectedMarker ifAbsentPut: [ OrderedCollection new ]) add: currentEntry ] ].
+			[ (entriesDictionary at: currentEntry content behaviorAffectedName ifAbsentPut: [ OrderedCollection new ]) add: currentEntry ] ].
 	behaviorEntries := OrderedCollection new.
 	entriesDictionary do: [ :entry |
 		(currentBoolean or: [ impactFilter accepts: entry last ]) ifTrue:
@@ -43,6 +79,18 @@ GtEpEventSequencer >> chronologicalEntriesFrom: anEpEntryCollection [
 
 ]
 
+{ #category : #accessing }
+GtEpEventSequencer >> entries [
+
+	^ entries
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> entries: anObject [
+
+	entries := anObject
+]
+
 { #category : #private }
 GtEpEventSequencer >> filteredEntriesFrom: chronologicalEntries includeCurrent: currentBoolean [
 	"Select only the events which:
@@ -57,6 +105,50 @@ GtEpEventSequencer >> filteredEntriesFrom: chronologicalEntries includeCurrent: 
 			sorted: #gtTime ascending.
 ]
 
+{ #category : #accessing }
+GtEpEventSequencer >> getSequencedEntries [
+	"(Re)calculate the sequenced entries from the entries"
+	| chronologicalEntries |
+
+	chronologicalEntries := self chronologicalEntriesFrom: entries.
+	^ self filteredEntriesFrom: chronologicalEntries includeCurrent: includeCurrent.
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> gtActionApplyFor: anAction [
+	<gtAction>
+
+	^ anAction button
+		label: 'Apply';
+		priority: 10;
+		action: [ self apply ].
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> gtEntriesFor: aView [
+	<gtView>
+
+	^ aView list
+		title: 'Entries';
+		priority: 10;
+		itemText: [ :item | item content ];
+		items: [ self sequencedEntries ].
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> includeCurrent [
+	"Answer a boolean indicating whether the latest entry should be included even if it doesn't change the current system"
+	<return: #Boolean>
+
+	^ includeCurrent
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> includeCurrent: aBoolean [
+
+	includeCurrent := aBoolean
+]
+
 { #category : #initialization }
 GtEpEventSequencer >> initialize [
 
@@ -66,9 +158,11 @@ GtEpEventSequencer >> initialize [
 
 { #category : #testing }
 GtEpEventSequencer >> isBehaviorDefinitionChange: anEpEvent [
-	"Answer a boolean indicating whether the supplied event is a behavior (class or trait) definition change, and so must be replayed first."
+	"Answer a boolean indicating whether the supplied event is a behavior change that must be replayed first."
 
-	^ anEpEvent isEpClassChange or: [ anEpEvent isEpTraitChange ].
+	^ anEpEvent isEpBehaviorChange and:
+		[ anEpEvent isEpProtocolChange not and:
+		[ anEpEvent isEpBehaviorCommentChange not ] ].
 ]
 
 { #category : #private }
@@ -101,22 +195,11 @@ GtEpEventSequencer >> otherEntriesFrom: chronologicalEntries includeCurrent: cur
 	^ otherEntries
 ]
 
-{ #category : #sequencing }
-GtEpEventSequencer >> sequence: anEpEntryCollection [
+{ #category : #accessing }
+GtEpEventSequencer >> sequencedEntries [
 
-	^ self sequence: anEpEntryCollection withCurrent: false.
-]
-
-{ #category : #sequencing }
-GtEpEventSequencer >> sequence: anEpEntryCollection withCurrent: currentBoolean [
-	"Sequence the supplied collection of OmEntries for replay.
-	If currentBoolean is true, include entries that don't change the running system, if false filter them out."
-	| chronologicalEntries |
-
-	anEpEntryCollection ifEmpty: [ ^ anEpEntryCollection ].
-	chronologicalEntries := self chronologicalEntriesFrom: anEpEntryCollection.
-	^ self filteredEntriesFrom: chronologicalEntries includeCurrent: currentBoolean.
-
+	entries ifEmpty: [ ^ sequencedEntries := entries ].
+	^ sequencedEntries ifNil: [ sequencedEntries := self getSequencedEntries ].
 ]
 
 { #category : #private }

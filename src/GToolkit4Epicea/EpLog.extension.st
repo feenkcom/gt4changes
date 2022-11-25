@@ -13,6 +13,16 @@ EpLog >> entriesStream [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+EpLog >> gtEntriesTreeViewFor: aView [
+	<gtView>
+
+	^ aView explicit
+		title: 'Tree View';
+		priority: 20;
+		stencil: [ GtEpiceaLogView new treeViewOn: self entries ]
+]
+
+{ #category : #'*GToolkit4Epicea' }
 EpLog >> gtReset [
 	store reset
 ]

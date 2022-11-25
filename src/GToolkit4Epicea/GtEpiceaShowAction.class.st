@@ -94,5 +94,5 @@ GtEpiceaShowAction >> eventsFromEntries: aCollectionOfEntries [
 
 { #category : #accessing }
 GtEpiceaShowAction >> latestEventsFrom: previewEventsTheNewestFirst [
-	^ GtEpEventSequencer new sequence: previewEventsTheNewestFirst withCurrent: false
+	^ GtEpEventSequencer sequence: previewEventsTheNewestFirst withCurrent: false
 ]

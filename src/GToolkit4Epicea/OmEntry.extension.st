@@ -20,7 +20,7 @@ OmEntry >> gtActionBrowseEntryFor: anAction [
 				label: 'Browse';
 				action: [ :button | self content methodAffected compiledMethod gtBrowseFrom: button ] ].
 
-	(self content isKindOf: EpClassChange)
+	(self content isEpBehaviorChange)
 		ifTrue: [ ^ anAction button
 				label: 'Browse';
 				action: [ :button | self content behaviorAffected realClass gtBrowseFrom: button ] ].
