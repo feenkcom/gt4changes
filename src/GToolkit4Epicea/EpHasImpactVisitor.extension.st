@@ -5,13 +5,16 @@ EpHasImpactVisitor >> visitBehaviorCommentChange: aChange [
 
 	self
 		behaviorNamed: aChange behaviorAffectedName
-		ifPresent: [ :aClass | 
+		ifPresent: [ :aClass |
+			aChange newComment = 'nil' ifTrue: 
+				[ Stdio stdout << '*** ignoring ''nil'' comment'; lf.
+				GtEpNilCommentSignal emit.
+				^ false ].
+			(aClass hasComment not and: [ aChange newComment isEmpty ]) ifTrue: [ ^ false ].
 			^ aClass comment ~= aChange newComment or: [
 			aClass organization commentStamp ~= aChange newStamp ] ].
 
-	^ aChange newComment isNotNil 
-		and: [ aChange newComment isNotEmpty
-		and: [ aChange newComment ~= 'nil' ] ]
+	^ true
 ]
 
 { #category : #'*GToolkit4Epicea' }

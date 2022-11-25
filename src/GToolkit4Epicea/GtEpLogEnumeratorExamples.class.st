@@ -42,7 +42,7 @@ GtEpLogEnumeratorExamples >> priorEntriesFromHead [
 	<gtExample>
 	| entries epLog reference fileReference |
 
-	fileReference := self class testDataRoot / 'testClass01' / 'Pharo10-SNAPSHOT-64bit-fec28a6.em8gtmjvf6qouoyjm5tk4q4dm.ombu'.
+	fileReference := self testClass01Directory.
 	self assert: fileReference resolve exists
 		description: [ fileReference fullName, ' not found' ].
 	epLog := GtEpLogEnumerator fromFile: fileReference.
@@ -66,7 +66,7 @@ GtEpLogEnumeratorExamples >> priorEntriesFromHeadForTestTrait2 [
 	self assert: fileReference resolve exists
 		description: [ fileReference fullName, ' not found' ].
 	epLog := GtEpLogEnumerator fromFile: fileReference.
-	entries := GtEpEventSequencer uniqueInstance sequence: epLog priorEntriesFromHead.
+	entries := GtEpEventSequencer sequence: epLog priorEntriesFromHead.
 	self assert: entries size equals: 7.
 	reference := entries first tagAt: #self.
 	self assert: reference localName equals: '1'.
@@ -76,4 +76,10 @@ GtEpLogEnumeratorExamples >> priorEntriesFromHeadForTestTrait2 [
 	reference := entries last tagAt: #self.
 	self assert: reference localName equals: '10'.
 	self assert: reference globalName equals: 'Pharo10-SNAPSHOT-64bit-fec28a6.313x18caa4oyvcekylktb7i4k'.
+]
+
+{ #category : #private }
+GtEpLogEnumeratorExamples >> testClass01Directory [
+
+	^ self class testDataRoot / 'testClass01' / 'Pharo10-SNAPSHOT-64bit-fec28a6.em8gtmjvf6qouoyjm5tk4q4dm.ombu'.
 ]

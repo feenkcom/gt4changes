@@ -1,6 +1,8 @@
 Class {
 	#name : #GtEpiceaAbstractLog,
 	#superclass : #Object,
+	#traits : 'TGtEpiceaLogView',
+	#classTraits : 'TGtEpiceaLogView classTrait',
 	#category : #'GToolkit4Epicea-Model'
 }
 
@@ -223,8 +225,7 @@ GtEpiceaAbstractLog >> recoverFilter [
 	^ GtFilterDescriptor new
 		creator: [ :aStream | | epLog sorted |
 			epLog := GtEpLogEnumerator new latestLog: self logs first.
-			sorted := GtEpEventSequencer uniqueInstance 
-				sequence: epLog priorEntriesFromHead withCurrent: false.
+			sorted := GtEpEventSequencer sequence: epLog priorEntriesFromHead withCurrent: false.
 			AsyncSequenceStream forCollection: sorted reversed ];
 		named: 'Recover';
 		order: 20;
@@ -239,9 +240,9 @@ GtEpiceaAbstractLog >> sequenceFilter [
 	<gtChangeFilter>
 	^ GtFilterDescriptor new
 		creator: [ :aStream | | chronological sorted |
-			chronological := GtEpEventSequencer uniqueInstance
+			chronological := GtEpEventSequencer new
 				chronologicalEntriesFrom: aStream toArray wait.
-			sorted := GtEpEventSequencer uniqueInstance 
+			sorted := GtEpEventSequencer new 
 				sortedEntriesFrom: chronological.
 			AsyncSequenceStream forCollection: sorted reversed ];
 		named: 'Sequence';

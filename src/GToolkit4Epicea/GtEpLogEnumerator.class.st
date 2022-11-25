@@ -4,6 +4,8 @@ GtEpLogEnumerator follows chains of events over multiple epicea log files.
 Class {
 	#name : #GtEpLogEnumerator,
 	#superclass : #Object,
+	#traits : 'TGtEpiceaLogView',
+	#classTraits : 'TGtEpiceaLogView classTrait',
 	#instVars : [
 		'latestLog'
 	],
@@ -137,4 +139,10 @@ GtEpLogEnumerator >> priorEntriesIn: anEpLog from: endReference backTo: startRef
 				nextReference := anEpLog priorReferenceAt: entry ]
 			ifAbsent: [ ^ nextReference ] ].
 	^ nextReference
+]
+
+{ #category : #accessing }
+GtEpLogEnumerator >> treeView [
+
+	^ self treeViewOn: self priorEntriesFromHead.
 ]
