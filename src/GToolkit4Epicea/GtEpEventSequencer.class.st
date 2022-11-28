@@ -21,6 +21,15 @@ GtEpEventSequencer class >> entries: anEpEntryCollection includeCurrent: current
 		includeCurrent: currentBoolean
 ]
 
+{ #category : #accessing }
+GtEpEventSequencer class >> forCurrentSession [
+	"Answer the receiver with the current session sequenced, including changes which are already in the image."
+
+	^ self
+		entries: (GtEpLogEnumerator new latestLog: EpMonitor current log) priorEntriesFromHead
+		includeCurrent: true.
+]
+
 { #category : #sequencing }
 GtEpEventSequencer class >> sequence: anEpEntryCollection [
 
@@ -88,7 +97,8 @@ GtEpEventSequencer >> entries [
 { #category : #accessing }
 GtEpEventSequencer >> entries: anObject [
 
-	entries := anObject
+	entries := anObject.
+	sequencedEntries := nil.
 ]
 
 { #category : #private }
@@ -146,7 +156,8 @@ GtEpEventSequencer >> includeCurrent [
 { #category : #accessing }
 GtEpEventSequencer >> includeCurrent: aBoolean [
 
-	includeCurrent := aBoolean
+	includeCurrent := aBoolean.
+	sequencedEntries := nil.
 ]
 
 { #category : #initialization }
