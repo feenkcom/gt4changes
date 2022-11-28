@@ -6,6 +6,19 @@ Class {
 	#category : #'GToolkit4Epicea-Model'
 }
 
+{ #category : #accessing }
+GtEpiceaAbstractLog >> addToolbarButtonsTo: aView withModel: changeListModel [
+	| methods |
+	methods := (Pragma allNamed: #gtChangeAction in: self class)
+			collect: #methodSelector.
+	methods
+		do: [ :aSelector | 
+			self
+				perform: aSelector
+				withArguments: {aView.
+						changeListModel} ]
+]
+
 { #category : #'accessing - filters' }
 GtEpiceaAbstractLog >> additionFilter [
 	<gtChangeFilter>
@@ -122,7 +135,7 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 					anchor: aButton;
 					asDropdown ].
 
-
+	self addToolbarButtonsTo: view withModel: changeListModel.
 
 	^ view
 ]
