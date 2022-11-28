@@ -124,7 +124,7 @@ GtEpEventSequencer >> getSequencedEntries [
 	^ self filteredEntriesFrom: chronologicalEntries includeCurrent: includeCurrent.
 ]
 
-{ #category : #accessing }
+{ #category : #'gt - extensions' }
 GtEpEventSequencer >> gtActionApplyFor: anAction [
 	<gtAction>
 
@@ -134,15 +134,75 @@ GtEpEventSequencer >> gtActionApplyFor: anAction [
 		action: [ self apply ].
 ]
 
-{ #category : #accessing }
-GtEpEventSequencer >> gtEntriesFor: aView [
+{ #category : #'gt - extensions' }
+GtEpEventSequencer >> gtBackgroundColorForEntry: anOmbuEntry [ 
+	^ (((sequencedEntries ifNil: [#()])
+			includes: anOmbuEntry) 
+				ifTrue: [ Color black ] 
+				ifFalse: [ Color gray])
+]
+
+{ #category : #'gt - extensions' }
+GtEpEventSequencer >> gtViewAllEntriesFor: aView [
 	<gtView>
 
-	^ aView list
-		title: 'Entries';
+	^ aView columnedList
+		title: 'All Entries';
+		priority: 20;
+		items: [ entries ];
+		column: 'Change' text: [ :anOmbuEntry | 
+			anOmbuEntry content asRopedText 
+				foreground: (self gtBackgroundColorForEntry: anOmbuEntry) ];
+		column: 'Timestamp' 
+			text: [ :anOmbuEntry | 
+				anOmbuEntry gtTime asString asRopedText 
+					foreground: (self gtBackgroundColorForEntry: anOmbuEntry) ] 
+			width: 250
+]
+
+{ #category : #'gt - extensions' }
+GtEpEventSequencer >> gtViewChronologicalEntriesFor: aView [
+	<gtView>
+
+	^ aView columnedList
+		title: 'Chronological Entries';
+		priority: 15;
+		items: [ self chronologicalEntriesFrom: entries ];
+		column: 'Change' text: [ :anOmbuEntry | 
+			anOmbuEntry content asRopedText 
+				foreground: (self gtBackgroundColorForEntry: anOmbuEntry) ];
+		column: 'Timestamp' 
+			text: [ :anOmbuEntry | 
+				anOmbuEntry gtTime asString asRopedText 
+					foreground: (self gtBackgroundColorForEntry: anOmbuEntry) ] 
+			width: 250
+]
+
+{ #category : #'gt - extensions' }
+GtEpEventSequencer >> gtViewSequencedEntriesFor: aView [
+	<gtView>
+
+	^ aView columnedList
+		title: 'Sequenced Entries';
 		priority: 10;
-		itemText: [ :item | item content ];
-		items: [ self sequencedEntries ].
+		items: [ self sequencedEntries ];
+		column: 'Change' text: [ :anOmbuEntry | anOmbuEntry content ];
+		column: 'Timestamp' text: [ :anOmbuEntry | anOmbuEntry gtTime ] width: 250
+]
+
+{ #category : #'gt - extensions' }
+GtEpEventSequencer >> gtViewSequencedEntriesWithImpactFor: aView [
+	<gtView>
+
+	^ aView columnedList
+		title: 'Sequenced Entries (with impact)';
+		priority: 11;
+		items: [ self sequencedEntries ];
+		column: 'Change' text: [ :anOmbuEntry | anOmbuEntry content ];
+		column: 'Has Impact' 
+			text: [ :anOmbuEntry | impactFilter accepts: anOmbuEntry ]
+			width: 75;
+		column: 'Timestamp' text: [ :anOmbuEntry | anOmbuEntry gtTime ] width: 250
 ]
 
 { #category : #accessing }
