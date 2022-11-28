@@ -210,6 +210,11 @@ GtEpiceaAbstractLog >> logs [
 ]
 
 { #category : #accessing }
+GtEpiceaAbstractLog >> name [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
 GtEpiceaAbstractLog >> orderEntries: aCollectionOfEvents [
 	^ aCollectionOfEvents sorted: [:a :b | (self timeAt: a) > (self timeAt: b)]
 ]
