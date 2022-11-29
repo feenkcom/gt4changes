@@ -234,6 +234,4 @@ GtEpiceaChangeElement >> updateToolbarElement [
 	(self hasChangeViewModel not or: [ 
 		 self changeViewModel hasChange not ]) ifTrue: [ ^ self ].
 	toolbarElement removeAllItems.
-
-	self addToolbarButtons
 ]
