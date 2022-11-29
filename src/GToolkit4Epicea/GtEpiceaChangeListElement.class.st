@@ -97,14 +97,7 @@ GtEpiceaChangeListElement >> initializeList [
 		cellStencil: [ :each | BrLabel new aptitude: BrGlamorousLabelAptitude new ];
 		dataBinder: [ :aLabel :anEpEvent | aLabel text: (model timeAt: anEpEvent) asString ].
 
-	list
-		when: BrSelectionChanged
-		do: [ :anEvent | 
-			anEvent indices
-				ifNotEmpty: [ | aWidgetElement selectedObject |
-					aWidgetElement := anEvent currentTarget.
-					selectedObject := aWidgetElement viewModel itemAt: anEvent indices first.
-					self phlow spawnObject: selectedObject ] ].
+	list addEventHandler: GtPhlowListToSelectHandler new.
 
 	list
 		rowStencil: (GtPhlowColumnedListItemElementWithContextMenuDecorator new
