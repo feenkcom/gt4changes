@@ -125,21 +125,22 @@ GtEpEventSequencer >> getSequencedEntries [
 ]
 
 { #category : #'gt - extensions' }
-GtEpEventSequencer >> gtActionApplyFor: anAction [
-	<gtAction>
-
-	^ anAction button
-		label: 'Apply';
-		priority: 10;
-		action: [ self apply ].
-]
-
-{ #category : #'gt - extensions' }
 GtEpEventSequencer >> gtBackgroundColorForEntry: anOmbuEntry [ 
 	^ (((sequencedEntries ifNil: [#()])
 			includes: anOmbuEntry) 
 				ifTrue: [ Color black ] 
 				ifFalse: [ Color gray])
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> gtChangeListFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Change List';
+		priority: 5;
+		object: [ GtEpiceaSequencedLog sequencer: self ];
+		view: #gtEventsFor:
 ]
 
 { #category : #'gt - extensions' }
