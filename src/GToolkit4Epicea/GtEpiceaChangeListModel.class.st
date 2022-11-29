@@ -57,6 +57,8 @@ GtEpiceaChangeListModel >> filterDescriptors [
 
 { #category : #accessing }
 GtEpiceaChangeListModel >> initialize [
+	super initialize.
+	
 	all := OrderedCollection new.
 	selection := OrderedCollection new.
 	available := OrderedCollection new
