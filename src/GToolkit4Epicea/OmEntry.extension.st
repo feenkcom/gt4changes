@@ -39,6 +39,46 @@ OmEntry >> gtActionRevertFor: anAction [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+OmEntry >> gtCurrentSourceFor: aView [
+	<gtView>
+	
+	^ aView textEditor
+		title: 'Current Source';
+		aptitude: BrGlamorousCodeEditorAptitude;
+		styler: (GtCodeDiffRBTextStyler new 
+			isForWorkspace: (self content isEpMethodChange not));
+		priority: 43;
+		text: [ self content accept: (GtEpiceaCurrentStateVisitor
+			inEnvironment: self class environment
+			showClassName: false) ]
+]
+
+{ #category : #'*GToolkit4Epicea' }
+OmEntry >> gtDiffCurrentFor: aView [
+	<gtView>
+	
+	^ aView explicit
+		title: 'Diff Current';
+		priority: 5;
+		stencil: [
+			| previousContent newContent |
+			previousContent := self content accept:  (GtEpiceaCurrentStateVisitor 
+				inEnvironment: self class environment
+				showClassName: false).
+			newContent := self content accept: EpNewStateVisitor new.
+			
+			GtEpiceaDiffElementWithLabelStencil new
+			 	fromLabelText: 'Current:';
+			 	toLabelText:  'Change:';
+			 	ombuEntry: self;
+			 	shouldHideDiff: (previousContent = newContent);
+			 	diffBuilder: ((GtCodeDiffBuilder 
+			 		from: previousContent
+			 		to: newContent) 
+			 			isMethod: self content isEpMethodChange) ]
+]
+
+{ #category : #'*GToolkit4Epicea' }
 OmEntry >> gtDiffFor: aView [
 	<gtView>
 	

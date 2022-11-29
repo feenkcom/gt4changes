@@ -36,6 +36,11 @@ GtEpiceaExplicitLog >> isActive [
 ]
 
 { #category : #accessing }
+GtEpiceaExplicitLog >> log [
+	^ nil
+]
+
+{ #category : #accessing }
 GtEpiceaExplicitLog >> logs [
 	^ {}
 ]
@@ -43,6 +48,11 @@ GtEpiceaExplicitLog >> logs [
 { #category : #accessing }
 GtEpiceaExplicitLog >> name [
 	^ 'Explicit log on ', entries size asString, ' entries'
+]
+
+{ #category : #accessing }
+GtEpiceaExplicitLog >> shouldUpdate [
+	^ false
 ]
 
 { #category : #accessing }

@@ -16,6 +16,14 @@ GtEpiceaCurrentStateVisitor class >> inEnvironment: anEnvironment [
 		yourself
 ]
 
+{ #category : #'instance creation' }
+GtEpiceaCurrentStateVisitor class >> inEnvironment: anEnvironment showClassName: aBoolean [
+
+	^ self basicNew 
+		initializeWith: anEnvironment;
+		showClassNameInMethodSource: aBoolean
+]
+
 { #category : #private }
 GtEpiceaCurrentStateVisitor >> behaviorNamed: aSymbol ifPresent: presentBlock [
 
