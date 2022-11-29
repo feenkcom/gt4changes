@@ -9,7 +9,7 @@ Class {
 { #category : #accessing }
 GtEpiceaAbstractLog >> addToolbarButtonsTo: aView withModel: changeListModel [
 	| methods |
-	methods := (Pragma allNamed: #gtChangeAction in: self class)
+	methods := (Pragma allNamed: #gtChangeAction from: GtEpiceaAbstractLog to: self class)
 			collect: #methodSelector.
 	methods
 		do: [ :aSelector | 
@@ -206,6 +206,11 @@ GtEpiceaAbstractLog >> log [
 
 { #category : #accessing }
 GtEpiceaAbstractLog >> logs [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractLog >> name [
 	^ self subclassResponsibility
 ]
 
