@@ -18,15 +18,6 @@ Class {
 }
 
 { #category : #accessing }
-GtEpiceaChangeElement >> addToolbarButtons [
-
-	| methods |
-	methods := (Pragma allNamed: #gtChangeAction in: self class) 
-		           collect: #methodSelector.
-	methods do: [ :aSelector | self perform: aSelector ]
-]
-
-{ #category : #accessing }
 GtEpiceaChangeElement >> changeViewItems [
 
 	| aChange collector context |
