@@ -145,7 +145,7 @@ GtEpiceaAbstractLog >> gtImpactFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Impact';
-		priority: 1;
+		priority: 45;
 		stencil: [ (GtEpiceaShowAction on: self entries) asViewFor: self ]
 ]
 
