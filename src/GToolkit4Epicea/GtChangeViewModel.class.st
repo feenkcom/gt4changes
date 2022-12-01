@@ -29,7 +29,8 @@ GtChangeViewModel >> name [
 
 { #category : #accessing }
 GtChangeViewModel >> remove [
-	^ self changeModel log store fileReference ensureDelete
+	^ self changeModel log
+		ifNotNil: [ :aLog | aLog store fileReference ensureDelete ]
 ]
 
 { #category : #accessing }

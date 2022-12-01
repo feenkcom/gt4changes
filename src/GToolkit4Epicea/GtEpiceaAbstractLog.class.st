@@ -317,6 +317,11 @@ GtEpiceaAbstractLog >> sequenceFilter [
 ]
 
 { #category : #accessing }
+GtEpiceaAbstractLog >> shouldUpdate [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
 GtEpiceaAbstractLog >> timeAt: anEpEvent [ 
 	^ self subclassResponsibility
 ]
