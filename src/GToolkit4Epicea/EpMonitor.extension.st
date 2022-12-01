@@ -43,3 +43,16 @@ EpMonitor >> gtViewEntriesListFor: aView [
 		object: [ log ];
 		view: #gtViewEntriesListFor:
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpMonitor class >> shutDown: isImageQuitting [
+	"If enabled, record a snapshot event.
+	Always open a new file on snapshot"
+
+	self hasCurrent ifTrue:
+		[ self current isEnabled ifTrue: 
+			[ self current sessionSnapshot ].
+		self current sessionStore flush.
+		"Force a new log file on every image save.
+		self current log store resetWithNextStoreName." ].
+]
