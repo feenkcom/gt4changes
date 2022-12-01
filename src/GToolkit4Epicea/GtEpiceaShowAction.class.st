@@ -18,7 +18,7 @@ GtEpiceaShowAction >> asView [
 			              + BrGlamorousWithHorizontalResizerAptitude new beLeft
 			              + BrGlamorousWithVerticalResizerAptitude new.
 
-	events ifEmpty: [ 
+	self events ifEmpty: [ 
 		aContainer addChild: (BrLabel new
 				 aptitude: BrGlamorousLabelAptitude;
 				 text: 'No relevant changes').
@@ -82,17 +82,7 @@ GtEpiceaShowAction >> asViewFor: aLog [
 
 	aList addAptitude: BrColumnedListHeaderAptitude.
 	
-	aList items: events.
+	aList items: self events.
 	
 	^ aList
-]
-
-{ #category : #accessing }
-GtEpiceaShowAction >> eventsFromEntries: aCollectionOfEntries [
-	events := self latestEventsFrom: aCollectionOfEntries
-]
-
-{ #category : #accessing }
-GtEpiceaShowAction >> latestEventsFrom: previewEventsTheNewestFirst [
-	^ GtEpEventSequencer sequence: previewEventsTheNewestFirst withCurrent: false
 ]
