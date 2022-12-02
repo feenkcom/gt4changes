@@ -62,9 +62,11 @@ GtEpiceaChangeListElement >> initializeList [
 		title: 'Selected';
 		stencil: [ :anEpEvent :anIndex | 
 			anEpEvent content isCodeChange
-				ifTrue: [ BrCheckbox new
+				ifTrue: [ 
+					BrCheckbox new
 						aptitude: BrGlamorousCheckboxAptitude
-								+ (BrGlamorousWithLabelTooltipAptitude new text: 'Toggle Selection');
+							+ (BrGlamorousWithLabelTooltipAptitude new 
+								text: 'Toggle Selection');
 						checked: (model isSelected: anEpEvent);
 						whenCheckedDo: [ model select: anEpEvent ];
 						margin: (BlInsets left: 20);
@@ -72,11 +74,10 @@ GtEpiceaChangeListElement >> initializeList [
 				ifFalse: [ BlElement new size: 1 @ 1 ] ];
 		width: 56.
 
-
 	list column
 		title: 'Icon';
 		cellStencil: [ BlElement new
-				layout: BlLinearLayout horizontal;
+				layout: BlLinearLayout horizontal alignCenter;
 				constraintsDo: [ :c | 
 					c horizontal fitContent.
 					c vertical fitContent ] ];
@@ -92,22 +93,26 @@ GtEpiceaChangeListElement >> initializeList [
 				layout: BlLinearLayout horizontal;
 				constraintsDo: [ :c | 
 					c horizontal fitContent.
-					c vertical fitContent ] ];
+					c vertical exact: 26 ] ];
 		dataBinder: [ :anElement :anEpEvent | 
 			anElement
 				removeChildren;
 				addChildren: (anEpEvent content accept: GtEpiceaBrickVisitor new) ].
 	list column
-		width: 250;
+		width: 150;
 		title: 'Timestamp';
-		cellStencil: [ :each | BrLabel new aptitude: BrGlamorousLabelAptitude new ];
-		dataBinder: [ :aLabel :anEpEvent | aLabel text: (model timeAt: anEpEvent) asString ].
+		cellStencil: [ :each | 
+			BrLabel new 
+				aptitude: BrGlamorousLabelAptitude new ];
+		dataBinder: [ :aLabel :anEpEvent | 
+			aLabel text: (model timeAt: anEpEvent) printToSeconds ].
 
-	list addEventHandler: GtPhlowListToSelectHandler new.
+	list addEventHandler: GtPhlowListToSelectHandler new .
 
 	list
 		rowStencil: (GtPhlowColumnedListItemElementWithContextMenuDecorator new
-				stencilBuilder: BrGlamorousColumnedListSelectableRowElementStencilBuilder new;
+				stencilBuilder: (BrGlamorousColumnedListSelectableRowElementStencilBuilder new
+					cellSpacing: self leftPadding);
 				contextMenuStencil: [ :element :item | 
 					item content isCodeChange
 						ifTrue: [ BrGlamorousSimpleContextMenuContent new
@@ -129,7 +134,8 @@ GtEpiceaChangeListElement >> initializeList [
 								yourself ]
 						ifFalse: [ BrGlamorousSimpleContextMenuContent new ] ]).
 
-	list addAptitude: BrColumnedListHeaderAptitude
+	list addAptitude: (BrColumnedListHeaderAptitude new 
+		cellSpacing: self leftPadding)
 ]
 
 { #category : #accessing }
