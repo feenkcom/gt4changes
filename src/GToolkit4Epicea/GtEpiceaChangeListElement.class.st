@@ -75,7 +75,7 @@ GtEpiceaChangeListElement >> initializeList [
 		width: 56.
 
 	list column
-		title: 'Icon';
+		title: 'Type';
 		cellStencil: [ BlElement new
 				layout: BlLinearLayout horizontal alignCenter;
 				constraintsDo: [ :c | 

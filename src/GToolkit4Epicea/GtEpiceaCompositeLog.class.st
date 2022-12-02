@@ -66,7 +66,7 @@ GtEpiceaCompositeLog >> createListFor: aView [
 							margin: (BlInsets left: 14) ]
 					ifFalse: [ BlElement new size: 12 @ 12 ] ]
 			width: 38;
-		column: 'From' text: [ :change | change startTime ];
+		column: 'From' text: [ :change | change startTime printToSeconds ];
 		actionButtonIcon: BrGlamorousVectorIcons refresh
 			tooltip: 'Reload list of changes'
 			action: [ :aButton :aTab | 
