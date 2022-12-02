@@ -127,16 +127,9 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 		actionDropdownButtonLabel: 'Apply'
 			tooltip: 'Apply Selected Changes'
 			content: [ :aButton | 
-				(GtEpiceaApplyAction on: (self orderEntries: changeListModel selectedCodeEvents))
-					anchor: aButton;
-					asDropdown ];
-		actionDropdownButtonLabel: 'Revert'
-			tooltip: 'Revert Selected Changes'
-			content: [ :aButton | 
-				(GtEpiceaRevertAction
-					on: (self orderEntries: changeListModel selectedCodeEvents))
-					anchor: aButton;
-					asDropdown ].
+				GtEpiceaApplyChangesDetailsElement  new 
+					entries: changeListModel selectedCodeEvents;
+					anchor: aButton ].
 
 	self addToolbarButtonsTo: view withModel: changeListModel.
 
@@ -146,10 +139,26 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 { #category : #accessing }
 GtEpiceaAbstractLog >> gtImpactFor: aView [
 	<gtView>
-	^ aView explicit
-		title: 'Impact';
-		priority: 45;
-		stencil: [ (GtEpiceaShowAction on: self entries) asViewFor: self ]
+	
+	^ aView columnedList
+		  title: 'Impact';
+		  priority: 20;
+		  items: [ 
+		  	(GtEpEventSequencer 
+		  		sequence: self entries 
+		  		withCurrent: false) collect: #content ];
+		  column: 'Icon' 
+		  	icon: [ :anEpEvent :anIndex | 
+			  	(anEpEvent accept: EpIconVisitor new) asElement ]
+		 	 width: 32;
+		  column: 'Description' stencil: [ :anEpEvent :anIndex | 
+			  BlElement new
+				  layout: BlLinearLayout horizontal;
+				  addChildren:
+					  (anEpEvent accept: GtEpiceaBrickVisitor new);
+				  constraintsDo: [ :c | 
+					  c horizontal fitContent.
+					  c vertical exact: 24 ] ]
 ]
 
 { #category : #accessing }
