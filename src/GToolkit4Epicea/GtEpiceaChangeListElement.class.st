@@ -19,6 +19,11 @@ GtEpiceaChangeListElement class >> forModel: aListModel [
 ]
 
 { #category : #accessing }
+GtEpiceaChangeListElement >> cellSpacing [
+	^ 10
+]
+
+{ #category : #accessing }
 GtEpiceaChangeListElement >> filters [
 	^ filters
 ]
@@ -42,6 +47,7 @@ GtEpiceaChangeListElement >> initialize [
 { #category : #accessing }
 GtEpiceaChangeListElement >> initializeFilters [
 	filters := GtFiltersElement new.
+	filters padding: (BlInsets left: self leftPadding).
 	filters
 		when: GtFiltersChangedEvent
 		do: [ :event | 
@@ -124,6 +130,11 @@ GtEpiceaChangeListElement >> initializeList [
 						ifFalse: [ BrGlamorousSimpleContextMenuContent new ] ]).
 
 	list addAptitude: BrColumnedListHeaderAptitude
+]
+
+{ #category : #accessing }
+GtEpiceaChangeListElement >> leftPadding [
+	^ 10
 ]
 
 { #category : #accessing }

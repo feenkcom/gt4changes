@@ -17,7 +17,7 @@ EpLog >> gtEntriesTreeViewFor: aView [
 	<gtView>
 
 	^ aView explicit
-		title: 'Tree View';
+		title: 'Changes Tree';
 		priority: 20;
 		stencil: [ GtEpiceaLogView new treeViewOn: self entries ]
 ]
@@ -25,17 +25,6 @@ EpLog >> gtEntriesTreeViewFor: aView [
 { #category : #'*GToolkit4Epicea' }
 EpLog >> gtReset [
 	store reset
-]
-
-{ #category : #'*GToolkit4Epicea' }
-EpLog >> gtViewChangeTreeFor: aView [ 
-	<gtView>
-	
-	^ aView forward 
-		title: 'Changes Tree';
-		priority: 45;
-		object: [ store ];
-		view: #gtViewChangeTreeFor:
 ]
 
 { #category : #'*GToolkit4Epicea' }
