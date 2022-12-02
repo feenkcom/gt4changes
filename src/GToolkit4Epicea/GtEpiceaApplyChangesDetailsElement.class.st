@@ -48,7 +48,9 @@ GtEpiceaApplyChangesDetailsElement >> buildActionButtonElements [
 	horizontalPane := BrHorizontalPane new 
 		fitContent;
 		alignCenterRight;
-		cellSpacing: 5.
+		cellSpacing: 5;
+		padding: (BlInsets right: 15);
+		margin: (BlInsets top: 5).
 	
 	inspectButton := self createInspectActionButton.
 	confirmButton := self createApplyChangesActionButton.
@@ -109,8 +111,7 @@ GtEpiceaApplyChangesDetailsElement >> createApplyAndInspectResultActionButton [
 		aptitude: BrGlamorousButtonWithLabelAptitude new
 				+ (BrGlamorousWithLabelTooltipAptitude new text: 'Confirm action and inspect result');
 		label: 'Confirm and Inspect Result';
-		action: [ self actionAndInspect ];
-		margin: (BlInsets top: 5)
+		action: [ self actionAndInspect ]
 ]
 
 { #category : #accessing }
@@ -119,8 +120,7 @@ GtEpiceaApplyChangesDetailsElement >> createApplyChangesActionButton [
 		aptitude: BrGlamorousButtonWithLabelAptitude new
 				+ (BrGlamorousWithLabelTooltipAptitude new text: 'Confirm action');
 		label: 'Confirm';
-		action: [ self action ];
-		margin: (BlInsets top: 5)
+		action: [ self action ]
 ]
 
 { #category : #accessing }
@@ -131,8 +131,7 @@ GtEpiceaApplyChangesDetailsElement >> createInspectActionButton [
 		label: 'Inspect';
 		action: [ 
 			anchor phlow spawnObject: (GtEpEventSequencer entries: entries includeCurrent: false).
-			anchor fireEvent: BrDropdownHideWish new ];
-		margin: (BlInsets top: 5)
+			anchor fireEvent: BrDropdownHideWish new ]
 ]
 
 { #category : #accessing }
