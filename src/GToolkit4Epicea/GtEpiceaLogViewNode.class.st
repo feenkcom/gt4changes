@@ -33,6 +33,17 @@ GtEpiceaLogViewNode >> apply [
 
 ]
 
+{ #category : #converting }
+GtEpiceaLogViewNode >> asArray [
+	"Answer an Array containing the receiver and all prior nodes"
+
+	^ Array streamContents: [ :stream | | node |
+		node := self.
+		[ stream nextPut: node.
+		node := node prior.
+		node isNotNil ] whileTrue ].
+]
+
 { #category : #accessing }
 GtEpiceaLogViewNode >> entries [
 	| node |
@@ -87,6 +98,40 @@ GtEpiceaLogViewNode >> gtActionApplyFor: anAction [
 ]
 
 { #category : #accessing }
+GtEpiceaLogViewNode >> gtChangeListFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Change List';
+		priority: 20;
+		object: [ GtEpiceaExplicitLog on: 
+			(self asArray collect: #entry) reversed ];
+		view: #gtEventsFor:
+]
+
+{ #category : #accessing }
+GtEpiceaLogViewNode >> gtCurrentSourceFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Current Source';
+		priority: 45;
+		object: [ self entry ];
+		view: #gtCurrentSourceFor:
+]
+
+{ #category : #accessing }
+GtEpiceaLogViewNode >> gtDiffCurrentFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Diff Current';
+		priority: 30;
+		object: [ self entry ];
+		view: #gtDiffCurrentFor:
+]
+
+{ #category : #accessing }
 GtEpiceaLogViewNode >> gtDiffFor: aView [
 	<gtView>
 
@@ -109,7 +154,7 @@ GtEpiceaLogViewNode >> gtEntriesTreeViewFor: aView [
 
 	^ aView mondrian
 		title: 'Entries';
-		priority: 20;
+		priority: 49;
 		painting: [ :mondrian | self treeViewWith: mondrian ]
 ]
 
@@ -119,7 +164,7 @@ GtEpiceaLogViewNode >> gtNewSourceFor: aView [
 
 	^ aView forward
 		title: 'New Source';
-		priority: 30;
+		priority: 35;
 		object: [ self entry ];
 		view: #gtNewSourceFor:
 ]
@@ -129,8 +174,8 @@ GtEpiceaLogViewNode >> gtOldSourceFor: aView [
 	<gtView>
 
 	^ aView forward
-		title: 'New Source';
-		priority: 35;
+		title: 'Old Source';
+		priority: 40;
 		object: [ self entry ];
 		view: #gtOldSourceFor:
 ]
@@ -159,19 +204,17 @@ GtEpiceaLogViewNode >> prior: anObject [
 { #category : #accessing }
 GtEpiceaLogViewNode >> treeViewWith: mondrian [
 	"Answer a mondrian tree view representing the receiver"
-	| nodes |
+	| nodes hasImpactSet |
 
-	nodes := GtEpiceaLogViewNode fromCollection: self entries.
+	nodes := self asArray.
+	hasImpactSet := GtEpEventSequencer
+		sequence: (nodes collect: #entry)
+		withCurrent: false.
 	mondrian nodes
-		stencil: [ :each | | color |
-			color := Color gray.
-			each event isEpBehaviorChange ifTrue: [ color := Color red ].
-			each event isEpCategoryChange ifTrue: [ color := Color green ].
-			each event isEpMethodChange ifTrue: [ color := Color blue ].
-			BlElement new
-				geometry: BlCircleGeometry new;
-				size: 50@50;
-				background: color. ];
+		stencil: [ :each |
+			GtEpCodeChangeGeometricElement new
+				node: each;
+				hasImpact: (hasImpactSet includes: each entry). ];
 		with: nodes.
 	mondrian layout grid.
 	^ mondrian.

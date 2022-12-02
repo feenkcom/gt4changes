@@ -10,7 +10,7 @@ Class {
 		'sequencedEntries',
 		'includeCurrent'
 	],
-	#category : #'GToolkit4Epicea-Model'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #sequencing }
@@ -51,27 +51,18 @@ GtEpEventSequencer class >> sequence: anEpEntryCollection withCurrent: currentBo
 
 { #category : #accessing }
 GtEpEventSequencer >> apply [
-	"Apply each of the events in the receiver"
+	"Apply each of the events in the receiver if it has an impact."
 
 	self sequencedEntries do: [ :each |
-		each content applyCodeChange ].
+		each content applyCodeChangeIfHasImpact ].
 ]
 
 { #category : #private }
 GtEpEventSequencer >> behaviorEntriesFrom: chronologicalEntries includeCurrent: currentBoolean [
-	"Group behaviour changes by name, and if currentBoolean is false, have an impact on the current system and either add or reject the entire group"
-	| entriesDictionary currentEntry behaviorEntries |
+	"Behaviour changes can't be easily filtered due to renames, etc.  Simply collect them all."
 
-	entriesDictionary := Dictionary new.
-	1 to: chronologicalEntries size do: [ :index |
-		currentEntry := chronologicalEntries at: index.
-		(self isBehaviorDefinitionChange: currentEntry content) ifTrue:
-			[ (entriesDictionary at: currentEntry content behaviorAffectedName ifAbsentPut: [ OrderedCollection new ]) add: currentEntry ] ].
-	behaviorEntries := OrderedCollection new.
-	entriesDictionary do: [ :entry |
-		(currentBoolean or: [ impactFilter accepts: entry last ]) ifTrue:
-			[ behaviorEntries addAll: entry ] ].
-	^ behaviorEntries
+	^ chronologicalEntries select: [ :each |
+		self isBehaviorDefinitionChange: each content ].
 ]
 
 { #category : #private }
@@ -125,21 +116,22 @@ GtEpEventSequencer >> getSequencedEntries [
 ]
 
 { #category : #'gt - extensions' }
-GtEpEventSequencer >> gtActionApplyFor: anAction [
-	<gtAction>
-
-	^ anAction button
-		label: 'Apply';
-		priority: 10;
-		action: [ self apply ].
-]
-
-{ #category : #'gt - extensions' }
 GtEpEventSequencer >> gtBackgroundColorForEntry: anOmbuEntry [ 
 	^ (((sequencedEntries ifNil: [#()])
 			includes: anOmbuEntry) 
 				ifTrue: [ Color black ] 
 				ifFalse: [ Color gray])
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> gtChangeListFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Change List';
+		priority: 5;
+		object: [ GtEpiceaSequencedLog sequencer: self ];
+		view: #gtEventsFor:
 ]
 
 { #category : #'gt - extensions' }

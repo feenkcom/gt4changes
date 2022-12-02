@@ -24,6 +24,14 @@ GtEpiceaElement >> change [
 ]
 
 { #category : #accessing }
+GtEpiceaElement >> change: aChange [
+	change := aChange.
+	self refreshView.
+	self updateTabLabel.
+	self fireEvent: (GtPhlowToolObjectChangeWish new object: self change)
+]
+
+{ #category : #accessing }
 GtEpiceaElement >> contentElement [
 	^ contentElement
 ]
@@ -111,10 +119,7 @@ GtEpiceaElement >> navigationModel: aNavigationModel [
 
 { #category : #accessing }
 GtEpiceaElement >> onNavigationModelChange: anEvent [
-	change := anEvent change.
-	self refreshView.
-	self updateTabLabel.
-	self fireEvent: (GtPhlowToolObjectChangeWish new object: change)
+	self change: anEvent change.
 ]
 
 { #category : #accessing }

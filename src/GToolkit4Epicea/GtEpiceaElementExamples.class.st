@@ -7,6 +7,15 @@ Class {
 }
 
 { #category : #examples }
+GtEpiceaElementExamples >> elementWithChange [
+	<gtExample>
+	| element |
+	element := self simpleElement change: (GtEpiceaExplicitLogExamples new simpleLog).
+	
+	^ element
+]
+
+{ #category : #examples }
 GtEpiceaElementExamples >> expandedElement [
 	<gtExample>
 	| element |
@@ -16,12 +25,79 @@ GtEpiceaElementExamples >> expandedElement [
 ]
 
 { #category : #examples }
+GtEpiceaElementExamples >> expandedElementWithChange [
+	<gtExample>
+	| element |
+	element := self elementWithChange createInPager maximized.
+	
+	^ element
+]
+
+{ #category : #examples }
+GtEpiceaElementExamples >> expandedElementWithDeletedChange [
+	<gtExample>
+	| aScripter |
+	
+	aScripter := self expandedElementWithDeletionDialog.
+	
+	aScripter click
+		label: 'Click on remove button';
+		onSpaceRoot;
+		id: #'change-button-action';
+		play.
+		
+	aScripter check
+		label: 'Check no change';
+		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ];
+		play.
+	
+	^ aScripter
+]
+
+{ #category : #examples }
+GtEpiceaElementExamples >> expandedElementWithDeletionDialog [
+	<gtExample>
+	| aScripter |
+	
+	aScripter := self scripterOnExpandedElementWithChange.
+	
+	aScripter click
+		label: 'Click change deletion button';
+		id: #content;
+		id: #removebtn;
+		play.
+	
+	^ aScripter
+]
+
+{ #category : #examples }
 GtEpiceaElementExamples >> scripterOnExpandedElement [
 	<gtExample>
 	| aScripter |
 	
 	aScripter := BlScripter new.
 	aScripter element: self expandedElement.
+	
+	^ aScripter
+]
+
+{ #category : #examples }
+GtEpiceaElementExamples >> scripterOnExpandedElementWithChange [
+	<gtExample>
+	| aScripter |
+	
+	aScripter := BlScripter new.
+	aScripter element: self expandedElementWithChange.
+		
+	aScripter check
+		label: 'Check change';
+		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ];
+		play.
+			
+	aScripter check
+		label: 'Check change name';
+		satisfies: [ :aChangeView | ((aChangeView pages last contentElement tool childNamed: #title) childAt: 1) text asString = 'Explicit log on 0 entries' ];
+		play.
 	
 	^ aScripter
 ]

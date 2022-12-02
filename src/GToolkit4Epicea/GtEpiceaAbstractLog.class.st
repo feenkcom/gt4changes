@@ -3,6 +3,9 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtEpiceaLogView',
 	#classTraits : 'TGtEpiceaLogView classTrait',
+	#instVars : [
+		'headReference'
+	],
 	#category : #'GToolkit4Epicea-Model'
 }
 
@@ -145,8 +148,15 @@ GtEpiceaAbstractLog >> gtImpactFor: aView [
 	<gtView>
 	^ aView explicit
 		title: 'Impact';
-		priority: 1;
+		priority: 45;
 		stencil: [ (GtEpiceaShowAction on: self entries) asViewFor: self ]
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractLog >> headReference [
+
+	^ headReference ifNil: 
+		[ headReference := (self orderEntries: self entries) first tagAt: #self ].
 ]
 
 { #category : #accessing }
@@ -155,9 +165,9 @@ GtEpiceaAbstractLog >> historyFilter [
 	This works across multiple log files in the event that an old image is being used to recover changes."
 	<gtChangeFilter>
 	^ GtFilterDescriptor new
-		creator: [ :aStream | | epLog |
-			epLog := GtEpLogEnumerator new latestLog: self logs first.
-			AsyncSequenceStream forCollection: epLog priorEntriesFromHead ];
+		creator: [ :aStream |
+			AsyncSequenceStream forCollection: 
+				(GtEpiceaExplicitLog on: aStream toArray wait) priorEntriesFromHead ];
 		named: 'History';
 		order: 20;
 		valueNotRequired;
@@ -235,15 +245,52 @@ GtEpiceaAbstractLog >> packageFilter [
 		beNotDefault
 ]
 
+{ #category : #enumerating }
+GtEpiceaAbstractLog >> priorEntriesFrom: aReference [
+	"Answer the chain of events leading up to the supplied reference, in reverse chronological order.
+	Events that are not part of the headReference are excluded."
+
+	^ Array streamContents: [  :stream |
+		self 
+			priorEntriesFrom: aReference 
+			backTo: OmNullReference uniqueInstance
+			do: [ :anEntry | stream nextPut: anEntry ] ]
+]
+
+{ #category : #enumerating }
+GtEpiceaAbstractLog >> priorEntriesFrom: endOmReference backTo: startOmReference do: aBlock [
+	"Evaluate aBlock for each event in the chain of events leading up to the supplied reference, in reverse chronological order.
+	Events that are not part of the headReference are excluded."
+	| allEntries omReferenceDictionary  currentEntry |
+
+	allEntries := self entries.
+	omReferenceDictionary := Dictionary new: allEntries size * 2.
+	allEntries do: [ :each |
+		omReferenceDictionary at: (each tagAt: #self) put: each ].
+	currentEntry := omReferenceDictionary at: endOmReference ifAbsent: [ nil ].
+	[ currentEntry isNil or: [ (currentEntry tagAt: #self) = startOmReference ] ] whileFalse:
+		[ aBlock value: currentEntry.
+		currentEntry := omReferenceDictionary at: (currentEntry tagAt: #prior) ifAbsent: [ nil ] ].
+]
+
+{ #category : #enumerating }
+GtEpiceaAbstractLog >> priorEntriesFromHead [
+	"Answer the chain of events leading up to the head reference, in reverse chronological order.
+	Events that are not part of the headReference are excluded."
+
+	^ self priorEntriesFrom: self headReference.
+]
+
 { #category : #accessing }
 GtEpiceaAbstractLog >> recoverFilter [
 	"Filter the events down to only those that were present in the system  at the time of the latest change and which would change the current system (i.e. need to be applied).
 	This works across multiple log files in the event that an old image is being used to recover changes."
 	<gtChangeFilter>
 	^ GtFilterDescriptor new
-		creator: [ :aStream | | epLog sorted |
-			epLog := GtEpLogEnumerator new latestLog: self logs first.
-			sorted := GtEpEventSequencer sequence: epLog priorEntriesFromHead withCurrent: false.
+		creator: [ :aStream | | sorted |
+			sorted := GtEpEventSequencer 
+				sequence: (GtEpiceaExplicitLog on: aStream toArray wait) priorEntriesFromHead 
+				withCurrent: false.
 			AsyncSequenceStream forCollection: sorted reversed ];
 		named: 'Recover';
 		order: 20;
@@ -267,6 +314,11 @@ GtEpiceaAbstractLog >> sequenceFilter [
 		order: 20;
 		valueNotRequired;
 		beNotDefault
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractLog >> shouldUpdate [
+	^ self subclassResponsibility
 ]
 
 { #category : #accessing }
