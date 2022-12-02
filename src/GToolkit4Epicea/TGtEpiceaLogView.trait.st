@@ -8,7 +8,7 @@ TGtEpiceaLogView >> gtEntriesTreeViewFor: aView [
 	<gtView>
 
 	^ aView forward
-		title: 'Entries';
+		title: 'Entries Tree';
 		priority: 20;
 		object: [ self treeView ];
 		view: #gtLiveFor:
