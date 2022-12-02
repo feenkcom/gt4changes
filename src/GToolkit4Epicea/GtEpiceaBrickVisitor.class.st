@@ -19,7 +19,7 @@ GtEpiceaBrickVisitor >> displayBehavior: aString [
 { #category : #private }
 GtEpiceaBrickVisitor >> displayBehavior: aClassName method: aSelector [
 
-	^ (self displayBehavior: aClassName), (self displayOperation: '»'), (self displayString: aSelector)
+	^ (self displayBehavior: aClassName), (self displayOperation: '>>'), (self displayString: aSelector)
 ]
 
 { #category : #private }
