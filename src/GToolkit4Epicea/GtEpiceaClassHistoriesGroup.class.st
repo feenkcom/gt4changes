@@ -25,7 +25,7 @@ GtEpiceaClassHistoriesGroup >> gtViewClassHistoriesFor: aView [
 			anEntry gtViewChangeHistoryChildren ];
 		column: 'Type ' do: [ :aColumn | 
 			aColumn 
-				width: 55;
+				width: 75;
 				cellStencil: [ BlElement new
 					layout: BlLinearLayout horizontal alignCenter;
 					padding: (BlInsets left:10);
@@ -46,17 +46,7 @@ GtEpiceaClassHistoriesGroup >> gtViewClassHistoriesFor: aView [
 				dataBinder: [ :anElement :anEntry | 
 					anElement
 						removeChildren;
-						addChildren: anEntry gtViewChangeDescriptionElements ] ]"; 
-		column: 'Changes Count' text: [ :anEntry | 
-			anEntry class = GtEpiceaMethodHistory 
-				ifTrue: [ 
-					anEntry changes size asString
-						, ' '
-						, ('change' asPluralBasedOn: anEntry changes size) ] 
-				ifFalse: [ '' ] ] width: 100" ;
+						addChildren: anEntry gtViewChangeDescriptionElements ] ];
 		column: 'Timestamp' text: [ :anEntry | 
-			(anEntry class = GtEpiceaClassHistory 
-				ifTrue: [ 
-					anEntry latestChange gtTime ] 
-				ifFalse: [ anEntry gtTime ]) printToSeconds ] width: 150
+			anEntry gtViewLatestChangeTime printToSeconds ] width: 150
 ]

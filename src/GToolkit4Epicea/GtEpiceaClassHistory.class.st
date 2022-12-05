@@ -40,7 +40,9 @@ GtEpiceaClassHistory >> behaviourChanges: aCollectionOfEntries [
 GtEpiceaClassHistory >> gtViewChangeDescriptionElements [
 	^ {BrLabel new 
 		aptitude: BrGlamorousLabelAptitude;
-		text: self targetClassName}
+		text: (self targetClassName  asRopedText 
+			bold; 
+			glamorousRegularFont)}
 ]
 
 { #category : #'gt - extensions' }

@@ -21,23 +21,21 @@ GtEpiceaMethodHistoriesGroup >> gtViewMethodHistoriesFor: aView [
 		column: 'Type ' do: [ :aColumn | 
 			aColumn 
 				width: 55;
-				cellStencil: [ BlElement new
-					layout: BlLinearLayout horizontal alignCenter;
-					padding: (BlInsets left:10);
-					constraintsDo: [ :c | 
-						c horizontal fitContent.
-						c vertical fitContent ] ];
+				cellStencil: [ 
+					BrHorizontalPane new
+						alignCenter;
+						fitContent;
+						padding: (BlInsets left:10)];
 				dataBinder: [ :anElement :anEntry | 
 					anElement
 						removeChildren;
 						addChild: anEntry gtViewChangeIcon asElement ] ];
 		column: 'Method' do: [ :aColumn |
 			aColumn 
-				cellStencil: [ BlElement new
-					layout: BlLinearLayout horizontal;
-					constraintsDo: [ :c | 
-						c horizontal fitContent.
-						c vertical exact: 26 ] ];
+				cellStencil: [ 
+					BrHorizontalPane new
+						hFitContent;
+						vExact: 26 ];
 				dataBinder: [ :anElement :anEntry | 
 					anElement
 						removeChildren;
@@ -50,10 +48,7 @@ GtEpiceaMethodHistoriesGroup >> gtViewMethodHistoriesFor: aView [
 						, ('change' asPluralBasedOn: anEntry changes size) ] 
 				ifFalse: [ '' ] ] width: 100;
 		column: 'Timestamp' text: [ :anEntry | 
-			(anEntry class = GtEpiceaMethodHistory 
-				ifTrue: [ 
-					anEntry latestChange gtTime ] 
-				ifFalse: [ anEntry gtTime ]) printToSeconds ] width: 150
+			anEntry gtViewLatestChangeTime printToSeconds ] width: 150
 ]
 
 { #category : #testing }
