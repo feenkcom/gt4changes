@@ -110,6 +110,19 @@ GtEpiceaAbstractLog >> entriesStream [
 	^ self subclassResponsibility
 ]
 
+{ #category : #'accessing - grouping' }
+GtEpiceaAbstractLog >> groupedByMethod [
+	^ ((self entries 
+		select: [ :anOmbuEntry |
+			anOmbuEntry content isEpMethodChange ])
+		groupedBy: [ :anOmbuEntry | anOmbuEntry content methodAffected ]) associations 
+		collect: [ :assoc | GtEpiceaMethodHistory new 
+			targetMethod: assoc key;
+			changes: (GtEpiceaEntriesGroup 
+				withAll: (assoc value 
+					sorted: [ :anEntry | anEntry gtTime] descending ) ) ] 
+]
+
 { #category : #accessing }
 GtEpiceaAbstractLog >> gtEventsFor: aView [
 	<gtView>
@@ -127,16 +140,9 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 		actionDropdownButtonLabel: 'Apply'
 			tooltip: 'Apply Selected Changes'
 			content: [ :aButton | 
-				(GtEpiceaApplyAction on: (self orderEntries: changeListModel selectedCodeEvents))
-					anchor: aButton;
-					asDropdown ];
-		actionDropdownButtonLabel: 'Revert'
-			tooltip: 'Revert Selected Changes'
-			content: [ :aButton | 
-				(GtEpiceaRevertAction
-					on: (self orderEntries: changeListModel selectedCodeEvents))
-					anchor: aButton;
-					asDropdown ].
+				GtEpiceaApplyChangesDetailsElement  new 
+					entries: changeListModel selectedCodeEvents;
+					anchor: aButton ].
 
 	self addToolbarButtonsTo: view withModel: changeListModel.
 
@@ -146,10 +152,105 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 { #category : #accessing }
 GtEpiceaAbstractLog >> gtImpactFor: aView [
 	<gtView>
-	^ aView explicit
-		title: 'Impact';
-		priority: 45;
-		stencil: [ (GtEpiceaShowAction on: self entries) asViewFor: self ]
+	
+	^ aView columnedList
+		  title: 'Impact';
+		  priority: 20;
+		  items: [ 
+		  	(GtEpEventSequencer 
+		  		sequence: self entries 
+		  		withCurrent: false) collect: #content ];
+		  column: 'Icon' 
+		  	icon: [ :anEpEvent :anIndex | 
+			  	(anEpEvent accept: EpIconVisitor new) asElement ]
+		 	 width: 32;
+		  column: 'Description' stencil: [ :anEpEvent :anIndex | 
+			  BlElement new
+				  layout: BlLinearLayout horizontal;
+				  addChildren:
+					  (anEpEvent accept: GtEpiceaBrickVisitor new);
+				  constraintsDo: [ :c | 
+					  c horizontal fitContent.
+					  c vertical exact: 24 ] ]
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractLog >> gtViewEntriesListFor: aView [ 
+	<gtView>
+	
+	^ aView columnedList 
+		title: 'Entries List';
+		priority: 5;
+		items: [ self entriesStream ];
+		column: 'Icon'
+			icon: [ :anOmbuEntry | 
+				anOmbuEntry content accept: EpIconVisitor new ]
+			width: 32;
+		column: 'Event'
+			text: [ :anOmbuEntry | anOmbuEntry content ];
+		column: 'Event'
+			text: [ :anOmbuEntry | anOmbuEntry gtTime printToSeconds ]
+			width: 150
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractLog >> gtViewGroupedByMethodFor: aView [
+	<gtView>
+	<gtViewChanges>
+	
+	^ aView columnedTree 
+		title: 'By Method';
+		priority: 20;
+		items: [ self groupedByMethod 
+			sorted: [ :assoc | 
+				assoc value latestChange gtTime] descending ];
+		children: [ :anEntry |
+			anEntry class = GtEpiceaMethodHistory 
+				ifTrue: [ anEntry changes ]
+				ifFalse: [ #() ] ];
+		column: 'Type ' do: [ :aColumn | 
+			aColumn 
+				width: 55;
+				cellStencil: [ BlElement new
+					layout: BlLinearLayout horizontal alignCenter;
+					padding: (BlInsets left:10);
+					constraintsDo: [ :c | 
+						c horizontal fitContent.
+						c vertical fitContent ] ];
+				dataBinder: [ :anElement :anEntry | 
+					anElement
+						removeChildren;
+						addChild: (anEntry class = GtEpiceaMethodHistory 
+							ifTrue: [ anEntry latestChange content accept: EpIconVisitor new ]
+							ifFalse: [ anEntry content accept: EpIconVisitor new ]) asElement ] ];
+		column: 'Method' do: [ :aColumn |
+			aColumn 
+				cellStencil: [ BlElement new
+					layout: BlLinearLayout horizontal;
+					constraintsDo: [ :c | 
+						c horizontal fitContent.
+						c vertical exact: 26 ] ];
+				dataBinder: [ :anElement :anEntry | 
+					| ombuEntity |
+					ombuEntity := anEntry class = GtEpiceaMethodHistory 
+						ifTrue: [ anEntry latestChange ]
+						ifFalse: [ anEntry ].
+					anElement
+						removeChildren;
+						addChildren: (ombuEntity content 
+							accept: GtEpiceaBrickVisitor new) ] ]; 
+		column: 'Changes Count' text: [ :anEntry | 
+			anEntry class = GtEpiceaMethodHistory 
+				ifTrue: [ 
+					anEntry changes size asString
+						, ' '
+						, ('change' asPluralBasedOn: anEntry changes size) ] 
+				ifFalse: [ '' ] ] width: 100;
+		column: 'Timestamp' text: [ :anEntry | 
+			(anEntry class = GtEpiceaMethodHistory 
+				ifTrue: [ 
+					anEntry latestChange gtTime ] 
+				ifFalse: [ anEntry gtTime ]) printToSeconds ] width: 150
 ]
 
 { #category : #accessing }
