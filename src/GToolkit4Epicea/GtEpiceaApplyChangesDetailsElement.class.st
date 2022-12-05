@@ -187,6 +187,10 @@ GtEpiceaApplyChangesDetailsElement >> sequencedEntries [
 
 { #category : #updating }
 GtEpiceaApplyChangesDetailsElement >> updateContent [
+	"Update the receiver's content.
+	If there are no sequencedEntries changesList will be nil."
+
+	changesList ifNil: [ ^ self ].
 	changesList itemsProvider: (BrStreamItemsProvider 
 		forCollection: self sequencedEntries)
 ]
