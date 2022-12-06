@@ -68,6 +68,12 @@ GtEpiceaClassHistory >> gtViewChangeIcon [
 ]
 
 { #category : #'gt - extensions' }
+GtEpiceaClassHistory >> gtViewChangesCount [
+	^ self methodHistories gtViewChangesCount
+			+ self behaviourChanges size
+]
+
+{ #category : #'gt - extensions' }
 GtEpiceaClassHistory >> gtViewEntriesListFor: aView [ 
 	<gtView>
 	
@@ -120,11 +126,6 @@ GtEpiceaClassHistory >> gtViewFullChangesFor: aView [
 			anEntry gtViewLatestChangeTime printToSeconds ] width: 150
 ]
 
-{ #category : #accessing }
-GtEpiceaClassHistory >> gtViewLatestChangeTime [ 
-	^ self latestChange  gtTime
-]
-
 { #category : #'gt - extensions' }
 GtEpiceaClassHistory >> gtViewMethodHistoriesFor: aView [
 	<gtView>
@@ -133,7 +134,7 @@ GtEpiceaClassHistory >> gtViewMethodHistoriesFor: aView [
 		title: 'Methods Changes';
 		priority: 20;
 		object: [ self methodHistories ];
-		view: #gtViewMethodHistoriesFor: 
+		view: #gtViewHistoriesFor: 
 ]
 
 { #category : #testing }
