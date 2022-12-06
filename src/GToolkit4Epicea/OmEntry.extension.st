@@ -140,3 +140,24 @@ OmEntry >> gtTagsFor: aView [
 OmEntry >> gtTime [
 	^ self tagAt: #time
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+OmEntry >> gtViewChangeDescriptionElements [
+	^  self content 
+			accept: GtEpiceaBrickVisitor new
+]
+
+{ #category : #'*GToolkit4Epicea' }
+OmEntry >> gtViewChangeHistoryChildren [
+	^ #()
+]
+
+{ #category : #'*GToolkit4Epicea' }
+OmEntry >> gtViewChangeIcon [
+	^  self content accept: EpIconVisitor new
+]
+
+{ #category : #'*GToolkit4Epicea' }
+OmEntry >> gtViewLatestChangeTime [
+	^ self gtTime
+]

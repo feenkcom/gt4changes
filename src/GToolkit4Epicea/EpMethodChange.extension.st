@@ -12,3 +12,8 @@ EpMethodChange >> = other [
 EpMethodChange >> affectedMarker [
 	^ {  self behaviorAffectedName . self methodAffectedSelector }
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpMethodChange >> gtAffectedPackageName [ 
+	^ self methodAffected package 
+]

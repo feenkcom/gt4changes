@@ -48,6 +48,14 @@ GtEpiceaAbstractLog >> allEntriesFilter [
 		beNotDefault
 ]
 
+{ #category : #'accessing - grouping' }
+GtEpiceaAbstractLog >> behaviorChangesGroupedByClass [
+	^ (self entries 
+		select: [ :anOmbuEntry |
+			anOmbuEntry content isEpBehaviorChange ])
+		groupedBy: [ :anOmbuEntry | anOmbuEntry content behaviorAffected ]
+]
+
 { #category : #accessing }
 GtEpiceaAbstractLog >> canBeFrozen [
 	^ true
@@ -81,6 +89,12 @@ GtEpiceaAbstractLog >> classFilter [
 		beNotDefault
 ]
 
+{ #category : #'accessing - history' }
+GtEpiceaAbstractLog >> classHistories [
+	^ GtEpiceaClassesHistoryBuilder 
+		buildHistoryForEntriesGroup: self entriesGroup
+]
+
 { #category : #'accessing - filters' }
 GtEpiceaAbstractLog >> codeChangesFilter [
 	<gtChangeFilter>
@@ -106,24 +120,16 @@ GtEpiceaAbstractLog >> entries [
 ]
 
 { #category : #accessing }
+GtEpiceaAbstractLog >> entriesGroup [
+	^ GtEpiceaEntriesGroup withAll: self entries
+]
+
+{ #category : #accessing }
 GtEpiceaAbstractLog >> entriesStream [
 	^ self subclassResponsibility
 ]
 
-{ #category : #'accessing - grouping' }
-GtEpiceaAbstractLog >> groupedByMethod [
-	^ ((self entries 
-		select: [ :anOmbuEntry |
-			anOmbuEntry content isEpMethodChange ])
-		groupedBy: [ :anOmbuEntry | anOmbuEntry content methodAffected ]) associations 
-		collect: [ :assoc | GtEpiceaMethodHistory new 
-			targetMethod: assoc key;
-			changes: (GtEpiceaEntriesGroup 
-				withAll: (assoc value 
-					sorted: [ :anEntry | anEntry gtTime] descending ) ) ] 
-]
-
-{ #category : #accessing }
+{ #category : #'gt - extensions' }
 GtEpiceaAbstractLog >> gtEventsFor: aView [
 	<gtView>
 	<gtViewChanges>
@@ -149,7 +155,7 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 	^ view
 ]
 
-{ #category : #accessing }
+{ #category : #'gt - extensions' }
 GtEpiceaAbstractLog >> gtImpactFor: aView [
 	<gtView>
 	
@@ -174,7 +180,19 @@ GtEpiceaAbstractLog >> gtImpactFor: aView [
 					  c vertical exact: 24 ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #'gt - extensions' }
+GtEpiceaAbstractLog >> gtViewClassHistoriesFor: aView [
+	<gtView>
+	<gtViewChanges>
+	
+	^ aView forward 
+		title: 'By Class';
+		priority: 35;
+		object: [ self classHistories ];
+		view: #gtViewHistoriesFor: 
+]
+
+{ #category : #'gt - extensions' }
 GtEpiceaAbstractLog >> gtViewEntriesListFor: aView [ 
 	<gtView>
 	
@@ -193,67 +211,31 @@ GtEpiceaAbstractLog >> gtViewEntriesListFor: aView [
 			width: 150
 ]
 
-{ #category : #accessing }
-GtEpiceaAbstractLog >> gtViewGroupedByMethodFor: aView [
+{ #category : #'gt - extensions' }
+GtEpiceaAbstractLog >> gtViewMethodHistoriesFor: aView [
 	<gtView>
 	<gtViewChanges>
 	
-	^ aView columnedTree 
+	^ aView forward 
 		title: 'By Method';
-		priority: 20;
-		items: [ self groupedByMethod 
-			sorted: [ :assoc | 
-				assoc value latestChange gtTime] descending ];
-		children: [ :anEntry |
-			anEntry class = GtEpiceaMethodHistory 
-				ifTrue: [ anEntry changes ]
-				ifFalse: [ #() ] ];
-		column: 'Type ' do: [ :aColumn | 
-			aColumn 
-				width: 55;
-				cellStencil: [ BlElement new
-					layout: BlLinearLayout horizontal alignCenter;
-					padding: (BlInsets left:10);
-					constraintsDo: [ :c | 
-						c horizontal fitContent.
-						c vertical fitContent ] ];
-				dataBinder: [ :anElement :anEntry | 
-					anElement
-						removeChildren;
-						addChild: (anEntry class = GtEpiceaMethodHistory 
-							ifTrue: [ anEntry latestChange content accept: EpIconVisitor new ]
-							ifFalse: [ anEntry content accept: EpIconVisitor new ]) asElement ] ];
-		column: 'Method' do: [ :aColumn |
-			aColumn 
-				cellStencil: [ BlElement new
-					layout: BlLinearLayout horizontal;
-					constraintsDo: [ :c | 
-						c horizontal fitContent.
-						c vertical exact: 26 ] ];
-				dataBinder: [ :anElement :anEntry | 
-					| ombuEntity |
-					ombuEntity := anEntry class = GtEpiceaMethodHistory 
-						ifTrue: [ anEntry latestChange ]
-						ifFalse: [ anEntry ].
-					anElement
-						removeChildren;
-						addChildren: (ombuEntity content 
-							accept: GtEpiceaBrickVisitor new) ] ]; 
-		column: 'Changes Count' text: [ :anEntry | 
-			anEntry class = GtEpiceaMethodHistory 
-				ifTrue: [ 
-					anEntry changes size asString
-						, ' '
-						, ('change' asPluralBasedOn: anEntry changes size) ] 
-				ifFalse: [ '' ] ] width: 100;
-		column: 'Timestamp' text: [ :anEntry | 
-			(anEntry class = GtEpiceaMethodHistory 
-				ifTrue: [ 
-					anEntry latestChange gtTime ] 
-				ifFalse: [ anEntry gtTime ]) printToSeconds ] width: 150
+		priority: 35;
+		object: [ self methodHistories ];
+		view: #gtViewHistoriesFor: 
 ]
 
-{ #category : #accessing }
+{ #category : #'gt - extensions' }
+GtEpiceaAbstractLog >> gtViewPackageHistoriesFor: aView [
+	<gtView>
+	<gtViewChanges>
+	
+	^ aView forward 
+		title: 'By Package';
+		priority: 45;
+		object: [ self packageHistories ];
+		view: #gtViewHistoriesFor: 
+]
+
+{ #category : #'gt - extensions' }
 GtEpiceaAbstractLog >> headReference [
 
 	^ headReference ifNil: 
@@ -320,6 +302,20 @@ GtEpiceaAbstractLog >> logs [
 	^ self subclassResponsibility
 ]
 
+{ #category : #'accessing - grouping' }
+GtEpiceaAbstractLog >> methodChangesGroupedByAffectedMethod [
+	^ (self entries 
+		select: [ :anOmbuEntry |
+			anOmbuEntry content isEpMethodChange ])
+		groupedBy: [ :anOmbuEntry | anOmbuEntry content methodAffected ]
+]
+
+{ #category : #'accessing - history' }
+GtEpiceaAbstractLog >> methodHistories [
+	^ GtEpiceaMethodsHistoryBuilder
+		buildHistoryForEntriesGroup: self entriesGroup
+]
+
 { #category : #accessing }
 GtEpiceaAbstractLog >> name [
 	^ self subclassResponsibility
@@ -344,6 +340,12 @@ GtEpiceaAbstractLog >> packageFilter [
 		completion: [ GtStringsCompletionStrategy new
 				completions: [ GtPrefixTree withAll: (RPackage organizer packages collect: #name) ] ];
 		beNotDefault
+]
+
+{ #category : #'accessing - history' }
+GtEpiceaAbstractLog >> packageHistories [
+	^ GtEpiceaPackagesHistoryBuilder 
+		buildHistoryForEntriesGroup: self entriesGroup
 ]
 
 { #category : #enumerating }
