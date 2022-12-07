@@ -82,3 +82,9 @@ GtEpiceaEntriesGroup >> methodHistories [
 	^ GtEpiceaMethodsHistoryBuilder
 		buildHistoryForEntriesGroup: self
 ]
+
+{ #category : #'accessing - history' }
+GtEpiceaEntriesGroup >> packageHistories [
+	^ GtEpiceaPackagesHistoryBuilder 
+		buildHistoryForEntriesGroup: self
+]
