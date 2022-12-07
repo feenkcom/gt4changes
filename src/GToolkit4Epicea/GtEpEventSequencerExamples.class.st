@@ -30,6 +30,8 @@ GtEpEventSequencerExamples >> classAddAndRenameWithCurrent [
 	sequencer := GtEpEventSequencer entries: entries includeCurrent: true.
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: sequencedEntries size equals: 5.
+	
+	^ sequencer
 ]
 
 { #category : #examples }
@@ -45,4 +47,6 @@ GtEpEventSequencerExamples >> classAddAndRenameWithoutCurrent [
 	sequencer := GtEpEventSequencer entries: entries includeCurrent: false.
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: sequencedEntries size equals: 5.
+	
+	^ sequencer
 ]
