@@ -52,8 +52,9 @@ GtEpiceaAbstractLog >> allEntriesFilter [
 GtEpiceaAbstractLog >> behaviorChangesGroupedByClass [
 	^ (self entries 
 		select: [ :anOmbuEntry |
-			anOmbuEntry content isEpBehaviorChange ])
-		groupedBy: [ :anOmbuEntry | anOmbuEntry content behaviorAffected ]
+			anOmbuEntry content isEpBehaviorChange  ])
+		groupedBy: [ :anOmbuEntry | 
+			anOmbuEntry content behaviorAffected instanceSide ]
 ]
 
 { #category : #accessing }

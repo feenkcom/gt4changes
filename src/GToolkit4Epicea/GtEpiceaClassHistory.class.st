@@ -38,8 +38,10 @@ GtEpiceaClassHistory >> behaviourChanges: aCollectionOfEntries [
 
 { #category : #'gt - extensions' }
 GtEpiceaClassHistory >> gtViewChangeDescriptionElements [
-	^ {BrLabel new 
-		aptitude: BrGlamorousLabelAptitude;
+	^ {BlTextElement new 
+		padding: (BlInsets all: 0);
+		constraintsDo: [ :c | 
+			c linear vertical alignCenter ];
 		text: (self targetClassName  asRopedText 
 			bold; 
 			glamorousRegularFont)}
@@ -98,30 +100,10 @@ GtEpiceaClassHistory >> gtViewFullChangesFor: aView [
 					aMHistoryEntity gtViewLatestChangeTime ] descending ];
 		children: [ :anEntry |
 			anEntry gtViewChangeHistoryChildren ];
-		column: 'Type ' do: [ :aColumn | 
+		column: 'Details' do: [ :aColumn | 
 			aColumn 
-				width: 55;
-				cellStencil: [ BlElement new
-					layout: BlLinearLayout horizontal alignCenter;
-					padding: (BlInsets left:10);
-					constraintsDo: [ :c | 
-						c horizontal fitContent.
-						c vertical fitContent ] ];
-				dataBinder: [ :anElement :anEntry | 
-					anElement
-						removeChildren;
-						addChild: anEntry gtViewChangeIcon asElement ] ];
-		column: 'Change' do: [ :aColumn |
-			aColumn 
-				cellStencil: [ BlElement new
-					layout: BlLinearLayout horizontal;
-					constraintsDo: [ :c | 
-						c horizontal fitContent.
-						c vertical exact: 26 ] ];
-				dataBinder: [ :anElement :anEntry | 
-					anElement
-						removeChildren;
-						addChildren: anEntry gtViewChangeDescriptionElements ] ]; 
+				cellStencil: [ GtEpiceaHistoryEntityDetailsElement new ];
+				dataBinder: [ :anElement :anEntry | anElement updateForEntry: anEntry ] ];
 		column: 'Timestamp' text: [ :anEntry | 
 			anEntry gtViewLatestChangeTime printToSeconds ] width: 150
 ]

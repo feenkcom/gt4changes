@@ -27,30 +27,11 @@ GtEpiceaEntityHistoriesGroup >> gtViewHistoriesFor: aView [
 		items: [ self items 
 			sorted: [ :anEntityHistory | 
 				anEntityHistory latestChange gtTime ] descending ];
-		children: [ :anEntry |
-			anEntry gtViewChangeHistoryChildren ];
-		column: 'Type ' do: [ :aColumn | 
+		children: [ :anEntry | anEntry gtViewChangeHistoryChildren ];
+		column: 'Details' do: [ :aColumn | 
 			aColumn 
-				width: 55;
-				cellStencil: [ 
-					BrHorizontalPane new
-						alignCenter;
-						fitContent;
-						padding: (BlInsets left:10)];
-				dataBinder: [ :anElement :anEntry | 
-					anElement
-						removeChildren;
-						addChild: anEntry gtViewChangeIcon asElement ] ];
-		column: 'Method' do: [ :aColumn |
-			aColumn 
-				cellStencil: [ 
-					BrHorizontalPane new
-						hFitContent;
-						vExact: 26 ];
-				dataBinder: [ :anElement :anEntry | 
-					anElement
-						removeChildren;
-						addChildren: anEntry gtViewChangeDescriptionElements ] ]; 
+				cellStencil: [ GtEpiceaHistoryEntityDetailsElement new ];
+				dataBinder: [ :anElement :anEntry | anElement updateForEntry: anEntry ] ];
 		column: 'Changes Count' text: [ :anEntry | 
 			| entryChangesCount |
 			(anEntry class inheritsFrom: GtEpiceaEntityHistory)
@@ -62,6 +43,12 @@ GtEpiceaEntityHistoriesGroup >> gtViewHistoriesFor: aView [
 				ifFalse: [ '' ] ] width: 100;
 		column: 'Timestamp' text: [ :anEntry | 
 			anEntry gtViewLatestChangeTime printToSeconds ] width: 150
+]
+
+{ #category : #testing }
+GtEpiceaEntityHistoriesGroup >> hasNoEffect [
+	^ self items allSatisfy: [ :aMethodHistory |
+		aMethodHistory hasNoEffect ]
 ]
 
 { #category : #accessing }

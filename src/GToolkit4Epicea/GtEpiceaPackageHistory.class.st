@@ -27,8 +27,10 @@ GtEpiceaPackageHistory >> classHistories [
 
 { #category : #'gt - extensions' }
 GtEpiceaPackageHistory >> gtViewChangeDescriptionElements [
-	^ {BrLabel new 
-		aptitude: BrGlamorousLabelAptitude;
+	^ {BlTextElement new 
+		padding: (BlInsets all: 0);
+		constraintsDo: [ :c | 
+			c linear vertical alignCenter ];
 		text: (self targetPackageName  asRopedText 
 			bold; 
 			glamorousRegularFont)}
@@ -41,6 +43,9 @@ GtEpiceaPackageHistory >> gtViewChangeHistoryChildren [
 
 { #category : #'gt - extensions' }
 GtEpiceaPackageHistory >> gtViewChangeIcon [
+	self hasNoEffect ifTrue: [
+		^ Smalltalk ui icons iconNamed: #emptyPackage ].
+		
 	^ Smalltalk ui icons iconNamed: #package
 ]
 
@@ -58,6 +63,11 @@ GtEpiceaPackageHistory >> gtViewClassHistoriesFor: aView [
 		priority: 35;
 		object: [ self classHistories ];
 		view: #gtViewHistoriesFor: 
+]
+
+{ #category : #testing }
+GtEpiceaPackageHistory >> hasNoEffect [
+	^ self classHistories hasNoEffect
 ]
 
 { #category : #initialization }
