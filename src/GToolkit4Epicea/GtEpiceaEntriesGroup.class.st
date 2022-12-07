@@ -16,7 +16,7 @@ GtEpiceaEntriesGroup >> behaviorChanges [
 GtEpiceaEntriesGroup >> behaviorChangesGroupedByClass [
 	^ self behaviorChanges 
 		groupedBy: [ :anOmbuEntry | 
-			anOmbuEntry content behaviorAffected ]
+			anOmbuEntry content behaviorAffected instanceSide ]
 ]
 
 { #category : #'accessing - history' }
