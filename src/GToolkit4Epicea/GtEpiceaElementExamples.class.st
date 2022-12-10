@@ -10,6 +10,10 @@ Class {
 GtEpiceaElementExamples >> elementWithChange [
 	<gtExample>
 	| element |
+
+	"This example assumes an on-disk Epicea store"
+	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
+
 	element := self simpleElement change: (GtEpiceaExplicitLogExamples new simpleLog).
 	
 	^ element
@@ -19,6 +23,10 @@ GtEpiceaElementExamples >> elementWithChange [
 GtEpiceaElementExamples >> expandedElement [
 	<gtExample>
 	| element |
+
+	"This example assumes an on-disk Epicea store"
+	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
+
 	element := self simpleElement createInPager maximized.
 	
 	^ element
@@ -28,6 +36,10 @@ GtEpiceaElementExamples >> expandedElement [
 GtEpiceaElementExamples >> expandedElementWithChange [
 	<gtExample>
 	| element |
+
+	"This example assumes an on-disk Epicea store"
+	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
+
 	element := self elementWithChange createInPager maximized.
 	
 	^ element
@@ -38,6 +50,9 @@ GtEpiceaElementExamples >> expandedElementWithDeletedChange [
 	<gtExample>
 	| aScripter |
 	
+	"This example assumes an on-disk Epicea store"
+	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
+
 	aScripter := self expandedElementWithDeletionDialog.
 	
 	aScripter click
@@ -59,6 +74,9 @@ GtEpiceaElementExamples >> expandedElementWithDeletionDialog [
 	<gtExample>
 	| aScripter |
 	
+	"This example assumes an on-disk Epicea store"
+	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
+
 	aScripter := self scripterOnExpandedElementWithChange.
 	
 	aScripter click
@@ -75,6 +93,9 @@ GtEpiceaElementExamples >> scripterOnExpandedElement [
 	<gtExample>
 	| aScripter |
 	
+	"This example assumes an on-disk Epicea store"
+	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
+
 	aScripter := BlScripter new.
 	aScripter element: self expandedElement.
 	
@@ -86,6 +107,9 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithChange [
 	<gtExample>
 	| aScripter |
 	
+	"This example assumes an on-disk Epicea store"
+	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
+
 	aScripter := BlScripter new.
 	aScripter element: self expandedElementWithChange.
 		
@@ -107,6 +131,10 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedActiveLog [
 	<gtExample>
 	<noTest>
 	| aScripter |
+
+	"This example assumes an on-disk Epicea store"
+	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
+
 	aScripter := self scripterOnExpandedElement.
 
 	aScripter check
@@ -163,6 +191,10 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedCompositeLog [
 	<gtExample>
 	<noTest>
 	| aScripter |
+
+	"This example assumes an on-disk Epicea store"
+	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
+
 	aScripter := self scripterOnExpandedElement.
 
 	aScripter check
@@ -214,6 +246,10 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedSimpleLog [
 	<gtExample>
 	<noTest>
 	| aScripter |
+
+	"This example assumes an on-disk Epicea store"
+	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
+
 	aScripter := self scripterOnExpandedElement.
 
 	aScripter check
@@ -269,6 +305,10 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedSimpleLog [
 GtEpiceaElementExamples >> simpleElement [
 	<gtExample>
 	| element |
+
+	"This example assumes an on-disk Epicea store"
+	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
+
 	element := GtEpiceaElement new.
 	
 	self assert: element change equals: nil.

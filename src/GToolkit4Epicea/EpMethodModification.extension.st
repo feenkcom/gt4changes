@@ -11,3 +11,15 @@ EpMethodModification >> = other [
 						self oldSourceCode = other oldSourceCode and: [ 
 							self newSourceCode = other newSourceCode ] ] ] ] ] ]
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpMethodModification >> isEpMethodModification [
+
+	^ true
+]
+
+{ #category : #'*GToolkit4Epicea' }
+EpMethodModification >> selector [
+
+	^ newMethod selector
+]

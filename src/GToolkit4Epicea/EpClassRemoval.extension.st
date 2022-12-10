@@ -7,3 +7,9 @@ EpClassRemoval >> = other [
 		self behaviorAffectedName = other behaviorAffectedName and: [ 
 			self classRemoved = other classRemoved ] ]
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpClassRemoval >> isEpClassRemoval [
+
+	^ true.
+]

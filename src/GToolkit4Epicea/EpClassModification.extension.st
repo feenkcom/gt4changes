@@ -8,3 +8,9 @@ EpClassModification >> = other [
 			self oldClass = other oldClass and: [ 
 				self newClass = other newClass ] ] ]
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpClassModification >> isEpClassModification [
+
+	^ true.
+]

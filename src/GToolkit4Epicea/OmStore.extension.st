@@ -33,3 +33,10 @@ OmStore >> gtViewEntriesListFor: aView [
 		priority: 10;
 		items: [ self entriesStream ]
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+OmStore >> isMemoryStore [
+	"Answer a boolean indicating if the current store is memory only (or on disk)"
+
+	^ false
+]

@@ -7,3 +7,16 @@ EpClassAddition >> = other [
 		self behaviorAffectedName = other behaviorAffectedName and: [ 
 			self classAdded = other classAdded ] ]
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpClassAddition >> isEpClassAddition [
+
+	^ true.
+]
+
+{ #category : #'*GToolkit4Epicea' }
+EpClassAddition >> isGtEpReplayBehaviorAddition [
+	"Answer a boolean indicating whether the receiver can be regarded as adding a behavior to the system."
+
+	^ true.
+]
