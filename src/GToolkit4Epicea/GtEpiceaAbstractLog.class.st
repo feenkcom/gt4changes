@@ -396,7 +396,6 @@ GtEpiceaAbstractLog >> recoverFilter [
 			sorted := GtEpEventSequencer 
 				sequence: explicitLog priorEntriesFromHead 
 				withCurrent: false.
-			{ explicitLog. sorted reversed. } inspect.
 			AsyncSequenceStream forCollection: sorted reversed ];
 		named: 'Recover';
 		order: 20;
