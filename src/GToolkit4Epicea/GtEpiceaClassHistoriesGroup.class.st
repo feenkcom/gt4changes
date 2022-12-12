@@ -1,52 +1,5 @@
 Class {
 	#name : #GtEpiceaClassHistoriesGroup,
-	#superclass : #Object,
-	#traits : 'TGtGroup + TGtGroupItems',
-	#classTraits : 'TGtGroup classTrait + TGtGroupItems classTrait',
+	#superclass : #GtEpiceaEntityHistoriesGroup,
 	#category : #'GToolkit4Epicea-Model'
 }
-
-{ #category : #'gt - extensions' }
-GtEpiceaClassHistoriesGroup >> gtViewChangeHistoryChildren [
-	^ self items
-]
-
-{ #category : #'gt - extensions' }
-GtEpiceaClassHistoriesGroup >> gtViewClassHistoriesFor: aView [
-	<gtView>
-	
-	^ aView columnedTree 
-		title: 'Class Histories';
-		priority: 20;
-		items: [ self items 
-			sorted: [ :aClassHistory | 
-				aClassHistory latestChange gtTime ] descending ];
-		children: [ :anEntry |
-			anEntry gtViewChangeHistoryChildren ];
-		column: 'Type ' do: [ :aColumn | 
-			aColumn 
-				width: 75;
-				cellStencil: [ BlElement new
-					layout: BlLinearLayout horizontal alignCenter;
-					padding: (BlInsets left:10);
-					constraintsDo: [ :c | 
-						c horizontal fitContent.
-						c vertical fitContent ] ];
-				dataBinder: [ :anElement :anEntry | 
-					anElement
-						removeChildren;
-						addChild: anEntry gtViewChangeIcon asElement ] ];
-		column: 'Event' do: [ :aColumn |
-			aColumn 
-				cellStencil: [ BlElement new
-					layout: BlLinearLayout horizontal;
-					constraintsDo: [ :c | 
-						c horizontal fitContent.
-						c vertical exact: 26 ] ];
-				dataBinder: [ :anElement :anEntry | 
-					anElement
-						removeChildren;
-						addChildren: anEntry gtViewChangeDescriptionElements ] ];
-		column: 'Timestamp' text: [ :anEntry | 
-			anEntry gtViewLatestChangeTime printToSeconds ] width: 150
-]

@@ -56,6 +56,11 @@ GtEpiceaMethodHistory >> gtViewChangeIcon [
 ]
 
 { #category : #'gt - extensions' }
+GtEpiceaMethodHistory >> gtViewChangesCount [
+	^ self changes size
+]
+
+{ #category : #'gt - extensions' }
 GtEpiceaMethodHistory >> gtViewEntriesListFor: aView [ 
 	<gtView>
 	
@@ -64,11 +69,6 @@ GtEpiceaMethodHistory >> gtViewEntriesListFor: aView [
 		priority: 10;
 		object: [ self changes ];
 		view: #gtItemsFor:
-]
-
-{ #category : #accessing }
-GtEpiceaMethodHistory >> gtViewLatestChangeTime [ 
-	^ self latestChange  gtTime
 ]
 
 { #category : #testing }

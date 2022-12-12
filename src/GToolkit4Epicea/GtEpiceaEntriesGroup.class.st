@@ -6,6 +6,25 @@ Class {
 	#category : #'GToolkit4Epicea-Model'
 }
 
+{ #category : #'accessing - filtering' }
+GtEpiceaEntriesGroup >> behaviorChanges [
+	^ self select: [ :anOmbuEntry |
+		anOmbuEntry content isEpBehaviorChange ]
+]
+
+{ #category : #'accessing - grouping' }
+GtEpiceaEntriesGroup >> behaviorChangesGroupedByClass [
+	^ self behaviorChanges 
+		groupedBy: [ :anOmbuEntry | 
+			anOmbuEntry content behaviorAffected instanceSide ]
+]
+
+{ #category : #'accessing - history' }
+GtEpiceaEntriesGroup >> classHistories [
+	^ GtEpiceaClassesHistoryBuilder 
+		buildHistoryForEntriesGroup: self
+]
+
 { #category : #accessing }
 GtEpiceaEntriesGroup >> gtItemsFor: aView [ 
 	<gtView>
@@ -43,4 +62,29 @@ GtEpiceaEntriesGroup >> initialChange [
 { #category : #accessing }
 GtEpiceaEntriesGroup >> latestChange [
 	^ self items detectMax: [ :anOmbuEntry | anOmbuEntry gtTime]
+]
+
+{ #category : #'accessing - filtering' }
+GtEpiceaEntriesGroup >> methodChanges [
+	^ self select: [ :anOmbuEntry |
+		anOmbuEntry content isEpMethodChange ]
+]
+
+{ #category : #'accessing - grouping' }
+GtEpiceaEntriesGroup >> methodChangesGroupedByAffectedMethod [
+	^ self methodChanges
+		groupedBy: [ :anOmbuEntry | 
+			anOmbuEntry content methodAffected ]
+]
+
+{ #category : #'accessing - history' }
+GtEpiceaEntriesGroup >> methodHistories [
+	^ GtEpiceaMethodsHistoryBuilder
+		buildHistoryForEntriesGroup: self
+]
+
+{ #category : #'accessing - history' }
+GtEpiceaEntriesGroup >> packageHistories [
+	^ GtEpiceaPackagesHistoryBuilder 
+		buildHistoryForEntriesGroup: self
 ]

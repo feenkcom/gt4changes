@@ -52,8 +52,9 @@ GtEpiceaAbstractLog >> allEntriesFilter [
 GtEpiceaAbstractLog >> behaviorChangesGroupedByClass [
 	^ (self entries 
 		select: [ :anOmbuEntry |
-			anOmbuEntry content isEpBehaviorChange ])
-		groupedBy: [ :anOmbuEntry | anOmbuEntry content behaviorAffected ]
+			anOmbuEntry content isEpBehaviorChange  ])
+		groupedBy: [ :anOmbuEntry | 
+			anOmbuEntry content behaviorAffected instanceSide ]
 ]
 
 { #category : #accessing }
@@ -89,37 +90,10 @@ GtEpiceaAbstractLog >> classFilter [
 		beNotDefault
 ]
 
-{ #category : #'accessing - history grouping' }
+{ #category : #'accessing - history' }
 GtEpiceaAbstractLog >> classHistories [
-	| classHistories groupedByClassName |
-	groupedByClassName := Dictionary new.
-	
-	classHistories := self classHistoriesWithOnlyBehaviourChanges.
-	classHistories do: [ :aClassHistory |
-		groupedByClassName at: aClassHistory targetClassName put: aClassHistory ].
-	
-	self methodHistories do: [ :aMethodHistory |
-		| targetClassName classHistory | 
-		targetClassName := aMethodHistory targetClassName.
-		aMethodHistory targetMethod isMetaSide ifTrue: [ 
-			targetClassName := targetClassName removeSuffix: ' class' ].
-		classHistory := groupedByClassName 
-			at: targetClassName
-			ifAbsentPut: [
-				GtEpiceaClassHistory   new
-					targetClassName: targetClassName ].
-		classHistory addMethodHistory: aMethodHistory ].
-		
-	^ GtEpiceaClassHistoriesGroup withAll: groupedByClassName values
-]
-
-{ #category : #'accessing - history grouping' }
-GtEpiceaAbstractLog >> classHistoriesWithOnlyBehaviourChanges [
-	^ GtEpiceaClassHistoriesGroup 
-		withAll: (self behaviorChangesGroupedByClass associations 
-			collect: [ :assoc | GtEpiceaClassHistory  
-				forClass: assoc key
-				withBehaviourChanges: assoc value ])
+	^ GtEpiceaClassesHistoryBuilder 
+		buildHistoryForEntriesGroup: self entriesGroup
 ]
 
 { #category : #'accessing - filters' }
@@ -144,6 +118,11 @@ GtEpiceaAbstractLog >> codeEvents [
 { #category : #accessing }
 GtEpiceaAbstractLog >> entries [
 	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractLog >> entriesGroup [
+	^ GtEpiceaEntriesGroup withAll: self entries
 ]
 
 { #category : #accessing }
@@ -211,7 +190,7 @@ GtEpiceaAbstractLog >> gtViewClassHistoriesFor: aView [
 		title: 'By Class';
 		priority: 35;
 		object: [ self classHistories ];
-		view: #gtViewClassHistoriesFor: 
+		view: #gtViewHistoriesFor: 
 ]
 
 { #category : #'gt - extensions' }
@@ -242,7 +221,19 @@ GtEpiceaAbstractLog >> gtViewMethodHistoriesFor: aView [
 		title: 'By Method';
 		priority: 35;
 		object: [ self methodHistories ];
-		view: #gtViewMethodHistoriesFor: 
+		view: #gtViewHistoriesFor: 
+]
+
+{ #category : #'gt - extensions' }
+GtEpiceaAbstractLog >> gtViewPackageHistoriesFor: aView [
+	<gtView>
+	<gtViewChanges>
+	
+	^ aView forward 
+		title: 'By Package';
+		priority: 45;
+		object: [ self packageHistories ];
+		view: #gtViewHistoriesFor: 
 ]
 
 { #category : #'gt - extensions' }
@@ -320,12 +311,10 @@ GtEpiceaAbstractLog >> methodChangesGroupedByAffectedMethod [
 		groupedBy: [ :anOmbuEntry | anOmbuEntry content methodAffected ]
 ]
 
-{ #category : #'accessing - history grouping' }
+{ #category : #'accessing - history' }
 GtEpiceaAbstractLog >> methodHistories [
-	^ GtEpiceaMethodHistoriesGroup withAll: (self methodChangesGroupedByAffectedMethod associations 
-		collect: [ :assoc | GtEpiceaMethodHistory  
-			forMethod: assoc key
-			withChanges: assoc value ])
+	^ GtEpiceaMethodsHistoryBuilder
+		buildHistoryForEntriesGroup: self entriesGroup
 ]
 
 { #category : #accessing }
@@ -352,6 +341,12 @@ GtEpiceaAbstractLog >> packageFilter [
 		completion: [ GtStringsCompletionStrategy new
 				completions: [ GtPrefixTree withAll: (RPackage organizer packages collect: #name) ] ];
 		beNotDefault
+]
+
+{ #category : #'accessing - history' }
+GtEpiceaAbstractLog >> packageHistories [
+	^ GtEpiceaPackagesHistoryBuilder 
+		buildHistoryForEntriesGroup: self entriesGroup
 ]
 
 { #category : #enumerating }
