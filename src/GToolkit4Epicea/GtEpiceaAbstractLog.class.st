@@ -391,30 +391,14 @@ GtEpiceaAbstractLog >> recoverFilter [
 	This works across multiple log files in the event that an old image is being used to recover changes."
 	<gtChangeFilter>
 	^ GtFilterDescriptor new
-		creator: [ :aStream | | sorted |
+		creator: [ :aStream | | explicitLog sorted |
+			explicitLog := GtEpiceaExplicitLog on: aStream toArray wait.
 			sorted := GtEpEventSequencer 
-				sequence: (GtEpiceaExplicitLog on: aStream toArray wait) priorEntriesFromHead 
+				sequence: explicitLog priorEntriesFromHead 
 				withCurrent: false.
+			{ explicitLog. sorted reversed. } inspect.
 			AsyncSequenceStream forCollection: sorted reversed ];
 		named: 'Recover';
-		order: 20;
-		valueNotRequired;
-		beNotDefault
-]
-
-{ #category : #accessing }
-GtEpiceaAbstractLog >> sequenceFilter [
-	"Filter the events down to only those that were present in the system  at the time of the latest change and which would change the current system (i.e. need to be applied).
-	This works across multiple log files in the event that an old image is being used to recover changes."
-	<gtChangeFilter>
-	^ GtFilterDescriptor new
-		creator: [ :aStream | | chronological sorted |
-			chronological := GtEpEventSequencer new
-				chronologicalEntriesFrom: aStream toArray wait.
-			sorted := GtEpEventSequencer new 
-				sortedEntriesFrom: chronological.
-			AsyncSequenceStream forCollection: sorted reversed ];
-		named: 'Sequence';
 		order: 20;
 		valueNotRequired;
 		beNotDefault

@@ -1,5 +1,5 @@
 "
-GtEpEventSequencer takes a chronological sequence of events and filters and orders it ready for replay, allowing an image to be synced up to a later image.
+GtEpEventSequencer takes a chronological sequence of events from a single branch and filters and orders it ready for replay, allowing an image to be synced up to a later image.
 "
 Class {
 	#name : #GtEpEventSequencer,
@@ -8,17 +8,44 @@ Class {
 		'impactFilter',
 		'entries',
 		'sequencedEntries',
-		'includeCurrent'
+		'visitor',
+		'image',
+		'replay',
+		'inImage'
 	],
 	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #sequencing }
+GtEpEventSequencer class >> entries: anEpEntryCollection inImage: inImageBoolean [
+
+	^ inImageBoolean ifTrue:
+		[ self new
+			entries: anEpEntryCollection;
+			sequencedEntriesInImage;
+			yourself ]
+	ifFalse:
+		[ self new
+			entries: anEpEntryCollection;
+			sequencedEntriesForExport;
+			yourself ]
+
+]
+
+{ #category : #sequencing }
 GtEpEventSequencer class >> entries: anEpEntryCollection includeCurrent: currentBoolean [
 
-	^ self new
-		entries: anEpEntryCollection;
-		includeCurrent: currentBoolean
+	^ currentBoolean ifTrue:
+		[ self new
+			entries: anEpEntryCollection;
+			sequencedEntriesForExport;
+			yourself ]
+	ifFalse:
+		[ self new
+			entries: anEpEntryCollection;
+			sequencedEntriesInImage;
+			yourself ]
+
 ]
 
 { #category : #accessing }
@@ -40,12 +67,15 @@ GtEpEventSequencer class >> sequence: anEpEntryCollection [
 GtEpEventSequencer class >> sequence: anEpEntryCollection withCurrent: currentBoolean [
 	"Sequence the supplied collection of OmEntries for replay and answer an OrderedCollection of entries.
 	If currentBoolean is true, include entries that don't change the running system, if false filter them out."
-	| sequencer chronologicalEntries |
 
-	anEpEntryCollection ifEmpty: [ ^ anEpEntryCollection ].
-	sequencer := self new.
-	chronologicalEntries := sequencer chronologicalEntriesFrom: anEpEntryCollection.
-	^ sequencer filteredEntriesFrom: chronologicalEntries includeCurrent: currentBoolean.
+	^ currentBoolean ifTrue:
+		[ self new
+			entries: anEpEntryCollection;
+			sequencedEntriesForExport ]
+	ifFalse:
+		[ self new
+			entries: anEpEntryCollection;
+			sequencedEntriesInImage ]
 
 ]
 
@@ -55,28 +85,6 @@ GtEpEventSequencer >> apply [
 
 	self sequencedEntries do: [ :each |
 		each content applyCodeChangeIfHasImpact ].
-]
-
-{ #category : #private }
-GtEpEventSequencer >> behaviorEntriesFrom: chronologicalEntries includeCurrent: currentBoolean [
-	"Behaviour changes can't be easily filtered due to renames, etc.  Simply collect them all."
-
-	^ chronologicalEntries select: [ :each |
-		self isBehaviorDefinitionChange: each content ].
-]
-
-{ #category : #private }
-GtEpEventSequencer >> chronologicalEntriesFrom: anEpEntryCollection [
-	"Answer the supplied collection of events ensuring the oldest is first.
-	NOTE: anEpEventCollection is assumed to be either chronological or reverse chronological."
-	| firstTime lastTime |
-
-	firstTime := anEpEntryCollection first gtTime.
-	lastTime := anEpEntryCollection last gtTime.
-	^ firstTime > lastTime 
-		ifTrue: [ anEpEntryCollection reversed ]
-		ifFalse: [ anEpEntryCollection copy ].
-
 ]
 
 { #category : #accessing }
@@ -92,27 +100,28 @@ GtEpEventSequencer >> entries: anObject [
 	sequencedEntries := nil.
 ]
 
-{ #category : #private }
-GtEpEventSequencer >> filteredEntriesFrom: chronologicalEntries includeCurrent: currentBoolean [
-	"Select only the events which:
-	- are a code change
-	- if not a class or trait definition (isEpBehaviorChange): aren't overridden by a later change.
-	- if currentBoolean is false, aren't the same as the current image.
-	As class/trait changes can depend on earlier changes - e.g. add class, add trait, add class to trait - class/trait changes are kept or removed as a block.
-	This also has the side effect of sorting entries in to behaviour and other."
-
-	^ ((self behaviorEntriesFrom: chronologicalEntries includeCurrent: currentBoolean),
-		(self otherEntriesFrom: chronologicalEntries includeCurrent: currentBoolean))
-			sorted: #gtTime ascending.
-]
-
 { #category : #accessing }
 GtEpEventSequencer >> getSequencedEntries [
-	"(Re)calculate the sequenced entries from the entries"
-	| chronologicalEntries |
+	"Calculate the sequenced entries from the entries.
+	The sequence generation consists of three steps:
+	1. Iterate over the events building the image model.
+	2. Iterate over the image model and select required events.
+	3. Sort the events chronologically."
 
-	chronologicalEntries := self chronologicalEntriesFrom: entries.
-	^ self filteredEntriesFrom: chronologicalEntries includeCurrent: includeCurrent.
+	"1. Iterate over the events building the image model."
+	visitor := GtEpReplayEventVisitor new.
+	visitor visitNodes: entries.
+	image := visitor image.
+
+	"2. Iterate over the image model and select required events."
+	replay := inImage
+		ifTrue: [ GtEpImageModelInImageVisitor image: image ]
+		ifFalse: [ GtEpImageModelForExportVisitor image: image ].
+
+	"3. Sort the events chronologically."
+	sequencedEntries := replay sequencedEntries sorted: [ :a :b | a gtTime < b gtTime ].
+
+	^ sequencedEntries
 ]
 
 { #category : #'gt - extensions' }
@@ -153,24 +162,6 @@ GtEpEventSequencer >> gtViewAllEntriesFor: aView [
 ]
 
 { #category : #'gt - extensions' }
-GtEpEventSequencer >> gtViewChronologicalEntriesFor: aView [
-	<gtView>
-
-	^ aView columnedList
-		title: 'Chronological Entries';
-		priority: 15;
-		items: [ self chronologicalEntriesFrom: entries ];
-		column: 'Change' text: [ :anOmbuEntry | 
-			anOmbuEntry content asRopedText 
-				foreground: (self gtBackgroundColorForEntry: anOmbuEntry) ];
-		column: 'Timestamp' 
-			text: [ :anOmbuEntry | 
-				anOmbuEntry gtTime asString asRopedText 
-					foreground: (self gtBackgroundColorForEntry: anOmbuEntry) ] 
-			width: 250
-]
-
-{ #category : #'gt - extensions' }
 GtEpEventSequencer >> gtViewSequencedEntriesFor: aView [
 	<gtView>
 
@@ -198,18 +189,10 @@ GtEpEventSequencer >> gtViewSequencedEntriesWithImpactFor: aView [
 ]
 
 { #category : #accessing }
-GtEpEventSequencer >> includeCurrent [
-	"Answer a boolean indicating whether the latest entry should be included even if it doesn't change the current system"
-	<return: #Boolean>
+GtEpEventSequencer >> image [
+	<return: #GtEpReplayImageModel>
 
-	^ includeCurrent
-]
-
-{ #category : #accessing }
-GtEpEventSequencer >> includeCurrent: aBoolean [
-
-	includeCurrent := aBoolean.
-	sequencedEntries := nil.
+	^ image
 ]
 
 { #category : #initialization }
@@ -240,41 +223,32 @@ GtEpEventSequencer >> isEvent: currentEntry notOverriddenIn: chronologicalEntrie
 	^ true
 ]
 
-{ #category : #private }
-GtEpEventSequencer >> otherEntriesFrom: chronologicalEntries includeCurrent: currentBoolean [
-	"Filter non-behaviour changes which are the latest code change, and if currentBoolean is false, have an impact on the current system"
-	| entriesDictionary otherEntries |
-
-	entriesDictionary := Dictionary new.
-	1 to: chronologicalEntries size do: [ :index | | currentEntry |
-		currentEntry := chronologicalEntries at: index.
-		(currentEntry content isCodeChange and:
-			[ (self isBehaviorDefinitionChange: currentEntry content) not ]) ifTrue:
-				[ entriesDictionary at: currentEntry content affectedMarker put: currentEntry ] ].
-	otherEntries := OrderedCollection new.
-	entriesDictionary do: [ :entry |
-		(currentBoolean or: [ impactFilter accepts: entry ]) ifTrue:
-				[ otherEntries add: entry ] ].
-	^ otherEntries
-]
-
 { #category : #accessing }
 GtEpEventSequencer >> sequencedEntries [
 
-	entries ifEmpty: [ ^ sequencedEntries := entries ].
-	^ sequencedEntries ifNil: [ sequencedEntries := self getSequencedEntries ].
+	^ sequencedEntries
 ]
 
-{ #category : #private }
-GtEpEventSequencer >> sortedEntriesFrom: filteredEntries [
-	"Sort the supplied events so that class and trait definitions come before everything else (to avoid a method being applied to a class that doesn't yet exist"
-	| behaviorDefinitions other |
+{ #category : #accessing }
+GtEpEventSequencer >> sequencedEntriesForExport [
 
-	behaviorDefinitions := OrderedCollection new.
-	other := OrderedCollection new.
-	filteredEntries do: [ :entry |
-		entry content isEpBehaviorChange
-			ifTrue: [ behaviorDefinitions add: entry ]
-			ifFalse: [ other add: entry ] ].
-	^ behaviorDefinitions, other.
+	self assert: (inImage isNil or: [ inImage not ]).
+	inImage := false.
+	entries ifEmpty: [ ^ sequencedEntries := entries ].
+	^ sequencedEntries ifNil: [ self getSequencedEntries ].
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> sequencedEntriesInImage [
+
+	self assert: (inImage isNil or: [ inImage ]).
+	inImage := true.
+	entries ifEmpty: [ ^ sequencedEntries := entries ].
+	^ sequencedEntries ifNil: [ self getSequencedEntries ].
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> visitor [
+
+	^ visitor
 ]

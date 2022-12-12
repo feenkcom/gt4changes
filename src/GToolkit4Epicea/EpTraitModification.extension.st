@@ -8,3 +8,9 @@ EpTraitModification >> = other [
 			self oldTrait = other oldTrait and: [ 
 				self newTrait = other newTrait ] ] ]
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpTraitModification >> isEpTraitModification [
+
+	^ true
+]
