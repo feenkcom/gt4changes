@@ -6,7 +6,7 @@ Class {
 		'classHistories',
 		'latestChange'
 	],
-	#category : #'GToolkit4Epicea-Model'
+	#category : #'GToolkit4Epicea-History'
 }
 
 { #category : #adding }

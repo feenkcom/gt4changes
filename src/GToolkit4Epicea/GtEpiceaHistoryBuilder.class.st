@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'entriesGroup'
 	],
-	#category : #'GToolkit4Epicea-Model'
+	#category : #'GToolkit4Epicea-History'
 }
 
 { #category : #actions }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'classHistoryTypeName'
 	],
-	#category : #'GToolkit4Epicea-Model'
+	#category : #'GToolkit4Epicea-History'
 }
 
 { #category : #actions }

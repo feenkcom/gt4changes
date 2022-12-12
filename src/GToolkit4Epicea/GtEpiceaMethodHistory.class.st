@@ -7,7 +7,7 @@ Class {
 		'latestChange',
 		'initialChange'
 	],
-	#category : #'GToolkit4Epicea-Model'
+	#category : #'GToolkit4Epicea-History'
 }
 
 { #category : #'instance - accessing' }
@@ -29,6 +29,31 @@ GtEpiceaMethodHistory >> changes [
 GtEpiceaMethodHistory >> changes: anObject [
 
 	changes := anObject
+]
+
+{ #category : #'gt - extensions' }
+GtEpiceaMethodHistory >> gtDiffFor: aView [
+	<gtView>
+	
+	^ aView explicit
+		title: 'Diff';
+		priority: 1;
+		stencil: [
+			| previousContent newContent |
+			previousContent := self initialChange content 
+				accept:  EpOldStateVisitor new.
+			newContent := self latestChange  content
+				accept: EpNewStateVisitor new.
+			
+			GtEpiceaDiffElementWithLabelStencil new
+			 	fromLabelText: 'First Change:';
+			 	toLabelText:  'Last Change:';
+			 	ombuEntry: self;
+			 	shouldHideDiff: (previousContent = newContent);
+			 	diffBuilder: ((GtCodeDiffBuilder 
+			 		from: previousContent
+			 		to: newContent) 
+			 			isMethod: true) ]
 ]
 
 { #category : #'gt - extensions' }
@@ -58,6 +83,17 @@ GtEpiceaMethodHistory >> gtViewChangeIcon [
 { #category : #'gt - extensions' }
 GtEpiceaMethodHistory >> gtViewChangesCount [
 	^ self changes size
+]
+
+{ #category : #'gt - extensions' }
+GtEpiceaMethodHistory >> gtViewDiffCurrentFor: aView [  
+	<gtView>
+	
+	^ aView forward 
+		title: 'Diff Current';
+		priority: 5;
+		object: [ self latestChange ];
+		view: #gtDiffCurrentFor:
 ]
 
 { #category : #'gt - extensions' }

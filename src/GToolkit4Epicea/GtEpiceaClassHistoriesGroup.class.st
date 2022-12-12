@@ -1,5 +1,5 @@
 Class {
 	#name : #GtEpiceaClassHistoriesGroup,
 	#superclass : #GtEpiceaEntityHistoriesGroup,
-	#category : #'GToolkit4Epicea-Model'
+	#category : #'GToolkit4Epicea-History'
 }

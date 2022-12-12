@@ -1,7 +1,7 @@
 Class {
 	#name : #GtEpiceaPackagesHistoryBuilder,
 	#superclass : #GtEpiceaHistoryBuilder,
-	#category : #'GToolkit4Epicea-Model'
+	#category : #'GToolkit4Epicea-History'
 }
 
 { #category : #'accessing - grouping' }
