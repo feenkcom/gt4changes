@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtGroup + TGtGroupItems',
 	#classTraits : 'TGtGroup classTrait + TGtGroupItems classTrait',
-	#category : #'GToolkit4Epicea-Model'
+	#category : #'GToolkit4Epicea-History'
 }
 
 { #category : #'gt - extensions' }

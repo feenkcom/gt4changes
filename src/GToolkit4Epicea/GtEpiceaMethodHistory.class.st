@@ -7,7 +7,7 @@ Class {
 		'latestChange',
 		'initialChange'
 	],
-	#category : #'GToolkit4Epicea-Model'
+	#category : #'GToolkit4Epicea-History'
 }
 
 { #category : #'instance - accessing' }
