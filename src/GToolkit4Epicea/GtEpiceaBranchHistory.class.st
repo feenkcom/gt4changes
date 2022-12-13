@@ -28,6 +28,17 @@ GtEpiceaBranchHistory >> changes: anObject [
 ]
 
 { #category : #accessing }
+GtEpiceaBranchHistory >> gtEventsFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Change List';
+		priority: 20;
+		object: [ GtEpiceaExplicitLog on: changes items ];
+		view: #gtEventsFor:
+]
+
+{ #category : #accessing }
 GtEpiceaBranchHistory >> gtViewChangeDescriptionElements [
 
 	^ changes first gtViewChangeDescriptionElements
