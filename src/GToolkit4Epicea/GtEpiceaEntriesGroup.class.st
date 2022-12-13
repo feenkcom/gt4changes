@@ -19,6 +19,14 @@ GtEpiceaEntriesGroup >> behaviorChangesGroupedByClass [
 			anOmbuEntry content behaviorAffected instanceSide ]
 ]
 
+{ #category : #accessing }
+GtEpiceaEntriesGroup >> changesGroupedByBranch [
+	| headNodes |
+
+	headNodes := GtEpBranchUtilities branchesHeadLogNodesFrom: self items.
+	^ headNodes collect: [ :node | node entry -> node entries ].
+]
+
 { #category : #'accessing - history' }
 GtEpiceaEntriesGroup >> classHistories [
 	^ GtEpiceaClassesHistoryBuilder 

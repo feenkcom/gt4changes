@@ -57,6 +57,12 @@ GtEpiceaAbstractLog >> behaviorChangesGroupedByClass [
 			anOmbuEntry content behaviorAffected instanceSide ]
 ]
 
+{ #category : #'accessing - history' }
+GtEpiceaAbstractLog >> branches [
+	^ GtEpiceaBranchesHistoryBuilder
+		buildHistoryForEntriesGroup: self entriesGroup
+]
+
 { #category : #accessing }
 GtEpiceaAbstractLog >> canBeFrozen [
 	^ true
@@ -72,6 +78,14 @@ GtEpiceaAbstractLog >> changedClassNames [
 			aChange accept: changedClassesVisitor ] ].
 		
 	^ changedClassesVisitor changedClassNames
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractLog >> changesGroupedByBranch [
+	| headNodes |
+
+	headNodes := GtEpBranchUtilities branchesHeadLogNodesFrom: self entries.
+	^ headNodes collect: [ :node | node entry -> node entries ].
 ]
 
 { #category : #'accessing - filters' }
@@ -179,6 +193,18 @@ GtEpiceaAbstractLog >> gtImpactFor: aView [
 				  constraintsDo: [ :c | 
 					  c horizontal fitContent.
 					  c vertical exact: 24 ] ]
+]
+
+{ #category : #'gt - extensions' }
+GtEpiceaAbstractLog >> gtViewBranchesFor: aView [
+	<gtView>
+	<gtViewChanges>
+	
+	^ aView forward 
+		title: 'By Branch';
+		priority: 45;
+		object: [ self branches ];
+		view: #gtViewHistoriesFor: 
 ]
 
 { #category : #'gt - extensions' }

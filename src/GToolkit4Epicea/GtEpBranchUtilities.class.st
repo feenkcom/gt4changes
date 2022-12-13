@@ -7,8 +7,10 @@ Class {
 { #category : #accessing }
 GtEpBranchUtilities class >> branchesHeadLogNodesFrom: aCollectionOfEntries [
 	"Answer a collection of {{gtClass:GtEpiceaLogViewNode}} from the supplied OmEntries"
-	| nodes |
+	| nodes set |
 
 	nodes := GtEpiceaLogViewNode fromCollection: aCollectionOfEntries.
-	^ nodes select: [ :each | each prior isNil ].
+	set := nodes asSet.
+	nodes do: [ :each | set remove: each prior ifAbsent: [] ].
+	^ set sorted: [ :each | each entry gtTime ] descending.
 ]
