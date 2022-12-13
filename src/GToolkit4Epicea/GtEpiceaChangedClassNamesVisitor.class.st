@@ -25,7 +25,7 @@ GtEpiceaChangedClassNamesVisitor >> changedClassNames [
 
 { #category : #accessing }
 GtEpiceaChangedClassNamesVisitor >> processClassName: aClassName [
-	^ aClassName removeSuffix: ' class'
+	^ aClassName withoutSuffix: ' class'
 ]
 
 { #category : #visitor }
