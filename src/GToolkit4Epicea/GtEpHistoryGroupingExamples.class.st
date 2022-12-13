@@ -9,7 +9,7 @@ Class {
 	#category : #'GToolkit4Epicea-Examples'
 }
 
-{ #category : #setup }
+{ #category : #accessing }
 GtEpHistoryGroupingExamples >> classFactory [
 	^ self codeFactory classFactory
 ]
@@ -20,7 +20,7 @@ GtEpHistoryGroupingExamples >> codeFactory [
 	^ theCodeFactory
 ]
 
-{ #category : #setup }
+{ #category : #'events generation' }
 GtEpHistoryGroupingExamples >> createAndMoveClassToDifferentTag [
 	<gtExample>
 	<after: #tearDown>
@@ -79,18 +79,18 @@ GtEpHistoryGroupingExamples >> ensureSetup [
 	theCodeFactory := GtEpiceaCodeFactoryForTesting new.
 ]
 
-{ #category : #'events generation' }
+{ #category : #accessing }
 GtEpHistoryGroupingExamples >> mainPackageNameForTesting [
 
 	^ #'CategoryForTestToBeDeleted'
 ]
 
-{ #category : #setup }
+{ #category : #accessing }
 GtEpHistoryGroupingExamples >> packageFactory [
 	^ self codeFactory packageFactory
 ]
 
-{ #category : #'events generation' }
+{ #category : #accessing }
 GtEpHistoryGroupingExamples >> secondaryPackageNameForTesting [
 
 	^ #'CategoryForTestToBeDeleted-Second'
@@ -105,19 +105,20 @@ GtEpHistoryGroupingExamples >> tearDown [
 	theLogBuilder cleanUp.
 ]
 
-{ #category : #accessing }
-GtEpHistoryGroupingExamples >> testClassAndMethodEventsWithNoImpactByMethod [
+{ #category : #examples }
+GtEpHistoryGroupingExamples >> testClassAndMethodEventsWithNoMethodImpact [
 	<gtExample>
 	| entries methodHistories |
 	entries := self createClassAndMethodEventsWithNoImpact.
 	methodHistories := entries methodHistories.
 	
 	self assert: methodHistories hasNoEffect.
+	self assert: methodHistories size equals: 2.
 	
-	^ methodHistories
+	^ entries
 ]
 
-{ #category : #accessing }
+{ #category : #examples }
 GtEpHistoryGroupingExamples >> testClassMoveBetweenPackagesWithByPackageGrouping [
 	<gtExample>
 	| entries packageHistories mainPackageHistory |
