@@ -38,9 +38,10 @@ GtEpiceaEntriesGroup >> gtItemsFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
-		title: 'Entries List';
+		title: 'Entries';
 		priority: 5;
-		items: [ self ];
+		items: [ self items sorted: [ :anOmbuEntry | 
+			anOmbuEntry gtTime ] descending ];
 		column: 'Icon'
 			icon: [ :anOmbuEntry | 
 				anOmbuEntry content accept: EpIconVisitor new ]
@@ -60,6 +61,39 @@ GtEpiceaEntriesGroup >> gtItemsFor: aView [
 		column: 'Timestamp'
 			text: [ :anOmbuEntry | anOmbuEntry gtTime printToSeconds ]
 			width: 150
+]
+
+{ #category : #accessing }
+GtEpiceaEntriesGroup >> gtViewClassHistoriesFor: aView [
+	<gtView>
+	
+	^ aView forward 
+		title: 'By Class';
+		priority: 35;
+		object: [ self classHistories ];
+		view: #gtViewHistoriesFor: 
+]
+
+{ #category : #accessing }
+GtEpiceaEntriesGroup >> gtViewMethodHistoriesFor: aView [
+	<gtView>
+	
+	^ aView forward 
+		title: 'By Method';
+		priority: 35;
+		object: [ self methodHistories ];
+		view: #gtViewHistoriesFor: 
+]
+
+{ #category : #accessing }
+GtEpiceaEntriesGroup >> gtViewPackageHistoriesFor: aView [
+	<gtView>
+	
+	^ aView forward 
+		title: 'By Package';
+		priority: 45;
+		object: [ self packageHistories ];
+		view: #gtViewHistoriesFor: 
 ]
 
 { #category : #accessing }
@@ -95,4 +129,16 @@ GtEpiceaEntriesGroup >> methodHistories [
 GtEpiceaEntriesGroup >> packageHistories [
 	^ GtEpiceaPackagesHistoryBuilder 
 		buildHistoryForEntriesGroup: self
+]
+
+{ #category : #sorting }
+GtEpiceaEntriesGroup >> sorted: aBlock [
+	^ self species 
+		withAll: (self items sorted: aBlock)
+]
+
+{ #category : #sorting }
+GtEpiceaEntriesGroup >> sortedDescendingByChangeTime [
+	^ self sorted: [ :anOmbuEntry | 
+		anOmbuEntry gtTime ] descending
 ]

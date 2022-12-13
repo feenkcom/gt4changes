@@ -57,8 +57,14 @@ GtEpiceaEntityHistoriesGroup >> latestChange [
 		detectMax: [ :anOmbuEntry | anOmbuEntry gtTime]
 ]
 
-{ #category : #accessing }
+{ #category : #sorting }
 GtEpiceaEntityHistoriesGroup >> sorted: aBlock [
 	^ self species 
 		withAll: (self items sorted: aBlock)
+]
+
+{ #category : #sorting }
+GtEpiceaEntityHistoriesGroup >> sortedDescendingByLatestChangeTime [
+	^ self sorted: [ :anEntityHistory | 
+		anEntityHistory latestChange gtTime ] descending
 ]
