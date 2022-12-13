@@ -61,8 +61,8 @@ GtEpImageModelInImageVisitor >> behaviorModificationEntryDiffersFromCurrent: anO
 			ifAbsent: [ '' ]).
 	currentString ifNotEmpty:
 		[ index := currentString indexOfSubCollection: 'subclass:'.
-		self assert: index > 0.
-		currentString := currentString copyFrom: index to: currentString size ].
+		index > 0 ifTrue:
+			[ currentString := currentString copyFrom: index to: currentString size ] ].
 	^ modificationString ~= currentString.
 ]
 
