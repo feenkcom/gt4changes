@@ -109,6 +109,12 @@ GtEpReplayImageModel >> addMethodRemoval: anOmEntry [
 ]
 
 { #category : #adding }
+GtEpReplayImageModel >> addOtherChange: anOmEntry [
+
+	entries add: anOmEntry.
+]
+
+{ #category : #adding }
 GtEpReplayImageModel >> addProtocolAddition: anOmEntry [
 	| behavior |
 
