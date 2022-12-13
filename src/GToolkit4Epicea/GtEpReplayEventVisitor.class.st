@@ -103,7 +103,7 @@ GtEpReplayEventVisitor >> visitClassRemoval: aChange [
 { #category : #visitor }
 GtEpReplayEventVisitor >> visitEvent: aChange [
 
-	^ self error: 'All event types should be handled explicitly'
+	^ image addOtherChange: currentEntry.
 ]
 
 { #category : #visitor }
@@ -164,22 +164,6 @@ GtEpReplayEventVisitor >> visitProtocolRemoval: aProtocolRemoved [
 ]
 
 { #category : #visitor }
-GtEpReplayEventVisitor >> visitRedo: aRedoEvent [
-	"The events in the redo should follow, do nothing now."
-]
-
-{ #category : #visitor }
-GtEpReplayEventVisitor >> visitRefactoring: anEvent [ 
-	"Refactorings are redundant, e.g. a method rename will be followed by the add renamed method and remove old method events.
-	Do nothing."
-]
-
-{ #category : #visitor }
-GtEpReplayEventVisitor >> visitSessionSnapshot: anEvent [
-	"Nothing to do"
-]
-
-{ #category : #visitor }
 GtEpReplayEventVisitor >> visitTraitAddition: aChange [
 
 	^ self visitBehaviorAddition: aChange
@@ -195,9 +179,4 @@ GtEpReplayEventVisitor >> visitTraitModification: aChange [
 GtEpReplayEventVisitor >> visitTraitRemoval: aChange [
 
 	image addTraitRemoval: currentEntry.
-]
-
-{ #category : #visitor }
-GtEpReplayEventVisitor >> visitUndo: anUndoEvent [
-	"The events in the undo should follow, do nothing now."
 ]
