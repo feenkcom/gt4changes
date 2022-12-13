@@ -65,6 +65,18 @@ GtEpiceaPackageHistory >> gtViewClassHistoriesFor: aView [
 		view: #gtViewHistoriesFor: 
 ]
 
+{ #category : #'gt - extensions' }
+GtEpiceaPackageHistory >> gtViewMethodHistoriesFor: aView [
+	<gtView>
+	<gtViewChanges>
+	
+	^ aView forward 
+		title: 'By Method';
+		priority: 45;
+		object: [ self classHistories  methodHistories ];
+		view: #gtViewHistoriesFor: 
+]
+
 { #category : #testing }
 GtEpiceaPackageHistory >> hasNoEffect [
 	^ self classHistories hasNoEffect
