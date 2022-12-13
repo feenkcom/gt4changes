@@ -12,7 +12,7 @@ GtEpiceaClassesHistoryBuilder >> addMethodsHistory: aMethodHistory toGrouping: b
 	| targetClassName classHistory | 
 	targetClassName := aMethodHistory targetClassName.
 	aMethodHistory targetMethod isMetaSide ifTrue: [ 
-		targetClassName := targetClassName removeSuffix: ' class' ].
+		targetClassName := targetClassName withoutSuffix: ' class' ].
 	classHistory := byClassNameGroups 
 		at: targetClassName
 		ifAbsentPut: [
