@@ -58,7 +58,7 @@ GtEpiceaClassHistory >> gtViewChangeIcon [
 		^ Smalltalk ui icons iconNamed: #windowMinimizeInactive ].
 		
 	self hasOnlyMethodChanges ifTrue: [
-		^ Smalltalk ui icons iconNamed: #changeUpdateIcon ].
+		^ Smalltalk ui icons iconNamed: #class ].
 	
 	self isLatestBehaviourChangeRemoval ifTrue: [
 		^ Smalltalk ui icons iconNamed: #changeRemoveIcon ].
