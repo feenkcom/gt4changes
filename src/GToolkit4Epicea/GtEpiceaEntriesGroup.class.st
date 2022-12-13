@@ -96,3 +96,15 @@ GtEpiceaEntriesGroup >> packageHistories [
 	^ GtEpiceaPackagesHistoryBuilder 
 		buildHistoryForEntriesGroup: self
 ]
+
+{ #category : #sorting }
+GtEpiceaEntriesGroup >> sorted: aBlock [
+	^ self species 
+		withAll: (self items sorted: aBlock)
+]
+
+{ #category : #sorting }
+GtEpiceaEntriesGroup >> sortedDescendingByChangeTime [
+	^ self sorted: [ :anOmbuEntry | 
+		anOmbuEntry gtTime ] descending
+]
