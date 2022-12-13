@@ -144,6 +144,23 @@ GtEpiceaAbstractLog >> entriesStream [
 	^ self subclassResponsibility
 ]
 
+{ #category : #accessing }
+GtEpiceaAbstractLog >> exportFilter [
+	"Filter the events down to only those that would be exported for replay in another image to sync it with the current image."
+	<gtChangeFilter>
+	^ GtFilterDescriptor new
+		creator: [ :aStream | | explicitLog sorted |
+			explicitLog := GtEpiceaExplicitLog on: aStream toArray wait.
+			sorted := GtEpEventSequencer 
+				sequence: explicitLog entries 
+				withCurrent: false.
+			AsyncSequenceStream forCollection: sorted reversed ];
+		named: 'Export';
+		order: 25;
+		valueNotRequired;
+		beNotDefault
+]
+
 { #category : #'gt - extensions' }
 GtEpiceaAbstractLog >> gtEventsFor: aView [
 	<gtView>
@@ -271,8 +288,7 @@ GtEpiceaAbstractLog >> headReference [
 
 { #category : #accessing }
 GtEpiceaAbstractLog >> historyFilter [
-	"Filter the events down to only those that were present in the system  at the time of the latest change and which would change the current system (i.e. need to be applied).
-	This works across multiple log files in the event that an old image is being used to recover changes."
+	"Filter the events showing the history of events leading to the latest change, i.e. the latest branch in the current collection of events."
 	<gtChangeFilter>
 	^ GtFilterDescriptor new
 		creator: [ :aStream |
@@ -413,14 +429,13 @@ GtEpiceaAbstractLog >> priorEntriesFromHead [
 
 { #category : #accessing }
 GtEpiceaAbstractLog >> recoverFilter [
-	"Filter the events down to only those that were present in the system  at the time of the latest change and which would change the current system (i.e. need to be applied).
-	This works across multiple log files in the event that an old image is being used to recover changes."
+	"Filter out any events which don't have an impact in the current system, taking the event history in to account."
 	<gtChangeFilter>
 	^ GtFilterDescriptor new
 		creator: [ :aStream | | explicitLog sorted |
 			explicitLog := GtEpiceaExplicitLog on: aStream toArray wait.
 			sorted := GtEpEventSequencer 
-				sequence: explicitLog priorEntriesFromHead 
+				sequence: explicitLog entries 
 				withCurrent: false.
 			AsyncSequenceStream forCollection: sorted reversed ];
 		named: 'Recover';
