@@ -61,20 +61,6 @@ GtEpReplayBehaviorModel >> addBehaviorRename: anOmEntry [
 ]
 
 { #category : #adding }
-GtEpReplayBehaviorModel >> addProtocolRemoval: anOmEntry [
-	| removedMethodModels protocol protocolChange |
-
-	protocol := anOmEntry content protocol.
-	protocolChange := self ensureProtocolAt: protocol.
-	protocolChange addProtocolChange: anOmEntry.
-
-	removedMethodModels := self methodsInProtocol: protocol.
-	removedMethods addAll: removedMethodModels.
-	removedMethodModels do: [ :each |
-		methods removeKey: each selector ].
-]
-
-{ #category : #adding }
 GtEpReplayBehaviorModel >> addTraitRemoval: anOmEntry [
 
 	self addBehaviorRemoval: anOmEntry.
