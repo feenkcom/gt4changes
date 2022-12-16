@@ -49,6 +49,20 @@ GtEpReplayAbstractBehaviorModel >> addProtocolAddition: anOmEntry [
 	protocolChange addProtocolChange: anOmEntry.
 ]
 
+{ #category : #adding }
+GtEpReplayAbstractBehaviorModel >> addProtocolRemoval: anOmEntry [
+	| removedMethodModels protocol protocolChange |
+
+	protocol := anOmEntry content protocol.
+	protocolChange := self ensureProtocolAt: protocol.
+	protocolChange addProtocolChange: anOmEntry.
+
+	removedMethodModels := self methodsInProtocol: protocol.
+	removedMethods addAll: removedMethodModels.
+	removedMethodModels do: [ :each |
+		methods removeKey: each selector ].
+]
+
 { #category : #accessing }
 GtEpReplayAbstractBehaviorModel >> behaviorAffectedName [
 

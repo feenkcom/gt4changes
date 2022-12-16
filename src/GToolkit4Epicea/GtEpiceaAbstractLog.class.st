@@ -151,9 +151,10 @@ GtEpiceaAbstractLog >> exportFilter [
 	^ GtFilterDescriptor new
 		creator: [ :aStream | | explicitLog sorted |
 			explicitLog := GtEpiceaExplicitLog on: aStream toArray wait.
-			sorted := GtEpEventSequencer 
-				sequence: explicitLog entries 
-				withCurrent: false.
+			sorted := (GtEpEventSequencer 
+				entries: explicitLog entries 
+				inImage: false)
+					sequencedEntries.
 			AsyncSequenceStream forCollection: sorted reversed ];
 		named: 'Export';
 		order: 25;
