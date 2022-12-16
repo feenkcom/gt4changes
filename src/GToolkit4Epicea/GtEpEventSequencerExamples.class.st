@@ -399,6 +399,56 @@ GtEpEventSequencerExamples >> classModifyRenameInImage [
 ]
 
 { #category : #examples }
+GtEpEventSequencerExamples >> classProtocolRemovalForExport [
+	"Check that class side protocol removal is sequenced correctly.
+	#classMethod1 is removed manually, and the protocol automatically.
+	#cp2 is removed manually, automatically removing #classMethod2."
+	<gtExample>
+	| fileReference epLog entries sequencer sequencedEntries behavior |
+
+	self deny: (self class environment includesKey: #Issue2936v2).
+	fileReference := self class testDataRoot / 'Issue2958' / 'Pharo10-SNAPSHOT-64bit-2314c3f.2adndgempmdk8mj0pwknbzd68.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 11.
+	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencer image behaviors includesKey: #Issue2958).
+	behavior := sequencer image classOrTraitNamed: #Issue2958.
+	self assert: behavior methods keys isEmpty.
+	self assert: behavior classSide methods keys isEmpty.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassAddition #EpProtocolRemoval #EpProtocolRemoval).
+	^ sequencer.
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classProtocolRemovalInImage [
+	"Check that class side protocol removal is sequenced correctly.
+	#classMethod1 is removed manually, and the protocol automatically.
+	#cp2 is removed manually, automatically removing #classMethod2."
+	<gtExample>
+	| fileReference epLog entries sequencer sequencedEntries behavior |
+
+	self deny: (self class environment includesKey: #Issue2936v2).
+	fileReference := self class testDataRoot / 'Issue2958' / 'Pharo10-SNAPSHOT-64bit-2314c3f.2adndgempmdk8mj0pwknbzd68.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 11.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencer image behaviors includesKey: #Issue2958).
+	behavior := sequencer image classOrTraitNamed: #Issue2958.
+	self assert: behavior methods keys isEmpty.
+	self assert: behavior classSide methods keys isEmpty.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassAddition).
+	^ sequencer.
+]
+
+{ #category : #examples }
 GtEpEventSequencerExamples >> classRefactoringExistingInImage [
 	"Check that a class refactirubg is sequenced correctly."
 	<gtExample>
