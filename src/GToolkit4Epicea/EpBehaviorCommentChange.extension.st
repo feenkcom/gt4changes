@@ -13,8 +13,7 @@ EpBehaviorCommentChange >> = other [
 EpBehaviorCommentChange >> initializeWithBehavior: aBehavior oldComment: anOldComment newComment: aNewComment oldStamp: anOldStamp newStamp: aNewStamp [
 
 	(newComment = 'nil' or: [ oldComment = 'nil' ]) ifTrue:
-		[ Stdio stdout << '*** nil comment warning'; lf.
-		GtEpNilCommentSignal emit ].
+		[ self error: 'This error is probably appearing due to a bug causing the comment to be set to the string ''nil''.' ].
 	self initialize.
 	behavior := aBehavior.
 	oldComment := anOldComment.
