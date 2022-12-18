@@ -61,9 +61,9 @@ GtEpReplayBehaviorModel >> addBehaviorRename: anOmEntry [
 ]
 
 { #category : #adding }
-GtEpReplayBehaviorModel >> addTraitRemoval: anOmEntry [
+GtEpReplayBehaviorModel >> addCategoryChange: anOmEntry [
 
-	self addBehaviorRemoval: anOmEntry.
+	entries add: anOmEntry.
 ]
 
 { #category : #accessing }
@@ -126,6 +126,12 @@ GtEpReplayBehaviorModel >> instanceSide [
 ]
 
 { #category : #testing }
+GtEpReplayBehaviorModel >> isClass [ 
+
+	^ false
+]
+
+{ #category : #testing }
 GtEpReplayBehaviorModel >> isRemoved [
 	"Answer a boolean indicating whether the receiver has been removed from the system."
 	| isRemoved |
@@ -133,6 +139,12 @@ GtEpReplayBehaviorModel >> isRemoved [
 	isRemoved := entries isEmpty and: [ methods isEmpty ].
 	isRemoved ifTrue: [ self assert: previousLives isNotEmpty ].
 	^ isRemoved
+]
+
+{ #category : #testing }
+GtEpReplayBehaviorModel >> isTrait [
+
+	^ false
 ]
 
 { #category : #accessing }

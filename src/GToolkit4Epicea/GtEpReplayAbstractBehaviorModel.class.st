@@ -51,22 +51,32 @@ GtEpReplayAbstractBehaviorModel >> addProtocolAddition: anOmEntry [
 
 { #category : #adding }
 GtEpReplayAbstractBehaviorModel >> addProtocolRemoval: anOmEntry [
-	| removedMethodModels protocol protocolChange |
+	| protocol protocolChange |
 
 	protocol := anOmEntry content protocol.
 	protocolChange := self ensureProtocolAt: protocol.
 	protocolChange addProtocolChange: anOmEntry.
 
+	"Protocol removal is dangerous since it can remove methods unexpectedly.
+	We choose to potentially leave empty protocols behind rather than accidentally remove methods.
 	removedMethodModels := self methodsInProtocol: protocol.
 	removedMethods addAll: removedMethodModels.
 	removedMethodModels do: [ :each |
-		methods removeKey: each selector ].
+		methods removeKey: each selector ]."
 ]
 
 { #category : #accessing }
 GtEpReplayAbstractBehaviorModel >> behaviorAffectedName [
 
 	^ self subclassResponsibility
+]
+
+{ #category : #testing }
+GtEpReplayAbstractBehaviorModel >> definesBehavior [
+	"Answer a boolean indicating whether the receiver defines its class / trait.
+	I.e. are there entries which add the behavior."
+
+	^ self subclassResponsibility 
 ]
 
 { #category : #accessing }
@@ -112,6 +122,15 @@ GtEpReplayAbstractBehaviorModel >> gtProtocolsFor: aView [
 ]
 
 { #category : #testing }
+GtEpReplayAbstractBehaviorModel >> hasDependentClassIn: anEnvironment [
+	"Answer a boolean indicating whether the receiver has any dependent classes present in the supplied environment.
+	For a class this means the superclass is present.
+	Traits have no equivalent dependency."
+
+	^ self subclassResponsibility 
+]
+
+{ #category : #testing }
 GtEpReplayAbstractBehaviorModel >> hasProtocolNamed: aSymbol [
 	"Answer a boolean indicating whether the specified protocol exists in the image model."
 
@@ -128,6 +147,18 @@ GtEpReplayAbstractBehaviorModel >> initialize [
 	super initialize.
 	self reset.
 
+]
+
+{ #category : #testing }
+GtEpReplayAbstractBehaviorModel >> isClass [ 
+
+	^ self subclassResponsibility 
+]
+
+{ #category : #testing }
+GtEpReplayAbstractBehaviorModel >> isTrait [
+
+	^ self subclassResponsibility 
 ]
 
 { #category : #accessing }
