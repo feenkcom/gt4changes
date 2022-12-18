@@ -25,6 +25,23 @@ GtEpReplayMetaBehaviorModel >> classSide [
 	^ self
 ]
 
+{ #category : #testing }
+GtEpReplayMetaBehaviorModel >> definesBehavior [
+	"Answer a boolean indicating whether the receiver defines its class / trait.
+	I.e. are there entries which add the behavior."
+
+	^ instanceSide definesBehavior
+]
+
+{ #category : #testing }
+GtEpReplayMetaBehaviorModel >> hasDependentClassIn: anEnvironment [
+	"Answer a boolean indicating whether the receiver has any dependent classes present in the supplied environment.
+	For a class this means the superclass is present.
+	Traits have no equivalent dependency."
+
+	^ instanceSide hasDependentClassIn: anEnvironment
+]
+
 { #category : #accessing }
 GtEpReplayMetaBehaviorModel >> instanceSide [
 
@@ -38,9 +55,21 @@ GtEpReplayMetaBehaviorModel >> instanceSide: anObject [
 ]
 
 { #category : #testing }
+GtEpReplayMetaBehaviorModel >> isClass [
+
+	^ instanceSide isClass
+]
+
+{ #category : #testing }
 GtEpReplayMetaBehaviorModel >> isRemoved [
 
 	^ self instanceSide isRemoved
+]
+
+{ #category : #testing }
+GtEpReplayMetaBehaviorModel >> isTrait [
+
+	^ instanceSide isTrait
 ]
 
 { #category : #accessing }

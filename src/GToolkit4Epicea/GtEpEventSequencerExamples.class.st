@@ -18,6 +18,51 @@ GtEpEventSequencerExamples class >> testDataRoot [
 ]
 
 { #category : #examples }
+GtEpEventSequencerExamples >> behaviorRenameWithoutDependentsForExport [
+	"Check that adding a class and method when the required superclass / class is missing is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #Issue2961Class).
+	self deny: (self class environment includesKey: #Issue2961Renamed).
+	fileReference := self class testDataRoot / 'Issue2961' / 'Pharo10-SNAPSHOT-64bit-2314c3f.bf2tmewfhauyof3f6iuprs8vy.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 4.
+	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencer image behaviors includesKey: #Issue2961ClassRenamed).
+	self assert: (sequencer image behaviors includesKey: #Issue2961TraitRenamed).
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpBehaviorNameChange #EpBehaviorNameChange).
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> behaviorRenameWithoutDependentsInImage [
+	"Check that adding a class and method when the required superclass / class is missing is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #Issue2961Class).
+	self deny: (self class environment includesKey: #Issue2961Renamed).
+	fileReference := self class testDataRoot / 'Issue2961' / 'Pharo10-SNAPSHOT-64bit-2314c3f.bf2tmewfhauyof3f6iuprs8vy.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 4.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencer image behaviors includesKey: #Issue2961ClassRenamed).
+	self assert: (sequencer image behaviors includesKey: #Issue2961TraitRenamed).
+	self assert: sequencedEntries isEmpty.
+	^ sequencer
+]
+
+{ #category : #examples }
 GtEpEventSequencerExamples >> classAddAndRenameForExport [
 	"Check that a class add and rename is sequenced correctly."
 	<gtExample>
@@ -41,19 +86,19 @@ GtEpEventSequencerExamples >> classAddAndRenameForExport [
 GtEpEventSequencerExamples >> classAddAndRenameInImage [
 	"Check that a class add and rename is sequenced correctly."
 	<gtExample>
-	| fileReference epLog entries sequencer sequencedEntries visitor |
+	| fileReference epLog entries sequencer sequencedEntries |
 
 	self deny: (self class environment includesKey: #Issue2924).
 	fileReference := self class testDataRoot / 'Issue2924' / 'Pharo10-SNAPSHOT-64bit-f72dfb7.a3go932rm46kbo5k07xd6d0lo.ombu'.
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
 	self assert: entries size equals: 6.
-	sequencer := GtEpEventSequencer entries: entries includeCurrent: false.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
 	sequencedEntries := sequencer sequencedEntries.
-	self assert: sequencedEntries size equals: 4.
-	visitor := sequencer visitor.
-	self deny: (visitor image behaviors includesKey: #Issue2924).
-	self assert: (visitor image behaviors includesKey: #Issue2924Renamed).
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassAddition #EpMethodModification #EpBehaviorNameChange #EpMethodAddition).
+	self deny: (sequencer image behaviors includesKey: #Issue2924).
+	self assert: (sequencer image behaviors includesKey: #Issue2924Renamed).
 	^ sequencer
 ]
 
@@ -192,7 +237,8 @@ GtEpEventSequencerExamples >> classAddAndRenameMultipleForExport [
 	self assert: entries size equals:11.
 	sequencer := GtEpEventSequencer entries: entries inImage: false.
 	sequencedEntries := sequencer sequencedEntries.
-	self assert: sequencedEntries size equals: 4.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassModification #EpBehaviorCategoryChange #EpBehaviorNameChange #EpBehaviorNameChange).
 	self deny: (sequencer image behaviors includesKey: #Issue2936v4).
 	self deny: (sequencer image behaviors includesKey: #Issue2936v41).
 	self deny: (sequencer image behaviors includesKey: #Issue2936v42).
@@ -321,11 +367,95 @@ GtEpEventSequencerExamples >> classAddModifyRenameRemoveInImage [
 	epLog := GtEpLogEnumerator fromFile: fileReference.
 	entries := epLog priorEntriesFromHead.
 	self assert: entries size equals: 22.
-	sequencer := GtEpEventSequencer entries: entries includeCurrent: false.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
 	sequencedEntries := sequencer sequencedEntries.
 	self deny: (sequencer image behaviors includesKey: #Issue2936).
 	self assert: sequencedEntries isEmpty.
 	^ sequencer.
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classAddWithoutDependentsForExport [
+	"Check that adding a class and method when the required superclass / class is missing is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #Issue2961Class).
+	self deny: (self class environment includesKey: #Issue2961Renamed).
+	fileReference := self class testDataRoot / 'Issue2961' / 'Pharo10-SNAPSHOT-64bit-2314c3f.2adndgh5axfgk7r9vz60o6ajx.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 3.
+	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencer image behaviors includesKey: #Issue2961Class).
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassAddition).
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classAddWithoutDependentsInImage [
+	"Check that adding a class and method when the required superclass / class is missing is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #Issue2961Class).
+	self deny: (self class environment includesKey: #Issue2961Renamed).
+	fileReference := self class testDataRoot / 'Issue2961' / 'Pharo10-SNAPSHOT-64bit-2314c3f.2adndgh5axfgk7r9vz60o6ajx.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 3.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencer image behaviors includesKey: #Issue2961Class).
+	self assert: sequencedEntries isEmpty.
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classAndTraitRemovalWithoutDependentsForExport [
+	"Check that removing methods when the required class / trait is missing is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #Issue2961Class).
+	self deny: (self class environment includesKey: #Issue2961Renamed).
+	fileReference := self class testDataRoot / 'Issue2961' / 'Pharo10-SNAPSHOT-64bit-2314c3f.d88aj31wfdp12jpe5067qrhny.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 30.
+	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassRemoval #EpTraitRemoval).
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classAndTraitRemovalWithoutDependentsInImage [
+	"Check that removing methods when the required class / trait is missing is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #Issue2961Class).
+	self deny: (self class environment includesKey: #Issue2961Renamed).
+	fileReference := self class testDataRoot / 'Issue2961' / 'Pharo10-SNAPSHOT-64bit-2314c3f.d88aj31wfdp12jpe5067qrhny.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 30.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: sequencedEntries isEmpty.
+	^ sequencer
 ]
 
 { #category : #examples }
@@ -417,9 +547,8 @@ GtEpEventSequencerExamples >> classProtocolRemovalForExport [
 	self assert: (sequencer image behaviors includesKey: #Issue2958).
 	behavior := sequencer image classOrTraitNamed: #Issue2958.
 	self assert: behavior methods keys isEmpty.
-	self assert: behavior classSide methods keys isEmpty.
 	self assert: (sequencedEntries collect: [ :each | each content class name ])
-		equals: #(#EpClassAddition #EpProtocolRemoval #EpProtocolRemoval).
+		equals: #(#EpClassAddition #EpMethodRemoval #EpMethodRemoval).
 	^ sequencer.
 ]
 
@@ -442,7 +571,6 @@ GtEpEventSequencerExamples >> classProtocolRemovalInImage [
 	self assert: (sequencer image behaviors includesKey: #Issue2958).
 	behavior := sequencer image classOrTraitNamed: #Issue2958.
 	self assert: behavior methods keys isEmpty.
-	self assert: behavior classSide methods keys isEmpty.
 	self assert: (sequencedEntries collect: [ :each | each content class name ])
 		equals: #(#EpClassAddition).
 	^ sequencer.
@@ -636,7 +764,7 @@ GtEpEventSequencerExamples >> commentsCategoriesAndProtocolsForExport [
 	self deny: (sequencer image behaviors includesKey: #Issue2936Renamed).
 	self assert: (sequencer image behaviors includesKey: #Issue2936v2).
 	self assert: (sequencedEntries collect: [ :each | each content class name ])
-		equals: #(#EpClassAddition #EpProtocolRemoval #EpBehaviorCommentChange #EpProtocolRemoval #EpProtocolRemoval #EpMethodModification).
+		equals: #(#EpClassAddition #EpBehaviorCommentChange #EpMethodRemoval #EpMethodModification).
 	^ sequencer.
 ]
 
@@ -706,6 +834,94 @@ GtEpEventSequencerExamples >> commentsCategoriesAndProtocolsRemovalInImage [
 ]
 
 { #category : #examples }
+GtEpEventSequencerExamples >> methodAddWithoutDependentsForExport [
+	"Check that adding a class and method when the required superclass / class is missing is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #Issue2961Class).
+	self deny: (self class environment includesKey: #Issue2961Renamed).
+	fileReference := self class testDataRoot / 'Issue2961' / 'Pharo10-SNAPSHOT-64bit-2314c3f.971cu00m29881vlstap6uq2ou.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 6.
+	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencer image behaviors includesKey: #Issue2961Class).
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpMethodAddition #EpMethodAddition #EpMethodAddition #EpMethodAddition).
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> methodAddWithoutDependentsInImage [
+	"Check that adding a class and method when the required superclass / class is missing is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #Issue2961Class).
+	self deny: (self class environment includesKey: #Issue2961Renamed).
+	fileReference := self class testDataRoot / 'Issue2961' / 'Pharo10-SNAPSHOT-64bit-2314c3f.971cu00m29881vlstap6uq2ou.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 6.
+	sequencer := GtEpEventSequencer entries: entries includeCurrent: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencer image behaviors includesKey: #Issue2961Class).
+	self assert: sequencedEntries isEmpty.
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> methodRemovalWithoutDependentsForExport [
+	"Check that removing methods when the required class / trait is missing is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #Issue2961Class).
+	self deny: (self class environment includesKey: #Issue2961Renamed).
+	fileReference := self class testDataRoot / 'Issue2961' / 'Pharo10-SNAPSHOT-64bit-2314c3f.bv2k87kq4fxh8kky06axflhqu.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 10.
+	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencer image behaviors includesKey: #Issue2961ClassRenamed).
+	self assert: (sequencer image behaviors includesKey: #Issue2961TraitRenamed).
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpMethodRemoval #EpMethodRemoval #EpMethodRemoval #EpMethodRemoval).
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> methodRemovalWithoutDependentsInImage [
+	"Check that removing methods when the required class / trait is missing is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #Issue2961Class).
+	self deny: (self class environment includesKey: #Issue2961Renamed).
+	fileReference := self class testDataRoot / 'Issue2961' / 'Pharo10-SNAPSHOT-64bit-2314c3f.bv2k87kq4fxh8kky06axflhqu.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 10.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencer image behaviors includesKey: #Issue2961ClassRenamed).
+	self assert: (sequencer image behaviors includesKey: #Issue2961TraitRenamed).
+	self assert: sequencedEntries isEmpty.
+	^ sequencer
+]
+
+{ #category : #examples }
 GtEpEventSequencerExamples >> removeMethodAndClassForExport [
 	"Check that a method and class remove is sequenced correctly."
 	<gtExample>
@@ -755,7 +971,8 @@ GtEpEventSequencerExamples >> removeTestClasses [
 		[ #(#Issue2924 #Issue2924Renamed #Issue2936 #Issue2936Renamed
 		#Issue2936 #Issue2936v2 
 		#Issue2936v4 #Issue2936v41 #Issue2936v42 #Issue2936v43
-		#Issue2936v5 #Issue2936v51 #Issue2936v52) do: [ :each |
+		#Issue2936v5 #Issue2936v51 #Issue2936v52
+		#Issue2961Class #Issue2961Renamed) do: [ :each |
 			self class environment removeClassNamed: each ].
 		self class environment organization
 			removeCategory: #Issue2924;
@@ -763,7 +980,8 @@ GtEpEventSequencerExamples >> removeTestClasses [
 			removeCategory: #Issue2936v2;
 			removeCategory: #Issue2936v4;
 			removeCategory: #Issue2936v41;
-			removeCategory: #Issue2936v5 ].
+			removeCategory: #Issue2936v5;
+			removeCategory: #Issue2961 ].
 ]
 
 { #category : #examples }
@@ -887,5 +1105,47 @@ GtEpEventSequencerExamples >> traitAdditionModificationRemovalInImage [
 	sequencedEntries := sequencer sequencedEntries.
 	self deny: (sequencer image behaviors includesKey: #TIssue2936).
 	self assert: sequencedEntries isEmpty.
+	^ sequencer.
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> traitMethodThenAdditionForExport [
+	"Check that a trait method modification followed by the trait addition is exported correctly."
+	<gtExample>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #Issue2936v3).
+	fileReference := self class testDataRoot / 'Issue2961' / 'Pharo10-SNAPSHOT-64bit-2314c3f.exvcqivgnjv9mn3laofp09ze1.ombu'.
+	self assert: fileReference exists.
+	epLog := GtEpLogEnumerator fromFile: fileReference.
+	entries := epLog priorEntriesFromHead.
+	self assert: entries size equals: 4.
+	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencer image classOrTraitNamed: #Trait2961) isTrait.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpMethodAddition #EpTraitModification).
+	^ sequencer.
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> traitMethodThenAdditionInImage [
+	"Check that a trait method modification followed by the trait addition is replayed correctly.
+	Strictly speaking this is producing a sequence which can't be replayed, since the trait doesn't exist when the method modification is made.  This can only happen if there are missing log files.
+	However it does test that class models are converted to trait models correctly."
+	<gtExample>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #Issue2936v3).
+	fileReference := self class testDataRoot / 'Issue2961' / 'Pharo10-SNAPSHOT-64bit-2314c3f.exvcqivgnjv9mn3laofp09ze1.ombu'.
+	self assert: fileReference exists.
+	epLog := GtEpLogEnumerator fromFile: fileReference.
+	entries := epLog priorEntriesFromHead.
+	self assert: entries size equals: 4.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencer image classOrTraitNamed: #Trait2961) isTrait.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpMethodAddition #EpTraitModification).
 	^ sequencer.
 ]

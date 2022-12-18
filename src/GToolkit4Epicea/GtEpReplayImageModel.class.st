@@ -17,19 +17,11 @@ GtEpReplayImageModel >> accept: aVisitor [
 ]
 
 { #category : #adding }
-GtEpReplayImageModel >> addBehaviorAddition: anOmEntry [
+GtEpReplayImageModel >> addBehaviorCategoryChange: anOmEntry [
 	| behavior |
 
 	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName.
-	behavior addBehaviorAddition: anOmEntry.
-]
-
-{ #category : #adding }
-GtEpReplayImageModel >> addBehaviorChange: anOmEntry [
-	| behavior |
-
-	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName.
-	behavior addBehaviorChange: anOmEntry.
+	behavior addCategoryChange: anOmEntry.
 ]
 
 { #category : #adding }
@@ -41,70 +33,93 @@ GtEpReplayImageModel >> addBehaviorCommentChange: anOmEntry [
 ]
 
 { #category : #adding }
-GtEpReplayImageModel >> addBehaviorModification: anOmEntry [
-	| behavior |
-
-	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName.
-	behavior addBehaviorModification: anOmEntry.
-]
-
-{ #category : #adding }
-GtEpReplayImageModel >> addBehaviorRemoval: anOmEntry [
-	| behavior entry |
-
-	entry := anOmEntry content.
-	behavior := self classOrTraitNamed: entry behaviorAffectedName.
-	behavior addBehaviorRemoval: anOmEntry.
-]
-
-{ #category : #adding }
 GtEpReplayImageModel >> addBehaviorRename: anOmEntry [
-	| behavior entry |
+	| behavior event |
 
-	entry := anOmEntry content.
-	behavior := self classOrTraitNamed: entry oldName.
+	event := anOmEntry content.
+	behavior := self classOrTraitNamed: event oldName
+		ifAbsentPut: [ :baseName | (self behaviorModelFor: event) name: baseName ].
 	behavior addBehaviorRename: anOmEntry.
 	behaviors 
-		removeKey: entry oldName
+		removeKey: event oldName
 		ifAbsent: [ ].
-	behaviors at: entry newName put: behavior.
+	behaviors at: event newName put: behavior.
 ]
 
 { #category : #adding }
 GtEpReplayImageModel >> addCategoryChange: anOmEntry [
-	"We're a bit lazy at the moment.
-	Assume subsequent behavior changes will take care of everything."
+
+	self addOtherChange: anOmEntry.
+]
+
+{ #category : #adding }
+GtEpReplayImageModel >> addClassAddition: anOmEntry [
+	| behavior |
+
+	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName
+		ifAbsentPut: [ :baseName | GtEpReplayClassModel new name: baseName ].
+	behavior addBehaviorAddition: anOmEntry.
+]
+
+{ #category : #adding }
+GtEpReplayImageModel >> addClassModification: anOmEntry [
+	| behavior |
+
+	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName
+		ifAbsentPut: [ :baseName | GtEpReplayClassModel new name: baseName ].
+	behavior addBehaviorModification: anOmEntry.
+]
+
+{ #category : #adding }
+GtEpReplayImageModel >> addClassRemoval: anOmEntry [
+	| behavior |
+
+	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName
+		ifAbsentPut: [ :baseName | GtEpReplayClassModel new name: baseName ].
+	behavior addBehaviorRemoval: anOmEntry.
 ]
 
 { #category : #adding }
 GtEpReplayImageModel >> addMethodAddition: anOmEntry [
+	"Add the supplied method definition.
+	Ring doesn't model whether the method is being added to a class or a trait, so if the behavior definition is missing we have to assume it is a class.  If this turns out to be wrong, it will be converted to a Trait when the definition is supplied."
 	| behavior |
 
-	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName.
+	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName
+		ifAbsentPut: [ :baseName | GtEpReplayClassModel new name: baseName ].
 	behavior addMethodAddition: anOmEntry.
 ]
 
 { #category : #adding }
 GtEpReplayImageModel >> addMethodChange: anOmEntry [
+	"Add the supplied method change.
+	Ring doesn't model whether the method is being added to a class or a trait, so if the behavior definition is missing we have to assume it is a class.  If this turns out to be wrong, it will be converted to a Trait when the definition is supplied."
 	| behavior |
 
-	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName.
+	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName
+		ifAbsentPut: [ :baseName | GtEpReplayClassModel new name: baseName ].
 	behavior addMethodChange: anOmEntry.
 ]
 
 { #category : #adding }
 GtEpReplayImageModel >> addMethodModification: anOmEntry [
+	"Add the supplied method definition.
+	Ring doesn't model whether the method is being added to a class or a trait, so if the behavior definition is missing we have to assume it is a class.  If this turns out to be wrong, it will be converted to a Trait when the definition is supplied."
 	| behavior |
 
-	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName.
-	behavior addMethodModification: anOmEntry.
+	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName
+		ifAbsentPut: [ :baseName | GtEpReplayClassModel new name: baseName ].
+	behavior addMethodAddition: anOmEntry.
 ]
 
 { #category : #adding }
 GtEpReplayImageModel >> addMethodRemoval: anOmEntry [
+	"Add the supplied method removal.
+	Ring doesn't model whether the method is being added to a class or a trait, so if the behavior definition is missing we have to assume it is a class.  If this turns out to be wrong, it will be converted to a Trait when the definition is supplied."
 	| behavior |
 
-	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName.
+	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName
+		ifAbsentPut: [ :baseName | GtEpReplayClassModel new name: baseName ].
 	behavior addMethodRemoval: anOmEntry.
 ]
 
@@ -131,12 +146,27 @@ GtEpReplayImageModel >> addProtocolRemoval: anOmEntry [
 ]
 
 { #category : #adding }
-GtEpReplayImageModel >> addTraitRemoval: anOmEntry [
-	| behavior entry |
+GtEpReplayImageModel >> addTraitAddition: anOmEntry [
+	| behavior |
 
-	entry := anOmEntry content.
-	behavior := self classOrTraitNamed: entry behaviorAffectedName.
-	behavior addTraitRemoval: anOmEntry.
+	behavior := self traitNamed: anOmEntry content behaviorAffectedName.
+	behavior addBehaviorAddition: anOmEntry.
+]
+
+{ #category : #adding }
+GtEpReplayImageModel >> addTraitModification: anOmEntry [
+	| behavior |
+
+	behavior := self traitNamed: anOmEntry content behaviorAffectedName.
+	behavior addBehaviorModification: anOmEntry.
+]
+
+{ #category : #adding }
+GtEpReplayImageModel >> addTraitRemoval: anOmEntry [
+	| behavior |
+
+	behavior := self traitNamed: anOmEntry content behaviorAffectedName.
+	behavior addBehaviorRemoval: anOmEntry.
 ]
 
 { #category : #accessing }
@@ -159,6 +189,18 @@ GtEpReplayImageModel >> behaviorAt: aSymbol ifPresent: presentBlock ifAbsent: ab
 		ifPresent: presentBlock
 		ifAbsent: absentBlock .
 
+]
+
+{ #category : #private }
+GtEpReplayImageModel >> behaviorModelFor: anEpEvent [
+	"Answer the appropriate behavior model for the supplied event"
+
+	^ anEpEvent behaviorAffected isClass ifTrue:
+		[ GtEpReplayClassModel new ]
+	ifFalse: [ anEpEvent behaviorAffected isTrait ifTrue:
+		[ GtEpReplayTraitModel new ]
+	ifFalse:
+		[ self error: 'Unknown behavior' ] ]
 ]
 
 { #category : #accessing }
@@ -185,10 +227,35 @@ GtEpReplayImageModel >> classOrTraitNamed: aSymbol [
 			[ meta := false.
 			baseName := aSymbol asSymbol ] ].
 
-	behavior := behaviors at: baseName ifAbsentPut: 
+	behavior := behaviors at: baseName "ifAbsentPut: 
 		[ GtEpReplayBehaviorModel new
-			name: baseName ].
-	^ meta 
+			name: baseName ]".
+	 ^ meta 
+		ifTrue: [ behavior classSide ]
+		ifFalse: [ behavior ]
+]
+
+{ #category : #accessing }
+GtEpReplayImageModel >> classOrTraitNamed: aSymbol ifAbsentPut: putBlock [
+	"Answer the class or trait with the supplied name.
+	If it is present in the running image, but not the model, add it to the model.
+	Otherwise answer nil."
+	| meta baseName behavior |
+
+	(aSymbol endsWith: ' class') ifTrue: 
+		[ meta := true.
+		baseName := (aSymbol copyFrom: 1 to: aSymbol size - 6) asSymbol ]
+	ifFalse: 
+		[ (aSymbol endsWith: ' classTrait') ifTrue: 
+			[ meta := true.
+			baseName := (aSymbol copyFrom: 1 to: aSymbol size - 11) asSymbol ]
+		ifFalse: 
+			[ meta := false.
+			baseName := aSymbol asSymbol ] ].
+
+	behavior := behaviors at: baseName 
+		ifAbsentPut: [ putBlock value: baseName ].
+	 ^ meta 
 		ifTrue: [ behavior classSide ]
 		ifFalse: [ behavior ]
 ]
@@ -226,4 +293,17 @@ GtEpReplayImageModel >> initialize [
 	super initialize.
 	behaviors := Dictionary new.
 
+]
+
+{ #category : #private }
+GtEpReplayImageModel >> traitNamed: aSymbol [
+	"Answer the trait named aSymbol.
+	If the model was created through a method change it will be incorrectly modelled as a class, convert to a trait."
+	| behavior |
+
+	behavior := self classOrTraitNamed: aSymbol ifAbsentPut: 
+		[ :baseName | GtEpReplayTraitModel new name: baseName ].
+	behavior isClass ifTrue:
+		[ behavior := GtEpReplayTraitModel fromClassModel: behavior ].
+	^ behavior.
 ]

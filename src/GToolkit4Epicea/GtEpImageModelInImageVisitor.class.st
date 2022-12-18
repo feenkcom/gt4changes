@@ -43,7 +43,9 @@ GtEpImageModelInImageVisitor >> behaviorEntriesChangeRunningSystem: replayEntrie
 	"Answer a boolean indicating whether the supplied behavior changes impact the running system."
 
 	^ replayEntries isNotEmpty and:
-		[ self behaviorModificationEntryDiffersFromCurrent: replayEntries last ]
+		[ (currentBehaviorModel hasDependentClassIn: self environment) and:
+		[ self currentOrPreviousBehaviorNameExists and:
+		[ self behaviorModificationEntryDiffersFromCurrent: replayEntries last ] ] ]
 ]
 
 { #category : #testing }
@@ -110,6 +112,18 @@ GtEpImageModelInImageVisitor >> currentBehavior [
 	^ self environment classOrTraitNamed: currentBehaviorModel behaviorAffectedName.
 ]
 
+{ #category : #testing }
+GtEpImageModelInImageVisitor >> currentOrPreviousBehaviorNameExists [
+	"Answer a boolean indicating whether the current or one of the previous behaviour's names exists in the current image."
+
+	(currentBehaviorModel definesBehavior or:
+		[ self environment includesKey: currentBehaviorModel behaviorAffectedName ]) ifTrue: [ ^ true ].
+	^ currentBehaviorModel previousNames
+		detect: [ :name | self environment includesKey: name asSymbol ]
+		ifFound: [ :name | true ]
+		ifNone: [ false ].
+]
+
 { #category : #accessing }
 GtEpImageModelInImageVisitor >> environment [
 
@@ -162,20 +176,27 @@ GtEpImageModelInImageVisitor >> isMethodAddition: anEpMethodChange [
 
 { #category : #testing }
 GtEpImageModelInImageVisitor >> methodEntryChangesRunningSystem: anOmEntry [
-	"Answer a boolean indicating whether the supplied entry changes the running system"
+	"Answer a boolean indicating whether the supplied entry changes the running system.
+	If the entry is a removal, the answer is whether the entry has an impact.
+	If the behavior exists, it is whether the code has changed.
+	If the behavior doesn't exist, it has no impact."
 	| event |
 
 	event := anOmEntry content.
-	^ event isEpMethodRemoval
-		ifTrue: [ event hasImpact ]
-		ifFalse: [ self methodModificationEntryDiffersFromCurrent: anOmEntry ]
+	^ event isEpMethodRemoval ifTrue: 
+		[ event hasImpact ]
+	ifFalse: 
+		[ self currentOrPreviousBehaviorNameExists and:
+			[ self methodModificationEntryDiffersFromCurrent: anOmEntry ] ]
 ]
 
 { #category : #private }
 GtEpImageModelInImageVisitor >> methodModificationEntryDiffersFromCurrent: anOmEntry [
-	"Determine if the supplied method definition differs from what is currently in the system.  Check back through previous class names to see if the method is inherited through a rename."
+	"Determine if the supplied method definition differs from what is currently in the system.  Check back through previous class names to see if the method is inherited through a rename.
+	The method's behavior must exist in the system or be defined by the previous entries."
 	| isMetaSide behaviorNames missingOriginal index newSource |
 
+	"anOmEntry content selector = #buildImageSyncDropdown ifTrue: [ self halt ]."
 	isMetaSide := anOmEntry content methodAffected isMetaSide.
 	behaviorNames := OrderedCollection new.
 	behaviorNames add: (isMetaSide
@@ -197,10 +218,11 @@ GtEpImageModelInImageVisitor >> methodModificationEntryDiffersFromCurrent: anOmE
 		((self environment classOrTraitNamed: name)
 			ifNotNil: [ :behavior | behavior compiledMethodAt: anOmEntry content methodAffectedSelector
 					ifPresent: [ :method | ^ newSource ~= method sourceCode ]
-					ifAbsent: [ nil ] ]
-			ifNil: [ nil ]) ].
+					ifAbsent: [ ] ]
+			ifNil: [ ]) ].
 
-	^ true
+	"If we get here the entry has an effect since this method is only valid if the behavior exists."
+	^ true.
 ]
 
 { #category : #testing }
@@ -286,19 +308,6 @@ GtEpImageModelInImageVisitor >> replayBehaviorRemovalFrom: aGtEpReplayBehaviorMo
 ]
 
 { #category : #private }
-GtEpImageModelInImageVisitor >> replayChangesFrom: aGtEpReplayBehaviorModel [
-	"Replay the changes to the supplied behavior"
-
-	self replayMethodEntriesFrom: aGtEpReplayBehaviorModel methods.
-	self replayMethodEntriesFrom: aGtEpReplayBehaviorModel classSide methods.
-	self replayBehaviorFrom: aGtEpReplayBehaviorModel entries: aGtEpReplayBehaviorModel entries.
-	self replayProtocolEntriesFrom: aGtEpReplayBehaviorModel protocolChanges.
-	self replayProtocolEntriesFrom: aGtEpReplayBehaviorModel classSide protocolChanges.
-	self replayCommentEntriesFrom: aGtEpReplayBehaviorModel.
-	
-]
-
-{ #category : #private }
 GtEpImageModelInImageVisitor >> replayCommentEntriesFrom: aGtEpReplayBehaviorModel [
 	"Only the latest comment entry counts"
 	| latestCommentEntry |
@@ -309,43 +318,6 @@ GtEpImageModelInImageVisitor >> replayCommentEntriesFrom: aGtEpReplayBehaviorMod
 	(self commentEntryChangesRunningSystem: latestCommentEntry) ifTrue:
 		[ stream nextPut: aGtEpReplayBehaviorModel latestCommentEntry ].
 
-]
-
-{ #category : #private }
-GtEpImageModelInImageVisitor >> replayMethodEntriesFrom: aGtEpReplayMethodModelCollection [
-	"Methods refactorings can be ignored as the component events are also supplied.
-	A rename will result in the source method being deleted.
-	So only the latest change is required.
-	Record the earliest behavior dependency for use while replaying behavior changes."
-
-	aGtEpReplayMethodModelCollection do: [ :method | | entries lastEntry |
-		entries := method entries.
-		entries ifNotEmpty:
-			[ lastEntry := entries last.
-			(self methodEntryChangesRunningSystem: lastEntry) ifTrue:
-				[ stream nextPut: lastEntry.
-				lastEntry gtTime < earliestBehaviorDependency gtTime ifTrue:
-					[ earliestBehaviorDependency := lastEntry ] ] ] ].
-]
-
-{ #category : #private }
-GtEpImageModelInImageVisitor >> replayProtocolEntriesFrom: aGtEpReplayProtocolModelCollection [
-	"Protocol entries either add an empty protocol or remove the protocol and all methods.
-	So only the latest removal is required, and an addition if it comes after the removal."
-
-	aGtEpReplayProtocolModelCollection do: [ :protocol | | entries lastRemoval lastAddition |
-		entries := protocol entries.
-		entries ifNotEmpty:
-			[ entries do: [ :entry |
-				entry content isEpProtocolAddition
-					ifTrue: [ lastAddition := entry ]
-					ifFalse: [ lastRemoval := entry ] ].
-			lastRemoval ifNotNil:
-				[ (self protocolRemovalChangesRunningSystem: lastRemoval) ifTrue:
-					[ stream nextPut: lastRemoval ].
-				(lastAddition isNotNil and: [ lastAddition gtTime > lastRemoval gtTime ]) ifTrue:
-					[ (self protocolAdditionChangesRunningSystem: lastRemoval) ifTrue:
-						[ stream nextPut: lastRemoval ] ] ] ] ].
 ]
 
 { #category : #accessing }
@@ -362,9 +334,14 @@ GtEpImageModelInImageVisitor >> visitBehaviorReplay: aGtEpReplayBehaviorModel [
 	"The latest event has to be earlier than now, set a dummy entry for comparison"
 	earliestBehaviorDependency := OmEntry content: EpEvent new.
 	earliestBehaviorDependency tags at: EpLog timeKey put: DateAndTime now.
-
 	self replayBehaviorRemovalFrom: aGtEpReplayBehaviorModel.
-	self replayChangesFrom: aGtEpReplayBehaviorModel.
+	"self replayChangesFrom: aGtEpReplayBehaviorModel."
+	self visitNodes: aGtEpReplayBehaviorModel methods.
+	self visitNodes: aGtEpReplayBehaviorModel classSide methods.
+	self replayBehaviorFrom: aGtEpReplayBehaviorModel entries: aGtEpReplayBehaviorModel entries.
+	self visitNodes: aGtEpReplayBehaviorModel protocolChanges.
+	self visitNodes: aGtEpReplayBehaviorModel classSide protocolChanges.
+	self replayCommentEntriesFrom: aGtEpReplayBehaviorModel.
 	currentBehaviorModel := nil.
 ]
 
@@ -376,7 +353,53 @@ GtEpImageModelInImageVisitor >> visitImageReplay: aGtEpReplayImageModel [
 ]
 
 { #category : #visiting }
+GtEpImageModelInImageVisitor >> visitMethodReplay: aGtEpReplayMethodModel [
+	| entries lastEntry |
+
+	entries := aGtEpReplayMethodModel entries.
+	entries ifNotEmpty:
+		[ lastEntry := entries last.
+		(self methodEntryChangesRunningSystem: lastEntry) ifTrue:
+			[ stream nextPut: lastEntry.
+			lastEntry gtTime < earliestBehaviorDependency gtTime ifTrue:
+				[ earliestBehaviorDependency := lastEntry ] ] ].
+]
+
+{ #category : #visiting }
 GtEpImageModelInImageVisitor >> visitNode: aGtEpReplayImageModel [
 
 	aGtEpReplayImageModel accept: self
+]
+
+{ #category : #visiting }
+GtEpImageModelInImageVisitor >> visitNodes: aCollection [
+
+	aCollection do: [ :node |
+		self visitNode: node ].
+]
+
+{ #category : #private }
+GtEpImageModelInImageVisitor >> visitProtocolReplay: aGtEpReplayProtocolModel [
+	"Protocol addition is unnecessary since protocols are automatically added when a method is added.
+	Protocol removal is unsafe since it may remove more methods than expected.
+	The cost of not replaying protocol removal is the possibility of a few empty protocols left behind.
+	Since this is safer than removing methods accidentally, ignore protocol changes.
+	
+	Old comment:
+	Protocol entries either add an empty protocol or remove the protocol and all methods.
+	So only the latest removal is required, and an addition if it comes after the removal.
+	| entries lastRemoval lastAddition |
+
+	entries := aGtEpReplayProtocolModel entries.
+	entries ifNotEmpty:
+		[ entries do: [ :entry |
+			entry content isEpProtocolAddition
+				ifTrue: [ lastAddition := entry ]
+				ifFalse: [ lastRemoval := entry ] ].
+		lastRemoval ifNotNil:
+			[ (self protocolRemovalChangesRunningSystem: lastRemoval) ifTrue:
+				[ stream nextPut: lastRemoval ].
+			(lastAddition isNotNil and: [ lastAddition gtTime > lastRemoval gtTime ]) ifTrue:
+				[ (self protocolAdditionChangesRunningSystem: lastRemoval) ifTrue:
+					[ stream nextPut: lastRemoval ] ] ] ]."
 ]

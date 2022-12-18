@@ -48,13 +48,19 @@ GtEpReplayEventVisitor >> initialize [
 { #category : #visitor }
 GtEpReplayEventVisitor >> visitBehaviorAddition: aChange [
 
-	image addBehaviorAddition: currentEntry.
+	self error: 'Behaviors should be added explicitly (Class or Trait)'.
+]
+
+{ #category : #visitor }
+GtEpReplayEventVisitor >> visitBehaviorCategoryChange: aChange [
+
+	image addBehaviorCategoryChange: currentEntry.
 ]
 
 { #category : #visitor }
 GtEpReplayEventVisitor >> visitBehaviorChange: aChange [
 
-	image addBehaviorChange: currentEntry.
+	self error: 'Behaviors should be modified explicitly (Class or Trait)'.
 ]
 
 { #category : #visitor }
@@ -66,7 +72,7 @@ GtEpReplayEventVisitor >> visitBehaviorCommentChange: aChange [
 { #category : #visitor }
 GtEpReplayEventVisitor >> visitBehaviorModification: aChange [
 
-	image addBehaviorModification: currentEntry.
+	self error: 'Behaviors should be modified explicitly (Class or Trait)'.
 ]
 
 { #category : #visitor }
@@ -85,19 +91,19 @@ GtEpReplayEventVisitor >> visitCategoryChange: aChange [
 { #category : #visitor }
 GtEpReplayEventVisitor >> visitClassAddition: aChange [
 
-	^ self visitBehaviorAddition: aChange
+	image addClassAddition: currentEntry
 ]
 
 { #category : #visitor }
 GtEpReplayEventVisitor >> visitClassModification: aChange [
 
-	^ self visitBehaviorModification: aChange
+	image addClassModification: currentEntry.
 ]
 
 { #category : #visitor }
 GtEpReplayEventVisitor >> visitClassRemoval: aChange [
 
-	image addBehaviorRemoval: currentEntry.
+	image addClassRemoval: currentEntry.
 ]
 
 { #category : #visitor }
@@ -166,13 +172,13 @@ GtEpReplayEventVisitor >> visitProtocolRemoval: aProtocolRemoved [
 { #category : #visitor }
 GtEpReplayEventVisitor >> visitTraitAddition: aChange [
 
-	^ self visitBehaviorAddition: aChange
+	image addTraitAddition: currentEntry
 ]
 
 { #category : #visitor }
 GtEpReplayEventVisitor >> visitTraitModification: aChange [
 
-	^ self visitBehaviorModification: aChange
+	image addTraitModification: currentEntry
 ]
 
 { #category : #visitor }
