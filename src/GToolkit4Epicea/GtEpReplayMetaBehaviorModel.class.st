@@ -26,11 +26,11 @@ GtEpReplayMetaBehaviorModel >> classSide [
 ]
 
 { #category : #testing }
-GtEpReplayMetaBehaviorModel >> definesBehavior [
+GtEpReplayMetaBehaviorModel >> definesBehaviorInImage: aGtEpReplayImageModel [
 	"Answer a boolean indicating whether the receiver defines its class / trait.
 	I.e. are there entries which add the behavior."
 
-	^ instanceSide definesBehavior
+	^ instanceSide definesBehaviorInImage: aGtEpReplayImageModel
 ]
 
 { #category : #testing }

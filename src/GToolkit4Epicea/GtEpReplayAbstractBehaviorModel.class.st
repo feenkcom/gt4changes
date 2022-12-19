@@ -72,7 +72,7 @@ GtEpReplayAbstractBehaviorModel >> behaviorAffectedName [
 ]
 
 { #category : #testing }
-GtEpReplayAbstractBehaviorModel >> definesBehavior [
+GtEpReplayAbstractBehaviorModel >> definesBehaviorInImage: aGtEpReplayImageModel [
 	"Answer a boolean indicating whether the receiver defines its class / trait.
 	I.e. are there entries which add the behavior."
 

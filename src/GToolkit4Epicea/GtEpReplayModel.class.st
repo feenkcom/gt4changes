@@ -28,6 +28,12 @@ GtEpReplayModel >> entries [
 	^ entries
 ]
 
+{ #category : #accessing }
+GtEpReplayModel >> environment [
+
+	^ self class environment
+]
+
 { #category : #ui }
 GtEpReplayModel >> gtEntriesFor: aView [
 	<gtView>
