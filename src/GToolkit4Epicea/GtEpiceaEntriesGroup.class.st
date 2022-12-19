@@ -34,6 +34,12 @@ GtEpiceaEntriesGroup >> classHistories [
 ]
 
 { #category : #accessing }
+GtEpiceaEntriesGroup >> entries [
+
+	^ self items
+]
+
+{ #category : #accessing }
 GtEpiceaEntriesGroup >> gtItemsFor: aView [ 
 	<gtView>
 	

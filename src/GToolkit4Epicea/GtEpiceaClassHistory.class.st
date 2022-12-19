@@ -36,6 +36,13 @@ GtEpiceaClassHistory >> behaviourChanges: aCollectionOfEntries [
 	behaviourChanges := aCollectionOfEntries
 ]
 
+{ #category : #accessing }
+GtEpiceaClassHistory >> entries [
+	"Answer all the receiver's {{gtClass:OmEntry}}s"
+
+	^ methodHistories entries, behaviourChanges entries
+]
+
 { #category : #'gt - extensions' }
 GtEpiceaClassHistory >> gtViewChangeDescriptionElements [
 	^ {BlTextElement new 
