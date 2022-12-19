@@ -418,6 +418,85 @@ GtEpEventSequencerExamples >> classAddWithoutDependentsInImage [
 ]
 
 { #category : #examples }
+GtEpEventSequencerExamples >> classAdditionWithSuperclassMethodModificationForExport [
+	"Check that adding a class when the superclass only has methods modified is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #SuperClassGone).
+	fileReference := self class testDataRoot / 'Issue2961-2' / 'Pharo10-SNAPSHOT-64bit-2314c3f.3699hxpexw9en86vig1dlpbso.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 4.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassAddition #EpMethodModification).
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classAdditionWithSuperclassMethodModificationInImage [
+	"Check that adding a class when the superclass only has methods modified is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #SuperClassGone).
+	fileReference := self class testDataRoot / 'Issue2961-2' / 'Pharo10-SNAPSHOT-64bit-2314c3f.3699hxpexw9en86vig1dlpbso.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 4.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassAddition #EpMethodModification).
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classAdditionWithoutSuperclassForExport [
+	"Check that adding a class when one of the superclasses is missing is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #SuperClassGone).
+	fileReference := self class testDataRoot / 'Issue2961-2' / 'Pharo10-SNAPSHOT-64bit-2314c3f.cfubabs62s0q03px5en9hhqlp.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 5.
+	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassAddition #EpClassAddition #EpClassAddition #EpMethodAddition #EpMethodAddition).
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classAdditionWithoutSuperclassInImage [
+	"Check that adding a class when one of the superclasses is missing is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #SuperClassGone).
+	fileReference := self class testDataRoot / 'Issue2961-2' / 'Pharo10-SNAPSHOT-64bit-2314c3f.cfubabs62s0q03px5en9hhqlp.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 5.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: sequencedEntries isEmpty.
+	^ sequencer
+]
+
+{ #category : #examples }
 GtEpEventSequencerExamples >> classAndTraitRemovalWithoutDependentsForExport [
 	"Check that removing methods when the required class / trait is missing is sequenced correctly."
 	<gtExample>
@@ -452,45 +531,6 @@ GtEpEventSequencerExamples >> classAndTraitRemovalWithoutDependentsInImage [
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
 	self assert: entries size equals: 30.
-	sequencer := GtEpEventSequencer entries: entries inImage: true.
-	sequencedEntries := sequencer sequencedEntries.
-	self assert: sequencedEntries isEmpty.
-	^ sequencer
-]
-
-{ #category : #examples }
-GtEpEventSequencerExamples >> classAndTraitRemovalWithoutSuperclassForExport [
-	"Check that adding a class when one of the superclasses is missing is sequenced correctly."
-	<gtExample>
-	<after: #removeTestClasses>
-	| fileReference epLog entries sequencer sequencedEntries |
-
-	self deny: (self class environment includesKey: #SuperClassGone).
-	fileReference := self class testDataRoot / 'Issue2961-2' / 'Pharo10-SNAPSHOT-64bit-2314c3f.cfubabs62s0q03px5en9hhqlp.ombu'.
-	self assert: fileReference exists.
-	epLog := EpLog fromFile: fileReference.
-	entries := epLog entries.
-	self assert: entries size equals: 5.
-	sequencer := GtEpEventSequencer entries: entries inImage: false.
-	sequencedEntries := sequencer sequencedEntries.
-	self assert: (sequencedEntries collect: [ :each | each content class name ])
-		equals: #(#EpClassAddition #EpClassAddition #EpClassAddition #EpMethodAddition #EpMethodAddition).
-	^ sequencer
-]
-
-{ #category : #examples }
-GtEpEventSequencerExamples >> classAndTraitRemovalWithoutSuperclassInImage [
-	"Check that adding a class when one of the superclasses is missing is sequenced correctly."
-	<gtExample>
-	<after: #removeTestClasses>
-	| fileReference epLog entries sequencer sequencedEntries |
-
-	self deny: (self class environment includesKey: #SuperClassGone).
-	fileReference := self class testDataRoot / 'Issue2961-2' / 'Pharo10-SNAPSHOT-64bit-2314c3f.cfubabs62s0q03px5en9hhqlp.ombu'.
-	self assert: fileReference exists.
-	epLog := EpLog fromFile: fileReference.
-	entries := epLog entries.
-	self assert: entries size equals: 5.
 	sequencer := GtEpEventSequencer entries: entries inImage: true.
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: sequencedEntries isEmpty.

@@ -107,6 +107,17 @@ GtEpReplayBehaviorModel >> gtPreviousLivesFor: aView [
 ]
 
 { #category : #accessing }
+GtEpReplayBehaviorModel >> gtPreviousNamesFor: aView [
+	<gtView>
+	
+	^ aView list
+		title: 'Previous Names';
+		priority: 45;
+		items: [ previousNames ];
+		actionUpdateButton
+]
+
+{ #category : #accessing }
 GtEpReplayBehaviorModel >> hasCommentEntry [
 
 	^ comments isNotEmpty

@@ -4,6 +4,24 @@ Class {
 	#category : #'GToolkit4Epicea-History'
 }
 
+{ #category : #accessing }
+GtEpiceaEntityHistory >> entries [
+	"Answer all the receiver's {{gtClass:OmEntry}}s"
+
+	^ self subclassResponsibility
+]
+
+{ #category : #ui }
+GtEpiceaEntityHistory >> gtEventsFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Change List';
+		priority: 2;
+		object: [ GtEpiceaExplicitLog on: self entries ];
+		view: #gtEventsFor:
+]
+
 { #category : #'gt - extensions' }
 GtEpiceaEntityHistory >> gtViewChangesCount [
 	^ self subclassResponsibility

@@ -6,6 +6,12 @@ Class {
 	#category : #'GToolkit4Epicea-History'
 }
 
+{ #category : #accessing }
+GtEpiceaEntityHistoriesGroup >> entries [
+
+	^ self items flatCollect: #entries
+]
+
 { #category : #'gt - extensions' }
 GtEpiceaEntityHistoriesGroup >> gtViewChangeHistoryChildren [
 	^ self items

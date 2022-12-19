@@ -35,7 +35,7 @@ GtEpReplayClassModel >> definesBehaviorInImage: aGtEpReplayImageModel [
 				behaviorAt: superclassSymbol
 				ifPresent: [ :superclass | superclass definesBehaviorInImage: aGtEpReplayImageModel ]
 				ifAbsent: [ self environment includesKey: superclassSymbol ] ]
-		ifNone: [ false ]
+		ifNone: [ self environment includesKey: self behaviorAffectedName asSymbol. ]
 ]
 
 { #category : #testing }
