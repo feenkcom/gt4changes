@@ -18,7 +18,7 @@ GtEpReplayTraitModel >> addTraitRemoval: anOmEntry [
 ]
 
 { #category : #testing }
-GtEpReplayTraitModel >> definesBehavior [
+GtEpReplayTraitModel >> definesBehaviorInImage: aGtEpReplayImageModel [
 	"Answer a boolean indicating whether the receiver defines its class / trait.
 	I.e. are there entries which add the behavior."
 

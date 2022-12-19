@@ -22,13 +22,19 @@ GtEpReplayClassModel >> addBehaviorRename: anOmEntry [
 ]
 
 { #category : #testing }
-GtEpReplayClassModel >> definesBehavior [
+GtEpReplayClassModel >> definesBehaviorInImage: aGtEpReplayImageModel [
 	"Answer a boolean indicating whether the receiver defines its class / trait.
 	I.e. are there entries which add the behavior."
 
-	^ entries
+	^ entries reversed
 		detect: [ :entry | entry content isEpClassAddition or: [ entry content isEpClassModification ] ]
-		ifFound: [ :entry | true ]
+		ifFound: [ :entry | | superclassSymbol |
+			superclassSymbol := entry content behaviorAffected superclassName asSymbol.
+			"The definition actually defines only if the superclass is defined"
+			aGtEpReplayImageModel
+				behaviorAt: superclassSymbol
+				ifPresent: [ :superclass | superclass definesBehaviorInImage: aGtEpReplayImageModel ]
+				ifAbsent: [ self environment includesKey: superclassSymbol ] ]
 		ifNone: [ false ]
 ]
 

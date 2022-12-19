@@ -133,7 +133,8 @@ GtEpReplayImageModel >> addOtherChange: anOmEntry [
 GtEpReplayImageModel >> addProtocolAddition: anOmEntry [
 	| behavior |
 
-	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName.
+	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName
+		ifAbsentPut: [ :baseName | GtEpReplayClassModel new name: baseName ].
 	behavior addProtocolAddition: anOmEntry.
 ]
 
@@ -141,7 +142,8 @@ GtEpReplayImageModel >> addProtocolAddition: anOmEntry [
 GtEpReplayImageModel >> addProtocolRemoval: anOmEntry [
 	| behavior |
 
-	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName.
+	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName
+		ifAbsentPut: [ :baseName | GtEpReplayClassModel new name: baseName ].
 	behavior addProtocolRemoval: anOmEntry.
 ]
 
@@ -258,12 +260,6 @@ GtEpReplayImageModel >> classOrTraitNamed: aSymbol ifAbsentPut: putBlock [
 	 ^ meta 
 		ifTrue: [ behavior classSide ]
 		ifFalse: [ behavior ]
-]
-
-{ #category : #accessing }
-GtEpReplayImageModel >> environment [
-
-	^ self class environment
 ]
 
 { #category : #ui }

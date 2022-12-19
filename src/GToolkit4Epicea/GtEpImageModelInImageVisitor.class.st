@@ -116,7 +116,7 @@ GtEpImageModelInImageVisitor >> currentBehavior [
 GtEpImageModelInImageVisitor >> currentOrPreviousBehaviorNameExists [
 	"Answer a boolean indicating whether the current or one of the previous behaviour's names exists in the current image."
 
-	(currentBehaviorModel definesBehavior or:
+	((currentBehaviorModel definesBehaviorInImage: image) or:
 		[ self environment includesKey: currentBehaviorModel behaviorAffectedName ]) ifTrue: [ ^ true ].
 	^ currentBehaviorModel previousNames
 		detect: [ :name | self environment includesKey: name asSymbol ]
