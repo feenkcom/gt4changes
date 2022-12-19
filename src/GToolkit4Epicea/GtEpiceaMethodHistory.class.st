@@ -31,6 +31,22 @@ GtEpiceaMethodHistory >> changes: anObject [
 	changes := anObject
 ]
 
+{ #category : #accessing }
+GtEpiceaMethodHistory >> entries [
+
+	^ changes entries
+]
+
+{ #category : #accessing }
+GtEpiceaMethodHistory >> gtActionApplyFor: anAction [
+	<gtAction>
+	latestChange content isCodeChange ifFalse: [ ^ anAction noAction ].
+
+	^ anAction button
+		label: 'Apply';
+		action: [ :button | latestChange content applyCodeChange ]
+]
+
 { #category : #'gt - extensions' }
 GtEpiceaMethodHistory >> gtDiffFor: aView [
 	<gtView>
