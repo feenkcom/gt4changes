@@ -100,17 +100,20 @@ GtEpLogEnumerator >> priorEntriesFrom: aReference [
 GtEpLogEnumerator >> priorEntriesFrom: endOmReference backTo: startOmReference do: aBlock [
 	"Evaluate aBlock for each event in the chain of events leading up to the supplied reference, in reverse chronological order.
 	Events that are not part of the headReference are excluded."
-	| currentLog currentReference |
+	| currentLog currentReference previousReference |
 
 	self assert: endOmReference globalName = latestLog headReference globalName.
 	currentLog := latestLog.
 	currentReference := endOmReference.
 	[ currentReference isNull or: [ currentReference = startOmReference ] ] whileFalse:
-		[ currentReference := self 
+		[ previousReference := currentReference.
+		currentReference := self 
 			priorEntriesIn: currentLog 
 			from: currentReference 
 			backTo: startOmReference 
 			do: aBlock.
+		previousReference = currentReference ifTrue:
+			[ self error: 'Epicea log file circular reference detected' ].
 		currentReference isNull ifFalse:
 			[ currentLog := self previousLogFrom: currentReference.
 			currentLog ifNil: [ currentReference := OmNullReference uniqueInstance ] ] ].
