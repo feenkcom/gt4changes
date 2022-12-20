@@ -28,6 +28,12 @@ GtEpiceaBranchHistory >> changes: anObject [
 ]
 
 { #category : #accessing }
+GtEpiceaBranchHistory >> entries [
+
+	^ changes entries
+]
+
+{ #category : #accessing }
 GtEpiceaBranchHistory >> gtEventsFor: aView [
 	<gtView>
 
