@@ -21,8 +21,9 @@ GtEpReplayImageModel >> addBehaviorCategoryChange: anOmEntry [
 	| behavior event |
 
 	event := anOmEntry content.
-	behavior := self classOrTraitNamed: event oldName
+	behavior := self classOrTraitNamed: event behaviorAffectedName
 		ifAbsentPut: [ :baseName | (self behaviorModelFor: event) name: baseName ].
+
 	behavior addCategoryChange: anOmEntry.
 ]
 
@@ -31,8 +32,9 @@ GtEpReplayImageModel >> addBehaviorCommentChange: anOmEntry [
 	| behavior event |
 
 	event := anOmEntry content.
-	behavior := self classOrTraitNamed: event oldName
+	behavior := self classOrTraitNamed: event behaviorAffectedName
 		ifAbsentPut: [ :baseName | (self behaviorModelFor: event) name: baseName ].
+
 	behavior addBehaviorCommentChange: anOmEntry.
 ]
 
