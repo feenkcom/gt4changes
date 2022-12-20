@@ -18,17 +18,21 @@ GtEpReplayImageModel >> accept: aVisitor [
 
 { #category : #adding }
 GtEpReplayImageModel >> addBehaviorCategoryChange: anOmEntry [
-	| behavior |
+	| behavior event |
 
-	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName.
+	event := anOmEntry content.
+	behavior := self classOrTraitNamed: event oldName
+		ifAbsentPut: [ :baseName | (self behaviorModelFor: event) name: baseName ].
 	behavior addCategoryChange: anOmEntry.
 ]
 
 { #category : #adding }
 GtEpReplayImageModel >> addBehaviorCommentChange: anOmEntry [
-	| behavior |
+	| behavior event |
 
-	behavior := self classOrTraitNamed: anOmEntry content behaviorAffectedName.
+	event := anOmEntry content.
+	behavior := self classOrTraitNamed: event oldName
+		ifAbsentPut: [ :baseName | (self behaviorModelFor: event) name: baseName ].
 	behavior addBehaviorCommentChange: anOmEntry.
 ]
 
