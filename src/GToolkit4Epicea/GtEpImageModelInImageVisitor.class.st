@@ -71,7 +71,7 @@ GtEpImageModelInImageVisitor >> behaviorModificationEntryDiffersFromCurrent: anO
 { #category : #testing }
 GtEpImageModelInImageVisitor >> behaviorNameExists: aSymbol [
 
-	^ self class environment includesKey: aSymbol.
+	^ self class environment includesKey: aSymbol asSymbol.
 ]
 
 { #category : #testing }

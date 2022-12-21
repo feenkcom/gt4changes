@@ -1001,6 +1001,66 @@ GtEpEventSequencerExamples >> methodRemovalWithoutDependentsInImage [
 ]
 
 { #category : #examples }
+GtEpEventSequencerExamples >> removeExistingClassForExport [
+	"Check that removing a class that is already in the image is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #Issue2961).
+	fileReference := self class testDataRoot / 'Issue2961-3' / 'Pharo10-SNAPSHOT-64bit-2314c3f.2adndgfuoq0bg86t1y9x6ssxk.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 2.
+	EpMonitor disableDuring: [ entries do: [ :entry |
+		entry content applyCodeChange ] ].
+	self assert: (self class environment includesKey: #Issue2961).
+
+	fileReference := self class testDataRoot / 'Issue2961-3' / 'Pharo10-SNAPSHOT-64bit-2314c3f.aje0o0eb1zbt8670wq78g31mk.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 2.
+
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassRemoval).
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> removeExistingClassInImage [
+	"Check that removing a class that is already in the image is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #Issue2961).
+	fileReference := self class testDataRoot / 'Issue2961-3' / 'Pharo10-SNAPSHOT-64bit-2314c3f.2adndgfuoq0bg86t1y9x6ssxk.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 2.
+	EpMonitor disableDuring: [ entries do: [ :entry |
+		entry content applyCodeChange ] ].
+	self assert: (self class environment includesKey: #Issue2961).
+
+	fileReference := self class testDataRoot / 'Issue2961-3' / 'Pharo10-SNAPSHOT-64bit-2314c3f.aje0o0eb1zbt8670wq78g31mk.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 2.
+
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassRemoval).
+	^ sequencer
+]
+
+{ #category : #examples }
 GtEpEventSequencerExamples >> removeMethodAndClassForExport [
 	"Check that a method and class remove is sequenced correctly."
 	<gtExample>
@@ -1051,7 +1111,7 @@ GtEpEventSequencerExamples >> removeTestClasses [
 		#Issue2936 #Issue2936v2 
 		#Issue2936v4 #Issue2936v41 #Issue2936v42 #Issue2936v43
 		#Issue2936v5 #Issue2936v51 #Issue2936v52
-		#Issue2961Class #Issue2961Renamed) do: [ :each |
+		#Issue2961 #Issue2961Class #Issue2961Renamed) do: [ :each |
 			self class environment removeClassNamed: each ].
 		self class environment organization
 			removeCategory: #Issue2924;
@@ -1060,7 +1120,8 @@ GtEpEventSequencerExamples >> removeTestClasses [
 			removeCategory: #Issue2936v4;
 			removeCategory: #Issue2936v41;
 			removeCategory: #Issue2936v5;
-			removeCategory: #Issue2961 ].
+			removeCategory: #Issue2961;
+			removeCategory: #GtEpEventSequencerExampleChecks ].
 ]
 
 { #category : #examples }

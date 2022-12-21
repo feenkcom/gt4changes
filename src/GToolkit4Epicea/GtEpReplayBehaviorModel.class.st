@@ -180,7 +180,7 @@ GtEpReplayBehaviorModel >> name: anObject [
 GtEpReplayBehaviorModel >> originalBehaviorNameAffected [
 	"Answer the name of the receiver's behavior prior to any renames"
 
-	entries
+	^ entries
 		detect: [ :entry | entry content isEpBehaviorNameChange ]
 		ifFound: [ :entry | entry content oldName ]
 		ifNone: [ entries last content behaviorAffectedName ].
