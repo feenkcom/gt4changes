@@ -115,8 +115,8 @@ GtEpLogEnumerator >> priorEntriesFrom: endOmReference backTo: startOmReference d
 		currentReference isNull ifFalse:
 			[ currentLog := self previousLogFrom: currentReference.
 			currentLog ifNil: [ currentReference := OmNullReference uniqueInstance ] ].
-		previousReference = currentReference ifTrue:
-			[ self halt: 'Epicea log file circular reference detected' ] ].
+		"previousReference = currentReference ifTrue:
+			[ self halt: 'Epicea log file circular reference detected' ]" ].
 ]
 
 { #category : #enumerating }
