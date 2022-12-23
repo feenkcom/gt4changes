@@ -1,6 +1,14 @@
 Extension { #name : #OmBlockFileStore }
 
 { #category : #'*GToolkit4Epicea' }
+OmBlockFileStore >> blockForLocalNameAsInteger: anIndex [
+
+	self checkIfMustRefresh.
+	blocks reverseDo: [:each | each firstLocalNameAsInteger <= anIndex ifTrue: [ ^each ] ].
+	^ self error: 'block not found'
+]
+
+{ #category : #'*GToolkit4Epicea' }
 OmBlockFileStore >> reset [
 	self fileReference ensureDelete ensureCreateFile.
 
