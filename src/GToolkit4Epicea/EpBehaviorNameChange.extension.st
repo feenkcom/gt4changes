@@ -10,6 +10,13 @@ EpBehaviorNameChange >> = other [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+EpBehaviorNameChange >> hash [
+	^ self species hash
+		bitXor: (self behaviorAffectedName hash
+				bitXor: (self oldName hash bitXor: self newName hash))
+]
+
+{ #category : #'*GToolkit4Epicea' }
 EpBehaviorNameChange >> isEpBehaviorNameChange [
 
 	^ true
