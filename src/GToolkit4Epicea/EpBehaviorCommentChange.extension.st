@@ -10,6 +10,13 @@ EpBehaviorCommentChange >> = other [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+EpBehaviorCommentChange >> hash [
+	^ self species hash
+		bitXor: (self behaviorAffectedName hash
+				bitXor: (self oldComment hash bitXor: self newComment hash))
+]
+
+{ #category : #'*GToolkit4Epicea' }
 EpBehaviorCommentChange >> initializeWithBehavior: aBehavior oldComment: anOldComment newComment: aNewComment oldStamp: anOldStamp newStamp: aNewStamp [
 
 	(newComment = 'nil' or: [ oldComment = 'nil' ]) ifTrue:

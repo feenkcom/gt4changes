@@ -12,3 +12,9 @@ EpCategoryChange >> = other [
 EpCategoryChange >> affectedMarker [
 	^ self affectedPackageName
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpCategoryChange >> hash [
+	^ self species hash
+		bitXor: (self affectedPackageName hash bitXor: self categoryName hash)
+]

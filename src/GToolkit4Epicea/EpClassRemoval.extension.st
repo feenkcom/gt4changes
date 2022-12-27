@@ -9,6 +9,12 @@ EpClassRemoval >> = other [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+EpClassRemoval >> hash [
+	^ self species hash
+		bitXor: (self behaviorAffectedName hash bitXor: self classRemoved hash)
+]
+
+{ #category : #'*GToolkit4Epicea' }
 EpClassRemoval >> isEpClassRemoval [
 
 	^ true.

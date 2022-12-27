@@ -13,6 +13,16 @@ EpMethodModification >> = other [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+EpMethodModification >> hash [
+	^ super hash
+		bitXor: (self newMethod hash
+				bitXor: (self oldMethod hash
+						bitXor: (self newProtocol hash
+								bitXor: (self oldProtocol hash
+										bitXor: (self oldSourceCode hash bitXor: self newSourceCode hash)))))
+]
+
+{ #category : #'*GToolkit4Epicea' }
 EpMethodModification >> isEpMethodModification [
 
 	^ true

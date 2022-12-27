@@ -10,6 +10,13 @@ EpTraitModification >> = other [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+EpTraitModification >> hash [
+	^ self species hash
+		bitXor: (self behaviorAffectedName hash
+				bitXor: (self oldTrait hash bitXor: self newTrait hash))
+]
+
+{ #category : #'*GToolkit4Epicea' }
 EpTraitModification >> isEpTraitModification [
 
 	^ true

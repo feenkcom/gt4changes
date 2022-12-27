@@ -10,6 +10,12 @@ EpClassModification >> = other [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+EpClassModification >> hash [
+	^ self species hash
+		bitXor: (self behaviorAffectedName bitXor: (self oldClass hash bitXor: self newClass))
+]
+
+{ #category : #'*GToolkit4Epicea' }
 EpClassModification >> isEpClassModification [
 
 	^ true.

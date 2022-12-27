@@ -17,3 +17,9 @@ EpMethodChange >> affectedMarker [
 EpMethodChange >> gtAffectedPackageName [ 
 	^ self methodAffected package 
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpMethodChange >> hash [
+	^ self species hash
+		bitXor: (self behaviorAffectedName hash bitXor: self methodAffected hash)
+]

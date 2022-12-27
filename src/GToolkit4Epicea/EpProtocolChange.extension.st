@@ -14,3 +14,9 @@ EpProtocolChange >> affectedMarker [
 
 	^ { EpProtocolChange. self behaviorAffectedName }
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpProtocolChange >> hash [
+	^ self species hash
+		bitXor: (self behaviorAffectedName hash bitXor: self protocol hash)
+]

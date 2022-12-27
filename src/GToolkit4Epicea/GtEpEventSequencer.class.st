@@ -17,22 +17,6 @@ Class {
 }
 
 { #category : #sequencing }
-GtEpEventSequencer class >> entries: anEpEntryCollection includeCurrent: currentBoolean [
-
-	^ currentBoolean ifTrue:
-		[ self new
-			entries: anEpEntryCollection;
-			sequencedEntriesForExport;
-			yourself ]
-	ifFalse:
-		[ self new
-			entries: anEpEntryCollection;
-			sequencedEntriesInImage;
-			yourself ]
-
-]
-
-{ #category : #sequencing }
 GtEpEventSequencer class >> entries: anEpEntryCollection inImage: inImageBoolean [
 
 	^ inImageBoolean ifTrue:
@@ -44,6 +28,22 @@ GtEpEventSequencer class >> entries: anEpEntryCollection inImage: inImageBoolean
 		[ self new
 			entries: anEpEntryCollection;
 			sequencedEntriesForExport;
+			yourself ]
+
+]
+
+{ #category : #sequencing }
+GtEpEventSequencer class >> entries: anEpEntryCollection includeCurrent: currentBoolean [
+
+	^ currentBoolean ifTrue:
+		[ self new
+			entries: anEpEntryCollection;
+			sequencedEntriesForExport;
+			yourself ]
+	ifFalse:
+		[ self new
+			entries: anEpEntryCollection;
+			sequencedEntriesInImage;
 			yourself ]
 
 ]
