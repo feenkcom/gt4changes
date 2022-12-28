@@ -1,8 +1,8 @@
 Class {
 	#name : #GtEpiceaEntriesGroup,
 	#superclass : #Object,
-	#traits : 'TGtGroup + TGtGroupItems',
-	#classTraits : 'TGtGroup classTrait + TGtGroupItems classTrait',
+	#traits : 'TGtGroupWithItems',
+	#classTraits : 'TGtGroupWithItems classTrait',
 	#category : #'GToolkit4Epicea-Model'
 }
 
@@ -31,6 +31,16 @@ GtEpiceaEntriesGroup >> changesGroupedByBranch [
 GtEpiceaEntriesGroup >> classHistories [
 	^ GtEpiceaClassesHistoryBuilder 
 		buildHistoryForEntriesGroup: self
+]
+
+{ #category : #enumerating }
+GtEpiceaEntriesGroup >> detectMax: aBlock [
+	^ self items detectMax: aBlock
+]
+
+{ #category : #enumerating }
+GtEpiceaEntriesGroup >> detectMin: aBlock [
+	^ self items detectMin: aBlock
 ]
 
 { #category : #accessing }
