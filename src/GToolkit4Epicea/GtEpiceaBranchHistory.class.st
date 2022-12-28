@@ -59,7 +59,7 @@ GtEpiceaBranchHistory >> gtViewChangeHistoryChildren [
 { #category : #accessing }
 GtEpiceaBranchHistory >> gtViewChangeIcon [
 
-	^ Smalltalk ui icons iconNamed: #windowMinimizeInactive.
+	^ Smalltalk ui icons iconNamed: #branch.
 ]
 
 { #category : #accessing }
