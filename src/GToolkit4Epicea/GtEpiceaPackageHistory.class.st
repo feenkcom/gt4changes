@@ -25,6 +25,13 @@ GtEpiceaPackageHistory >> classHistories [
 	^ classHistories
 ]
 
+{ #category : #accessing }
+GtEpiceaPackageHistory >> entries [
+	"Answer all the receiver's {{gtClass:OmEntry}}s"
+
+	^ classHistories entries
+]
+
 { #category : #'gt - extensions' }
 GtEpiceaPackageHistory >> gtViewChangeDescriptionElements [
 	^ {BlTextElement new 

@@ -6,6 +6,11 @@ Class {
 	#category : #'GToolkit4Epicea-Model'
 }
 
+{ #category : #accessing }
+GtEpiceaEntriesGroup >> asAsyncStream [
+	^ AsyncSequenceStream forCollection: self
+]
+
 { #category : #'accessing - filtering' }
 GtEpiceaEntriesGroup >> behaviorChanges [
 	^ self select: [ :anOmbuEntry |
