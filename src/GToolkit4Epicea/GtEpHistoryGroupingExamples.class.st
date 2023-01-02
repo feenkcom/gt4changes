@@ -98,8 +98,6 @@ GtEpHistoryGroupingExamples >> secondaryPackageNameForTesting [
 
 { #category : #setup }
 GtEpHistoryGroupingExamples >> tearDown [
-	self inform: 'terminating'.
-	
 	theMonitor disable.	
 	theCodeFactory cleanUp.
 	theLogBuilder cleanUp.
