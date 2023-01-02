@@ -48,20 +48,20 @@ GtEpHistoryGroupingExamples >> createAndMoveClassToDifferentTag [
 ]
 
 { #category : #'events generation' }
-GtEpHistoryGroupingExamples >> createClassAndMethodEventsWithNoImpact [
+GtEpHistoryGroupingExamples >> createMethodEventsWithNoImpactInNewClass [
 	<gtExample>
 	<after: #tearDown>
-	| aClass |
+	| newClass |
 
-	aClass := self classFactory newClass.
+	newClass := self classFactory newClass.
 	
-	aClass compile: 'fortyTwo ^42'.
-	aClass compile: 'fortyTwo ^40+1'.
-	(aClass methodNamed: #fortyTwo) protocol: 'new-protocol' .
-	aClass removeSelector: #fortyTwo.
+	newClass compile: 'fortyTwo ^42'.
+	newClass compile: 'fortyTwo ^40+1'.
+	(newClass methodNamed: #fortyTwo) protocol: 'new-protocol' .
+	newClass removeSelector: #fortyTwo.
 	
-	aClass compile: 'fortyThree ^43'.
-	aClass removeSelector: #fortyThree.
+	newClass compile: 'fortyThree ^43'.
+	newClass removeSelector: #fortyThree.
 	
 	^ GtEpiceaEntriesGroup withAll:theMonitor log entries
 ]
@@ -98,24 +98,9 @@ GtEpHistoryGroupingExamples >> secondaryPackageNameForTesting [
 
 { #category : #setup }
 GtEpHistoryGroupingExamples >> tearDown [
-	self inform: 'terminating'.
-	
 	theMonitor disable.	
 	theCodeFactory cleanUp.
 	theLogBuilder cleanUp.
-]
-
-{ #category : #examples }
-GtEpHistoryGroupingExamples >> testClassAndMethodEventsWithNoMethodImpact [
-	<gtExample>
-	| entries methodHistories |
-	entries := self createClassAndMethodEventsWithNoImpact.
-	methodHistories := entries methodHistories.
-	
-	self assert: methodHistories hasNoEffect.
-	self assert: methodHistories size equals: 2.
-	
-	^ entries
 ]
 
 { #category : #examples }
@@ -132,4 +117,47 @@ GtEpHistoryGroupingExamples >> testClassMoveBetweenPackagesWithByPackageGrouping
 	self assert: mainPackageHistory hasNoEffect.
 	
 	^ packageHistories
+]
+
+{ #category : #examples }
+GtEpHistoryGroupingExamples >> testMethodEventsWithNoImpactInNewClass [
+	<gtExample>
+	| entries methodHistories |
+	entries := self createMethodEventsWithNoImpactInNewClass.
+	methodHistories := entries methodHistories.
+	
+	self assert: methodHistories hasNoEffect.
+	self assert: methodHistories size equals: 2.
+	
+	^ entries
+]
+
+{ #category : #examples }
+GtEpHistoryGroupingExamples >> testTransformMethodToExtensionMethodEventsGrouping [
+	<gtExample>
+	| entries packageHistories |
+	entries := self transformMethodToExtensionMethodEvents.
+	packageHistories := entries packageHistories.
+	
+	self assert: packageHistories hasNoEffect not.
+	self assert: packageHistories size equals: 2.
+	
+	^ entries
+]
+
+{ #category : #'events generation' }
+GtEpHistoryGroupingExamples >> transformMethodToExtensionMethodEvents [
+	<gtExample>
+	<after: #tearDown>
+	| newClass |
+	
+	newClass := self classFactory newClass.
+	newClass compile: 'fortyTwo ^42'.
+
+	self packageFactory 
+		createNewPackageNamed: self secondaryPackageNameForTesting.
+	
+	(newClass methodNamed: #fortyTwo) protocol: '*', self secondaryPackageNameForTesting.
+	
+	^ GtEpiceaEntriesGroup withAll:theMonitor log entries
 ]
