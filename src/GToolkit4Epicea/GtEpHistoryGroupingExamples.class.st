@@ -82,7 +82,7 @@ GtEpHistoryGroupingExamples >> ensureSetup [
 { #category : #accessing }
 GtEpHistoryGroupingExamples >> mainPackageNameForTesting [
 
-	^ #'CategoryForTestToBeDeleted'
+	^ #'CategoryForTestToBeDeleted-Default'
 ]
 
 { #category : #accessing }
@@ -135,12 +135,33 @@ GtEpHistoryGroupingExamples >> testMethodEventsWithNoImpactInNewClass [
 { #category : #examples }
 GtEpHistoryGroupingExamples >> testTransformMethodToExtensionMethodEventsGrouping [
 	<gtExample>
-	| entries packageHistories |
+	
+	| entries packageHistories mainPackageHistory secondPackageHistory methodHistoryInMainPackage methodHistoryInSecondPackage |
 	entries := self transformMethodToExtensionMethodEvents.
 	packageHistories := entries packageHistories.
 	
 	self assert: packageHistories hasNoEffect not.
 	self assert: packageHistories size equals: 2.
+	
+	mainPackageHistory := packageHistories 
+		historyForPackageNamed: self mainPackageNameForTesting.
+	self assert: mainPackageHistory hasNoEffect not.
+	
+	secondPackageHistory := packageHistories 
+		historyForPackageNamed: self secondaryPackageNameForTesting.
+	self assert: mainPackageHistory hasNoEffect not.
+	
+	methodHistoryInMainPackage := mainPackageHistory classHistories first methodHistories first.
+	self assert: methodHistoryInMainPackage hasNoEffect.
+	self assert: methodHistoryInMainPackage changes size equals: 2.
+	self assert: methodHistoryInMainPackage isInitialChangeAddition.
+	self assert: methodHistoryInMainPackage isLatestChangeRemoval.
+	
+	methodHistoryInSecondPackage := secondPackageHistory classHistories first methodHistories first.
+	self assert: methodHistoryInSecondPackage hasNoEffect not.
+	self assert: methodHistoryInSecondPackage changes size equals: 1.
+	self assert: methodHistoryInSecondPackage isInitialChangeAddition.
+	self assert: methodHistoryInSecondPackage isLatestChangeRemoval not.
 	
 	^ entries
 ]

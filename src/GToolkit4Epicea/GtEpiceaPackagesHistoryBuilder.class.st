@@ -38,9 +38,20 @@ GtEpiceaPackagesHistoryBuilder >> addExtraEventForCategoryChangeFor: anOmbuEntry
 
 { #category : #'accessing - grouping' }
 GtEpiceaPackagesHistoryBuilder >> addExtraEventForExtensionMethodFor: anOmbuEntry toGroups: groupedByPackageName [ 
-	anOmbuEntry class = EpMethodModification ifFalse: [ ^ self ].
+	| event previousPackageName|
+	event := anOmbuEntry content.
+	event class = EpMethodModification ifFalse: [ ^ self ].
 	
-	"TODO"
+	"We add an extra event in case the protocol of an extension method is involved"
+	event gtIsProtocolChangeForExtensionMethod ifFalse: [ ^ self ].
+	
+	previousPackageName := event gtPreviousPackageName.
+	previousPackageName ifNil: [ ^ self ].
+	
+	self 
+		addCodeEntityChange: anOmbuEntry
+		toPackageNamed: previousPackageName
+		inGroups: groupedByPackageName
 ]
 
 { #category : #actions }
@@ -90,10 +101,10 @@ GtEpiceaPackagesHistoryBuilder >> groupedByPackageName [
 			toGroups: groupedByPackageName.
 		self 
 			addExtraEventForCategoryChangeFor: anOmbuEntry 
-			toGroups: groupedByPackageName."
+			toGroups: groupedByPackageName.
 		self 
 			addExtraEventForExtensionMethodFor: anOmbuEntry	
-			toGroups: groupedByPackageName" ].
+			toGroups: groupedByPackageName ].
 	
 	^ groupedByPackageName
 ]

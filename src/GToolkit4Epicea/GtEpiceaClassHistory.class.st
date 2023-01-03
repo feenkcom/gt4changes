@@ -19,6 +19,11 @@ GtEpiceaClassHistory class >> forClass: aTargetClass withBehaviourChanges: aColl
 				sorted: [ :anEntry | anEntry gtTime] descending ))
 ]
 
+{ #category : #accessing }
+GtEpiceaClassHistory class >> methodHistoryType [
+	^ GtEpiceaMethodHistory
+]
+
 { #category : #adding }
 GtEpiceaClassHistory >> addMethodHistory: aMethodHistory [
 	self methodHistories add: aMethodHistory 

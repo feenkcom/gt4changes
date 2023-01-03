@@ -41,7 +41,10 @@ GtEpiceaClassesHistoryBuilder >> buildHistory [
 
 { #category : #actions }
 GtEpiceaClassesHistoryBuilder >> buildMethodHistories [
-	^ self entriesGroup methodHistories
+	^ (GtEpiceaMethodsHistoryBuilder
+		forEntriesGroup: self entriesGroup) 
+			methodHistoryTypeName: self classHistoryType methodHistoryType name;
+			buildHistory
 ]
 
 { #category : #accessing }
