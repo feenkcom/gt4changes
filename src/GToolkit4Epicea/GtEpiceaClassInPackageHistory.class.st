@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #accessing }
+GtEpiceaClassInPackageHistory class >> methodHistoryType [
+	^ GtEpiceaMethodInPackageHistory
+]
+
+{ #category : #accessing }
 GtEpiceaClassInPackageHistory >> isInitialBehaviourChangeAddition [
 	| epEvent |
 	
@@ -36,5 +41,7 @@ GtEpiceaClassInPackageHistory >> targetPackageName [
 { #category : #accessing }
 GtEpiceaClassInPackageHistory >> targetPackageName: aPackageName [
 
-	targetPackageName := aPackageName
+	targetPackageName := aPackageName.
+	methodHistories do: [ :aMethodHistory |
+		aMethodHistory targetPackageName: aPackageName ] 
 ]

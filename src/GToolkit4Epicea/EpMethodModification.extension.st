@@ -13,6 +13,21 @@ EpMethodModification >> = other [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+EpMethodModification >> gtIsProtocolChangeForExtensionMethod [
+	self oldProtocol = self newProtocol ifTrue: [ ^ false ].
+	
+	^ ((self oldProtocol beginsWith: '*') or: [
+		self newProtocol beginsWith: '*' ])
+]
+
+{ #category : #'*GToolkit4Epicea' }
+EpMethodModification >> gtPreviousPackageName [
+	^ (self oldProtocol beginsWith: '*')
+		ifTrue: [ self oldProtocol copyWithFirst: '*' ] 
+		ifFalse: [ self classPackageName ]
+]
+
+{ #category : #'*GToolkit4Epicea' }
 EpMethodModification >> hash [
 	^ super hash
 		bitXor: (self newMethod hash
@@ -20,6 +35,16 @@ EpMethodModification >> hash [
 						bitXor: (self newProtocol hash
 								bitXor: (self oldProtocol hash
 										bitXor: (self oldSourceCode hash bitXor: self newSourceCode hash)))))
+]
+
+{ #category : #'*GToolkit4Epicea' }
+EpMethodModification >> initializeWithOldMethod: anOldMethod newMethod: aNewMethod [
+
+	self initialize.
+	oldMethod := anOldMethod asEpiceaRingDefinition.
+	newMethod := aNewMethod asEpiceaRingDefinition.
+	
+	self updateClassPackageName.
 ]
 
 { #category : #'*GToolkit4Epicea' }

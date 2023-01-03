@@ -37,5 +37,12 @@ BaselineOfGToolkit4Changes >> postLoadEpiceaChanges: spec [
  			self class environment
  				at: #TGtEpBehaviorCategoryChangeOldPackageName 
  				ifPresent: [ :aTrait |
- 					aClass addToComposition: aTrait ] ])
+ 					aClass addToComposition: aTrait ] ]).
+ 	(self class environment 
+ 		at: #EpMethodModification 
+ 		ifPresent: [ :aClass |
+ 			self class environment
+ 				at: #TGtEpMethodModificationClassPackagename 
+ 				ifPresent: [ :aTrait |
+ 					aClass addToComposition: aTrait ] ]).
 ]
