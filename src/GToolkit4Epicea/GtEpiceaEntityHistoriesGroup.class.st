@@ -52,6 +52,11 @@ GtEpiceaEntityHistoriesGroup >> gtViewHistoriesFor: aView [
 ]
 
 { #category : #testing }
+GtEpiceaEntityHistoriesGroup >> hasEffect [
+	^ self hasNoEffect not
+]
+
+{ #category : #testing }
 GtEpiceaEntityHistoriesGroup >> hasNoEffect [
 	^ self items allSatisfy: [ :aMethodHistory |
 		aMethodHistory hasNoEffect ]

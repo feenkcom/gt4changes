@@ -48,6 +48,24 @@ GtEpHistoryGroupingExamples >> createAndMoveClassToDifferentTag [
 ]
 
 { #category : #'events generation' }
+GtEpHistoryGroupingExamples >> createAndRemoveClassWithMethodEvents [
+	<gtExample>
+	<after: #tearDown>
+	| newClass |
+
+	newClass := self classFactory newClass.
+	
+	newClass compile: 'fortyTwo ^42'.
+	newClass removeSelector: #fortyTwo.
+	
+	newClass compile: 'fortyThree ^43'.
+	
+	newClass removeFromSystem.
+	
+	^ GtEpiceaEntriesGroup withAll:theMonitor log entries
+]
+
+{ #category : #'events generation' }
 GtEpHistoryGroupingExamples >> createMethodEventsWithNoImpactInNewClass [
 	<gtExample>
 	<after: #tearDown>
@@ -85,6 +103,26 @@ GtEpHistoryGroupingExamples >> mainPackageNameForTesting [
 	^ #'CategoryForTestToBeDeleted-Default'
 ]
 
+{ #category : #'events generation' }
+GtEpHistoryGroupingExamples >> moveExtensionMethodBetweetPackagesEvents [
+	<gtExample>
+	<after: #tearDown>
+	| newClass |
+	
+	newClass := self classFactory newClass.
+	newClass compile: 'fortyTwo ^42'.
+
+	self packageFactory 
+		createNewPackageNamed: self secondaryPackageNameForTesting.
+	self packageFactory 
+		createNewPackageNamed: self thirdPackageNameForTesting.
+	
+	(newClass methodNamed: #fortyTwo) protocol: '*', self secondaryPackageNameForTesting.
+	(newClass methodNamed: #fortyTwo) protocol: '*', self thirdPackageNameForTesting.
+	
+	^ GtEpiceaEntriesGroup withAll:theMonitor log entries
+]
+
 { #category : #accessing }
 GtEpHistoryGroupingExamples >> packageFactory [
 	^ self codeFactory packageFactory
@@ -120,20 +158,96 @@ GtEpHistoryGroupingExamples >> testClassMoveBetweenPackagesWithByPackageGrouping
 ]
 
 { #category : #examples }
-GtEpHistoryGroupingExamples >> testMethodEventsWithNoImpactInNewClass [
+GtEpHistoryGroupingExamples >> testCreateAndRemoveClassWithMethodEventsGrouping [
 	<gtExample>
-	| entries methodHistories |
-	entries := self createMethodEventsWithNoImpactInNewClass.
+	| entries methodHistories classHistories packageHistories |
+	entries := self createAndRemoveClassWithMethodEvents.
+	
 	methodHistories := entries methodHistories.
+	classHistories := entries classHistories.
+	packageHistories := entries classHistories.
 	
 	self assert: methodHistories hasNoEffect.
 	self assert: methodHistories size equals: 2.
+	
+	self assert: classHistories hasNoEffect.
+	self assert: classHistories size equals: 1.
+	
+	self assert: packageHistories hasNoEffect.
+	self assert: packageHistories size equals: 1.
 	
 	^ entries
 ]
 
 { #category : #examples }
-GtEpHistoryGroupingExamples >> testTransformMethodToExtensionMethodEventsGrouping [
+GtEpHistoryGroupingExamples >> testMethodEventsWithNoImpactInNewClass [
+	<gtExample>
+	| entries methodHistories classHistories packageHistories |
+	entries := self createMethodEventsWithNoImpactInNewClass.
+	
+	methodHistories := entries methodHistories.
+	classHistories := entries classHistories.
+	packageHistories := entries classHistories.
+	
+	self assert: methodHistories hasNoEffect.
+	self assert: methodHistories size equals: 2.
+	
+	self assert: classHistories hasEffect.
+	self assert: classHistories size equals: 1.
+	self assert: classHistories methodHistories hasNoEffect.
+	
+	self assert: packageHistories hasEffect.
+	self assert: packageHistories size equals: 1.
+	
+	^ entries
+]
+
+{ #category : #examples }
+GtEpHistoryGroupingExamples >> testMoveExtensionMethodBetweetPackagesByPackageGrouping [
+	<gtExample>
+	
+	| entries packageHistories mainPackageHistory secondPackageHistory methodHistoryInMainPackage methodHistoryInSecondPackage thirdPackageHistory methodHistoryInThirdPackage |
+	entries := self moveExtensionMethodBetweetPackagesEvents.
+	packageHistories := entries packageHistories.
+	
+	self assert: packageHistories hasNoEffect not.
+	self assert: packageHistories size equals: 3.
+	
+	mainPackageHistory := packageHistories 
+		historyForPackageNamed: self mainPackageNameForTesting.
+	self assert: mainPackageHistory hasNoEffect not.
+	
+	secondPackageHistory := packageHistories 
+		historyForPackageNamed: self secondaryPackageNameForTesting.
+	self assert: mainPackageHistory hasNoEffect not.
+	
+	thirdPackageHistory := packageHistories 
+		historyForPackageNamed: self thirdPackageNameForTesting.
+	self assert: thirdPackageHistory hasNoEffect not.
+	
+	methodHistoryInMainPackage := mainPackageHistory classHistories first methodHistories first.
+	self assert: methodHistoryInMainPackage hasNoEffect.
+	self assert: methodHistoryInMainPackage changes size equals: 2.
+	self assert: methodHistoryInMainPackage isInitialChangeAddition.
+	self assert: methodHistoryInMainPackage isLatestChangeRemoval.
+	
+	methodHistoryInSecondPackage := secondPackageHistory classHistories first methodHistories first.
+	self assert: methodHistoryInSecondPackage hasNoEffect.
+	self assert: methodHistoryInSecondPackage changes size equals: 2.
+	self assert: methodHistoryInSecondPackage isInitialChangeAddition.
+	self assert: methodHistoryInSecondPackage isLatestChangeRemoval.
+	
+	methodHistoryInThirdPackage := thirdPackageHistory classHistories first methodHistories first.
+	self assert: methodHistoryInThirdPackage hasNoEffect not.
+	self assert: methodHistoryInThirdPackage changes size equals: 1.
+	self assert: methodHistoryInThirdPackage isInitialChangeAddition.
+	self assert: methodHistoryInThirdPackage isLatestChangeRemoval not.
+	
+	^ entries
+]
+
+{ #category : #examples }
+GtEpHistoryGroupingExamples >> testTransformMethodToExtensionMethodWithByPackageGrouping [
 	<gtExample>
 	
 	| entries packageHistories mainPackageHistory secondPackageHistory methodHistoryInMainPackage methodHistoryInSecondPackage |
@@ -164,6 +278,12 @@ GtEpHistoryGroupingExamples >> testTransformMethodToExtensionMethodEventsGroupin
 	self assert: methodHistoryInSecondPackage isLatestChangeRemoval not.
 	
 	^ entries
+]
+
+{ #category : #accessing }
+GtEpHistoryGroupingExamples >> thirdPackageNameForTesting [
+
+	^ #'CategoryForTestToBeDeleted-Third'
 ]
 
 { #category : #'events generation' }

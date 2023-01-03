@@ -23,7 +23,7 @@ EpMethodModification >> gtIsProtocolChangeForExtensionMethod [
 { #category : #'*GToolkit4Epicea' }
 EpMethodModification >> gtPreviousPackageName [
 	^ (self oldProtocol beginsWith: '*')
-		ifTrue: [ self oldProtocol copyWithFirst: '*' ] 
+		ifTrue: [ self oldProtocol copyWithoutFirst: $* ] 
 		ifFalse: [ self classPackageName ]
 ]
 
