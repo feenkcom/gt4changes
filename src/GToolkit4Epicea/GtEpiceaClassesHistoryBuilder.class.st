@@ -11,8 +11,13 @@ Class {
 GtEpiceaClassesHistoryBuilder >> addMethodsHistory: aMethodHistory toGrouping: byClassNameGroups [ 
 	| targetClassName classHistory | 
 	targetClassName := aMethodHistory targetClassName.
+	
 	aMethodHistory targetMethod isMetaSide ifTrue: [ 
-		targetClassName := targetClassName withoutSuffix: ' class' ].
+		(targetClassName endsWith: ' class') ifTrue: [
+			targetClassName := targetClassName withoutSuffix: ' class' ].
+		(targetClassName endsWith: ' classTrait') ifTrue: [
+			targetClassName := targetClassName withoutSuffix: ' classTrait' ] ].
+		
 	classHistory := byClassNameGroups 
 		at: targetClassName
 		ifAbsentPut: [
