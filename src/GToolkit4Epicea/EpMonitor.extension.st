@@ -56,3 +56,13 @@ EpMonitor class >> shutDown: isImageQuitting [
 		"Force a new log file on every image save.
 		self current log store resetWithNextStoreName." ].
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpMonitor class >> startUp: isStarting [
+	"If --epiceaMemoryStore has been flagged switch to an OmMemoryStore"
+
+	isStarting ifFalse: [ ^ self ].
+	(Smalltalk argumentsInclude: '--epiceaMemoryStore') ifFalse: [ ^ self ].
+
+	EpMonitor current log initializeWith: OmMemoryStore new
+]
