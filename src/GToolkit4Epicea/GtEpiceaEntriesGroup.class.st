@@ -44,8 +44,18 @@ GtEpiceaEntriesGroup >> detectMax: aBlock [
 ]
 
 { #category : #enumerating }
+GtEpiceaEntriesGroup >> detectMaxCollateWith: aSortFunction [
+	^ self items detectMaxCollateWith: aSortFunction
+]
+
+{ #category : #enumerating }
 GtEpiceaEntriesGroup >> detectMin: aBlock [
 	^ self items detectMin: aBlock
+]
+
+{ #category : #enumerating }
+GtEpiceaEntriesGroup >> detectMinCollateWith: aSortFunction [
+	^ self items detectMinCollateWith: aSortFunction
 ]
 
 { #category : #accessing }
