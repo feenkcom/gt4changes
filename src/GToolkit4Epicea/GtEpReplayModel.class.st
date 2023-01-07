@@ -57,9 +57,3 @@ GtEpReplayModel >> latestEntry [
 
 	^ entries last
 ]
-
-{ #category : #accessing }
-GtEpReplayModel >> sequencedEntries [
-
-	^ self replayEntries sorted: [ :a :b | a gtTime < b gtTime ]
-]

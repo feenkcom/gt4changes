@@ -16,7 +16,7 @@ GtEpiceaClassHistory class >> forClass: aTargetClass withBehaviourChanges: aColl
 		targetClass: aTargetClass;
 		behaviourChanges: (GtEpiceaEntriesGroup 
 			withAll: (aCollectionOfEntries 
-				sorted: [ :anEntry | anEntry gtTime] descending ))
+				sorted: GtOmEntrySortFunction new reversed ))
 ]
 
 { #category : #accessing }
@@ -195,7 +195,7 @@ GtEpiceaClassHistory >> latestChange [
 	^ ({self methodHistories latestChange. 
 		self behaviourChanges latestChange} 
 			reject: [ :anOmbuEntry | anOmbuEntry isNil ])
-			detectMax: [ :anOmbuEntry | anOmbuEntry gtTime]
+			detectMaxCollateWith: GtOmEntrySortFunction new.
 ]
 
 { #category : #accessing }

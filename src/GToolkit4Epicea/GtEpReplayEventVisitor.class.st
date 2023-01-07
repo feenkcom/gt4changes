@@ -147,7 +147,7 @@ GtEpReplayEventVisitor >> visitNode: anOmEntry [
 GtEpReplayEventVisitor >> visitNodes: aCollectionOfOmEntry [
 	"Visit each of the nodes in chronological order."
 
-	allEntries := aCollectionOfOmEntry sorted: [ :a :b | a gtTime < b gtTime ].
+	allEntries := aCollectionOfOmEntry sorted: GtOmEntrySortFunction new.
 	allEntries do: [ :omEntry | self visitNode: omEntry ].
 ]
 

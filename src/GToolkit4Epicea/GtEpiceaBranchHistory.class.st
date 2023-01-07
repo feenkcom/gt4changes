@@ -12,7 +12,7 @@ Class {
 GtEpiceaBranchHistory class >> forChanges: aCollectionOfEntries [
 
 	^ self new changes:
-		(GtEpiceaEntriesGroup withAll: (aCollectionOfEntries sorted: #gtTime descending))
+		(GtEpiceaEntriesGroup withAll: (aCollectionOfEntries sorted: GtOmEntrySortFunction new reversed))
 ]
 
 { #category : #accessing }
