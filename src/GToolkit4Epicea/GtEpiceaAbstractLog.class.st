@@ -84,7 +84,7 @@ GtEpiceaAbstractLog >> changedClassNames [
 GtEpiceaAbstractLog >> changesGroupedByBranch [
 	| headNodes |
 
-	headNodes := GtEpBranchUtilities branchesHeadLogNodesFrom: self entries.
+	headNodes := GtEpiceaUtilities branchesHeadLogNodesFrom: self entries.
 	^ headNodes collect: [ :node | node entry -> node entries ].
 ]
 

@@ -31,8 +31,7 @@ GtEpiceaEntityHistoriesGroup >> gtViewHistoriesFor: aView [
 		title: 'Histories';
 		priority: 20;
 		items: [ self items 
-			sorted: [ :anEntityHistory | 
-				anEntityHistory latestChange gtTime ] descending ];
+			sorted: (GtEpiceaUtilities omEntrySortFunctionFor: #latestChange) reversed ];
 		children: [ :anEntry | anEntry gtViewChangeHistoryChildren ];
 		column: 'Details' do: [ :aColumn | 
 			aColumn 
@@ -65,7 +64,7 @@ GtEpiceaEntityHistoriesGroup >> hasNoEffect [
 { #category : #accessing }
 GtEpiceaEntityHistoriesGroup >> latestChange [
 	^ (self items collect: [ :anEntityHistory | anEntityHistory latestChange ])
-		detectMax: [ :anOmbuEntry | anOmbuEntry gtTime]
+		detectMaxCollateWith: GtOmEntrySortFunction new
 ]
 
 { #category : #sorting }
@@ -76,6 +75,5 @@ GtEpiceaEntityHistoriesGroup >> sorted: aBlock [
 
 { #category : #sorting }
 GtEpiceaEntityHistoriesGroup >> sortedDescendingByLatestChangeTime [
-	^ self sorted: [ :anEntityHistory | 
-		anEntityHistory latestChange gtTime ] descending
+	^ self sorted: (GtEpiceaUtilities omEntrySortFunctionFor: #latestChange) reversed
 ]

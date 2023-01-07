@@ -28,7 +28,7 @@ GtEpiceaEntriesGroup >> behaviorChangesGroupedByClass [
 GtEpiceaEntriesGroup >> changesGroupedByBranch [
 	| headNodes |
 
-	headNodes := GtEpBranchUtilities branchesHeadLogNodesFrom: self items.
+	headNodes := GtEpiceaUtilities branchesHeadLogNodesFrom: self items.
 	^ headNodes collect: [ :node | node entry -> node entries ].
 ]
 
@@ -44,8 +44,18 @@ GtEpiceaEntriesGroup >> detectMax: aBlock [
 ]
 
 { #category : #enumerating }
+GtEpiceaEntriesGroup >> detectMaxCollateWith: aSortFunction [
+	^ self items detectMaxCollateWith: aSortFunction
+]
+
+{ #category : #enumerating }
 GtEpiceaEntriesGroup >> detectMin: aBlock [
 	^ self items detectMin: aBlock
+]
+
+{ #category : #enumerating }
+GtEpiceaEntriesGroup >> detectMinCollateWith: aSortFunction [
+	^ self items detectMinCollateWith: aSortFunction
 ]
 
 { #category : #accessing }
@@ -61,8 +71,7 @@ GtEpiceaEntriesGroup >> gtItemsFor: aView [
 	^ aView columnedList 
 		title: 'Entries';
 		priority: 5;
-		items: [ self items sorted: [ :anOmbuEntry | 
-			anOmbuEntry gtTime ] descending ];
+		items: [ self items sorted: GtOmEntrySortFunction new reversed ];
 		column: 'Icon'
 			icon: [ :anOmbuEntry | 
 				anOmbuEntry content accept: EpIconVisitor new ]
@@ -119,12 +128,12 @@ GtEpiceaEntriesGroup >> gtViewPackageHistoriesFor: aView [
 
 { #category : #accessing }
 GtEpiceaEntriesGroup >> initialChange [
-	^ self items detectMin: [ :anOmbuEntry | anOmbuEntry gtTime]
+	^ self items detectMinCollateWith: GtOmEntrySortFunction new.
 ]
 
 { #category : #accessing }
 GtEpiceaEntriesGroup >> latestChange [
-	^ self items detectMax: [ :anOmbuEntry | anOmbuEntry gtTime]
+	^ self items detectMaxCollateWith: GtOmEntrySortFunction new
 ]
 
 { #category : #'accessing - filtering' }
@@ -160,6 +169,5 @@ GtEpiceaEntriesGroup >> sorted: aBlock [
 
 { #category : #sorting }
 GtEpiceaEntriesGroup >> sortedDescendingByChangeTime [
-	^ self sorted: [ :anOmbuEntry | 
-		anOmbuEntry gtTime ] descending
+	^ self sorted: GtOmEntrySortFunction new reversed
 ]

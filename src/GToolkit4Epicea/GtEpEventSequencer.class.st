@@ -119,7 +119,7 @@ GtEpEventSequencer >> getSequencedEntries [
 		ifFalse: [ GtEpImageModelForExportVisitor image: image ].
 
 	"3. Sort the events chronologically."
-	sequencedEntries := replay sequencedEntries sorted: [ :a :b | a gtTime < b gtTime ].
+	sequencedEntries := replay sequencedEntries sorted: GtOmEntrySortFunction new.
 
 	^ sequencedEntries
 ]

@@ -16,7 +16,7 @@ GtEpiceaMethodHistory class >> forMethod: aTargetMethod withChanges: aCollection
 		targetMethod: aTargetMethod;
 		changes: (GtEpiceaEntriesGroup 
 			withAll: (aCollectionOfEntries 
-				sorted: [ :anEntry | anEntry gtTime] descending ))
+				sorted: GtOmEntrySortFunction new reversed ))
 ]
 
 { #category : #accessing }
