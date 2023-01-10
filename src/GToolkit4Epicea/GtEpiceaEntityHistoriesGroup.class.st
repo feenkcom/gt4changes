@@ -37,7 +37,7 @@ GtEpiceaEntityHistoriesGroup >> gtViewHistoriesFor: aView [
 			aColumn 
 				cellStencil: [ GtEpiceaHistoryEntityDetailsElement new ];
 				dataBinder: [ :anElement :anEntry | anElement updateForEntry: anEntry ] ];
-		column: 'Changes Count' text: [ :anEntry | 
+		column: 'Number of Changes' text: [ :anEntry | 
 			| entryChangesCount |
 			(anEntry class inheritsFrom: GtEpiceaEntityHistory)
 				ifTrue: [
@@ -45,7 +45,7 @@ GtEpiceaEntityHistoriesGroup >> gtViewHistoriesFor: aView [
 					entryChangesCount asString
 						, ' '
 						, ('change' asPluralBasedOn: entryChangesCount)] 
-				ifFalse: [ '' ] ] width: 100;
+				ifFalse: [ '' ] ] width: 120;
 		column: 'Timestamp' text: [ :anEntry | 
 			anEntry gtViewLatestChangeTime printToSeconds ] width: 150
 ]
