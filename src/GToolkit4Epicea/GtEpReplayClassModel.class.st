@@ -21,6 +21,13 @@ GtEpReplayClassModel >> addBehaviorRename: anOmEntry [
 	superclassName := anOmEntry content behaviorAffected superclassName.
 ]
 
+{ #category : #adding }
+GtEpReplayClassModel >> addCategoryChange: anOmEntry [
+
+	super addCategoryChange: anOmEntry.
+	superclassName := anOmEntry content behaviorAffected superclassName.
+]
+
 { #category : #testing }
 GtEpReplayClassModel >> definesBehaviorInImage: aGtEpReplayImageModel [
 	"Answer a boolean indicating whether the receiver defines its class / trait.

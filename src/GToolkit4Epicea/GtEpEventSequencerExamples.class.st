@@ -9,6 +9,28 @@ Class {
 	#category : #'GToolkit4Epicea-Examples'
 }
 
+{ #category : #private }
+GtEpEventSequencerExamples class >> removeTestClasses [
+
+	EpMonitor disableDuring:
+		[ #(#Issue2924 #Issue2924Renamed #Issue2936 #Issue2936Renamed
+		#Issue2936 #Issue2936v2 
+		#Issue2936v4 #Issue2936v41 #Issue2936v42 #Issue2936v43
+		#Issue2936v5 #Issue2936v51 #Issue2936v52
+		#Issue2961 #Issue2961Class #Issue2961Renamed
+		#GtEpEventSequencerExampleCheck) do: [ :each |
+			self class environment removeClassNamed: each ].
+		self class environment organization
+			removeCategory: #Issue2924;
+			removeCategory: #Issue2936;
+			removeCategory: #Issue2936v2;
+			removeCategory: #Issue2936v4;
+			removeCategory: #Issue2936v41;
+			removeCategory: #Issue2936v5;
+			removeCategory: #Issue2961;
+			removeCategory: #GtEpEventSequencerExampleChecks ].
+]
+
 { #category : #'private - helpers' }
 GtEpEventSequencerExamples class >> testDataRoot [
 
@@ -1001,6 +1023,55 @@ GtEpEventSequencerExamples >> methodRemovalWithoutDependentsInImage [
 ]
 
 { #category : #examples }
+GtEpEventSequencerExamples >> modifyMethodChangeProtocolForExport [
+	"Check that moving a method to another protocol is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleCheck).
+	fileReference := self class testDataRoot / 'Issue2991' / 'Pharo10-SNAPSHOT-64bit-2314c3f.2adndgi1mh7mez3vuyyeo7oxr.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 6.
+	"Add the class and method1 to the system"
+	EpMonitor disableDuring:
+		[ entries second content applyCodeChange.
+		entries fourth content applyCodeChange ].
+	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: sequencedEntries size equals: 2.
+	self assert: sequencedEntries first identicalTo: entries second.
+	self assert: sequencedEntries second identicalTo: entries last.
+	^ sequencer.
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> modifyMethodChangeProtocolInImage [
+	"Check that moving a method to another protocol is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleCheck).
+	fileReference := self class testDataRoot / 'Issue2991' / 'Pharo10-SNAPSHOT-64bit-2314c3f.2adndgi1mh7mez3vuyyeo7oxr.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 6.
+	"Add the class and method1 to the system"
+	EpMonitor disableDuring:
+		[ entries second content applyCodeChange.
+		entries fourth content applyCodeChange ].
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: sequencedEntries size equals: 1.
+	self assert: sequencedEntries first identicalTo: entries last.
+	^ sequencer.
+]
+
+{ #category : #examples }
 GtEpEventSequencerExamples >> removeExistingClassForExport [
 	"Check that removing a class that is already in the image is sequenced correctly."
 	<gtExample>
@@ -1106,22 +1177,7 @@ GtEpEventSequencerExamples >> removeMethodAndClassInImage [
 { #category : #private }
 GtEpEventSequencerExamples >> removeTestClasses [
 
-	EpMonitor disableDuring:
-		[ #(#Issue2924 #Issue2924Renamed #Issue2936 #Issue2936Renamed
-		#Issue2936 #Issue2936v2 
-		#Issue2936v4 #Issue2936v41 #Issue2936v42 #Issue2936v43
-		#Issue2936v5 #Issue2936v51 #Issue2936v52
-		#Issue2961 #Issue2961Class #Issue2961Renamed) do: [ :each |
-			self class environment removeClassNamed: each ].
-		self class environment organization
-			removeCategory: #Issue2924;
-			removeCategory: #Issue2936;
-			removeCategory: #Issue2936v2;
-			removeCategory: #Issue2936v4;
-			removeCategory: #Issue2936v41;
-			removeCategory: #Issue2936v5;
-			removeCategory: #Issue2961;
-			removeCategory: #GtEpEventSequencerExampleChecks ].
+	self class removeTestClasses.
 ]
 
 { #category : #examples }
