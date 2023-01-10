@@ -194,7 +194,7 @@ GtEpImageModelInImageVisitor >> methodEntryChangesRunningSystem: anOmEntry [
 GtEpImageModelInImageVisitor >> methodModificationEntryDiffersFromCurrent: anOmEntry [
 	"Determine if the supplied method definition differs from what is currently in the system.  Check back through previous class names to see if the method is inherited through a rename.
 	The method's behavior must exist in the system or be defined by the previous entries."
-	| isMetaSide behaviorNames missingOriginal index newSource |
+	| isMetaSide behaviorNames missingOriginal index newSource newProtocol |
 
 	"anOmEntry content selector = #buildImageSyncDropdown ifTrue: [ self halt ]."
 	isMetaSide := anOmEntry content methodAffected isMetaSide.
@@ -214,11 +214,13 @@ GtEpImageModelInImageVisitor >> methodModificationEntryDiffersFromCurrent: anOmE
 			ifFalse: [ index := index - 1 ] ].
 
 	newSource := anOmEntry content methodAffectedSourceCode.
+	newProtocol := anOmEntry content methodAffectedProtocol.
 	behaviorNames do: [ :name |
 		((self environment classOrTraitNamed: name)
 			ifNotNil: [ :behavior | behavior compiledMethodAt: anOmEntry content methodAffectedSelector
-					ifPresent: [ :method | ^ newSource ~= method sourceCode ]
-					ifAbsent: [ ] ]
+				ifPresent: [ :method | ^ newProtocol ~= method protocol or:
+					[ newSource ~= method sourceCode ] ]
+				ifAbsent: [ ] ]
 			ifNil: [ ]) ].
 
 	"If we get here the entry has an effect since this method is only valid if the behavior exists."
