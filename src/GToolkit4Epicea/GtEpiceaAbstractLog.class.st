@@ -256,6 +256,18 @@ GtEpiceaAbstractLog >> gtViewEntriesListFor: aView [
 			width: 150
 ]
 
+{ #category : #accessing }
+GtEpiceaAbstractLog >> gtViewLatestChangesFor: aView [
+	<gtView>
+	<gtViewChanges>
+
+	^ aView forward
+		title: 'Recover latest';
+		priority: 10;
+		object: [ self recoverLatest ];
+		view: #gtEventsFor:
+]
+
 { #category : #'gt - extensions' }
 GtEpiceaAbstractLog >> gtViewMethodHistoriesFor: aView [
 	<gtView>
@@ -444,6 +456,18 @@ GtEpiceaAbstractLog >> recoverFilter [
 		order: 20;
 		valueNotRequired;
 		beNotDefault
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractLog >> recoverLatest [
+	"Answer a branch history filtered to the changes required to recover the image."
+	| entries |
+
+	entries := (GtEpEventSequencer
+		entries: self entriesGroup changesGroupedByBranch first value
+		inImage: true)
+			sequencedEntries.
+	^ GtEpiceaBranchHistory forChanges: entries.
 ]
 
 { #category : #accessing }
