@@ -467,7 +467,7 @@ GtEpiceaAbstractLog >> recoverLatest [
 		entries: self entriesGroup changesGroupedByBranch first value
 		inImage: true)
 			sequencedEntries.
-	^ GtEpiceaBranchHistory forChanges: entries.
+	^ GtEpiceaExplicitLog on: entries.
 ]
 
 { #category : #accessing }
