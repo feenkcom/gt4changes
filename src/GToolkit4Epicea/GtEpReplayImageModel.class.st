@@ -189,6 +189,15 @@ GtEpReplayImageModel >> behaviorAt: aSymbol [
 ]
 
 { #category : #accessing }
+GtEpReplayImageModel >> behaviorAt: aSymbol ifAbsent: absentBlock [
+	"Answer the behavior model for the given name"
+
+	^ behaviors 
+		at: aSymbol 
+		ifAbsent: absentBlock.
+]
+
+{ #category : #accessing }
 GtEpReplayImageModel >> behaviorAt: aSymbol ifPresent: presentBlock ifAbsent: absentBlock [
 	"Answer the behavior model for the given name"
 
@@ -209,6 +218,25 @@ GtEpReplayImageModel >> behaviorModelFor: anEpEvent [
 		[ GtEpReplayTraitModel new ]
 	ifFalse:
 		[ self error: 'Unknown behavior' ] ]
+]
+
+{ #category : #private }
+GtEpReplayImageModel >> behaviorModelForBehavior: aBehavior [
+	"Answer the appropriate behavior model for the supplied behavior"
+
+	^ aBehavior isClass ifTrue:
+		[ GtEpReplayClassModel new ]
+	ifFalse: [ aBehavior isTrait ifTrue:
+		[ GtEpReplayTraitModel new ]
+	ifFalse:
+		[ self error: 'Unknown behavior' ] ]
+]
+
+{ #category : #private }
+GtEpReplayImageModel >> behaviorModelForName: aSymbol [
+	"Answer the appropriate behavior model for the supplied behavior"
+
+	^ self behaviorModelForBehavior: (self class environment at: aSymbol)
 ]
 
 { #category : #accessing }

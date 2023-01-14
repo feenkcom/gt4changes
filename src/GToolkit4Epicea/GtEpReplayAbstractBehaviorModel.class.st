@@ -71,6 +71,12 @@ GtEpReplayAbstractBehaviorModel >> behaviorAffectedName [
 	^ self subclassResponsibility
 ]
 
+{ #category : #accessing }
+GtEpReplayAbstractBehaviorModel >> currentDefinition [
+
+	^ self environment classOrTraitNamed: self name
+]
+
 { #category : #testing }
 GtEpReplayAbstractBehaviorModel >> definesBehaviorInImage: aGtEpReplayImageModel [
 	"Answer a boolean indicating whether the receiver defines its class / trait.
@@ -83,7 +89,9 @@ GtEpReplayAbstractBehaviorModel >> definesBehaviorInImage: aGtEpReplayImageModel
 GtEpReplayAbstractBehaviorModel >> ensureMethodAt: aSymbol [
 	"Answer the behavior model for the given name"
 
-	^ methods at: aSymbol ifAbsentPut: [ GtEpReplayMethodModel new ].
+	^ methods at: aSymbol ifAbsentPut: [ GtEpReplayMethodModel new 
+		behaviorModel: self;
+		selector: aSymbol ].
 
 ]
 
@@ -162,6 +170,12 @@ GtEpReplayAbstractBehaviorModel >> isTrait [
 ]
 
 { #category : #accessing }
+GtEpReplayAbstractBehaviorModel >> methodAt: aSymbol [
+
+	^ methods at: aSymbol
+]
+
+{ #category : #accessing }
 GtEpReplayAbstractBehaviorModel >> methodAt: aSymbol ifPresent: presentBlock ifAbsent: absentBlock [
 
 	^ methods at: aSymbol ifPresent: presentBlock ifAbsent: absentBlock
@@ -183,6 +197,12 @@ GtEpReplayAbstractBehaviorModel >> methodsInProtocol: aSymbol [
 ]
 
 { #category : #accessing }
+GtEpReplayAbstractBehaviorModel >> name [
+
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
 GtEpReplayAbstractBehaviorModel >> protocolChanges [
 
 	^ protocolChanges
@@ -195,4 +215,16 @@ GtEpReplayAbstractBehaviorModel >> reset [
 	methods := IdentityDictionary new.
 	protocolChanges := IdentityDictionary new.
 	removedMethods := OrderedCollection new.
+]
+
+{ #category : #accessing }
+GtEpReplayAbstractBehaviorModel >> selectors [
+	"Answer the selectors defined by the receiver, including the current definition"
+	| selectors |
+
+	selectors := methods keys asSet.
+	self class environment 
+		at: self name
+		ifPresent: [ :cls | selectors addAll: cls selectors ].
+	^ selectors
 ]
