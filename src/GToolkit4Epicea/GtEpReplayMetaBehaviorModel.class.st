@@ -16,7 +16,7 @@ GtEpReplayMetaBehaviorModel >> accept: aVisitor [
 { #category : #accessing }
 GtEpReplayMetaBehaviorModel >> behaviorAffectedName [
 
-	^ instanceSide behaviorAffectedName, ' class'
+	^ instanceSide behaviorAffectedName, (self isClass ifTrue: [ ' class' ] ifFalse: [ ' classTrait' ])
 ]
 
 { #category : #accessing }
@@ -73,10 +73,28 @@ GtEpReplayMetaBehaviorModel >> isTrait [
 ]
 
 { #category : #accessing }
+GtEpReplayMetaBehaviorModel >> name [
+
+	^ instanceSide name, (self isClass ifTrue: [ ' class' ] ifFalse: [ ' classTrait' ])
+]
+
+{ #category : #accessing }
 GtEpReplayMetaBehaviorModel >> printOn: aStream [
 
 	instanceSide ifNil: [ ^ super printOn: aStream ].
 	aStream
 		<< self behaviorAffectedName;
 		<< ' model'.
+]
+
+{ #category : #accessing }
+GtEpReplayMetaBehaviorModel >> selectors [
+	"Answer the selectors defined by the receiver, including the current definition"
+	| selectors |
+
+	selectors := methods keys asSet.
+	self class environment 
+		at: instanceSide name
+		ifPresent: [ :cls | selectors addAll: cls class selectors ].
+	^ selectors
 ]

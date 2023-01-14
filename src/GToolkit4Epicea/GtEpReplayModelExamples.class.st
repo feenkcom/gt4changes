@@ -6,6 +6,47 @@ Class {
 	#category : #'GToolkit4Epicea-Examples'
 }
 
+{ #category : #private }
+GtEpReplayModelExamples class >> removeTestClasses [
+
+	EpMonitor disableDuring:
+		[ #(#GtEpReplayModelExamplesCheck) do: [ :each |
+			self class environment removeClassNamed: each ].
+		self class environment organization
+			removeCategory: #GtEpReplayModelExamplesCheck ].
+]
+
+{ #category : #accessing }
+GtEpReplayModelExamples class >> testDataRoot [
+
+	^ FileLocator gtResource 
+		/ 'feenkcom/gt4changes/data'
+		/ self name.
+]
+
+{ #category : #private }
+GtEpReplayModelExamples >> checkImageModelWithData01: aGtReplayImageModel [
+	"Check the behavior of the supplied image model matches expectations."
+	| behavior method classSide |
+
+	self assert: aGtReplayImageModel behaviors size equals: 1.
+	behavior := aGtReplayImageModel classOrTraitNamed: #GtEpReplayModelExamplesCheck.
+	self deny: behavior hasCommentEntry.
+	self assert: behavior package name equals: #GtEpReplayModelExamplesCheck.
+	method := behavior methodAt: #instanceMethod1.
+	self assert: method protocol equals: #accessing.
+	self assert: method sourceCode isNotEmpty.
+	self assert: ((behavior methodsInProtocol: #accessing) collect: #selector) 
+		equals: #(#instanceMethod1).
+
+	classSide := behavior classSide.
+	method := classSide methodAt: #classMethod1.
+	self assert: method protocol equals: #accessing.
+	self assert: method sourceCode isNotEmpty.
+	self assert: ((classSide methodsInProtocol: #accessing) collect: #selector) 
+		equals: #(#classMethod1).
+]
+
 { #category : #examples }
 GtEpReplayModelExamples >> classAddition [
 	<gtExample>
@@ -23,4 +64,49 @@ GtEpReplayModelExamples >> classAddition [
 	behavior := image classOrTraitNamed: #ATestClass.
 	history := behavior entries.
 	self assert: behavior methods size equals: 6.
+]
+
+{ #category : #examples }
+GtEpReplayModelExamples >> imageModelChangesOnly [
+	"Check the behavior of the image model when there are only changes."
+	<gtExample>
+	| fileReference entries epLog visitor |
+
+	self deny: (self class environment includesKey: #GtEpReplayModelExamplesCheck).
+	fileReference := self class testDataRoot / 'data01' / 'Pharo10-SNAPSHOT-64bit-2314c3f.2adndgji2gjod2o288oibtkgo.ombu'.
+	self assert: fileReference resolve exists
+		description: [ fileReference fullName, ' not found' ].
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	visitor := GtEpReplayEventVisitor new.
+	visitor visitNodes: entries.
+	self checkImageModelWithData01: visitor image.
+	^ visitor image.
+]
+
+{ #category : #examples }
+GtEpReplayModelExamples >> imageModelInSystem [
+	"Check the behavior of the image model when there are only changes."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference entries epLog visitor |
+
+	self deny: (self class environment includesKey: #GtEpReplayModelExamplesCheck).
+	fileReference := self class testDataRoot / 'data01' / 'Pharo10-SNAPSHOT-64bit-2314c3f.2adndgji2gjod2o288oibtkgo.ombu'.
+	self assert: fileReference resolve exists
+		description: [ fileReference fullName, ' not found' ].
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	EpMonitor disableDuring:
+		[ entries do: [ :each | each content applyCodeChange ] ].
+	visitor := GtEpReplayEventVisitor new.
+	visitor visitNodes: entries.
+	self checkImageModelWithData01: visitor image.
+	^ visitor image.
+]
+
+{ #category : #accessing }
+GtEpReplayModelExamples >> removeTestClasses [
+
+	self class removeTestClasses
 ]

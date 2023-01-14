@@ -67,6 +67,17 @@ GtEpReplayBehaviorModel >> addCategoryChange: anOmEntry [
 ]
 
 { #category : #accessing }
+GtEpReplayBehaviorModel >> behaviorAffected [
+	"Answer the RB model of the receiver's behavior.
+	Either the latest entry, or if none, on the system class"
+	<return: #RGClassDefinition>
+	
+	^ entries
+		ifEmpty: [ (self environment at: name) asRingDefinition ]
+		ifNotEmpty: [ entries last halt behaviorAffected ].
+]
+
+{ #category : #accessing }
 GtEpReplayBehaviorModel >> behaviorAffectedName [
 
 	^ name
@@ -171,9 +182,9 @@ GtEpReplayBehaviorModel >> name [
 ]
 
 { #category : #accessing }
-GtEpReplayBehaviorModel >> name: anObject [
+GtEpReplayBehaviorModel >> name: aSymbol [
 
-	name := anObject
+	name := aSymbol asSymbol
 ]
 
 { #category : #accessing }
@@ -184,6 +195,22 @@ GtEpReplayBehaviorModel >> originalBehaviorNameAffected [
 		detect: [ :entry | entry content isEpBehaviorNameChange ]
 		ifFound: [ :entry | entry content oldName ]
 		ifNone: [ entries last content behaviorAffectedName ].
+]
+
+{ #category : #accessing }
+GtEpReplayBehaviorModel >> package [
+	"Answer the package of the receiver.
+	Epicea incorrectly stores the package name, not the actual (ring) package."
+
+	^ entries ifEmpty: 
+		[ self currentDefinition package ]
+	ifNotEmpty: 
+		[ | packageName |
+		packageName := self latestEntry content behaviorAffected package.
+		packageName isString ifTrue:
+			[ RGPackageDefinition named: name ]
+		ifFalse:
+			[ packageName ] ].
 ]
 
 { #category : #copying }

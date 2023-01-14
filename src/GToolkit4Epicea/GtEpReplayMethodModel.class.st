@@ -5,7 +5,9 @@ Class {
 	#name : #GtEpReplayMethodModel,
 	#superclass : #GtEpReplayModel,
 	#instVars : [
-		'isRemoved'
+		'isRemoved',
+		'selector',
+		'behaviorModel'
 	],
 	#category : #'GToolkit4Epicea-Sequencer'
 }
@@ -46,7 +48,23 @@ GtEpReplayMethodModel >> addMethodRemoval: anOmEntry [
 { #category : #accessing }
 GtEpReplayMethodModel >> behaviorAffectedName [ 
 
-	^ self latestEntry content behaviorAffectedName.
+	^ behaviorModel behaviorAffectedName.
+]
+
+{ #category : #accessing }
+GtEpReplayMethodModel >> behaviorModel [
+	^ behaviorModel
+]
+
+{ #category : #accessing }
+GtEpReplayMethodModel >> behaviorModel: anObject [
+	behaviorModel := anObject
+]
+
+{ #category : #accessing }
+GtEpReplayMethodModel >> currentDefinition [
+
+	^ (self class environment classOrTraitNamed: behaviorModel name) methodNamed: selector
 ]
 
 { #category : #initialization }
@@ -63,6 +81,14 @@ GtEpReplayMethodModel >> isRemoved [
 	^ isRemoved
 ]
 
+{ #category : #accessing }
+GtEpReplayMethodModel >> methodAffected [
+
+	^ entries
+		ifEmpty: [ self currentDefinition ]
+		ifNotEmpty: [ self latestEntry methodAffected ]
+]
+
 { #category : #printing }
 GtEpReplayMethodModel >> printOn: aStream [
 
@@ -75,7 +101,29 @@ GtEpReplayMethodModel >> printOn: aStream [
 ]
 
 { #category : #accessing }
+GtEpReplayMethodModel >> protocol [
+
+	^ entries
+		ifEmpty: [ self currentDefinition protocol ]
+		ifNotEmpty: [ self latestEntry content methodAffected protocol ].
+]
+
+{ #category : #accessing }
 GtEpReplayMethodModel >> selector [
 
-	^ self latestEntry content selector.
+	^ selector.
+]
+
+{ #category : #accessing }
+GtEpReplayMethodModel >> selector: anObject [
+	selector := anObject
+]
+
+{ #category : #accessing }
+GtEpReplayMethodModel >> sourceCode [
+
+	self isRemoved ifTrue: [ ^ '' ].
+	^ entries 
+		ifEmpty: [ self currentDefinition sourceCode ]
+		ifNotEmpty: [ self latestEntry content methodAffected sourceCode ].
 ]

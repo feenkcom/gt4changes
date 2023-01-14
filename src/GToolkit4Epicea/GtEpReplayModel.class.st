@@ -23,6 +23,13 @@ GtEpReplayModel >> allEntries [
 ]
 
 { #category : #accessing }
+GtEpReplayModel >> currentDefinition [
+	"Answer the receiver's object in the running system"
+	
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
 GtEpReplayModel >> entries [
 
 	^ entries
