@@ -67,6 +67,23 @@ GtEpReplayMethodModel >> currentDefinition [
 	^ (self class environment classOrTraitNamed: behaviorModel name) methodNamed: selector
 ]
 
+{ #category : #testing }
+GtEpReplayMethodModel >> exists [
+
+	^ self isRemoved not and: 
+		[ entries isNotEmpty or: 
+			[ self existsInSystem ] ]
+]
+
+{ #category : #testing }
+GtEpReplayMethodModel >> existsInSystem [
+
+	^ [ self currentDefinition.
+		true. ]
+			on: KeyNotFound
+			do: [ :ex | false ]
+]
+
 { #category : #initialization }
 GtEpReplayMethodModel >> initialize [
 

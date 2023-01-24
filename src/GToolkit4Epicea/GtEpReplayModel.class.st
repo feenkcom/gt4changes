@@ -23,6 +23,13 @@ GtEpReplayModel >> allEntries [
 ]
 
 { #category : #accessing }
+GtEpReplayModel >> asRingDefinition [
+	"Answer the Ring definition of the receiver"
+
+	^ self subclassResponsibility.
+]
+
+{ #category : #accessing }
 GtEpReplayModel >> currentDefinition [
 	"Answer the receiver's object in the running system"
 	
@@ -50,6 +57,12 @@ GtEpReplayModel >> gtEntriesFor: aView [
 		priority: 20;
 		items: [ entries ];
 		actionUpdateButton
+]
+
+{ #category : #testing }
+GtEpReplayModel >> hasEntries [
+
+	^ entries isNotEmpty
 ]
 
 { #category : #initialization }

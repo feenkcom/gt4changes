@@ -65,6 +65,17 @@ GtEpiceaEntriesGroup >> entries [
 ]
 
 { #category : #accessing }
+GtEpiceaEntriesGroup >> gtChangesListFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Change List';
+		priority: 10;
+		object: [ GtEpiceaExplicitLog on: self items ];
+		view: #gtEventsFor:
+]
+
+{ #category : #accessing }
 GtEpiceaEntriesGroup >> gtItemsFor: aView [ 
 	<gtView>
 	

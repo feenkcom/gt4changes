@@ -72,6 +72,12 @@ GtEpReplayAbstractBehaviorModel >> behaviorAffectedName [
 ]
 
 { #category : #accessing }
+GtEpReplayAbstractBehaviorModel >> classSide [
+
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
 GtEpReplayAbstractBehaviorModel >> currentDefinition [
 
 	^ self environment classOrTraitNamed: self name
@@ -157,6 +163,12 @@ GtEpReplayAbstractBehaviorModel >> initialize [
 
 ]
 
+{ #category : #accessing }
+GtEpReplayAbstractBehaviorModel >> instanceSide [
+
+	^ self subclassResponsibility
+]
+
 { #category : #testing }
 GtEpReplayAbstractBehaviorModel >> isClass [ 
 
@@ -171,7 +183,8 @@ GtEpReplayAbstractBehaviorModel >> isTrait [
 
 { #category : #accessing }
 GtEpReplayAbstractBehaviorModel >> methodAt: aSymbol [
-
+	"Answer the method model named aSymbol.
+	Raise an exception if it isn't defined by the model"
 	^ methods at: aSymbol
 ]
 
@@ -179,6 +192,16 @@ GtEpReplayAbstractBehaviorModel >> methodAt: aSymbol [
 GtEpReplayAbstractBehaviorModel >> methodAt: aSymbol ifPresent: presentBlock ifAbsent: absentBlock [
 
 	^ methods at: aSymbol ifPresent: presentBlock ifAbsent: absentBlock
+]
+
+{ #category : #accessing }
+GtEpReplayAbstractBehaviorModel >> methodNamed: aSymbol [
+	"Answer the method named aSymbol.
+	If the method has been defined by the receiver, answer that, otherwise answer the current definition."
+
+	^ methods 
+		at: aSymbol
+		ifAbsent: [ self currentDefinition methodNamed: aSymbol ]
 ]
 
 { #category : #accessing }
