@@ -78,10 +78,9 @@ GtEpReplayMethodModel >> exists [
 { #category : #testing }
 GtEpReplayMethodModel >> existsInSystem [
 
-	^ [ self currentDefinition.
-		true. ]
-			on: KeyNotFound
-			do: [ :ex | false ]
+	^ (self class environment classOrTraitNamed: behaviorModel name)
+		ifNil: [ false ]
+		ifNotNil: [ :behavior | behavior includesSelector: selector ]
 ]
 
 { #category : #initialization }
@@ -89,6 +88,12 @@ GtEpReplayMethodModel >> initialize [
 
 	super initialize.
 	isRemoved := false.
+]
+
+{ #category : #testing }
+GtEpReplayMethodModel >> isMeta [
+
+	^ behaviorModel isMeta
 ]
 
 { #category : #testing }
