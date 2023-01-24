@@ -67,14 +67,23 @@ GtEpReplayBehaviorModel >> addCategoryChange: anOmEntry [
 ]
 
 { #category : #accessing }
+GtEpReplayBehaviorModel >> asRingDefinition [
+
+	^ self behaviorAffected
+]
+
+{ #category : #accessing }
 GtEpReplayBehaviorModel >> behaviorAffected [
-	"Answer the RB model of the receiver's behavior.
+	"Answer the Ring model of the receiver's behavior.
 	Either the latest entry, or if none, on the system class"
 	<return: #RGClassDefinition>
 	
 	^ entries
-		ifEmpty: [ (self environment at: name) asRingDefinition ]
-		ifNotEmpty: [ entries last halt behaviorAffected ].
+		ifEmpty: [ self isRemoved ifTrue:
+				[ previousLives last behaviorAffected ]
+			ifFalse:
+				[ (self environment at: name) asRingDefinition ] ]
+		ifNotEmpty: [ entries last content behaviorAffected ].
 ]
 
 { #category : #accessing }
@@ -104,6 +113,17 @@ GtEpReplayBehaviorModel >> gtCommentEntriesFor: aView [
 		priority: 30;
 		items: [ comments ];
 		actionUpdateButton
+]
+
+{ #category : #ui }
+GtEpReplayBehaviorModel >> gtDefinitionFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Definition';
+		priority: 10;
+		object: [ self behaviorAffected ];
+		view: #gtDefinitionFor:
 ]
 
 { #category : #accessing }
@@ -154,13 +174,18 @@ GtEpReplayBehaviorModel >> isClass [
 ]
 
 { #category : #testing }
+GtEpReplayBehaviorModel >> isMeta [
+
+	^ false
+]
+
+{ #category : #testing }
 GtEpReplayBehaviorModel >> isRemoved [
 	"Answer a boolean indicating whether the receiver has been removed from the system."
-	| isRemoved |
 
-	isRemoved := entries isEmpty and: [ methods isEmpty ].
-	isRemoved ifTrue: [ self assert: previousLives isNotEmpty ].
-	^ isRemoved
+	^ entries isEmpty and: 
+		[ methods isEmpty and:
+		[ previousLives isNotEmpty ] ].
 ]
 
 { #category : #testing }
@@ -201,16 +226,13 @@ GtEpReplayBehaviorModel >> originalBehaviorNameAffected [
 GtEpReplayBehaviorModel >> package [
 	"Answer the package of the receiver.
 	Epicea incorrectly stores the package name, not the actual (ring) package."
+	| packageName |
 
-	^ entries ifEmpty: 
-		[ self currentDefinition package ]
-	ifNotEmpty: 
-		[ | packageName |
-		packageName := self latestEntry content behaviorAffected package.
-		packageName isString ifTrue:
-			[ RGPackageDefinition named: name ]
-		ifFalse:
-			[ packageName ] ].
+	packageName := self behaviorAffected package.
+	^ packageName isString ifTrue:
+		[ RGPackageDefinition named: packageName ]
+	ifFalse:
+		[ packageName ].
 ]
 
 { #category : #copying }

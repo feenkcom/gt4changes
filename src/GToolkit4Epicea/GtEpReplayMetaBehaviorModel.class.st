@@ -61,6 +61,12 @@ GtEpReplayMetaBehaviorModel >> isClass [
 ]
 
 { #category : #testing }
+GtEpReplayMetaBehaviorModel >> isMeta [
+
+	^ true
+]
+
+{ #category : #testing }
 GtEpReplayMetaBehaviorModel >> isRemoved [
 
 	^ self instanceSide isRemoved

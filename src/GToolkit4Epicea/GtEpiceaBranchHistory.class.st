@@ -69,14 +69,38 @@ GtEpiceaBranchHistory >> gtViewChangesCount [
 ]
 
 { #category : #accessing }
+GtEpiceaBranchHistory >> gtViewClassHistoriesFor: aView [
+	<gtView>
+	"<gtViewChanges>"
+	
+	^ aView forward 
+		title: 'By Class';
+		priority: 46;
+		object: [ (GtEpiceaExplicitLog on: self entries) classHistories ];
+		view: #gtViewHistoriesFor: 
+]
+
+{ #category : #accessing }
 GtEpiceaBranchHistory >> gtViewEntriesListFor: aView [ 
 	<gtView>
 	
 	^ aView forward 
 		title: 'Entries List';
-		priority: 10;
+		priority: 50;
 		object: [ self changes ];
 		view: #gtItemsFor:
+]
+
+{ #category : #accessing }
+GtEpiceaBranchHistory >> gtViewPackageHistoriesFor: aView [
+	<gtView>
+	"<gtViewChanges>"
+	
+	^ aView forward 
+		title: 'By Package';
+		priority: 45;
+		object: [ (GtEpiceaExplicitLog on: self entries) packageHistories ];
+		view: #gtViewHistoriesFor: 
 ]
 
 { #category : #accessing }
