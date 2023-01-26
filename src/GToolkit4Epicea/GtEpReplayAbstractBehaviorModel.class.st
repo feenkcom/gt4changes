@@ -189,6 +189,12 @@ GtEpReplayAbstractBehaviorModel >> methodAt: aSymbol [
 ]
 
 { #category : #accessing }
+GtEpReplayAbstractBehaviorModel >> methodAt: aSymbol ifAbsent: absentBlock [
+
+	^ methods at: aSymbol ifAbsent: absentBlock
+]
+
+{ #category : #accessing }
 GtEpReplayAbstractBehaviorModel >> methodAt: aSymbol ifPresent: presentBlock ifAbsent: absentBlock [
 
 	^ methods at: aSymbol ifPresent: presentBlock ifAbsent: absentBlock

@@ -250,6 +250,7 @@ GtEpReplayBehaviorModel >> previousLives [
 
 { #category : #accessing }
 GtEpReplayBehaviorModel >> previousNames [
+	<return: #Collection of: #Symbol>
 
 	^ previousNames
 ]
