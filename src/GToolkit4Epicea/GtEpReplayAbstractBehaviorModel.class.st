@@ -203,7 +203,7 @@ GtEpReplayAbstractBehaviorModel >> methodAt: aSymbol ifPresent: presentBlock ifA
 { #category : #accessing }
 GtEpReplayAbstractBehaviorModel >> methodNamed: aSymbol [
 	"Answer the method named aSymbol.
-	If the method has been defined by the receiver, answer that, otherwise answer the current definition."
+	If the method has been defined by the receiver, answer that, otherwise answer the current defition."
 
 	^ methods 
 		at: aSymbol
