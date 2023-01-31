@@ -215,29 +215,34 @@ GtEpicea >> diffElements [
 	elements := OrderedCollection new.
 	self events
 		do: [ :each | 
-			| previous builder new element |
+			| previous change styler new element |
 			previous := each
-				accept:
-					((GtEpiceaCurrentStateVisitor inEnvironment: self class environment)
-						showClassNameInMethodSource: false).
+					accept: ((GtEpiceaCurrentStateVisitor inEnvironment: self class environment)
+							showClassNameInMethodSource: false).
 			new := each accept: EpNewStateVisitor new.
 			previous = new
-				ifFalse: [ builder := (GtCodeDiffBuilder from: previous to: new)
-						isMethod: (each isKindOf: EpMethodChange).
+				ifFalse: [ change := GtDiffBuilder
+							computeDifferencesFrom: previous
+							to: new
+							using: GtSmaCCDiffSplitter forPharo.
+					styler := GtCodeDiffRBTextStyler new.
+					styler isForWorkspace: (each isKindOf: EpMethodChange) not.
 					element := BrVerticalPane new.
 					element margin: (BlInsets all: 3).
 					element hMatchParent.
 					element vFitContent.
 					element
-						addChild: ((GtEpiceaDiffElement on: builder) aptitude: GtDiffFlatAptitude) vFitContent beSmallSize.
+						addChild: ((GtEpiceaDiffElement onChange: change)
+								aptitude: GtDiffFlatAptitude;
+								vFitContent;
+								styler: styler;
+								beSmallSize).
 					element
-						addChild:
-							(BrButton new
+						addChild: (BrButton new
 								aptitude: BrGlamorousButtonWithIconAptitude;
 								icon: BrGlamorousVectorIcons accept;
 								label: 'Accept';
-								margin:
-									(BlInsets
+								margin: (BlInsets
 										top: 0
 										left: 5
 										bottom: 5

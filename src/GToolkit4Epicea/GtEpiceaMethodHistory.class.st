@@ -50,26 +50,25 @@ GtEpiceaMethodHistory >> gtActionApplyFor: anAction [
 { #category : #'gt - extensions' }
 GtEpiceaMethodHistory >> gtDiffFor: aView [
 	<gtView>
-	
 	^ aView explicit
 		title: 'Diff';
 		priority: 1;
-		stencil: [
-			| previousContent newContent |
-			previousContent := self initialChange content 
-				accept:  EpOldStateVisitor new.
-			newContent := self latestChange  content
-				accept: EpNewStateVisitor new.
-			
+		stencil: [ | previousContent newContent change styler |
+			previousContent := self initialChange content accept: EpOldStateVisitor new.
+			newContent := self latestChange content accept: EpNewStateVisitor new.
+
+			change := GtDiffBuilder
+					computeDifferencesFrom: previousContent
+					to: newContent
+					using: GtSmaCCDiffSplitter forPharo.
+			styler := GtCodeDiffRBTextStyler new.
 			GtEpiceaDiffElementWithLabelStencil new
-			 	fromLabelText: 'First Change:';
-			 	toLabelText:  'Last Change:';
-			 	ombuEntry: self;
-			 	shouldHideDiff: (previousContent = newContent);
-			 	diffBuilder: ((GtCodeDiffBuilder 
-			 		from: previousContent
-			 		to: newContent) 
-			 			isMethod: true) ]
+				fromLabelText: 'First Change:';
+				toLabelText: 'Last Change:';
+				ombuEntry: self;
+				shouldHideDiff: previousContent = newContent;
+				change: change;
+				styler: styler ]
 ]
 
 { #category : #'gt - extensions' }
