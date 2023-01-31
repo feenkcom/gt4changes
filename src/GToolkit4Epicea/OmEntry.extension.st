@@ -56,49 +56,50 @@ OmEntry >> gtCurrentSourceFor: aView [
 { #category : #'*GToolkit4Epicea' }
 OmEntry >> gtDiffCurrentFor: aView [
 	<gtView>
-	
 	^ aView explicit
 		title: 'Diff Current';
 		priority: 5;
-		stencil: [
-			| previousContent newContent |
-			previousContent := self content accept:  (GtEpiceaCurrentStateVisitor 
-				inEnvironment: self class environment
-				showClassName: false).
+		stencil: [ | previousContent newContent change styler |
+			previousContent := self content
+					accept: (GtEpiceaCurrentStateVisitor
+							inEnvironment: self class environment
+							showClassName: false).
 			newContent := self content accept: EpNewStateVisitor new.
-			
+
+			change := GtDiffBuilder
+					computeDifferencesFrom: previousContent
+					to: newContent
+					using: GtSmaCCDiffSplitter forPharo.
 			GtEpiceaDiffElementWithLabelStencil new
-			 	fromLabelText: 'Current:';
-			 	toLabelText:  'Change:';
-			 	ombuEntry: self;
-			 	shouldHideDiff: (previousContent = newContent);
-			 	diffBuilder: ((GtCodeDiffBuilder 
-			 		from: previousContent
-			 		to: newContent) 
-			 			isMethod: self content isEpMethodChange) ]
+				fromLabelText: 'Current:';
+				toLabelText: 'Change:';
+				ombuEntry: self;
+				shouldHideDiff: previousContent = newContent;
+				change: change;
+				styler: (GtCodeDiffRBTextStyler new isForWorkspace: self content isEpMethodChange not) ]
 ]
 
 { #category : #'*GToolkit4Epicea' }
 OmEntry >> gtDiffFor: aView [
 	<gtView>
-	
 	^ aView explicit
 		title: 'Diff';
 		priority: 1;
-		stencil: [
-			| previousContent newContent |
-			previousContent := self content accept:  EpOldStateVisitor new.
+		stencil: [ | previousContent newContent change |
+			previousContent := self content accept: EpOldStateVisitor new.
 			newContent := self content accept: EpNewStateVisitor new.
-			
+
+			change := GtDiffBuilder
+					computeDifferencesFrom: previousContent
+					to: newContent
+					using: GtSmaCCDiffSplitter forPharo.
 			GtEpiceaDiffElementWithLabelStencil new
-			 	fromLabelText: 'Current:';
-			 	toLabelText:  'Change:';
-			 	ombuEntry: self;
-			 	shouldHideDiff: (previousContent = newContent);
-			 	diffBuilder: ((GtCodeDiffBuilder 
-			 		from: previousContent
-			 		to: newContent) 
-			 			isMethod: self content isEpMethodChange) ]
+				fromLabelText: 'Current:';
+				toLabelText: 'Change:';
+				ombuEntry: self;
+				shouldHideDiff: previousContent = newContent;
+				change: change;
+				styler: (GtCodeDiffRBTextStyler new isForWorkspace: self content isEpMethodChange not) ]
 ]
 
 { #category : #'*GToolkit4Epicea' }
