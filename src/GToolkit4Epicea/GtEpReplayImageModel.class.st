@@ -234,9 +234,13 @@ GtEpReplayImageModel >> behaviorModelForBehavior: aBehavior [
 
 { #category : #private }
 GtEpReplayImageModel >> behaviorModelForName: aSymbol [
-	"Answer the appropriate behavior model for the supplied behavior"
+	"Answer the appropriate behavior model for the supplied name.  If the behavior exists, use its type, otherwise assume Class"
 
-	^ self behaviorModelForBehavior: (self class environment at: aSymbol)
+	^ (self class environment
+		at: aSymbol
+		ifPresent: [ :behavior | self behaviorModelForBehavior: behavior ]
+		ifAbsent: [ GtEpReplayClassModel new ])
+			name: aSymbol
 ]
 
 { #category : #accessing }

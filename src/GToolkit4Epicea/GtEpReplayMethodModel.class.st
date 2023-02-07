@@ -111,6 +111,16 @@ GtEpReplayMethodModel >> methodAffected [
 		ifNotEmpty: [ self latestEntry methodAffected ]
 ]
 
+{ #category : #accessing }
+GtEpReplayMethodModel >> package [
+	| protocol |
+
+	protocol := self protocol.
+	^ protocol first = $*
+		ifTrue: [ RPackageOrganizer default packageMatchingExtensionName: protocol allButFirst ]
+		ifFalse: [ behaviorModel package ]
+]
+
 { #category : #printing }
 GtEpReplayMethodModel >> printOn: aStream [
 
