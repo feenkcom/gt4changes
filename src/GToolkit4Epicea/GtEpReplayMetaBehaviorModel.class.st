@@ -34,6 +34,12 @@ GtEpReplayMetaBehaviorModel >> definesBehaviorInImage: aGtEpReplayImageModel [
 ]
 
 { #category : #testing }
+GtEpReplayMetaBehaviorModel >> exists [
+
+	^ self instanceSide exists
+]
+
+{ #category : #testing }
 GtEpReplayMetaBehaviorModel >> hasDependentClassIn: anEnvironment [
 	"Answer a boolean indicating whether the receiver has any dependent classes present in the supplied environment.
 	For a class this means the superclass is present.
@@ -82,6 +88,12 @@ GtEpReplayMetaBehaviorModel >> isTrait [
 GtEpReplayMetaBehaviorModel >> name [
 
 	^ instanceSide name, (self isClass ifTrue: [ ' class' ] ifFalse: [ ' classTrait' ])
+]
+
+{ #category : #accessing }
+GtEpReplayMetaBehaviorModel >> package [
+
+	^ instanceSide package
 ]
 
 { #category : #accessing }

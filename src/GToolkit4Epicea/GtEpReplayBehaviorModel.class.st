@@ -99,9 +99,30 @@ GtEpReplayBehaviorModel >> classSide [
 ]
 
 { #category : #accessing }
+GtEpReplayBehaviorModel >> comment [
+
+	^ comments
+		ifEmpty: [ entries
+			ifEmpty: [ self exists
+				ifTrue: [ self currentDefinition comment ]
+				ifFalse: [ '' ] ]
+			ifNotEmpty: [ entries last content behaviorAffected comment ] ]
+		ifNotEmpty: [ comments last content newComment ]
+]
+
+{ #category : #accessing }
 GtEpReplayBehaviorModel >> comments [
 
 	^ comments
+]
+
+{ #category : #testing }
+GtEpReplayBehaviorModel >> exists [
+	"Answer a boolean indicating whether the receiver exists in the modelled system."
+
+	^ self isRemoved not and:
+		[ entries isNotEmpty or: 
+			[ self environment includesKey: name ] ].
 ]
 
 { #category : #ui }
