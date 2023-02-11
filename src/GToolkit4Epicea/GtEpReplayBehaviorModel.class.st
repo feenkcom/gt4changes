@@ -100,14 +100,15 @@ GtEpReplayBehaviorModel >> classSide [
 
 { #category : #accessing }
 GtEpReplayBehaviorModel >> comment [
+	<return: #String>
 
 	^ comments
 		ifEmpty: [ entries
 			ifEmpty: [ self exists
 				ifTrue: [ self currentDefinition comment ]
 				ifFalse: [ '' ] ]
-			ifNotEmpty: [ entries last content behaviorAffected comment ] ]
-		ifNotEmpty: [ comments last content newComment ]
+			ifNotEmpty: [ entries last content behaviorAffected comment content ] ]
+		ifNotEmpty: [ comments last content newComment ].
 ]
 
 { #category : #accessing }
