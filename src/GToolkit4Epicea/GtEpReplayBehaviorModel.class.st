@@ -107,7 +107,9 @@ GtEpReplayBehaviorModel >> comment [
 			ifEmpty: [ self exists
 				ifTrue: [ self currentDefinition comment ]
 				ifFalse: [ '' ] ]
-			ifNotEmpty: [ entries last content behaviorAffected comment content ] ]
+			ifNotEmpty: [ entries last content behaviorAffected comment 
+				ifNil: [ '' ]
+				ifNotNil: [ :rgComment | rgComment content ] ] ]
 		ifNotEmpty: [ comments last content newComment ].
 ]
 
