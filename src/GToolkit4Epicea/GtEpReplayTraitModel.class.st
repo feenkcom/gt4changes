@@ -32,6 +32,7 @@ GtEpReplayTraitModel >> definesBehaviorInImage: aGtEpReplayImageModel [
 GtEpReplayTraitModel >> fromClassModel: aGtEpReplayClassModel [
 
 	name := aGtEpReplayClassModel name.
+	imageModel := aGtEpReplayClassModel imageModel.
 	classSide := aGtEpReplayClassModel classSide.
 	comments := aGtEpReplayClassModel comments.
 	previousLives := aGtEpReplayClassModel previousLives.

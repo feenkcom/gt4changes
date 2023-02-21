@@ -49,6 +49,12 @@ GtEpReplayMetaBehaviorModel >> hasDependentClassIn: anEnvironment [
 ]
 
 { #category : #accessing }
+GtEpReplayMetaBehaviorModel >> imageModel [
+
+	^ instanceSide imageModel.
+]
+
+{ #category : #accessing }
 GtEpReplayMetaBehaviorModel >> instanceSide [
 
 	^ instanceSide
