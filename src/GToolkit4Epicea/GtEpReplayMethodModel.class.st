@@ -46,6 +46,12 @@ GtEpReplayMethodModel >> addMethodRemoval: anOmEntry [
 ]
 
 { #category : #accessing }
+GtEpReplayMethodModel >> asRingDefinition [
+
+	^ self methodAffected asRingDefinition.
+]
+
+{ #category : #accessing }
 GtEpReplayMethodModel >> behaviorAffectedName [ 
 
 	^ behaviorModel behaviorAffectedName.
@@ -108,7 +114,7 @@ GtEpReplayMethodModel >> methodAffected [
 
 	^ entries
 		ifEmpty: [ self currentDefinition ]
-		ifNotEmpty: [ self latestEntry methodAffected ]
+		ifNotEmpty: [ self latestEntry content methodAffected ]
 ]
 
 { #category : #accessing }

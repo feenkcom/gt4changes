@@ -9,7 +9,8 @@ Class {
 		'classSide',
 		'comments',
 		'previousLives',
-		'previousNames'
+		'previousNames',
+		'imageModel'
 	],
 	#category : #'GToolkit4Epicea-Sequencer'
 }
@@ -69,7 +70,7 @@ GtEpReplayBehaviorModel >> addCategoryChange: anOmEntry [
 { #category : #accessing }
 GtEpReplayBehaviorModel >> asRingDefinition [
 
-	^ self behaviorAffected
+	^ self behaviorAffected asRingDefinition.
 ]
 
 { #category : #accessing }
@@ -176,6 +177,19 @@ GtEpReplayBehaviorModel >> gtPreviousNamesFor: aView [
 GtEpReplayBehaviorModel >> hasCommentEntry [
 
 	^ comments isNotEmpty
+]
+
+{ #category : #accessing }
+GtEpReplayBehaviorModel >> imageModel [
+	<return: #GtEpReplayImageModel>
+
+	^ imageModel
+]
+
+{ #category : #accessing }
+GtEpReplayBehaviorModel >> imageModel: aGtEpReplayImageModel [
+
+	imageModel := aGtEpReplayImageModel
 ]
 
 { #category : #initialization }

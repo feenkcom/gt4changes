@@ -55,13 +55,29 @@ GtEpReplayClassModel >> hasDependentClassIn: anEnvironment [
 ]
 
 { #category : #testing }
+GtEpReplayClassModel >> hasSubclasses [
+
+	^ self subclasses isNotEmpty
+]
+
+{ #category : #testing }
 GtEpReplayClassModel >> isClass [ 
 
 	^ true
 ]
 
 { #category : #accessing }
+GtEpReplayClassModel >> subclasses [
+	| subclasses |
+
+	subclasses := imageModel subclassesFor: self.
+	self currentDefinition ifNotNil: 
+		[ :cls | subclasses := subclasses, cls subclasses ].
+	^ subclasses
+]
+
+{ #category : #accessing }
 GtEpReplayClassModel >> superclassName [
 
-	^ superclassName
+	^ superclassName ifNil: [ self asRingDefinition superclassName ].
 ]
