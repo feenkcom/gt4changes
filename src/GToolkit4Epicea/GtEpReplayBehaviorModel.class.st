@@ -94,6 +94,14 @@ GtEpReplayBehaviorModel >> behaviorAffectedName [
 ]
 
 { #category : #accessing }
+GtEpReplayBehaviorModel >> category [
+	"Answer the package of the receiver.
+	Epicea incorrectly stores the package name, not the actual (ring) package and doesn't set the category."
+
+	^ self behaviorAffected category ifNil: [ self package name ].
+]
+
+{ #category : #accessing }
 GtEpReplayBehaviorModel >> classSide [
 
 	^ classSide
