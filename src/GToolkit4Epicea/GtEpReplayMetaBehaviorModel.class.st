@@ -97,6 +97,12 @@ GtEpReplayMetaBehaviorModel >> name [
 ]
 
 { #category : #accessing }
+GtEpReplayMetaBehaviorModel >> omEntryFor: anEpCodeChange [
+
+	^ instanceSide omEntryFor: anEpCodeChange.
+]
+
+{ #category : #accessing }
 GtEpReplayMetaBehaviorModel >> package [
 
 	^ instanceSide package

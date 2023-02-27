@@ -5,7 +5,8 @@ Class {
 	#name : #GtEpReplayImageModel,
 	#superclass : #GtEpReplayModel,
 	#instVars : [
-		'behaviors'
+		'behaviors',
+		'nextOmEntryLocalName'
 	],
 	#category : #'GToolkit4Epicea-Sequencer'
 }
@@ -322,6 +323,13 @@ GtEpReplayImageModel >> gtBehaviorsFor: aView [
 ]
 
 { #category : #testing }
+GtEpReplayImageModel >> hasChanges [
+
+	^ super hasChanges or:
+		[ behaviors isNotEmpty ].
+]
+
+{ #category : #testing }
 GtEpReplayImageModel >> includesBehaviorNamed: aSymbol [
 	"Answer a boolean indicating whether the named behaviour exists in the system at the current point in replay"
 
@@ -334,7 +342,21 @@ GtEpReplayImageModel >> initialize [
 
 	super initialize.
 	behaviors := Dictionary new.
+	nextOmEntryLocalName := 1.
+]
 
+{ #category : #accessing }
+GtEpReplayImageModel >> omEntryFor: anEpCodeChange [
+	| entry |
+	
+	entry := OmEntry content: anEpCodeChange.
+	entry tags
+		at: #time put: DateAndTime now;
+		at: #self put: (OmReference
+			globalName: 'GtEpReplayImageModel'
+			localName: nextOmEntryLocalName asString).
+	nextOmEntryLocalName := nextOmEntryLocalName + 1.
+	^ entry
 ]
 
 { #category : #accessing }

@@ -135,6 +135,15 @@ GtEpReplayAbstractBehaviorModel >> gtProtocolsFor: aView [
 		actionUpdateButton.
 ]
 
+{ #category : #accessing }
+GtEpReplayAbstractBehaviorModel >> hasChanges [
+
+	^ super hasChanges or:
+		[ methods isNotEmpty or:
+		[ protocolChanges isNotEmpty or:
+		[ removedMethods isNotEmpty ] ] ]
+]
+
 { #category : #testing }
 GtEpReplayAbstractBehaviorModel >> hasDependentClassIn: anEnvironment [
 	"Answer a boolean indicating whether the receiver has any dependent classes present in the supplied environment.
@@ -192,6 +201,12 @@ GtEpReplayAbstractBehaviorModel >> methodAt: aSymbol [
 GtEpReplayAbstractBehaviorModel >> methodAt: aSymbol ifAbsent: absentBlock [
 
 	^ methods at: aSymbol ifAbsent: absentBlock
+]
+
+{ #category : #accessing }
+GtEpReplayAbstractBehaviorModel >> methodAt: aSymbol ifAbsentPut: absentBlock [
+
+	^ methods at: aSymbol ifAbsentPut: absentBlock
 ]
 
 { #category : #accessing }
