@@ -89,6 +89,17 @@ GtEpReplayMethodModel >> existsInSystem [
 		ifNotNil: [ :behavior | behavior includesSelector: selector ]
 ]
 
+{ #category : #accessing }
+GtEpReplayMethodModel >> gtSourceFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Source';
+		priority: 20;
+		object: [ self methodAffected ];
+		view: #gtSourceFor:
+]
+
 { #category : #initialization }
 GtEpReplayMethodModel >> initialize [
 
@@ -115,6 +126,12 @@ GtEpReplayMethodModel >> methodAffected [
 	^ entries
 		ifEmpty: [ self currentDefinition ]
 		ifNotEmpty: [ self latestEntry content methodAffected ]
+]
+
+{ #category : #accessing }
+GtEpReplayMethodModel >> omEntryFor: anEpCodeChange [
+
+	^ behaviorModel omEntryFor: anEpCodeChange
 ]
 
 { #category : #accessing }

@@ -181,6 +181,14 @@ GtEpReplayBehaviorModel >> gtPreviousNamesFor: aView [
 		actionUpdateButton
 ]
 
+{ #category : #testing }
+GtEpReplayBehaviorModel >> hasChanges [
+
+	^ super hasChanges or:
+		[ comments isNotEmpty or:
+		[ previousLives isNotEmpty ] ]
+]
+
 { #category : #accessing }
 GtEpReplayBehaviorModel >> hasCommentEntry [
 
@@ -231,7 +239,9 @@ GtEpReplayBehaviorModel >> isRemoved [
 
 	^ entries isEmpty and: 
 		[ methods isEmpty and:
-		[ previousLives isNotEmpty ] ].
+		[ classSide methods isEmpty and:
+		[ previousLives isNotEmpty or:
+			[ self currentDefinition isNil ] ] ] ].
 ]
 
 { #category : #testing }
@@ -256,6 +266,12 @@ GtEpReplayBehaviorModel >> name [
 GtEpReplayBehaviorModel >> name: aSymbol [
 
 	name := aSymbol asSymbol
+]
+
+{ #category : #accessing }
+GtEpReplayBehaviorModel >> omEntryFor: anEpCodeChange [
+
+	^ imageModel omEntryFor: anEpCodeChange.
 ]
 
 { #category : #accessing }

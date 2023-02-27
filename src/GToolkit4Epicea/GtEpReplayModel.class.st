@@ -60,6 +60,12 @@ GtEpReplayModel >> gtEntriesFor: aView [
 ]
 
 { #category : #testing }
+GtEpReplayModel >> hasChanges [
+
+	^ entries isNotEmpty
+]
+
+{ #category : #testing }
 GtEpReplayModel >> hasEntries [
 
 	^ entries isNotEmpty
