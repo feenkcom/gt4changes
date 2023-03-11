@@ -14,7 +14,7 @@ BaselineOfGToolkit4Changes >> baseline: spec [
 		spec postLoadDoIt: #'postLoadChanges:'.
 		spec
 			baseline: 'Brick' with: [
-				spec repository: 'github://feenkcom/Brick:v0.8.888/src' ].
+				spec repository: 'github://feenkcom/Brick:v0.8.889/src' ].
 
 		spec package: 'GToolkit4Epicea' with: [
 			spec requires: #('Brick') ].
