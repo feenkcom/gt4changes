@@ -50,8 +50,11 @@ GtEpReplayClassModel >> hasDependentClassIn: anEnvironment [
 	"Answer a boolean indicating whether the receiver has any dependent classes present in the supplied environment.
 	For a class this means the superclass is present.
 	Traits have no equivalent dependency."
+	| superClassSymbol |
 
-	^ anEnvironment includesKey: superclassName asSymbol
+	superClassSymbol := superclassName asSymbol.
+	^ (anEnvironment includesKey: superClassSymbol) or:
+		[ imageModel includesBehaviorNamed: superClassSymbol ].
 ]
 
 { #category : #testing }

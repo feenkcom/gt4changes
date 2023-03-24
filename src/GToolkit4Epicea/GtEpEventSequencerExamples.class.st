@@ -560,6 +560,50 @@ GtEpEventSequencerExamples >> classAndTraitRemovalWithoutDependentsInImage [
 ]
 
 { #category : #examples }
+GtEpEventSequencerExamples >> classHierarchyAdditionForExport [
+	"Check that adding a class when the superclass only has methods modified is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleCheck).
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleCheck1).
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleCheck2).
+	fileReference := self class testDataRoot / 'Issue3171' / 'Pharo10-SNAPSHOT-64bit-14f5413.ed7mu0v17lhsys4c7p20iogap.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 4.
+	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassAddition #EpClassAddition #EpClassAddition).
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classHierarchyAdditionInImage [
+	"Check that adding a class when the superclass only has methods modified is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleCheck).
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleCheck1).
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleCheck2).
+	fileReference := self class testDataRoot / 'Issue3171' / 'Pharo10-SNAPSHOT-64bit-14f5413.ed7mu0v17lhsys4c7p20iogap.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 4.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassAddition #EpClassAddition #EpClassAddition).
+	^ sequencer
+]
+
+{ #category : #examples }
 GtEpEventSequencerExamples >> classModifyRenameForExport [
 	"Check that a class add, modify and rename is sequenced correctly."
 	<gtExample>
