@@ -112,13 +112,13 @@ GtEpiceaChangeListElement >> initializeList [
 												name: 'Apply Changes';
 												valuable: [ GtEpiceaApplyChangesDetailsElement new matchParent
 														entries: model selectedCodeEvents;
-														anchor: element ]) ].
+														anchor: element ]) ]".
 							'Revert'
 								-> [ :e | 
 									e phlow
 										spawnObject: (GtEpiceaApplyChangesDetailsElement new
-												entries: model selectedCodeEvents;
-												anchor: element) ]} asOrderedCollection.
+												entries: (model selectedCodeEvents collect: [:anEvent | anEvent asRevertedCodeChange ]) reversed;
+												anchor: element) ]"} asOrderedCollection.
 					model selectedCodeEvents size = 1
 						ifTrue: [ contextMenuItems
 								add: 'Browse current version'
