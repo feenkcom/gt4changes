@@ -175,14 +175,6 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 			stencil: [ (GtEpiceaChangeListElement forModel: changeListModel)
 					padding: (BlInsets top: 5) ].
 
-	view
-		actionDropdownButtonLabel: 'Apply'
-			tooltip: 'Apply Selected Changes'
-			content: [ :aButton | 
-				GtEpiceaApplyChangesDetailsElement  new 
-					entries: changeListModel selectedCodeEvents;
-					anchor: aButton ].
-
 	self addToolbarButtonsTo: view withModel: changeListModel.
 
 	^ view
