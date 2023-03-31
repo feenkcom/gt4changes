@@ -13,8 +13,18 @@ Class {
 }
 
 { #category : #'instance creation' }
+GtEpiceaChangeListModel class >> onEvents: aCollection [
+	^ self new events: aCollection
+]
+
+{ #category : #'instance creation' }
 GtEpiceaChangeListModel class >> onLog: anEpLog [
 	^ self new log: anEpLog
+]
+
+{ #category : #accessing }
+GtEpiceaChangeListModel >> allEvents [
+	^ all
 ]
 
 { #category : #accessing }
@@ -42,6 +52,14 @@ GtEpiceaChangeListModel >> availableProvider [
 { #category : #accessing }
 GtEpiceaChangeListModel >> deselect: anEpEvent [
 	selection remove: anEpEvent
+]
+
+{ #category : #accessing }
+GtEpiceaChangeListModel >> events: aCollection [
+	available := aCollection.
+	all := available.
+	selection := available.
+	self whenReadyBlock ifNotNil: [ self whenReadyBlock value ]
 ]
 
 { #category : #accessing }
@@ -85,6 +103,11 @@ GtEpiceaChangeListModel >> log: anEpLog [
 				selection := available asOrderedCollection.
 				self whenReadyBlock ifNotNil: [ self whenReadyBlock value ] ].
 	promise await
+]
+
+{ #category : #accessing }
+GtEpiceaChangeListModel >> rawLog: anEpLog [
+	log := anEpLog
 ]
 
 { #category : #accessing }
