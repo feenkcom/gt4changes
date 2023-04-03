@@ -168,13 +168,12 @@ GtEpiceaAbstractLog >> gtApplyFor: anAction [
 	^ anAction dropdown
 		label: 'Apply';
 		priority: 5;
-		stencil: [ :aButton | 
-			aButton phlow
-				spawnTool: (GtPhlowValuableTool new
-						name: 'Apply Changes';
-						valuable: [ GtEpiceaApplyChangesDetailsElement new matchParent
-								entries: self entries;
-								anchor: aButton ]) ]
+		content: [ :aButton | 
+			GtPhlowValuableTool new
+				name: 'Apply Changes';
+				valuable: [ GtEpiceaApplyChangesDetailsElement new matchParent
+						entries: self entries;
+						anchor: aButton ] ]
 ]
 
 { #category : #'gt - extensions' }
