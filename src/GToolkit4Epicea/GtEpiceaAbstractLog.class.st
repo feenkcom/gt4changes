@@ -163,6 +163,20 @@ GtEpiceaAbstractLog >> exportFilter [
 ]
 
 { #category : #'gt - extensions' }
+GtEpiceaAbstractLog >> gtApplyFor: anAction [
+	<gtAction>
+	^ anAction dropdown
+		label: 'Apply';
+		priority: 5;
+		content: [ :aButton | 
+			GtPhlowValuableTool new
+				name: 'Apply Changes';
+				valuable: [ GtEpiceaApplyChangesDetailsElement new matchParent
+						entries: self entries;
+						anchor: aButton ] ]
+]
+
+{ #category : #'gt - extensions' }
 GtEpiceaAbstractLog >> gtEventsFor: aView [
 	<gtView>
 	<gtViewChanges>
