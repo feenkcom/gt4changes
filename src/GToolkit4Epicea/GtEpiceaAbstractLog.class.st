@@ -169,11 +169,9 @@ GtEpiceaAbstractLog >> gtApplyFor: anAction [
 		label: 'Apply';
 		priority: 5;
 		content: [ :aButton | 
-			GtPhlowValuableTool new
-				name: 'Apply Changes';
-				valuable: [ GtEpiceaApplyChangesDetailsElement new matchParent
-						entries: self entries;
-						anchor: aButton ] ]
+			GtEpiceaApplyChangesDetailsElement new
+				entries: self entries;
+				anchor: aButton ]
 ]
 
 { #category : #'gt - extensions' }
