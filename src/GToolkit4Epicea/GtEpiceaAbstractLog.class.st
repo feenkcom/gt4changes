@@ -195,6 +195,13 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 				entries: changeListModel selectedCodeEvents;
 				anchor: aButton ].
 
+	view
+		actionButtonLabel: 'Inspect'
+		tooltip: 'Inspect Selected Changes'
+		action: [ :aButton | 
+			aButton phlow spawnObject:
+				(GtEpiceaExplicitLog on: changeListModel selectedCodeEvents) ].
+
 	self addToolbarButtonsTo: view withModel: changeListModel.
 
 	^ view

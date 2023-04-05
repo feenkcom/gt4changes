@@ -185,25 +185,31 @@ GtEpReplayImageModel >> behaviorAt: aSymbol ifPresent: presentBlock ifAbsent: ab
 { #category : #private }
 GtEpReplayImageModel >> behaviorModelFor: anEpEvent [
 	"Answer the appropriate behavior model for the supplied event"
+	| behaviorModel |
 
-	^ anEpEvent behaviorAffected isClass ifTrue:
-		[ GtEpReplayClassModel new ]
-	ifFalse: [ anEpEvent behaviorAffected isTrait ifTrue:
-		[ GtEpReplayTraitModel new ]
-	ifFalse:
-		[ self error: 'Unknown behavior' ] ]
+	behaviorModel := anEpEvent behaviorAffected isClass ifTrue:
+			[ GtEpReplayClassModel new ]
+		ifFalse: [ anEpEvent behaviorAffected isTrait ifTrue:
+			[ GtEpReplayTraitModel new ]
+		ifFalse:
+			[ self error: 'Unknown behavior' ] ].
+	behaviorModel imageModel: self.
+	^ behaviorModel.
 ]
 
 { #category : #private }
 GtEpReplayImageModel >> behaviorModelForBehavior: aBehavior [
 	"Answer the appropriate behavior model for the supplied behavior"
+	| behaviorModel |
 
-	^ aBehavior isClass ifTrue:
-		[ GtEpReplayClassModel new ]
-	ifFalse: [ aBehavior isTrait ifTrue:
-		[ GtEpReplayTraitModel new ]
-	ifFalse:
-		[ self error: 'Unknown behavior' ] ]
+	behaviorModel := aBehavior isClass ifTrue:
+			[ GtEpReplayClassModel new ]
+		ifFalse: [ aBehavior isTrait ifTrue:
+			[ GtEpReplayTraitModel new ]
+		ifFalse:
+			[ self error: 'Unknown behavior' ] ].
+	behaviorModel imageModel: self.
+	^ behaviorModel.
 ]
 
 { #category : #private }
