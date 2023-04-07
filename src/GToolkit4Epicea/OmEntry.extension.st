@@ -7,6 +7,7 @@ OmEntry >> gtActionApplyFor: anAction [
 
 	^ anAction button
 		label: 'Apply';
+		priority: 1;
 		action: [ :button | self content applyCodeChange ]
 ]
 
@@ -18,11 +19,13 @@ OmEntry >> gtActionBrowseEntryFor: anAction [
 	(self content isKindOf: EpMethodChange)
 		ifTrue: [ ^ anAction button
 				label: 'Browse';
+				priority: 3;
 				action: [ :button | self content methodAffected compiledMethod gtBrowseFrom: button ] ].
 
 	(self content isEpBehaviorChange)
 		ifTrue: [ ^ anAction button
 				label: 'Browse';
+				priority: 3;
 				action: [ :button | self content behaviorAffected realClass gtBrowseFrom: button ] ].
 
 	^ anAction noAction
@@ -35,6 +38,7 @@ OmEntry >> gtActionRevertFor: anAction [
 
 	^ anAction button
 		label: 'Revert';
+		priority: 2;
 		action: [ :button | self content asRevertedCodeChange applyCodeChange ]
 ]
 
