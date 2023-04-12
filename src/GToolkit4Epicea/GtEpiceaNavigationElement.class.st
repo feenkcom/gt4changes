@@ -50,5 +50,8 @@ GtEpiceaNavigationElement >> setupNavigationView [
 
 { #category : #accessing }
 GtEpiceaNavigationElement >> subscribeToEpicea [
-	GtEpiceaMonitor current when: GtEpiceaLogAnnouncement send: #setupNavigationView to: self
+	GtEpiceaMonitor current weak 
+		when: GtEpiceaLogAnnouncement 
+		send: #setupNavigationView 
+		to: self
 ]
