@@ -62,16 +62,14 @@ GtEpicea >> announcer [
 
 { #category : #modification }
 GtEpicea >> applyChanges [
-	self 
-		assert: [ self log notNil ] 
-		description: [ 'Epicea log must be non-nil.' ].
+	| sequencedEntries |
+	self assert: [ self log notNil ] description: [ 'Epicea log must be non-nil.' ].
 	self hasChanges ifFalse: [ ^ self ].
-	EpLogBrowserOperationFactory new
-		logBrowserModel: self log;
-		entries: self entries;
-		errorHandlerBlock: applyErrorHandler;
-		applyCodeChanges.
-	self notifyEpiceaChanged.
+	sequencedEntries := GtEpEventSequencer
+			sequence: self entries
+			withCurrent: false.
+	sequencedEntries do: [ :each | each content applyCodeChangeIfHasImpact ].
+	self notifyEpiceaChanged
 ]
 
 { #category : #private }
@@ -100,32 +98,17 @@ GtEpicea >> constants [
 
 { #category : #'gt-extension' }
 GtEpicea >> createChangeList [
-
 	| aList |
-	aList := BrColumnedList new itemsProvider:
-		         self log entriesStream asBrItemsProvider.
-	aList column
-		title: 'Select';
-		width: 32;
-		stencil: [ :anEpEvent :anIndex | 
-			| aRemoveButton |
-			aRemoveButton := BrButton new.
-			aRemoveButton
-				layout: BlLinearLayout new;
-				beSmallSize;
-				aptitude: BrGlamorousButtonWithIconAptitude;
-				icon: BrGlamorousVectorIcons remove;
-				label: 'Remove';
-				action: [ 
-					self removeEntry: anEpEvent.
-					aRemoveButton enqueueTask: (BlTaskAction new action: [ 
-							 aRemoveButton visibility: BlVisibility hidden ]) ] ].
+	aList := BrColumnedList new
+			itemsProvider: self log entriesStream asBrItemsProvider;
+			aptitude: BrColumnedMultiListAptitude.
+
 	aList column
 		title: 'Icon';
 		width: 32;
 		stencil: [ :anEpEvent :anIndex | 
-			(anEpEvent content accept: EpIconVisitor new) asElement margin:
-					(BlInsets left: 5 right: 5) ].
+			(anEpEvent content accept: EpIconVisitor new) asElement
+				margin: (BlInsets left: 5 right: 5) ].
 	aList column
 		title: 'Description';
 		stencil: [ :anEpEvent :anIndex | 
@@ -135,53 +118,71 @@ GtEpicea >> createChangeList [
 				constraintsDo: [ :c | 
 					c horizontal fitContent.
 					c vertical fitContent ] ].
+
+	aList
+		rowStencil: (GtPhlowColumnedListItemElementWithContextMenuDecorator new
+				stencilBuilder: BrGlamorousColumnedListSelectableRowElementStencilBuilder new).
+
 	^ aList fitContent margin: (BlInsets top: 5)
 ]
 
 { #category : #'gt-extension' }
 GtEpicea >> createChangeTabs [
-	| aTabGroup |
+	| aTabGroup changesList globalChangesList |
 	aTabGroup := BrTabGroup new aptitude: BrGlamorousTabGroupAptitude.
-	
-	aTabGroup addTab: (BrTab new	aptitude: BrGlamorousTabAptitude new; label: 'Changes'; stencil: [self createChangeList]).
-	aTabGroup addTab: (BrTab new	aptitude: BrGlamorousTabAptitude new; label: 'Global Changes'; stencil: [self createGlobalChangeList]).
-	
+
+	changesList := self createChangeList.
+	globalChangesList := self createGlobalChangeList.
+
+	aTabGroup
+		addTab: (BrTab new
+				aptitude: BrGlamorousTabAptitude new;
+				label: 'Changes';
+				stencil: [ changesList ]).
+	aTabGroup
+		addTab: (BrTab new
+				aptitude: BrGlamorousTabAptitude new;
+				label: 'Global Changes';
+				stencil: [ globalChangesList ]).
+
+	aTabGroup
+		actionbarStencil: [ BrToolbar new
+				aptitude: BrGlamorousToolbarAptitude new;
+				addItem: (BrButton new
+						aptitude: BrGlamorousButtonWithIconAptitude;
+						icon: BrGlamorousVectorIcons add;
+						label: 'Add Selected';
+						action: [ globalChangesList selectedIndices
+								do: [ :anIndex | self addEvent: (globalChangesList items at: anIndex) content ].
+							changesList itemsProvider: self log entriesStream asBrItemsProvider ]);
+				addItem: (BrButton new
+						aptitude: BrGlamorousButtonWithIconAptitude;
+						icon: BrGlamorousVectorIcons remove;
+						label: 'Remove Selected';
+						action: [ changesList selectedIndices
+								do: [ :anIndex | self removeEntry: (changesList items at: anIndex) ] ]) ].
+
 	^ aTabGroup
-		  hExact: 400;
-		  vExact: 250;
-		  padding: (BlInsets all: 5);
-		  addAptitude: BrGlamorousWithVerticalResizerAptitude;
-		  addAptitude: BrGlamorousWithHorizontalResizerAptitude
+		hExact: 400;
+		vExact: 250;
+		padding: (BlInsets all: 5);
+		addAptitude: BrGlamorousWithVerticalResizerAptitude;
+		addAptitude: BrGlamorousWithHorizontalResizerAptitude
 ]
 
 { #category : #'gt-extension' }
 GtEpicea >> createGlobalChangeList [
-
 	| aList |
-	aList := BrColumnedList new itemsProvider:
-		         EpMonitor current log entries reversed asBrItemsProvider.
-	aList column
-		title: 'Select';
-		width: 32;
-		stencil: [ :anOmEntry :anIndex | 
-			| anAddButton |
-			anAddButton := BrButton new.
-			anAddButton
-				layout: BlLinearLayout new;
-				beSmallSize;
-				aptitude: BrGlamorousButtonWithIconAptitude;
-				icon: BrGlamorousVectorIcons add;
-				label: 'Add';
-				action: [ 
-					self addEvent: anOmEntry content.
-					anAddButton enqueueTask: (BlTaskAction new action: [ 
-									 anAddButton visibility: BlVisibility hidden ]) ] ].
+	aList := BrColumnedList new
+			itemsProvider: EpMonitor current log entries reversed asBrItemsProvider;
+			aptitude: BrColumnedMultiListAptitude.
+
 	aList column
 		title: 'Icon';
 		width: 32;
 		stencil: [ :anEpEvent :anIndex | 
-			(anEpEvent content accept: EpIconVisitor new) asElement margin:
-					(BlInsets left: 5 right: 5) ].
+			(anEpEvent content accept: EpIconVisitor new) asElement
+				margin: (BlInsets left: 5 right: 5) ].
 	aList column
 		title: 'Description';
 		stencil: [ :anEpEvent :anIndex | 
@@ -191,6 +192,11 @@ GtEpicea >> createGlobalChangeList [
 				constraintsDo: [ :c | 
 					c horizontal fitContent.
 					c vertical fitContent ] ].
+
+	aList
+		rowStencil: (GtPhlowColumnedListItemElementWithContextMenuDecorator new
+				stencilBuilder: BrGlamorousColumnedListSelectableRowElementStencilBuilder new).
+
 	^ aList matchParent margin: (BlInsets top: 5)
 ]
 
