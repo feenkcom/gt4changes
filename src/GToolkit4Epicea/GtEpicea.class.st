@@ -62,16 +62,14 @@ GtEpicea >> announcer [
 
 { #category : #modification }
 GtEpicea >> applyChanges [
-	self 
-		assert: [ self log notNil ] 
-		description: [ 'Epicea log must be non-nil.' ].
+	| sequencedEntries |
+	self assert: [ self log notNil ] description: [ 'Epicea log must be non-nil.' ].
 	self hasChanges ifFalse: [ ^ self ].
-	EpLogBrowserOperationFactory new
-		logBrowserModel: self log;
-		entries: self entries;
-		errorHandlerBlock: applyErrorHandler;
-		applyCodeChanges.
-	self notifyEpiceaChanged.
+	sequencedEntries := GtEpEventSequencer
+			sequence: self entries
+			withCurrent: false.
+	sequencedEntries do: [ :each | each content applyCodeChangeIfHasImpact ].
+	self notifyEpiceaChanged
 ]
 
 { #category : #private }
@@ -155,7 +153,8 @@ GtEpicea >> createChangeTabs [
 						icon: BrGlamorousVectorIcons add;
 						label: 'Add Selected';
 						action: [ globalChangesList selectedIndices
-								do: [ :anIndex | self addEvent: (globalChangesList items at: anIndex) content ] ]);
+								do: [ :anIndex | self addEvent: (globalChangesList items at: anIndex) content ].
+							changesList itemsProvider: self log entriesStream asBrItemsProvider ]);
 				addItem: (BrButton new
 						aptitude: BrGlamorousButtonWithIconAptitude;
 						icon: BrGlamorousVectorIcons remove;
