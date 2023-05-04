@@ -96,7 +96,7 @@ GtEpiceaChangeListElement >> initializeList [
 		do: [ :anEvent | 
 			| selected |
 			selected := anEvent indices
-					collect: [ :anIndex | model allEvents at: anIndex ].
+					collect: [ :anIndex | model availableEvents at: anIndex ].
 			model setSelection: selected ].
 
 	list
@@ -106,19 +106,19 @@ GtEpiceaChangeListElement >> initializeList [
 				contextMenuStencil: [ :element :item | 
 					| contextMenuItems |
 					contextMenuItems := {'Apply'
-								-> [ :e | 
-									e phlow
-										spawnTool: (GtPhlowValuableTool new
-												name: 'Apply Changes';
-												valuable: [ GtEpiceaApplyChangesDetailsElement new matchParent
-														entries: model selectedCodeEvents;
-														anchor: element ]) ]".
+								-> [  ".
 							'Revert'
 								-> [ :e | 
 									e phlow
 										spawnObject: (GtEpiceaApplyChangesDetailsElement new
 												entries: (model selectedCodeEvents collect: [:anEvent | anEvent asRevertedCodeChange ]) reversed;
-												anchor: element) ]"} asOrderedCollection.
+												anchor: element) ]":e | 
+									e phlow
+										spawnTool: (GtPhlowValuableTool new
+												name: 'Apply Changes';
+												valuable: [ GtEpiceaApplyChangesDetailsElement new matchParent
+														entries: model selectedCodeEvents;
+														anchor: element ]) ]} asOrderedCollection.
 					model selectedCodeEvents size = 1
 						ifTrue: [ contextMenuItems
 								add: 'Browse current version'
