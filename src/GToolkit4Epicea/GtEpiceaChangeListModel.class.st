@@ -45,6 +45,11 @@ GtEpiceaChangeListModel >> applyFiltersFrom: aFilterElement [
 ]
 
 { #category : #accessing }
+GtEpiceaChangeListModel >> availableEvents [
+	^ available
+]
+
+{ #category : #accessing }
 GtEpiceaChangeListModel >> availableProvider [
 	^ BrStreamItemsProvider forCollection: available
 ]
