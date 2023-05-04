@@ -93,7 +93,6 @@ GtEpiceaApplyChangesDetailsElement >> buildChangesListElement [
 GtEpiceaApplyChangesDetailsElement >> buildEmptyContentElement [
 	^ BrFrame new 
 		fitContent;
-		alignCenter;
 		addChild:  (BrLabel new
 			aptitude: BrGlamorousLabelAptitude;
 			text: 'No relevant changes');

@@ -166,3 +166,8 @@ OmEntry >> gtViewChangeIcon [
 OmEntry >> gtViewLatestChangeTime [
 	^ self gtTime
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+OmEntry >> hasTime [
+	^ self tags includesKey: #time
+]
