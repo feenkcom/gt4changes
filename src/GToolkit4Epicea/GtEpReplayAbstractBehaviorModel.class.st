@@ -114,7 +114,7 @@ GtEpReplayAbstractBehaviorModel >> gtEntityLabel [
 	^ self name
 ]
 
-{ #category : #ui }
+{ #category : #'gt - extensions' }
 GtEpReplayAbstractBehaviorModel >> gtMethodsFor: aView [
 	<gtView>
 
@@ -127,7 +127,7 @@ GtEpReplayAbstractBehaviorModel >> gtMethodsFor: aView [
 		actionUpdateButton.
 ]
 
-{ #category : #ui }
+{ #category : #'gt - extensions' }
 GtEpReplayAbstractBehaviorModel >> gtProtocolsFor: aView [
 	<gtView>
 
@@ -166,13 +166,12 @@ GtEpReplayAbstractBehaviorModel >> gtViewLatestChangeTime [
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtEpReplayAbstractBehaviorModel >> hasChanges [
-
-	^ super hasChanges or:
-		[ methods isNotEmpty or:
-		[ protocolChanges isNotEmpty or:
-		[ removedMethods isNotEmpty ] ] ]
+	^ super hasChanges
+		or: [ methods isNotEmpty
+				or: [ self hasProtocolEntry 
+					or: [ removedMethods isNotEmpty ] ] ]
 ]
 
 { #category : #testing }
@@ -182,6 +181,16 @@ GtEpReplayAbstractBehaviorModel >> hasDependentClassIn: anEnvironment [
 	Traits have no equivalent dependency."
 
 	^ self subclassResponsibility 
+]
+
+{ #category : #testing }
+GtEpReplayAbstractBehaviorModel >> hasNonMethodChanges [
+	^ self hasProtocolEntry 
+]
+
+{ #category : #testing }
+GtEpReplayAbstractBehaviorModel >> hasProtocolEntry [
+	^ protocolChanges isNotEmpty
 ]
 
 { #category : #testing }

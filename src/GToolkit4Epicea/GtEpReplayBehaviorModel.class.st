@@ -191,14 +191,18 @@ GtEpReplayBehaviorModel >> gtViewChangeIcon [
 				Smalltalk ui icons iconNamed: #windowMinimizeInactive ] ].
 	
 	(self environment includesKey: name) ifTrue: [
-		^ Smalltalk ui icons iconNamed: #class ].
+		^ self hasNonMethodChanges 
+			ifTrue: [ Smalltalk ui icons iconNamed: #changeUpdate ]
+			ifFalse: [ Smalltalk ui icons iconNamed: #class ] ].
 	
 	^ entries
 		detect: [ :entry | entry content isEpClassAddition or: [ entry content isEpClassAddition ] ]
 		ifFound: [ :entry | 
 			self previousNames
 				detect: [ :aName | self environment includesKey: aName asSymbol ]
-				ifFound: [ :aName | Smalltalk ui icons iconNamed: #class ]
+				ifFound: [ :aName | self hasNonMethodChanges 
+					ifTrue: [ Smalltalk ui icons iconNamed: #changeUpdate ]
+					ifFalse: [ Smalltalk ui icons iconNamed: #class ] ]
 				ifNone: [ 
 					entries
 						detect: [ :entry2 | entry2 content isEpClassAddition] 
@@ -223,6 +227,11 @@ GtEpReplayBehaviorModel >> hasChanges [
 GtEpReplayBehaviorModel >> hasCommentEntry [
 
 	^ comments isNotEmpty
+]
+
+{ #category : #accessing }
+GtEpReplayBehaviorModel >> hasNonMethodChanges [
+	^ super hasNonMethodChanges and: [ self hasCommentEntry ] 
 ]
 
 { #category : #accessing }
