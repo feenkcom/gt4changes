@@ -107,6 +107,11 @@ OmEntry >> gtDiffFor: aView [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+OmEntry >> gtEntityLabel [
+	^ content gtDisplayString
+]
+
+{ #category : #'*GToolkit4Epicea' }
 OmEntry >> gtNewSourceFor: aView [
 	<gtView>
 	

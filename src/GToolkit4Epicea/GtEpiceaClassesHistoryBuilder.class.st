@@ -59,9 +59,10 @@ GtEpiceaClassesHistoryBuilder >> classHistoriesWithOnlyBehaviourChanges [
 	
 	^ GtEpiceaClassHistoriesGroup 
 		withAll: (self entriesGroup behaviorChangesGroupedByClass associations 
-			collect: [ :assoc | classHistoryType  
-				forClass: assoc key
-				withBehaviourChanges: assoc value ])
+			collect: [ :assoc | 
+				classHistoryType  
+					forClass: assoc key
+					withBehaviourChanges: assoc value ])
 ]
 
 { #category : #accessing }

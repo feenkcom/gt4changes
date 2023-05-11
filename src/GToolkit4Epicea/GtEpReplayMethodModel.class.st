@@ -89,7 +89,16 @@ GtEpReplayMethodModel >> existsInSystem [
 		ifNotNil: [ :behavior | behavior includesSelector: selector ]
 ]
 
-{ #category : #accessing }
+{ #category : #'gt - extensions' }
+GtEpReplayMethodModel >> gtEntityLabel [
+	^ String streamContents: [ :aStream |
+		aStream
+			<< self behaviorAffectedName;
+			<< '>>';
+			<< self selector.]
+]
+
+{ #category : #'gt - extensions' }
 GtEpReplayMethodModel >> gtSourceFor: aView [
 	<gtView>
 
@@ -98,6 +107,35 @@ GtEpReplayMethodModel >> gtSourceFor: aView [
 		priority: 20;
 		object: [ self methodAffected ];
 		view: #gtSourceFor:
+]
+
+{ #category : #'gt - extensions' }
+GtEpReplayMethodModel >> gtViewChangeDescriptionElements [
+	^ self entries last gtViewChangeDescriptionElements
+]
+
+{ #category : #'gt - extensions' }
+GtEpReplayMethodModel >> gtViewChangeHistoryChildren [
+	^ entries sorted: #gtTime descending
+]
+
+{ #category : #'gt - extensions' }
+GtEpReplayMethodModel >> gtViewChangeIcon [
+	self isRemoved ifTrue: [
+		^ self existsInSystem 
+			ifTrue: [ Smalltalk ui icons iconNamed: #changeRemoveIcon ] 
+			ifFalse: [
+				Smalltalk ui icons iconNamed: #windowMinimizeInactive ] ].
+	
+	self existsInSystem ifTrue: [
+		^ Smalltalk ui icons iconNamed: #changeUpdate ].
+	
+	^ Smalltalk ui icons iconNamed: #changeAddIcon
+]
+
+{ #category : #'gt - extensions' }
+GtEpReplayMethodModel >> gtViewLatestChangeTime [
+	^ entries last gtViewLatestChangeTime
 ]
 
 { #category : #initialization }

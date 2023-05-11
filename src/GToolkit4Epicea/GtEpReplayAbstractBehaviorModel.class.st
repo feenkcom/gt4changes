@@ -109,6 +109,11 @@ GtEpReplayAbstractBehaviorModel >> ensureProtocolAt: aSymbol [
 
 ]
 
+{ #category : #'gt - extensions' }
+GtEpReplayAbstractBehaviorModel >> gtEntityLabel [
+	^ self name
+]
+
 { #category : #ui }
 GtEpReplayAbstractBehaviorModel >> gtMethodsFor: aView [
 	<gtView>
@@ -133,6 +138,32 @@ GtEpReplayAbstractBehaviorModel >> gtProtocolsFor: aView [
 		itemText: [ :item | item key ];
 		send: [ :item | item value ];
 		actionUpdateButton.
+]
+
+{ #category : #'gt - extensions' }
+GtEpReplayAbstractBehaviorModel >> gtViewChangeDescriptionElements [
+	^ {BlTextElement new 
+		padding: (BlInsets all: 0);
+		constraintsDo: [ :c | 
+			c linear vertical alignCenter ];
+		text: (self gtEntityLabel  asRopedText 
+			bold; 
+			glamorousRegularFont)}
+]
+
+{ #category : #'gt - extensions' }
+GtEpReplayAbstractBehaviorModel >> gtViewChangeHistoryChildren [
+	^ methods values sorted: #selector ascending
+]
+
+{ #category : #'gt - extensions' }
+GtEpReplayAbstractBehaviorModel >> gtViewChangeIcon [
+	^ Smalltalk ui icons iconNamed: #class
+]
+
+{ #category : #'gt - extensions' }
+GtEpReplayAbstractBehaviorModel >> gtViewLatestChangeTime [
+	^ nil
 ]
 
 { #category : #accessing }

@@ -181,6 +181,35 @@ GtEpReplayBehaviorModel >> gtPreviousNamesFor: aView [
 		actionUpdateButton
 ]
 
+{ #category : #accessing }
+GtEpReplayBehaviorModel >> gtViewChangeIcon [
+	self isRemoved ifTrue: [
+		^ (self environment includesKey: name) 
+			ifTrue: [ Smalltalk ui icons iconNamed: #changeRemoveIcon ] 
+			ifFalse: [
+				Smalltalk ui icons iconNamed: #windowMinimizeInactive ] ].
+	
+	(self environment includesKey: name) ifTrue: [
+		^ Smalltalk ui icons iconNamed: #class ].
+	
+	^ entries
+		detect: [ :entry | entry content isEpClassAddition or: [ entry content isEpClassAddition ] ]
+		ifFound: [ :entry | 
+			self previousNames
+				detect: [ :aName | self environment includesKey: aName asSymbol ]
+				ifFound: [ :aName | Smalltalk ui icons iconNamed: #class ]
+				ifNone: [ 
+					entries
+						detect: [ :entry2 | entry2 content isEpClassAddition] 
+						ifFound: [ :entry2 | Smalltalk ui icons iconNamed: #changeAddIcon ]
+						ifNone: [Smalltalk ui icons iconNamed: #warning]
+				 ]. ]
+		ifNone: [ (self environment includesKey: name asSymbol)
+			ifTrue: [ Smalltalk ui icons iconNamed: #changeAddIcon ]
+			ifFalse: [ Smalltalk ui icons iconNamed: #warning ] ].
+
+]
+
 { #category : #testing }
 GtEpReplayBehaviorModel >> hasChanges [
 
