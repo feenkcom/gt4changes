@@ -81,6 +81,18 @@ GtEpiceaAbstractLog >> changedClassNames [
 ]
 
 { #category : #accessing }
+GtEpiceaAbstractLog >> changedSelectorsByClassName [
+	| changedSelectorsVisitor |
+	
+	changedSelectorsVisitor := GtEpiceaChangedMethodSelectorsVisitor new.
+	self entries do: [ :anEntry |
+		anEntry content ifNotNil: [ :aChange |
+			aChange accept: changedSelectorsVisitor ] ].
+		
+	^ changedSelectorsVisitor changedSelectorsByClassName
+]
+
+{ #category : #accessing }
 GtEpiceaAbstractLog >> changesGroupedByBranch [
 	| headNodes |
 
