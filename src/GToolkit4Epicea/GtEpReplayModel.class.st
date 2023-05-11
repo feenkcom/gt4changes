@@ -52,10 +52,11 @@ GtEpReplayModel >> environment [
 GtEpReplayModel >> gtEntriesFor: aView [
 	<gtView>
 
-	^ aView list
+	^ aView forward
 		title: 'Entries';
 		priority: 20;
-		items: [ entries ];
+		object: [ GtEpiceaEntriesGroup withAll: entries ];
+		view: #gtItemsFor:;
 		actionUpdateButton
 ]
 

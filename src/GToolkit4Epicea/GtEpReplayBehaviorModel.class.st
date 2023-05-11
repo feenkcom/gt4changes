@@ -141,10 +141,11 @@ GtEpReplayBehaviorModel >> exists [
 GtEpReplayBehaviorModel >> gtCommentEntriesFor: aView [
 	<gtView>
 
-	^ aView list
+	^ aView forward
 		title: 'Comments';
-		priority: 30;
-		items: [ comments ];
+		priority: 20;
+		object: [ GtEpiceaEntriesGroup withAll: comments ];
+		view: #gtItemsFor:;
 		actionUpdateButton
 ]
 
