@@ -328,6 +328,27 @@ GtEpReplayImageModel >> gtBehaviorsFor: aView [
 		actionUpdateButton.
 ]
 
+{ #category : #ui }
+GtEpReplayImageModel >> gtBehaviorsTreeFor: aView [
+	<gtView>
+
+	^ aView columnedTree
+		title: 'Behaviors (tree)';
+		priority: 11;
+		items: [ behaviors values sorted: #name ascending ];
+		children: [ :anEntry |
+			anEntry gtViewChangeHistoryChildren ];
+		column: 'Details' do: [ :aColumn | 
+			aColumn 
+				cellStencil: [ GtEpiceaHistoryEntityDetailsElement new ];
+				dataBinder: [ :anElement :anEntry | anElement updateForEntry: anEntry ] ];
+		column: 'Timestamp' text: [ :anEntry | 
+			anEntry gtViewLatestChangeTime 
+				ifNil: [ '' ]
+				ifNotNil: [ :aTimestamp | aTimestamp printToSeconds ] ] width: 150;
+		actionUpdateButton.
+]
+
 { #category : #testing }
 GtEpReplayImageModel >> hasChanges [
 

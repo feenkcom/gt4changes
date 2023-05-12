@@ -5,7 +5,6 @@ Class {
 	#name : #GtEpEventSequencer,
 	#superclass : #Object,
 	#instVars : [
-		'impactFilter',
 		'entries',
 		'sequencedEntries',
 		'visitor',
@@ -173,33 +172,11 @@ GtEpEventSequencer >> gtViewSequencedEntriesFor: aView [
 		column: 'Timestamp' text: [ :anOmbuEntry | anOmbuEntry gtTime ] width: 250
 ]
 
-{ #category : #'gt - extensions' }
-GtEpEventSequencer >> gtViewSequencedEntriesWithImpactFor: aView [
-	<gtView>
-
-	^ aView columnedList
-		title: 'Sequenced Entries (with impact)';
-		priority: 11;
-		items: [ self sequencedEntries ];
-		column: 'Change' text: [ :anOmbuEntry | anOmbuEntry content ];
-		column: 'Has Impact' 
-			text: [ :anOmbuEntry | impactFilter accepts: anOmbuEntry ]
-			width: 75;
-		column: 'Timestamp' text: [ :anOmbuEntry | anOmbuEntry gtTime ] width: 250
-]
-
 { #category : #accessing }
 GtEpEventSequencer >> image [
 	<return: #GtEpReplayImageModel>
 
 	^ image
-]
-
-{ #category : #initialization }
-GtEpEventSequencer >> initialize [
-
-	super initialize.
-	impactFilter := EpImpactCodeChangeFilter new environment: self class environment.
 ]
 
 { #category : #testing }
