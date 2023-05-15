@@ -48,7 +48,6 @@ GtEpiceaElement >> initialize [
 	self initializeListeners.
 	self addInteractiveModelState: GtPhlowToolDetailModel new.
 	self layout: BlLinearLayout horizontal.
-	self addAptitude: BrLayoutResizerAptitude inherit.
 	self initializeView.
 	self navigationModel: self defaultNavigationModel.
 	
