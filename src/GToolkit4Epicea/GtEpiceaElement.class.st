@@ -48,6 +48,7 @@ GtEpiceaElement >> initialize [
 	self initializeListeners.
 	self addInteractiveModelState: GtPhlowToolDetailModel new.
 	self layout: BlLinearLayout horizontal.
+	self matchParent.
 	self initializeView.
 	self navigationModel: self defaultNavigationModel.
 	
