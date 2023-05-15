@@ -141,10 +141,11 @@ GtEpReplayBehaviorModel >> exists [
 GtEpReplayBehaviorModel >> gtCommentEntriesFor: aView [
 	<gtView>
 
-	^ aView list
+	^ aView forward
 		title: 'Comments';
-		priority: 30;
-		items: [ comments ];
+		priority: 20;
+		object: [ GtEpiceaEntriesGroup withAll: comments ];
+		view: #gtItemsFor:;
 		actionUpdateButton
 ]
 
@@ -181,6 +182,39 @@ GtEpReplayBehaviorModel >> gtPreviousNamesFor: aView [
 		actionUpdateButton
 ]
 
+{ #category : #accessing }
+GtEpReplayBehaviorModel >> gtViewChangeIcon [
+	self isRemoved ifTrue: [
+		^ (self environment includesKey: name) 
+			ifTrue: [ Smalltalk ui icons iconNamed: #changeRemoveIcon ] 
+			ifFalse: [
+				Smalltalk ui icons iconNamed: #windowMinimizeInactive ] ].
+	
+	(self environment includesKey: name) ifTrue: [
+		^ self hasNonMethodChanges 
+			ifTrue: [ Smalltalk ui icons iconNamed: #changeUpdate ]
+			ifFalse: [ Smalltalk ui icons iconNamed: #class ] ].
+	
+	^ entries
+		detect: [ :entry | entry content isEpClassAddition or: [ entry content isEpClassAddition ] ]
+		ifFound: [ :entry | 
+			self previousNames
+				detect: [ :aName | self environment includesKey: aName asSymbol ]
+				ifFound: [ :aName | self hasNonMethodChanges 
+					ifTrue: [ Smalltalk ui icons iconNamed: #changeUpdate ]
+					ifFalse: [ Smalltalk ui icons iconNamed: #class ] ]
+				ifNone: [ 
+					entries
+						detect: [ :entry2 | entry2 content isEpClassAddition] 
+						ifFound: [ :entry2 | Smalltalk ui icons iconNamed: #changeAddIcon ]
+						ifNone: [Smalltalk ui icons iconNamed: #warning]
+				 ]. ]
+		ifNone: [ (self environment includesKey: name asSymbol)
+			ifTrue: [ Smalltalk ui icons iconNamed: #changeAddIcon ]
+			ifFalse: [ Smalltalk ui icons iconNamed: #warning ] ].
+
+]
+
 { #category : #testing }
 GtEpReplayBehaviorModel >> hasChanges [
 
@@ -193,6 +227,11 @@ GtEpReplayBehaviorModel >> hasChanges [
 GtEpReplayBehaviorModel >> hasCommentEntry [
 
 	^ comments isNotEmpty
+]
+
+{ #category : #accessing }
+GtEpReplayBehaviorModel >> hasNonMethodChanges [
+	^ super hasNonMethodChanges and: [ self hasCommentEntry ] 
 ]
 
 { #category : #accessing }

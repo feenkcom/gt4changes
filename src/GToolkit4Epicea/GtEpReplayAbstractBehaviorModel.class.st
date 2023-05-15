@@ -109,7 +109,12 @@ GtEpReplayAbstractBehaviorModel >> ensureProtocolAt: aSymbol [
 
 ]
 
-{ #category : #ui }
+{ #category : #'gt - extensions' }
+GtEpReplayAbstractBehaviorModel >> gtEntityLabel [
+	^ self name
+]
+
+{ #category : #'gt - extensions' }
 GtEpReplayAbstractBehaviorModel >> gtMethodsFor: aView [
 	<gtView>
 
@@ -122,7 +127,7 @@ GtEpReplayAbstractBehaviorModel >> gtMethodsFor: aView [
 		actionUpdateButton.
 ]
 
-{ #category : #ui }
+{ #category : #'gt - extensions' }
 GtEpReplayAbstractBehaviorModel >> gtProtocolsFor: aView [
 	<gtView>
 
@@ -135,13 +140,38 @@ GtEpReplayAbstractBehaviorModel >> gtProtocolsFor: aView [
 		actionUpdateButton.
 ]
 
-{ #category : #accessing }
-GtEpReplayAbstractBehaviorModel >> hasChanges [
+{ #category : #'gt - extensions' }
+GtEpReplayAbstractBehaviorModel >> gtViewChangeDescriptionElements [
+	^ {BlTextElement new 
+		padding: (BlInsets all: 0);
+		constraintsDo: [ :c | 
+			c linear vertical alignCenter ];
+		text: (self gtEntityLabel  asRopedText 
+			bold; 
+			glamorousRegularFont)}
+]
 
-	^ super hasChanges or:
-		[ methods isNotEmpty or:
-		[ protocolChanges isNotEmpty or:
-		[ removedMethods isNotEmpty ] ] ]
+{ #category : #'gt - extensions' }
+GtEpReplayAbstractBehaviorModel >> gtViewChangeHistoryChildren [
+	^ methods values sorted: #selector ascending
+]
+
+{ #category : #'gt - extensions' }
+GtEpReplayAbstractBehaviorModel >> gtViewChangeIcon [
+	^ Smalltalk ui icons iconNamed: #class
+]
+
+{ #category : #'gt - extensions' }
+GtEpReplayAbstractBehaviorModel >> gtViewLatestChangeTime [
+	^ nil
+]
+
+{ #category : #testing }
+GtEpReplayAbstractBehaviorModel >> hasChanges [
+	^ super hasChanges
+		or: [ methods isNotEmpty
+				or: [ self hasProtocolEntry 
+					or: [ removedMethods isNotEmpty ] ] ]
 ]
 
 { #category : #testing }
@@ -151,6 +181,16 @@ GtEpReplayAbstractBehaviorModel >> hasDependentClassIn: anEnvironment [
 	Traits have no equivalent dependency."
 
 	^ self subclassResponsibility 
+]
+
+{ #category : #testing }
+GtEpReplayAbstractBehaviorModel >> hasNonMethodChanges [
+	^ self hasProtocolEntry 
+]
+
+{ #category : #testing }
+GtEpReplayAbstractBehaviorModel >> hasProtocolEntry [
+	^ protocolChanges isNotEmpty
 ]
 
 { #category : #testing }
