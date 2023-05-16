@@ -364,6 +364,21 @@ GtEpReplayImageModel >> includesBehaviorNamed: aSymbol [
 		[ self environment includesKey: aSymbol ]
 ]
 
+{ #category : #testing }
+GtEpReplayImageModel >> includesBehaviorSometimeNamed: aSymbol [
+	"Answer a boolean indicating whether the named behaviour exists in the system with its current or a previous name"
+	| behavior |
+
+	(self environment includesKey: aSymbol) ifTrue: [ ^ true ].
+	behavior := behaviors
+		at: aSymbol
+		ifAbsent: [ behaviors 
+			detect: [ :aBehavior | aBehavior previousNames includes: aSymbol ]
+			ifFound: [ :aBehavior | aBehavior ]
+			ifNone: [ ^ false ] ].
+	^ self includesBehaviorSometimeNamed: behavior superclassName asSymbol.
+]
+
 { #category : #initialization }
 GtEpReplayImageModel >> initialize [ 
 

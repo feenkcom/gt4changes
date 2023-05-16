@@ -35,26 +35,19 @@ GtEpReplayClassModel >> definesBehaviorInImage: aGtEpReplayImageModel [
 
 	^ entries reversed
 		detect: [ :entry | entry content isEpClassAddition or: [ entry content isEpClassModification ] ]
-		ifFound: [ :entry | | superclassSymbol |
-			superclassSymbol := entry content behaviorAffected superclassName asSymbol.
+		ifFound: [ :entry |
 			"The definition actually defines only if the superclass is defined"
-			aGtEpReplayImageModel
-				behaviorAt: superclassSymbol
-				ifPresent: [ :superclass | superclass definesBehaviorInImage: aGtEpReplayImageModel ]
-				ifAbsent: [ self environment includesKey: superclassSymbol ] ]
+			aGtEpReplayImageModel includesBehaviorSometimeNamed: entry content behaviorAffected superclassName asSymbol ]
 		ifNone: [ self environment includesKey: self behaviorAffectedName asSymbol. ]
 ]
 
 { #category : #testing }
 GtEpReplayClassModel >> hasDependentClassIn: anEnvironment [
 	"Answer a boolean indicating whether the receiver has any dependent classes present in the supplied environment.
-	For a class this means the superclass is present.
+	For a class this means the superclass is present (possibly with a previous name).
 	Traits have no equivalent dependency."
-	| superClassSymbol |
 
-	superClassSymbol := superclassName asSymbol.
-	^ (anEnvironment includesKey: superClassSymbol) or:
-		[ imageModel includesBehaviorNamed: superClassSymbol ].
+	^ imageModel includesBehaviorSometimeNamed: superclassName asSymbol
 ]
 
 { #category : #testing }
