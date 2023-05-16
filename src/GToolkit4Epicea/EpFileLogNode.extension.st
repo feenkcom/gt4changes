@@ -29,7 +29,7 @@ EpFileLogNode >> gtViewEntriesListFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Entries List';
+		title: 'Entries list';
 		priority: 10;
 		object: [ self log ];
 		view: #gtViewEntriesListFor:

@@ -5,7 +5,7 @@ EpMonitor >> gtViewChangeFilesFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Changes Files';
+		title: 'Changes files';
 		priority: 25;
 		object: [ self sessionStore ];
 		view: #gtViewChangeFilesFor:
@@ -16,7 +16,7 @@ EpMonitor >> gtViewChangeTreeFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Changes Tree';
+		title: 'Changes tree';
 		priority: 45;
 		object: [ self sessionStore ];
 		view: #gtViewChangeTreeFor:
@@ -38,7 +38,7 @@ EpMonitor >> gtViewEntriesListFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Entries List';
+		title: 'Entries list';
 		priority: 10;
 		object: [ log ];
 		view: #gtViewEntriesListFor:

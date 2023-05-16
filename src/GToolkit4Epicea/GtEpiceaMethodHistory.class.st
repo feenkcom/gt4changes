@@ -105,7 +105,7 @@ GtEpiceaMethodHistory >> gtViewDiffCurrentFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Diff Current';
+		title: 'Diff current';
 		priority: 5;
 		object: [ self latestChange ];
 		view: #gtDiffCurrentFor:
@@ -116,7 +116,7 @@ GtEpiceaMethodHistory >> gtViewEntriesListFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Entries List';
+		title: 'Entries list';
 		priority: 10;
 		object: [ self changes ];
 		view: #gtItemsFor:

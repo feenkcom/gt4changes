@@ -186,6 +186,17 @@ GtEpiceaAbstractLog >> gtApplyFor: anAction [
 				anchor: aButton ]
 ]
 
+{ #category : #accessing }
+GtEpiceaAbstractLog >> gtEntriesTreeViewFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Entries tree';
+		priority: 20;
+		object: [ self treeView ];
+		view: #gtLiveFor:
+]
+
 { #category : #'gt - extensions' }
 GtEpiceaAbstractLog >> gtEventsFor: aView [
 	<gtView>
@@ -194,7 +205,7 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 	changeListModel := GtEpiceaChangeListModel onLog: self.
 
 	view := aView explicit
-			title: 'Change List';
+			title: 'Change list';
 			priority: 3;
 			stencil: [ (GtEpiceaChangeListElement forModel: changeListModel)
 					padding: (BlInsets top: 5) ].
@@ -250,7 +261,7 @@ GtEpiceaAbstractLog >> gtViewBranchesFor: aView [
 	<gtViewChanges>
 	
 	^ aView forward 
-		title: 'By Branch';
+		title: 'By branch';
 		priority: 45;
 		object: [ self branches ];
 		view: #gtViewHistoriesFor: 
@@ -262,7 +273,7 @@ GtEpiceaAbstractLog >> gtViewClassHistoriesFor: aView [
 	<gtViewChanges>
 	
 	^ aView forward 
-		title: 'By Class';
+		title: 'By class';
 		priority: 35;
 		object: [ self classHistories ];
 		view: #gtViewHistoriesFor: 
@@ -273,7 +284,7 @@ GtEpiceaAbstractLog >> gtViewEntriesListFor: aView [
 	<gtView>
 	
 	^ aView columnedList 
-		title: 'Entries List';
+		title: 'Entries list';
 		priority: 5;
 		items: [ self entriesStream ];
 		column: 'Icon'
@@ -305,7 +316,7 @@ GtEpiceaAbstractLog >> gtViewMethodHistoriesFor: aView [
 	<gtViewChanges>
 	
 	^ aView forward 
-		title: 'By Method';
+		title: 'By method';
 		priority: 35;
 		object: [ self methodHistories ];
 		view: #gtViewHistoriesFor: 
@@ -317,7 +328,7 @@ GtEpiceaAbstractLog >> gtViewPackageHistoriesFor: aView [
 	<gtViewChanges>
 	
 	^ aView forward 
-		title: 'By Package';
+		title: 'By package';
 		priority: 45;
 		object: [ self packageHistories ];
 		view: #gtViewHistoriesFor: 

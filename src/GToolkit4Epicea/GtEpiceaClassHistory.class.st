@@ -92,7 +92,7 @@ GtEpiceaClassHistory >> gtViewEntriesListFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Class Changes';
+		title: 'Class changes';
 		priority: 10;
 		object: [ self behaviourChanges ];
 		view: #gtItemsFor:
@@ -125,7 +125,7 @@ GtEpiceaClassHistory >> gtViewMethodHistoriesFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Methods Changes';
+		title: 'Methods changes';
 		priority: 20;
 		object: [ self methodHistories ];
 		view: #gtViewHistoriesFor: 

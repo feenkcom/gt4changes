@@ -7,7 +7,7 @@ EpLogNode >> gtViewReferencedNodesFor: aView [
 	referencedNodes ifNil: [ ^ aView empty ].
 	
 	^ aView list 
-		title: 'Referenced Nodes';
+		title: 'Referenced nodes';
 		priority: 45;
 		items: [ self referencedNodes asArray ]
 ]

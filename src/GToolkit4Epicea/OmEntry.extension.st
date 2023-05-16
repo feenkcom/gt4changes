@@ -47,7 +47,7 @@ OmEntry >> gtCurrentSourceFor: aView [
 	<gtView>
 	
 	^ aView textEditor
-		title: 'Current Source';
+		title: 'Current source';
 		aptitude: BrGlamorousCodeEditorAptitude;
 		styler: (GtCodeDiffRBTextStyler new 
 			isForWorkspace: (self content isEpMethodChange not));
@@ -61,7 +61,7 @@ OmEntry >> gtCurrentSourceFor: aView [
 OmEntry >> gtDiffCurrentFor: aView [
 	<gtView>
 	^ aView explicit
-		title: 'Diff Current';
+		title: 'Diff current';
 		priority: 5;
 		stencil: [ | previousContent newContent change styler |
 			previousContent := self content
@@ -116,7 +116,7 @@ OmEntry >> gtNewSourceFor: aView [
 	<gtView>
 	
 	^ aView textEditor
-		title: 'New Source';
+		title: 'New source';
 		aptitude: BrGlamorousCodeEditorAptitude;
 		styler: (GtCodeDiffRBTextStyler new 
 			isForWorkspace: (self content isEpMethodChange not));
@@ -128,7 +128,7 @@ OmEntry >> gtNewSourceFor: aView [
 OmEntry >> gtOldSourceFor: aView [
 	<gtView>
 	^ aView textEditor
-		title: 'Old Source';
+		title: 'Old source';
 		aptitude: BrGlamorousCodeEditorAptitude;
 		styler: (GtCodeDiffRBTextStyler new 
 			isForWorkspace: (self content isEpMethodChange not));

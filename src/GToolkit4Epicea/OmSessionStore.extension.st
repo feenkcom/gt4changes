@@ -42,7 +42,7 @@ OmSessionStore >> gtViewBaseDirectoryFor: aView [
 	baseLocator ifNil: [ ^ aView empty ].
 	
 	^ aView forward 
-		title: 'Base Directory';
+		title: 'Base directory';
 		object: [ self baseLocator ];
 		view: #gtItemsFor: 
 ]
@@ -52,7 +52,7 @@ OmSessionStore >> gtViewChangeFilesFor: aView [
 	<gtView>
 	 
 	^ aView columnedList 
-		title: 'Changes Files';
+		title: 'Changes files';
 		items: [
 			| nodes |
 			nodes := EpFileLogNode fromAllLogsIn: self directory.
@@ -71,7 +71,7 @@ OmSessionStore >> gtViewChangeTreeFor: aView [
 	<gtView>
 	 
 	^ aView mondrian 
-		title: 'Changes Tree';
+		title: 'Changes tree';
 		painting: [ :aMondrianView |			
 			self gtPaintNodesTreeOn: aMondrianView ]
 ]

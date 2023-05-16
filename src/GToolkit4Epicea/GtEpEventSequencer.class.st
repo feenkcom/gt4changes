@@ -136,7 +136,7 @@ GtEpEventSequencer >> gtChangeListFor: aView [
 	<gtView>
 
 	^ aView forward
-		title: 'Change List';
+		title: 'Change list';
 		priority: 5;
 		object: [ GtEpiceaSequencedLog sequencer: self ];
 		view: #gtEventsFor:
@@ -147,7 +147,7 @@ GtEpEventSequencer >> gtViewAllEntriesFor: aView [
 	<gtView>
 
 	^ aView columnedList
-		title: 'All Entries';
+		title: 'All entries';
 		priority: 20;
 		items: [ entries ];
 		column: 'Change' text: [ :anOmbuEntry | 
@@ -165,7 +165,7 @@ GtEpEventSequencer >> gtViewSequencedEntriesFor: aView [
 	<gtView>
 
 	^ aView columnedList
-		title: 'Sequenced Entries';
+		title: 'Sequenced entries';
 		priority: 10;
 		items: [ self sequencedEntries ];
 		column: 'Change' text: [ :anOmbuEntry | anOmbuEntry content ];
