@@ -43,6 +43,17 @@ GtEpLogEnumerator >> eventsFrom: startOmReference to: endOmReference [
 ]
 
 { #category : #accessing }
+GtEpLogEnumerator >> gtEntriesTreeViewFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Entries tree';
+		priority: 20;
+		object: [ self treeView ];
+		view: #gtLiveFor:
+]
+
+{ #category : #accessing }
 GtEpLogEnumerator >> headReference [
 
 	^ latestLog headReference

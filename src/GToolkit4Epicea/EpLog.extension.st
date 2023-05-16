@@ -17,7 +17,7 @@ EpLog >> gtEntriesTreeViewFor: aView [
 	<gtView>
 
 	^ aView explicit
-		title: 'Changes Tree';
+		title: 'Changes tree';
 		priority: 20;
 		stencil: [ GtEpiceaLogView new treeViewOn: self entries ]
 ]
@@ -43,7 +43,7 @@ EpLog >> gtViewEntriesListFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Entries List';
+		title: 'Entries list';
 		priority: 10;
 		object: [ store ];
 		view: #gtViewEntriesListFor:

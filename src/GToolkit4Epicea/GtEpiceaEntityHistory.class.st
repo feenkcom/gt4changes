@@ -16,7 +16,7 @@ GtEpiceaEntityHistory >> gtEventsFor: aView [
 	<gtView>
 
 	^ aView forward
-		title: 'Change List';
+		title: 'Change list';
 		priority: 2;
 		object: [ GtEpiceaExplicitLog on: self entries ];
 		view: #gtEventsFor:

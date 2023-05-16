@@ -165,7 +165,7 @@ GtEpReplayBehaviorModel >> gtPreviousLivesFor: aView [
 	<gtView>
 	
 	^ aView list
-		title: 'Previous Lives';
+		title: 'Previous lives';
 		priority: 40;
 		items: [ previousLives ];
 		actionUpdateButton
@@ -176,7 +176,7 @@ GtEpReplayBehaviorModel >> gtPreviousNamesFor: aView [
 	<gtView>
 	
 	^ aView list
-		title: 'Previous Names';
+		title: 'Previous names';
 		priority: 45;
 		items: [ previousNames ];
 		actionUpdateButton

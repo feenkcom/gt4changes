@@ -38,7 +38,7 @@ GtEpiceaBranchHistory >> gtEventsFor: aView [
 	<gtView>
 
 	^ aView forward
-		title: 'Change List';
+		title: 'Change list';
 		priority: 20;
 		object: [ GtEpiceaExplicitLog on: changes items ];
 		view: #gtEventsFor:
@@ -74,7 +74,7 @@ GtEpiceaBranchHistory >> gtViewClassHistoriesFor: aView [
 	"<gtViewChanges>"
 	
 	^ aView forward 
-		title: 'By Class';
+		title: 'By class';
 		priority: 46;
 		object: [ (GtEpiceaExplicitLog on: self entries) classHistories ];
 		view: #gtViewHistoriesFor: 
@@ -85,7 +85,7 @@ GtEpiceaBranchHistory >> gtViewEntriesListFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'Entries List';
+		title: 'Entries list';
 		priority: 50;
 		object: [ self changes ];
 		view: #gtItemsFor:
@@ -97,7 +97,7 @@ GtEpiceaBranchHistory >> gtViewPackageHistoriesFor: aView [
 	"<gtViewChanges>"
 	
 	^ aView forward 
-		title: 'By Package';
+		title: 'By package';
 		priority: 45;
 		object: [ (GtEpiceaExplicitLog on: self entries) packageHistories ];
 		view: #gtViewHistoriesFor: 

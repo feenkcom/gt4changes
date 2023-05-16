@@ -69,7 +69,7 @@ GtEpiceaEntriesGroup >> gtChangesListFor: aView [
 	<gtView>
 
 	^ aView forward
-		title: 'Change List';
+		title: 'Change list';
 		priority: 10;
 		object: [ GtEpiceaExplicitLog on: self items ];
 		view: #gtEventsFor:
@@ -109,7 +109,7 @@ GtEpiceaEntriesGroup >> gtViewClassHistoriesFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'By Class';
+		title: 'By class';
 		priority: 35;
 		object: [ self classHistories ];
 		view: #gtViewHistoriesFor: 
@@ -120,7 +120,7 @@ GtEpiceaEntriesGroup >> gtViewMethodHistoriesFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'By Method';
+		title: 'By method';
 		priority: 35;
 		object: [ self methodHistories ];
 		view: #gtViewHistoriesFor: 
@@ -131,7 +131,7 @@ GtEpiceaEntriesGroup >> gtViewPackageHistoriesFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'By Package';
+		title: 'By package';
 		priority: 45;
 		object: [ self packageHistories ];
 		view: #gtViewHistoriesFor: 

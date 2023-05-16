@@ -29,7 +29,7 @@ OmStore >> gtViewEntriesListFor: aView [
 	<gtView>
 	
 	^ aView list 
-		title: 'Entries List';
+		title: 'Entries list';
 		priority: 10;
 		items: [ self entriesStream ]
 ]

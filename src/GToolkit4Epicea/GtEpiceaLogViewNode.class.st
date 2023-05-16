@@ -102,7 +102,7 @@ GtEpiceaLogViewNode >> gtChangeListFor: aView [
 	<gtView>
 
 	^ aView forward
-		title: 'Change List';
+		title: 'Change list';
 		priority: 20;
 		object: [ GtEpiceaExplicitLog on: 
 			(self asArray collect: #entry) reversed ];
@@ -114,7 +114,7 @@ GtEpiceaLogViewNode >> gtCurrentSourceFor: aView [
 	<gtView>
 
 	^ aView forward
-		title: 'Current Source';
+		title: 'Current source';
 		priority: 45;
 		object: [ self entry ];
 		view: #gtCurrentSourceFor:
@@ -125,7 +125,7 @@ GtEpiceaLogViewNode >> gtDiffCurrentFor: aView [
 	<gtView>
 
 	^ aView forward
-		title: 'Diff Current';
+		title: 'Diff current';
 		priority: 30;
 		object: [ self entry ];
 		view: #gtDiffCurrentFor:
@@ -163,7 +163,7 @@ GtEpiceaLogViewNode >> gtNewSourceFor: aView [
 	<gtView>
 
 	^ aView forward
-		title: 'New Source';
+		title: 'New source';
 		priority: 35;
 		object: [ self entry ];
 		view: #gtNewSourceFor:
@@ -174,7 +174,7 @@ GtEpiceaLogViewNode >> gtOldSourceFor: aView [
 	<gtView>
 
 	^ aView forward
-		title: 'Old Source';
+		title: 'Old source';
 		priority: 40;
 		object: [ self entry ];
 		view: #gtOldSourceFor:

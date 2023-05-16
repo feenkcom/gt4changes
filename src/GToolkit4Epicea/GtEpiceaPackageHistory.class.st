@@ -66,7 +66,7 @@ GtEpiceaPackageHistory >> gtViewClassHistoriesFor: aView [
 	<gtView>
 	
 	^ aView forward 
-		title: 'By Class';
+		title: 'By class';
 		priority: 35;
 		object: [ self classHistories ];
 		view: #gtViewHistoriesFor: 
@@ -78,7 +78,7 @@ GtEpiceaPackageHistory >> gtViewMethodHistoriesFor: aView [
 	<gtViewChanges>
 	
 	^ aView forward 
-		title: 'By Method';
+		title: 'By method';
 		priority: 45;
 		object: [ self classHistories  methodHistories ];
 		view: #gtViewHistoriesFor: 

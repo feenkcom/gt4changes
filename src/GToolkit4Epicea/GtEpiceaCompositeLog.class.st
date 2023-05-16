@@ -51,7 +51,7 @@ GtEpiceaCompositeLog class >> onLogs: aCollectionOfLogs [
 GtEpiceaCompositeLog >> createListFor: aView [
 	<gtView>
 	^ aView columnedTree
-		title: 'Log Files';
+		title: 'Log files';
 		items: [ {self} ];
 		children: #gtChildren;
 		column: 'Name' text: [ :change | change name ];

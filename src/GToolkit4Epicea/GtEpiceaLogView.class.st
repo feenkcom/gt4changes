@@ -20,3 +20,14 @@ GtEpiceaLogView >> entries: anObject [
 
 	entries := anObject
 ]
+
+{ #category : #accessing }
+GtEpiceaLogView >> gtEntriesTreeViewFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Entries tree';
+		priority: 20;
+		object: [ self treeView ];
+		view: #gtLiveFor:
+]
