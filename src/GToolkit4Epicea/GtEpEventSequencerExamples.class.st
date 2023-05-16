@@ -1225,6 +1225,42 @@ GtEpEventSequencerExamples >> removeTestClasses [
 ]
 
 { #category : #examples }
+GtEpEventSequencerExamples >> superclassAddAndRenameForExport [
+	"Check that a superclass add and rename is sequenced correctly."
+	<gtExample>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleCheckSub).
+	fileReference := self class testDataRoot / 'Issue3259' / 'Pharo10-SNAPSHOT-64bit-179ef65.4n9qze22qgvn4e0bzabuj85m3.ombu'.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 4.
+	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassAddition #EpClassAddition #EpBehaviorNameChange).
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> superclassAddAndRenameInImage [
+	"Check that a superclass add and rename is sequenced correctly."
+	<gtExample>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleCheckSub).
+	fileReference := self class testDataRoot / 'Issue3259' / 'Pharo10-SNAPSHOT-64bit-179ef65.4n9qze22qgvn4e0bzabuj85m3.ombu'.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 4.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassAddition #EpClassAddition #EpBehaviorNameChange).
+	^ sequencer
+]
+
+{ #category : #examples }
 GtEpEventSequencerExamples >> traitAdditionForExport [
 	"Check that a trait is added correctly."
 	<gtExample>
