@@ -4,7 +4,8 @@ Class {
 	#traits : 'EpTEventVisitor',
 	#classTraits : 'EpTEventVisitor classTrait',
 	#instVars : [
-		'changedClassNames'
+		'changedClassNames',
+		'shouldIncludeSubclasses'
 	],
 	#category : #'GToolkit4Epicea-Model'
 }
@@ -24,8 +25,18 @@ GtEpiceaChangedClassNamesVisitor >> changedClassNames [
 ]
 
 { #category : #accessing }
+GtEpiceaChangedClassNamesVisitor >> includeSubclasses [
+	shouldIncludeSubclasses := true
+]
+
+{ #category : #accessing }
 GtEpiceaChangedClassNamesVisitor >> processClassName: aClassName [
 	^ aClassName withoutSuffix: ' class'
+]
+
+{ #category : #accessing }
+GtEpiceaChangedClassNamesVisitor >> shouldIncludeSubclasses [
+	^ shouldIncludeSubclasses ifNil: [ false ]
 ]
 
 { #category : #visitor }
@@ -36,6 +47,11 @@ GtEpiceaChangedClassNamesVisitor >> visitBehaviorChange: aChange [
 { #category : #visitor }
 GtEpiceaChangedClassNamesVisitor >> visitBehaviorNameChange: aChange [
 	self addClassNamed: aChange  oldName.
+	
+	self shouldIncludeSubclasses ifTrue: [
+		aChange newName asClassIfPresent: [ :aNewClass |
+			aNewClass subclasses do: [ :aSubclass | 
+				self addClassNamed: aSubclass name ] ] ].
 	
 	^ self visitBehaviorChange: aChange
 ]

@@ -81,6 +81,19 @@ GtEpiceaAbstractLog >> changedClassNames [
 ]
 
 { #category : #accessing }
+GtEpiceaAbstractLog >> changedClassNamesWithAllRelatedChanges [
+	| changedClassesVisitor |
+	
+	changedClassesVisitor := GtEpiceaChangedClassNamesVisitor new.
+	changedClassesVisitor includeSubclasses.
+	self entries do: [ :anEntry |
+		anEntry content ifNotNil: [ :aChange |
+			aChange accept: changedClassesVisitor ] ].
+		
+	^ changedClassesVisitor changedClassNames
+]
+
+{ #category : #accessing }
 GtEpiceaAbstractLog >> changedSelectorsByClassName [
 	| changedSelectorsVisitor |
 	
