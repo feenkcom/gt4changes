@@ -87,7 +87,11 @@ GtEpReplayBehaviorModel >> behaviorAffected [
 					ifNotEmpty: [ :aPreviousLife | 
 						aPreviousLife behaviorAffected ] ]
 			ifFalse:
-				[ (self environment at: name) asRingDefinition ] ]
+				[ (self environment 
+					at: name
+					ifPresent: [ :aBehaviour |
+						aBehaviour asRingDefinition ]
+					ifAbsent: [ nil ])  ] ]
 		ifNotEmpty: [ entries last content behaviorAffected ].
 ]
 
