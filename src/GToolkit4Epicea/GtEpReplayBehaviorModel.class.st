@@ -70,7 +70,8 @@ GtEpReplayBehaviorModel >> addCategoryChange: anOmEntry [
 { #category : #accessing }
 GtEpReplayBehaviorModel >> asRingDefinition [
 
-	^ self behaviorAffected asRingDefinition.
+	^ self behaviorAffected ifNotNil: [ :aBehaviour|
+		aBehaviour asRingDefinition ].
 ]
 
 { #category : #accessing }
@@ -81,7 +82,10 @@ GtEpReplayBehaviorModel >> behaviorAffected [
 	
 	^ entries
 		ifEmpty: [ self isRemoved ifTrue:
-				[ previousLives last behaviorAffected ]
+				[ previousLives 
+					ifEmpty: [ nil] 
+					ifNotEmpty: [ :aPreviousLife | 
+						aPreviousLife behaviorAffected ] ]
 			ifFalse:
 				[ (self environment at: name) asRingDefinition ] ]
 		ifNotEmpty: [ entries last content behaviorAffected ].

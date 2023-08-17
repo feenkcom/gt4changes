@@ -105,6 +105,31 @@ GtEpReplayModelExamples >> imageModelInSystem [
 	^ visitor image.
 ]
 
+{ #category : #examples }
+GtEpReplayModelExamples >> inImageModelHasCorrectSuperclassOnRename [
+	"Check the behavior of the image model when we rename a superclass"
+	<gtExample>
+	| fileReference entries epLog visitor model superclassModel subclassModel |
+
+	self deny: (self class environment includesKey: #GtEpReplayModelExamplesCheck).
+	fileReference := GtEpEventSequencerExamples testDataRoot / 'Issue3398' / 'Pharo10-SNAPSHOT-64bit-179ef65.dw9p5j1vkn4cc2q7l08mzagby.ombu'.
+	self assert: fileReference resolve exists
+		description: [ fileReference fullName, ' not found' ].
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	visitor := GtEpReplayEventVisitor new.
+	visitor visitNodes: entries.
+	model := visitor image.
+	
+	self assert: model behaviors size equals: 2.
+	superclassModel := model classOrTraitNamed: #Issue3398RootClassRenamed.
+	subclassModel := model classOrTraitNamed: #Issue3398Subclass.
+	
+	self assert: subclassModel superclassName equals: #Issue3398RootClassRenamed.
+	
+	^ visitor image.
+]
+
 { #category : #accessing }
 GtEpReplayModelExamples >> removeTestClasses [
 

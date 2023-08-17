@@ -136,6 +136,16 @@ GtEpImageModelInImageVisitor >> eventHasImpact: anEpEvent [
 	^ anEpEvent hasImpact
 ]
 
+{ #category : #private }
+GtEpImageModelInImageVisitor >> hasNoRenamesBeforeIndex: anIndex inEntries: aCollection [ 
+	"This method checks if there are any renames after the current index.
+	We use it in order to not filter behaviour changes if we get renames 
+	before in the changes list, as the order can play a role."
+	
+	^ (aCollection takeFirst: anIndex - 1) allSatisfy: [ :anEntry |
+		anEntry content isEpBehaviorNameChange not ]
+]
+
 { #category : #accessing }
 GtEpImageModelInImageVisitor >> image [
 
@@ -260,13 +270,13 @@ GtEpImageModelInImageVisitor >> replayBehaviorFrom: aGtEpReplayBehaviorModel ent
 	index := entries size.
 	missingDefinition := true.
 	dependencyTime := earliestBehaviorDependency gtTime.
-	[ missingDefinition and: [ index > 0 ] ] whileTrue:
-		[ currentEntry := entries at: index.
-		((self isBehaviorAddition: currentEntry content) and:
-			[ currentEntry gtTime < dependencyTime ]) ifTrue:
-				[ missingDefinition := false ]
-		ifFalse:
-				[ index := index - 1 ] ].
+	[ missingDefinition and: [ index > 0 ] ] whileTrue:[ 
+		currentEntry := entries at: index.
+		((self isBehaviorAddition: currentEntry content) and: [ 
+			(self shouldAllowBehaviourChangeFor: aGtEpReplayBehaviorModel atIndex: index inEntries: entries ) and:
+				[ currentEntry gtTime < dependencyTime ] ]) 
+					ifTrue: [ missingDefinition := false ]
+					ifFalse:[ index := index - 1 ] ].
 
 	"If the entry found above matches the system it isn't required."
 	((self isBehaviorAddition: currentEntry content) and:
@@ -283,7 +293,8 @@ GtEpImageModelInImageVisitor >> replayBehaviorFrom: aGtEpReplayBehaviorModel ent
 	[ endIndex > 0 and: [ (self isBehaviorAddition: (replayEntries at: endIndex) content) not ] ]
 		whileTrue: [ endIndex := endIndex - 1].
 	endIndex - 1 to: 2 by: -1 do: [ :i |
-		(self isBehaviorAddition: (replayEntries at: i) content) ifTrue:
+		((self isBehaviorAddition: (replayEntries at: i) content) and: [
+			(self shouldAllowBehaviourChangeFor: aGtEpReplayBehaviorModel atIndex: i inEntries: entries )]) ifTrue:
 			[ replayEntries removeIndex: i ] ].
 
 	"If the changes have no impact on the system no need to add them"
@@ -326,6 +337,12 @@ GtEpImageModelInImageVisitor >> replayCommentEntriesFrom: aGtEpReplayBehaviorMod
 GtEpImageModelInImageVisitor >> sequencedEntries [
 
 	^ sequencedEntries
+]
+
+{ #category : #private }
+GtEpImageModelInImageVisitor >> shouldAllowBehaviourChangeFor: aBehaviourModel atIndex: anIndex inEntries: aCollection [ 
+	^ aBehaviourModel isClass and: [ aBehaviourModel subclasses isEmpty ]  "or: [ 
+		self hasNoRenamesBeforeIndex: anIndex inEntries: aCollection ]"
 ]
 
 { #category : #visiting }
