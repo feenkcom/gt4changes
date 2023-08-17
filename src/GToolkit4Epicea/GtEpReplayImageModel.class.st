@@ -45,7 +45,8 @@ GtEpReplayImageModel >> addBehaviorRename: anOmEntry [
 
 	event := anOmEntry content.
 	behavior := self classOrTraitNamed: event oldName
-		ifAbsentPut: [ :baseName | (self behaviorModelFor: event) name: baseName ].
+		ifAbsentPut: [ :baseName | 
+			(self behaviorModelFor: event) name: baseName ].
 	behavior addBehaviorRename: anOmEntry.
 	behaviors 
 		removeKey: event oldName
@@ -334,7 +335,7 @@ GtEpReplayImageModel >> gtBehaviorsTreeFor: aView [
 
 	^ aView columnedTree
 		title: 'Behaviors (tree)';
-		priority: 11;
+		priority: 5;
 		items: [ behaviors values sorted: #name ascending ];
 		children: [ :anEntry |
 			anEntry gtViewChangeHistoryChildren ];
@@ -413,7 +414,8 @@ GtEpReplayImageModel >> subclassesFor: aBehaviorModel [
 	| behaviorName |
 
 	behaviorName := aBehaviorModel name.
-	^ behaviors values select: [ :each | each superclassName = behaviorName ]
+	^ behaviors values select: [ :each | each isClass and: [ 
+		each superclassName = behaviorName ] ]
 ]
 
 { #category : #private }

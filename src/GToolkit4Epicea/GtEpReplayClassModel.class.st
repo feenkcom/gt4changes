@@ -16,9 +16,14 @@ GtEpReplayClassModel >> addBehaviorChange: anOmEntry [
 
 { #category : #adding }
 GtEpReplayClassModel >> addBehaviorRename: anOmEntry [
-
+	| currentSubclasses|
+	currentSubclasses := self subclasses.
+	
 	super addBehaviorRename: anOmEntry.
 	superclassName := anOmEntry content behaviorAffected superclassName.
+	
+	currentSubclasses do: [ :aSubclass |
+		aSubclass updateSuperclassNameTo: self name ]
 ]
 
 { #category : #adding }
@@ -75,5 +80,12 @@ GtEpReplayClassModel >> subclasses [
 { #category : #accessing }
 GtEpReplayClassModel >> superclassName [
 
-	^ superclassName ifNil: [ self asRingDefinition superclassName ].
+	^ superclassName ifNil: [ 
+		self asRingDefinition ifNotNil: [ :aClassDefinition | 
+			aClassDefinition superclassName ] ]
+]
+
+{ #category : #accessing }
+GtEpReplayClassModel >> updateSuperclassNameTo: aNewSuperclassName [
+	superclassName := aNewSuperclassName
 ]
