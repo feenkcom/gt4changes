@@ -84,8 +84,8 @@ GtEpReplayBehaviorModel >> behaviorAffected [
 		ifEmpty: [ self isRemoved ifTrue:
 				[ previousLives 
 					ifEmpty: [ nil] 
-					ifNotEmpty: [ :aPreviousLife | 
-						aPreviousLife behaviorAffected ] ]
+					ifNotEmpty: [ :allPreviousLifes | 
+						allPreviousLifes last behaviorAffected ] ]
 			ifFalse:
 				[ (self environment 
 					at: name
