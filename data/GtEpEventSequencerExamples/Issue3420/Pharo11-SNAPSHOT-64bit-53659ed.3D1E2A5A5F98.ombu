@@ -1,20 +1,9 @@
 OmEntry {
 	#tags : {
 		#author : 'GlamorousAuthor',
-		#time : DateAndTime [ '2023-08-24T18:41:03.175657+03:00' ],
+		#time : DateAndTime [ '2023-08-24T18:41:03.329895+03:00' ],
 		#prior : OmReference [ 'Pharo11-SNAPSHOT-64bit-53659ed.36BA03008E28', '332' ],
 		#self : OmReference [ '1' ]
-	},
-	#content : EpCategoryRegistration {
-		#classCategoryName : #Issue3420,
-		#affectedPackageName : #Issue3420
-	}
-}OmEntry {
-	#tags : {
-		#author : 'GlamorousAuthor',
-		#time : DateAndTime [ '2023-08-24T18:41:03.329895+03:00' ],
-		#prior : OmReference [ '1' ],
-		#self : OmReference [ '2' ]
 	},
 	#content : EpCategoryAddition {
 		#classCategoryName : #Issue3420,
@@ -24,8 +13,8 @@ OmEntry {
 	#tags : {
 		#author : 'GlamorousAuthor',
 		#time : DateAndTime [ '2023-08-24T18:41:03.352174+03:00' ],
-		#prior : OmReference [ '2' ],
-		#self : OmReference [ '3' ]
+		#prior : OmReference [ '1' ],
+		#self : OmReference [ '2' ]
 	},
 	#content : EpClassAddition {
 		#class : RGClassDefinition {
@@ -67,8 +56,8 @@ OmEntry {
 	#tags : {
 		#author : 'GlamorousAuthor',
 		#time : DateAndTime [ '2023-08-24T18:41:58.066324+03:00' ],
-		#prior : OmReference [ '3' ],
-		#self : OmReference [ '4' ]
+		#prior : OmReference [ '2' ],
+		#self : OmReference [ '3' ]
 	},
 	#content : EpClassAddition {
 		#class : RGClassDefinition {
@@ -127,8 +116,8 @@ OmEntry {
 	#tags : {
 		#author : 'GlamorousAuthor',
 		#time : DateAndTime [ '2023-08-24T18:42:23.78674+03:00' ],
-		#prior : OmReference [ '4' ],
-		#self : OmReference [ '5' ]
+		#prior : OmReference [ '3' ],
+		#self : OmReference [ '4' ]
 	},
 	#content : EpMethodAddition {
 		#method : RGMethodDefinition {
@@ -147,8 +136,8 @@ OmEntry {
 	#tags : {
 		#author : 'GlamorousAuthor',
 		#time : DateAndTime [ '2023-08-24T18:42:31.408341+03:00' ],
-		#prior : OmReference [ '5' ],
-		#self : OmReference [ '6' ]
+		#prior : OmReference [ '4' ],
+		#self : OmReference [ '5' ]
 	},
 	#content : EpMethodAddition {
 		#method : RGMethodDefinition {
@@ -167,8 +156,8 @@ OmEntry {
 	#tags : {
 		#author : 'GlamorousAuthor',
 		#time : DateAndTime [ '2023-08-24T18:43:29.215229+03:00' ],
-		#prior : OmReference [ '6' ],
-		#self : OmReference [ '7' ]
+		#prior : OmReference [ '5' ],
+		#self : OmReference [ '6' ]
 	},
 	#content : EpClassModification {
 		#oldClass : RGClassDefinition {
@@ -270,8 +259,8 @@ OmEntry {
 	#tags : {
 		#author : 'GlamorousAuthor',
 		#time : DateAndTime [ '2023-08-24T18:43:29.712222+03:00' ],
-		#prior : OmReference [ '7' ],
-		#self : OmReference [ '8' ]
+		#prior : OmReference [ '6' ],
+		#self : OmReference [ '7' ]
 	},
 	#content : EpClassModification {
 		#oldClass : RGClassDefinition {
@@ -356,8 +345,8 @@ OmEntry {
 	#tags : {
 		#author : 'GlamorousAuthor',
 		#time : DateAndTime [ '2023-08-24T18:43:33.894749+03:00' ],
-		#prior : OmReference [ '8' ],
-		#self : OmReference [ '9' ]
+		#prior : OmReference [ '7' ],
+		#self : OmReference [ '8' ]
 	},
 	#content : EpClassModification {
 		#oldClass : RGClassDefinition {
@@ -442,8 +431,8 @@ OmEntry {
 	#tags : {
 		#author : 'GlamorousAuthor',
 		#time : DateAndTime [ '2023-08-24T18:43:34.405576+03:00' ],
-		#prior : OmReference [ '9' ],
-		#self : OmReference [ '10' ]
+		#prior : OmReference [ '8' ],
+		#self : OmReference [ '9' ]
 	},
 	#content : EpClassModification {
 		#oldClass : RGClassDefinition {

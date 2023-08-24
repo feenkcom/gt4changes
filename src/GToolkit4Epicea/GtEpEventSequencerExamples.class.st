@@ -1371,7 +1371,7 @@ GtEpEventSequencerExamples >> superclassAndSubclassPushTwoSlotsUpForExport [
 	epLog :=  EpLog newWithStore: (OmStoreFactory current 
 		fromFile: fileReference).
 	entries := epLog entries.
-	self assert: entries size equals: 10.
+	self assert: entries size equals: 9.
 	sequencer := GtEpEventSequencer entries: entries inImage: false.
 	sequencedEntries := sequencer sequencedEntries.
 	
@@ -1411,7 +1411,7 @@ GtEpEventSequencerExamples >> superclassAndSubclassPushTwoSlotsUpInImage [
 	epLog :=  EpLog newWithStore: (OmStoreFactory current 
 		fromFile: fileReference).
 	entries := epLog entries.
-	self assert: entries size equals: 10.
+	self assert: entries size equals: 9.
 	sequencer := GtEpEventSequencer entries: entries inImage: true.
 	sequencedEntries := sequencer sequencedEntries.
 	
