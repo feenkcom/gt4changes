@@ -74,6 +74,13 @@ GtEpImageModelInImageVisitor >> behaviorNameExists: aSymbol [
 	^ self class environment includesKey: aSymbol asSymbol.
 ]
 
+{ #category : #private }
+GtEpImageModelInImageVisitor >> canRejectBehaviourChangeFor: aBehaviourModel atIndex: anIndex inEntries: aCollection [ 
+	^ aBehaviourModel isClass 
+		and: [ aBehaviourModel subclasses isEmpty 
+			and: [ aBehaviourModel knowsSuperclassInModel not ] ]  
+]
+
 { #category : #testing }
 GtEpImageModelInImageVisitor >> commentEntryChangesRunningSystem: anOmEntry [
 	"Answer a boolean indicating if the supplied entry will change the running system.
@@ -273,8 +280,8 @@ GtEpImageModelInImageVisitor >> replayBehaviorFrom: aGtEpReplayBehaviorModel ent
 	[ missingDefinition and: [ index > 0 ] ] whileTrue:[ 
 		currentEntry := entries at: index.
 		((self isBehaviorAddition: currentEntry content) and: [ 
-			(self shouldAllowBehaviourChangeFor: aGtEpReplayBehaviorModel atIndex: index inEntries: entries ) and:
-				[ currentEntry gtTime < dependencyTime ] ]) 
+			 (self canRejectBehaviourChangeFor: aGtEpReplayBehaviorModel atIndex: index inEntries: entries) 
+			 	and: [ currentEntry gtTime < dependencyTime ] ]) 
 					ifTrue: [ missingDefinition := false ]
 					ifFalse:[ index := index - 1 ] ].
 
@@ -294,7 +301,7 @@ GtEpImageModelInImageVisitor >> replayBehaviorFrom: aGtEpReplayBehaviorModel ent
 		whileTrue: [ endIndex := endIndex - 1].
 	endIndex - 1 to: 2 by: -1 do: [ :i |
 		((self isBehaviorAddition: (replayEntries at: i) content) and: [
-			(self shouldAllowBehaviourChangeFor: aGtEpReplayBehaviorModel atIndex: i inEntries: entries )]) ifTrue:
+			self canRejectBehaviourChangeFor: aGtEpReplayBehaviorModel atIndex: i inEntries: entries ]) ifTrue:
 			[ replayEntries removeIndex: i ] ].
 
 	"If the changes have no impact on the system no need to add them"
@@ -337,12 +344,6 @@ GtEpImageModelInImageVisitor >> replayCommentEntriesFrom: aGtEpReplayBehaviorMod
 GtEpImageModelInImageVisitor >> sequencedEntries [
 
 	^ sequencedEntries
-]
-
-{ #category : #private }
-GtEpImageModelInImageVisitor >> shouldAllowBehaviourChangeFor: aBehaviourModel atIndex: anIndex inEntries: aCollection [ 
-	^ aBehaviourModel isClass and: [ aBehaviourModel subclasses isEmpty ]  "or: [ 
-		self hasNoRenamesBeforeIndex: anIndex inEntries: aCollection ]"
 ]
 
 { #category : #visiting }

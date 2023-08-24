@@ -67,6 +67,13 @@ GtEpReplayClassModel >> isClass [
 	^ true
 ]
 
+{ #category : #testing }
+GtEpReplayClassModel >> knowsSuperclassInModel [
+
+	^ superclassName notNil and: [
+		imageModel basicIncludesBehaviorSometimeNamed:  superclassName ]
+]
+
 { #category : #accessing }
 GtEpReplayClassModel >> subclasses [
 	| subclasses |

@@ -1,0 +1,544 @@
+OmEntry {
+	#tags : {
+		#author : 'GlamorousAuthor',
+		#time : DateAndTime [ '2023-08-24T18:41:03.175657+03:00' ],
+		#prior : OmReference [ 'Pharo11-SNAPSHOT-64bit-53659ed.36BA03008E28', '332' ],
+		#self : OmReference [ '1' ]
+	},
+	#content : EpCategoryRegistration {
+		#classCategoryName : #Issue3420,
+		#affectedPackageName : #Issue3420
+	}
+}OmEntry {
+	#tags : {
+		#author : 'GlamorousAuthor',
+		#time : DateAndTime [ '2023-08-24T18:41:03.329895+03:00' ],
+		#prior : OmReference [ '1' ],
+		#self : OmReference [ '2' ]
+	},
+	#content : EpCategoryAddition {
+		#classCategoryName : #Issue3420,
+		#affectedPackageName : #Issue3420
+	}
+}OmEntry {
+	#tags : {
+		#author : 'GlamorousAuthor',
+		#time : DateAndTime [ '2023-08-24T18:41:03.352174+03:00' ],
+		#prior : OmReference [ '2' ],
+		#self : OmReference [ '3' ]
+	},
+	#content : EpClassAddition {
+		#class : RGClassDefinition {
+			#annotations : IdentityDictionary {
+				#definitionSource : 'Object subclass: #Issue3420Superclass\r\tinstanceVariableNames: \'\'\r\tclassVariableNames: \'\'\r\tpackage: \'Issue3420\'',
+				#superclassName : 'Object',
+				#traitCompositionSource : '{}'
+			},
+			#name : #Issue3420Superclass,
+			#methods : IdentityDictionary { },
+			#protocols : Set [ ],
+			#instanceVariables : OrderedCollection [ ],
+			#metaClass : RGMetaclassDefinition {
+				#annotations : IdentityDictionary {
+					#traitCompositionSource : '{}',
+					#definitionSource : 'Issue3420Superclass class\r\tinstanceVariableNames: \'\''
+				},
+				#name : #'Issue3420Superclass class',
+				#methods : IdentityDictionary { },
+				#protocols : Set [ ],
+				#instanceVariables : OrderedCollection [ ],
+				#baseClass : @7
+			},
+			#comment : RGCommentDefinition {
+				#annotations : IdentityDictionary {
+					#isMetaSide : false,
+					#className : #Issue3420Superclass
+				},
+				#parent : @7,
+				#content : ''
+			},
+			#classVariables : OrderedCollection [ ],
+			#category : #Issue3420,
+			#package : #Issue3420,
+			#sharedPools : OrderedCollection [ ]
+		}
+	}
+}OmEntry {
+	#tags : {
+		#author : 'GlamorousAuthor',
+		#time : DateAndTime [ '2023-08-24T18:41:58.066324+03:00' ],
+		#prior : OmReference [ '3' ],
+		#self : OmReference [ '4' ]
+	},
+	#content : EpClassAddition {
+		#class : RGClassDefinition {
+			#annotations : IdentityDictionary {
+				#definitionSource : 'Issue3420Superclass subclass: #Issue3420Subclass\r\tinstanceVariableNames: \'varA varB\'\r\tclassVariableNames: \'\'\r\tpackage: \'Issue3420\'',
+				#superclassName : 'Issue3420Superclass',
+				#traitCompositionSource : '{}'
+			},
+			#name : #Issue3420Subclass,
+			#methods : IdentityDictionary { },
+			#protocols : Set [ ],
+			#instanceVariables : OrderedCollection [
+				RGInstanceVariableDefinition {
+					#annotations : IdentityDictionary {
+						#isMetaSide : false,
+						#className : #Issue3420Subclass
+					},
+					#name : #varA,
+					#parent : @7
+				},
+				RGInstanceVariableDefinition {
+					#annotations : IdentityDictionary {
+						#isMetaSide : false,
+						#className : #Issue3420Subclass
+					},
+					#name : #varB,
+					#parent : @7
+				}
+			],
+			#metaClass : RGMetaclassDefinition {
+				#annotations : IdentityDictionary {
+					#traitCompositionSource : '{}',
+					#definitionSource : 'Issue3420Subclass class\r\tinstanceVariableNames: \'\''
+				},
+				#name : #'Issue3420Subclass class',
+				#methods : IdentityDictionary { },
+				#protocols : Set [ ],
+				#instanceVariables : OrderedCollection [ ],
+				#baseClass : @7
+			},
+			#comment : RGCommentDefinition {
+				#annotations : IdentityDictionary {
+					#isMetaSide : false,
+					#className : #Issue3420Subclass
+				},
+				#parent : @7,
+				#content : ''
+			},
+			#classVariables : OrderedCollection [ ],
+			#category : #Issue3420,
+			#package : #Issue3420,
+			#sharedPools : OrderedCollection [ ]
+		}
+	}
+}OmEntry {
+	#tags : {
+		#author : 'GlamorousAuthor',
+		#time : DateAndTime [ '2023-08-24T18:42:23.78674+03:00' ],
+		#prior : OmReference [ '4' ],
+		#self : OmReference [ '5' ]
+	},
+	#content : EpMethodAddition {
+		#method : RGMethodDefinition {
+			#annotations : IdentityDictionary {
+				#isMetaSide : false,
+				#className : #Issue3420Subclass
+			},
+			#name : #methodA,
+			#protocol : #accessing,
+			#sourceCode : 'methodA\r\t^ \'A\'',
+			#stamp : '',
+			#package : #Issue3420
+		}
+	}
+}OmEntry {
+	#tags : {
+		#author : 'GlamorousAuthor',
+		#time : DateAndTime [ '2023-08-24T18:42:31.408341+03:00' ],
+		#prior : OmReference [ '5' ],
+		#self : OmReference [ '6' ]
+	},
+	#content : EpMethodAddition {
+		#method : RGMethodDefinition {
+			#annotations : IdentityDictionary {
+				#isMetaSide : false,
+				#className : #Issue3420Superclass
+			},
+			#name : #methodB,
+			#protocol : #accessing,
+			#sourceCode : 'methodB\r\t^ \'B\'',
+			#stamp : '',
+			#package : #Issue3420
+		}
+	}
+}OmEntry {
+	#tags : {
+		#author : 'GlamorousAuthor',
+		#time : DateAndTime [ '2023-08-24T18:43:29.215229+03:00' ],
+		#prior : OmReference [ '6' ],
+		#self : OmReference [ '7' ]
+	},
+	#content : EpClassModification {
+		#oldClass : RGClassDefinition {
+			#annotations : IdentityDictionary {
+				#definitionSource : 'Issue3420Superclass subclass: #Issue3420Subclass\r\tinstanceVariableNames: \'varA varB\'\r\tclassVariableNames: \'\'\r\tpackage: \'Issue3420\'',
+				#superclassName : 'Issue3420Superclass',
+				#traitCompositionSource : '{}'
+			},
+			#name : #Issue3420Subclass,
+			#methods : IdentityDictionary { },
+			#protocols : Set [ ],
+			#instanceVariables : OrderedCollection [
+				RGInstanceVariableDefinition {
+					#annotations : IdentityDictionary {
+						#isMetaSide : false,
+						#className : #Issue3420Subclass
+					},
+					#name : #varA,
+					#parent : @7
+				},
+				RGInstanceVariableDefinition {
+					#annotations : IdentityDictionary {
+						#isMetaSide : false,
+						#className : #Issue3420Subclass
+					},
+					#name : #varB,
+					#parent : @7
+				}
+			],
+			#metaClass : RGMetaclassDefinition {
+				#annotations : IdentityDictionary {
+					#traitCompositionSource : '{}',
+					#definitionSource : 'Issue3420Subclass class\r\tinstanceVariableNames: \'\''
+				},
+				#name : #'Issue3420Subclass class',
+				#methods : IdentityDictionary { },
+				#protocols : Set [ ],
+				#instanceVariables : OrderedCollection [ ],
+				#baseClass : @7
+			},
+			#comment : RGCommentDefinition {
+				#annotations : IdentityDictionary {
+					#isMetaSide : false,
+					#className : #Issue3420Subclass
+				},
+				#parent : @7,
+				#content : ''
+			},
+			#classVariables : OrderedCollection [ ],
+			#category : #Issue3420,
+			#package : #Issue3420,
+			#sharedPools : OrderedCollection [ ]
+		},
+		#newClass : RGClassDefinition {
+			#annotations : IdentityDictionary {
+				#definitionSource : 'Issue3420Superclass subclass: #Issue3420Subclass\r\tinstanceVariableNames: \'varB\'\r\tclassVariableNames: \'\'\r\tpackage: \'Issue3420\'',
+				#superclassName : 'Issue3420Superclass',
+				#traitCompositionSource : '{}'
+			},
+			#name : #Issue3420Subclass,
+			#methods : IdentityDictionary { },
+			#protocols : Set [ ],
+			#instanceVariables : OrderedCollection [
+				RGInstanceVariableDefinition {
+					#annotations : IdentityDictionary {
+						#isMetaSide : false,
+						#className : #Issue3420Subclass
+					},
+					#name : #varB,
+					#parent : @25
+				}
+			],
+			#metaClass : RGMetaclassDefinition {
+				#annotations : IdentityDictionary {
+					#traitCompositionSource : '{}',
+					#definitionSource : 'Issue3420Subclass class\r\tinstanceVariableNames: \'\''
+				},
+				#name : #'Issue3420Subclass class',
+				#methods : IdentityDictionary { },
+				#protocols : Set [ ],
+				#instanceVariables : OrderedCollection [ ],
+				#baseClass : @25
+			},
+			#comment : RGCommentDefinition {
+				#annotations : IdentityDictionary {
+					#isMetaSide : false,
+					#className : #Issue3420Subclass
+				},
+				#parent : @25,
+				#content : ''
+			},
+			#classVariables : OrderedCollection [ ],
+			#category : #Issue3420,
+			#package : #Issue3420,
+			#sharedPools : OrderedCollection [ ]
+		}
+	}
+}OmEntry {
+	#tags : {
+		#author : 'GlamorousAuthor',
+		#time : DateAndTime [ '2023-08-24T18:43:29.712222+03:00' ],
+		#prior : OmReference [ '7' ],
+		#self : OmReference [ '8' ]
+	},
+	#content : EpClassModification {
+		#oldClass : RGClassDefinition {
+			#annotations : IdentityDictionary {
+				#definitionSource : 'Object subclass: #Issue3420Superclass\r\tinstanceVariableNames: \'\'\r\tclassVariableNames: \'\'\r\tpackage: \'Issue3420\'',
+				#superclassName : 'Object',
+				#traitCompositionSource : '{}'
+			},
+			#name : #Issue3420Superclass,
+			#methods : IdentityDictionary { },
+			#protocols : Set [ ],
+			#instanceVariables : OrderedCollection [ ],
+			#metaClass : RGMetaclassDefinition {
+				#annotations : IdentityDictionary {
+					#traitCompositionSource : '{}',
+					#definitionSource : 'Issue3420Superclass class\r\tinstanceVariableNames: \'\''
+				},
+				#name : #'Issue3420Superclass class',
+				#methods : IdentityDictionary { },
+				#protocols : Set [ ],
+				#instanceVariables : OrderedCollection [ ],
+				#baseClass : @7
+			},
+			#comment : RGCommentDefinition {
+				#annotations : IdentityDictionary {
+					#isMetaSide : false,
+					#className : #Issue3420Superclass
+				},
+				#parent : @7,
+				#content : ''
+			},
+			#classVariables : OrderedCollection [ ],
+			#category : #Issue3420,
+			#package : #Issue3420,
+			#sharedPools : OrderedCollection [ ]
+		},
+		#newClass : RGClassDefinition {
+			#annotations : IdentityDictionary {
+				#definitionSource : 'Object subclass: #Issue3420Superclass\r\tinstanceVariableNames: \'varA\'\r\tclassVariableNames: \'\'\r\tpackage: \'Issue3420\'',
+				#superclassName : 'Object',
+				#traitCompositionSource : '{}'
+			},
+			#name : #Issue3420Superclass,
+			#methods : IdentityDictionary { },
+			#protocols : Set [ ],
+			#instanceVariables : OrderedCollection [
+				RGInstanceVariableDefinition {
+					#annotations : IdentityDictionary {
+						#isMetaSide : false,
+						#className : #Issue3420Superclass
+					},
+					#name : #varA,
+					#parent : @21
+				}
+			],
+			#metaClass : RGMetaclassDefinition {
+				#annotations : IdentityDictionary {
+					#traitCompositionSource : '{}',
+					#definitionSource : 'Issue3420Superclass class\r\tinstanceVariableNames: \'\''
+				},
+				#name : #'Issue3420Superclass class',
+				#methods : IdentityDictionary { },
+				#protocols : Set [ ],
+				#instanceVariables : OrderedCollection [ ],
+				#baseClass : @21
+			},
+			#comment : RGCommentDefinition {
+				#annotations : IdentityDictionary {
+					#isMetaSide : false,
+					#className : #Issue3420Superclass
+				},
+				#parent : @21,
+				#content : ''
+			},
+			#classVariables : OrderedCollection [ ],
+			#category : #Issue3420,
+			#package : #Issue3420,
+			#sharedPools : OrderedCollection [ ]
+		}
+	}
+}OmEntry {
+	#tags : {
+		#author : 'GlamorousAuthor',
+		#time : DateAndTime [ '2023-08-24T18:43:33.894749+03:00' ],
+		#prior : OmReference [ '8' ],
+		#self : OmReference [ '9' ]
+	},
+	#content : EpClassModification {
+		#oldClass : RGClassDefinition {
+			#annotations : IdentityDictionary {
+				#definitionSource : 'Issue3420Superclass subclass: #Issue3420Subclass\r\tinstanceVariableNames: \'varB\'\r\tclassVariableNames: \'\'\r\tpackage: \'Issue3420\'',
+				#superclassName : 'Issue3420Superclass',
+				#traitCompositionSource : '{}'
+			},
+			#name : #Issue3420Subclass,
+			#methods : IdentityDictionary { },
+			#protocols : Set [ ],
+			#instanceVariables : OrderedCollection [
+				RGInstanceVariableDefinition {
+					#annotations : IdentityDictionary {
+						#isMetaSide : false,
+						#className : #Issue3420Subclass
+					},
+					#name : #varB,
+					#parent : @7
+				}
+			],
+			#metaClass : RGMetaclassDefinition {
+				#annotations : IdentityDictionary {
+					#traitCompositionSource : '{}',
+					#definitionSource : 'Issue3420Subclass class\r\tinstanceVariableNames: \'\''
+				},
+				#name : #'Issue3420Subclass class',
+				#methods : IdentityDictionary { },
+				#protocols : Set [ ],
+				#instanceVariables : OrderedCollection [ ],
+				#baseClass : @7
+			},
+			#comment : RGCommentDefinition {
+				#annotations : IdentityDictionary {
+					#isMetaSide : false,
+					#className : #Issue3420Subclass
+				},
+				#parent : @7,
+				#content : ''
+			},
+			#classVariables : OrderedCollection [ ],
+			#category : #Issue3420,
+			#package : #Issue3420,
+			#sharedPools : OrderedCollection [ ]
+		},
+		#newClass : RGClassDefinition {
+			#annotations : IdentityDictionary {
+				#definitionSource : 'Issue3420Superclass subclass: #Issue3420Subclass\r\tinstanceVariableNames: \'\'\r\tclassVariableNames: \'\'\r\tpackage: \'Issue3420\'',
+				#superclassName : 'Issue3420Superclass',
+				#traitCompositionSource : '{}'
+			},
+			#name : #Issue3420Subclass,
+			#methods : IdentityDictionary { },
+			#protocols : Set [ ],
+			#instanceVariables : OrderedCollection [ ],
+			#metaClass : RGMetaclassDefinition {
+				#annotations : IdentityDictionary {
+					#traitCompositionSource : '{}',
+					#definitionSource : 'Issue3420Subclass class\r\tinstanceVariableNames: \'\''
+				},
+				#name : #'Issue3420Subclass class',
+				#methods : IdentityDictionary { },
+				#protocols : Set [ ],
+				#instanceVariables : OrderedCollection [ ],
+				#baseClass : @23
+			},
+			#comment : RGCommentDefinition {
+				#annotations : IdentityDictionary {
+					#isMetaSide : false,
+					#className : #Issue3420Subclass
+				},
+				#parent : @23,
+				#content : ''
+			},
+			#classVariables : OrderedCollection [ ],
+			#category : #Issue3420,
+			#package : #Issue3420,
+			#sharedPools : OrderedCollection [ ]
+		}
+	}
+}OmEntry {
+	#tags : {
+		#author : 'GlamorousAuthor',
+		#time : DateAndTime [ '2023-08-24T18:43:34.405576+03:00' ],
+		#prior : OmReference [ '9' ],
+		#self : OmReference [ '10' ]
+	},
+	#content : EpClassModification {
+		#oldClass : RGClassDefinition {
+			#annotations : IdentityDictionary {
+				#definitionSource : 'Object subclass: #Issue3420Superclass\r\tinstanceVariableNames: \'varA\'\r\tclassVariableNames: \'\'\r\tpackage: \'Issue3420\'',
+				#superclassName : 'Object',
+				#traitCompositionSource : '{}'
+			},
+			#name : #Issue3420Superclass,
+			#methods : IdentityDictionary { },
+			#protocols : Set [ ],
+			#instanceVariables : OrderedCollection [
+				RGInstanceVariableDefinition {
+					#annotations : IdentityDictionary {
+						#isMetaSide : false,
+						#className : #Issue3420Superclass
+					},
+					#name : #varA,
+					#parent : @7
+				}
+			],
+			#metaClass : RGMetaclassDefinition {
+				#annotations : IdentityDictionary {
+					#traitCompositionSource : '{}',
+					#definitionSource : 'Issue3420Superclass class\r\tinstanceVariableNames: \'\''
+				},
+				#name : #'Issue3420Superclass class',
+				#methods : IdentityDictionary { },
+				#protocols : Set [ ],
+				#instanceVariables : OrderedCollection [ ],
+				#baseClass : @7
+			},
+			#comment : RGCommentDefinition {
+				#annotations : IdentityDictionary {
+					#isMetaSide : false,
+					#className : #Issue3420Superclass
+				},
+				#parent : @7,
+				#content : ''
+			},
+			#classVariables : OrderedCollection [ ],
+			#category : #Issue3420,
+			#package : #Issue3420,
+			#sharedPools : OrderedCollection [ ]
+		},
+		#newClass : RGClassDefinition {
+			#annotations : IdentityDictionary {
+				#definitionSource : 'Object subclass: #Issue3420Superclass\r\tinstanceVariableNames: \'varA varB\'\r\tclassVariableNames: \'\'\r\tpackage: \'Issue3420\'',
+				#superclassName : 'Object',
+				#traitCompositionSource : '{}'
+			},
+			#name : #Issue3420Superclass,
+			#methods : IdentityDictionary { },
+			#protocols : Set [ ],
+			#instanceVariables : OrderedCollection [
+				RGInstanceVariableDefinition {
+					#annotations : IdentityDictionary {
+						#isMetaSide : false,
+						#className : #Issue3420Superclass
+					},
+					#name : #varA,
+					#parent : @23
+				},
+				RGInstanceVariableDefinition {
+					#annotations : IdentityDictionary {
+						#isMetaSide : false,
+						#className : #Issue3420Superclass
+					},
+					#name : #varB,
+					#parent : @23
+				}
+			],
+			#metaClass : RGMetaclassDefinition {
+				#annotations : IdentityDictionary {
+					#traitCompositionSource : '{}',
+					#definitionSource : 'Issue3420Superclass class\r\tinstanceVariableNames: \'\''
+				},
+				#name : #'Issue3420Superclass class',
+				#methods : IdentityDictionary { },
+				#protocols : Set [ ],
+				#instanceVariables : OrderedCollection [ ],
+				#baseClass : @23
+			},
+			#comment : RGCommentDefinition {
+				#annotations : IdentityDictionary {
+					#isMetaSide : false,
+					#className : #Issue3420Superclass
+				},
+				#parent : @23,
+				#content : ''
+			},
+			#classVariables : OrderedCollection [ ],
+			#category : #Issue3420,
+			#package : #Issue3420,
+			#sharedPools : OrderedCollection [ ]
+		}
+	}
+}
