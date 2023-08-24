@@ -152,6 +152,19 @@ GtEpReplayImageModel >> addTraitRemoval: anOmEntry [
 	behavior addBehaviorRemoval: anOmEntry.
 ]
 
+{ #category : #testing }
+GtEpReplayImageModel >> basicIncludesBehaviorSometimeNamed: aSymbol [
+	"Answer a boolean indicating whether the named behaviour exists in the list of behaviours with its current or a previous name, without looking at superclasses"
+
+	^ behaviors
+		at: aSymbol
+		ifPresent: [ :aBehavior | true ]
+		ifAbsent: [ behaviors 
+			detect: [ :aBehavior | aBehavior previousNames includes: aSymbol ]
+			ifFound: [ :aBehavior | aBehavior ]
+			ifNone: [ ^ false ] ].
+]
+
 { #category : #accessing }
 GtEpReplayImageModel >> behaviorAt: aSymbol [
 	"Answer the behavior model for the given name"
