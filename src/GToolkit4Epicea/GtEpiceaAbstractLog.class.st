@@ -222,14 +222,15 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 			priority: 3;
 			stencil: [ (GtEpiceaChangeListElement forModel: changeListModel)
 					padding: (BlInsets top: 5) ].
-
-	view
-		actionDropdownButtonLabel: 'Apply'
-		tooltip: 'Apply Selected Changes'
-		content: [ :aButton | 
-			GtEpiceaApplyChangesDetailsElement new
-				entries: changeListModel selectedCodeEvents;
-				anchor: aButton ].
+	view actionDropdownButtonDo: [ :aDrodownAction | 
+		aDrodownAction dropdown 
+			label: 'Apply';
+			tooltip: 'Apply Selected Changes';
+			content: [ :aButton | 
+				GtEpiceaApplyChangesDetailsElement new
+					entries: changeListModel selectedCodeEvents;
+					anchor: aButton ];
+			preferredExtent: GtEpiceaApplyChangesDetailsElement preferredWidgetExtent].
 
 	view
 		actionButtonLabel: 'Inspect'
