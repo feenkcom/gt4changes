@@ -11,6 +11,11 @@ Class {
 	#category : #'GToolkit4Epicea-Model'
 }
 
+{ #category : #acccessing }
+GtEpiceaApplyChangesDetailsElement class >> preferredWidgetExtent [
+	^ 400@500
+]
+
 { #category : #accessing }
 GtEpiceaApplyChangesDetailsElement >> action [
 
@@ -154,8 +159,7 @@ GtEpiceaApplyChangesDetailsElement >> initialize [
 	super initialize.
 	
 	self 
-		hExact: 350;
-		vExact: 500;
+		exact: self class preferredWidgetExtent;
 		alignCenter;
 		padding: (BlInsets all: 5);
 		addAptitude: BrGlamorousWithHorizontalResizerAptitude new beLeft
