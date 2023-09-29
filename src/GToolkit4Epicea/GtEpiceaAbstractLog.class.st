@@ -222,22 +222,23 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 			priority: 3;
 			stencil: [ (GtEpiceaChangeListElement forModel: changeListModel)
 					padding: (BlInsets top: 5) ].
-	view actionDropdownButtonDo: [ :aDrodownAction | 
-		aDrodownAction dropdown 
-			label: 'Apply';
-			tooltip: 'Apply Selected Changes';
-			content: [ :aButton | 
-				GtEpiceaApplyChangesDetailsElement new
-					entries: changeListModel selectedCodeEvents;
-					anchor: aButton ];
-			preferredExtent: GtEpiceaApplyChangesDetailsElement preferredWidgetExtent].
+	view
+		actionDropdownButtonDo: [ :aDrodownAction | 
+			aDrodownAction dropdown
+				label: 'Apply';
+				tooltip: 'Apply Selected Changes';
+				content: [ :aButton | 
+					GtEpiceaApplyChangesDetailsElement new
+						entries: changeListModel selectedCodeEvents;
+						anchor: aButton ];
+				preferredExtent: GtEpiceaApplyChangesDetailsElement preferredWidgetExtent ].
 
 	view
 		actionButtonLabel: 'Inspect'
 		tooltip: 'Inspect Selected Changes'
 		action: [ :aButton | 
-			aButton phlow spawnObject:
-				(GtEpiceaExplicitLog on: changeListModel selectedCodeEvents) ].
+			aButton phlow
+				spawnObject: (GtEpiceaExplicitLog on: changeListModel selectedCodeEvents) ].
 
 	self addToolbarButtonsTo: view withModel: changeListModel.
 
