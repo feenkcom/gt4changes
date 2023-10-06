@@ -11,3 +11,9 @@ EpBehaviorCategoryChange >> initializeOldCategory: anOldCategory newCategory: aN
 	"This is a hack-ish was to determine the name of the old package starting from the name of the old category."
 	self inferOldPackageNameFromOldCategoryName.
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpBehaviorCategoryChange >> isEpBehaviorCategoryChange [
+
+	^ true
+]

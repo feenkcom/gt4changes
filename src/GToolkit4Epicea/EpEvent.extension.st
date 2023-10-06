@@ -25,6 +25,12 @@ EpEvent >> hasImpact [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+EpEvent >> isEpBehaviorCategoryChange [
+
+	^ false
+]
+
+{ #category : #'*GToolkit4Epicea' }
 EpEvent >> isEpBehaviorCommentChange [
 
 	^ false
