@@ -49,23 +49,24 @@ GtEpiceaElementExamples >> expandedElementWithChange [
 GtEpiceaElementExamples >> expandedElementWithDeletedChange [
 	<gtExample>
 	| aScripter |
-	
 	"This example assumes an on-disk Epicea store"
 	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
 
 	aScripter := self expandedElementWithDeletionDialog.
-	
-	aScripter click
-		label: 'Click on remove button';
-		onSpaceRoot;
-		id: #'change-button-action';
-		play.
-		
-	aScripter check
-		label: 'Check no change';
-		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ];
-		play.
-	
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click on remove button';
+				onSpaceRoot;
+				id: #'change-button-action' ].
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check no change';
+				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ] ].
+
 	^ aScripter
 ]
 
@@ -73,18 +74,18 @@ GtEpiceaElementExamples >> expandedElementWithDeletedChange [
 GtEpiceaElementExamples >> expandedElementWithDeletionDialog [
 	<gtExample>
 	| aScripter |
-	
 	"This example assumes an on-disk Epicea store"
 	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
 
 	aScripter := self scripterOnExpandedElementWithChange.
-	
-	aScripter click
-		label: 'Click change deletion button';
-		id: #content;
-		id: #removebtn;
-		play.
-	
+
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click change deletion button';
+				id: #content;
+				id: #removebtn ].
+
 	^ aScripter
 ]
 
@@ -106,23 +107,26 @@ GtEpiceaElementExamples >> scripterOnExpandedElement [
 GtEpiceaElementExamples >> scripterOnExpandedElementWithChange [
 	<gtExample>
 	| aScripter |
-	
 	"This example assumes an on-disk Epicea store"
 	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
 
 	aScripter := BlScripter new.
 	aScripter element: self expandedElementWithChange.
-		
-	aScripter check
-		label: 'Check change';
-		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ];
-		play.
-			
-	aScripter check
-		label: 'Check change name';
-		satisfies: [ :aChangeView | ((aChangeView pages last contentElement tool childNamed: #title) childAt: 1) text asString = 'Explicit log on 0 entries' ];
-		play.
-	
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check change';
+				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ] ].
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check change name';
+				satisfies: [ :aChangeView | 
+					((aChangeView pages last contentElement tool childNamed: #title) childAt: 1)
+						text asString = 'Explicit log on 0 entries' ] ].
+
 	^ aScripter
 ]
 
@@ -131,57 +135,63 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedActiveLog [
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	"This example assumes an on-disk Epicea store"
 	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
 
 	aScripter := self scripterOnExpandedElement.
 
-	aScripter check
-		label: 'Check no change';
-		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ];
-		play.
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check no change';
+				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ] ].
 
-	aScripter click
-		label: 'Click change expander';
-		id: #sidebar;
-		id: #content;
-		id: #scrollable;
-		id: #toggle;
-		play.
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click change expander';
+				id: #sidebar;
+				id: #content;
+				id: #scrollable;
+				id: #toggle ].
 
-	aScripter click
-		label: 'Click active change';
-		id: #sidebar;
-		id: #content;
-		id: #scrollable;
-		onChildAt: 2;
-		play.
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click active change';
+				id: #sidebar;
+				id: #content;
+				id: #scrollable;
+				onChildAt: 2 ].
 
-	aScripter check
-		label: 'Check change selected';
-		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ];
-		play.
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check change selected';
+				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ] ].
 
-	aScripter check
-		label: 'Check change selected';
-		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isSimple ];
-		play.
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check change selected';
+				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isSimple ] ].
 
-	aScripter check
-		label: 'Check change is active';
-		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isActive ];
-		play.
-		
-	aScripter check
-		label: 'Check change has a list view';
-		satisfies: [ :aChangeView | 
-			(((aChangeView pages last contentElement tool childNamed: #content)
-				childNamed: #tabs) childNamed: #content)
-				childNamed: #list
-				ifFound: [ :element | element isKindOf: BrColumnedList ]
-				ifNone: [ false ] ];
-		play.
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check change is active';
+				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isActive ] ].
+
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check change has a list view';
+				satisfies: [ :aChangeView | 
+					(((aChangeView pages last contentElement tool childNamed: #content)
+						childNamed: #tabs) childNamed: #content)
+						childNamed: #list
+						ifFound: [ :element | element isKindOf: BrColumnedList ]
+						ifNone: [ false ] ] ].
 
 	^ aScripter
 ]
@@ -191,52 +201,57 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedCompositeLog [
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	"This example assumes an on-disk Epicea store"
 	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
 
 	aScripter := self scripterOnExpandedElement.
 
-	aScripter check
-		label: 'Check no change';
-		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ];
-		play.
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check no change';
+				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ] ].
 
-	aScripter click
-		label: 'Click change expander';
-		id: #sidebar;
-		id: #content;
-		id: #scrollable;
-		id: #toggle;
-		play.
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click change expander';
+				id: #sidebar;
+				id: #content;
+				id: #scrollable;
+				id: #toggle ].
 
-	aScripter click
-		label: 'Click composite change';
-		id: #sidebar;
-		id: #content;
-		id: #scrollable;
-		onChildAt: 1;
-		play.
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click composite change';
+				id: #sidebar;
+				id: #content;
+				id: #scrollable;
+				onChildAt: 1 ].
 
-	aScripter check
-		label: 'Check change selected';
-		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ];
-		play.
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check change selected';
+				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ] ].
 
-	aScripter check
-		label: 'Check change is composite';
-		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isComposite ];
-		play.
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check change is composite';
+				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isComposite ] ].
 
-	aScripter check
-		label: 'Check change has a list view';
-		satisfies: [ :aChangeView | 
-			(((aChangeView pages last contentElement tool childNamed: #content)
-				childNamed: #tabs) childNamed: #content)
-				childNamed: #list
-				ifFound: [ :element | element isKindOf: BrColumnedList ]
-				ifNone: [ false ] ];
-		play.
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check change has a list view';
+				satisfies: [ :aChangeView | 
+					(((aChangeView pages last contentElement tool childNamed: #content)
+						childNamed: #tabs) childNamed: #content)
+						childNamed: #list
+						ifFound: [ :element | element isKindOf: BrColumnedList ]
+						ifNone: [ false ] ] ].
 
 	^ aScripter
 ]
@@ -246,58 +261,64 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithSelectedSimpleLog [
 	<gtExample>
 	<noTest>
 	| aScripter |
-
 	"This example assumes an on-disk Epicea store"
 	EpMonitor current sessionStore isMemoryStore ifTrue: [ ^ self ].
 
 	aScripter := self scripterOnExpandedElement.
 
-	aScripter check
-		label: 'Check no change';
-		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ];
-		play.
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check no change';
+				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ] ].
 
-	aScripter click
-		label: 'Click change expander';
-		id: #sidebar;
-		id: #content;
-		id: #scrollable;
-		id: #toggle;
-		play.
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click change expander';
+				id: #sidebar;
+				id: #content;
+				id: #scrollable;
+				id: #toggle ].
 
-	aScripter click
-		label: 'Click composite change';
-		id: #sidebar;
-		id: #content;
-		id: #scrollable;
-		onChildAt: 3;
-		play.
+	aScripter
+		clickStep: [ :s | 
+			s
+				label: 'Click composite change';
+				id: #sidebar;
+				id: #content;
+				id: #scrollable;
+				onChildAt: 3 ].
 
-	aScripter check
-		label: 'Check change selected';
-		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ];
-		play.
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check change selected';
+				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ] ].
 
-	aScripter check
-		label: 'Check change is composite';
-		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isSimple ];
-		play.
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check change is composite';
+				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isSimple ] ].
 
-	aScripter check
-		label: 'Check change is not active';
-		satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isActive not ];
-		play.
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check change is not active';
+				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isActive not ] ].
 
-	aScripter check
-		label: 'Check change has a list view';
-		satisfies: [ :aChangeView | 
-			(((aChangeView pages last contentElement tool childNamed: #content)
-				childNamed: #tabs) childNamed: #content)
-				childNamed: #list
-				ifFound: [ :element | element isKindOf: BrColumnedList ]
-				ifNone: [ false ] ];
-		play.
-		
+	aScripter
+		checkStep: [ :s | 
+			s
+				label: 'Check change has a list view';
+				satisfies: [ :aChangeView | 
+					(((aChangeView pages last contentElement tool childNamed: #content)
+						childNamed: #tabs) childNamed: #content)
+						childNamed: #list
+						ifFound: [ :element | element isKindOf: BrColumnedList ]
+						ifNone: [ false ] ] ].
+
 	^ aScripter
 ]
 
