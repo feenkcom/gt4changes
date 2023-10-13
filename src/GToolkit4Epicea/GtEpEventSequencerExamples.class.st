@@ -362,6 +362,45 @@ GtEpEventSequencerExamples >> classAddModifyRenameInImage [
 ]
 
 { #category : #examples }
+GtEpEventSequencerExamples >> classAddModifyRenameRemove2ForExport [
+	"Check that a class add, modify, rename and remove is sequenced correctly."
+	<gtExample>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #GtGemStoneCodeSyncExampleClassRenamed).
+	self deny: (self class environment includesKey: #GtGemStoneCodeSyncExampleClassRenamed).
+	fileReference := self class testDataRoot / 'Issue3487' / 'Pharo10-SNAPSHOT-64bit-179ef65.3dsjiizgjzilekro4fb7a5dr4.ombu'.
+	self assert: fileReference exists.
+	epLog := GtEpLogEnumerator fromFile: fileReference.
+	entries := epLog priorEntriesFromHead.
+	self assert: entries size equals: 16.
+	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpBehaviorNameChange #EpClassRemoval).
+	^ sequencer.
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classAddModifyRenameRemove2InImage [
+	"Check that a class add, modify, rename and remove is sequenced correctly."
+	<gtExample>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #GtGemStoneCodeSyncExampleClassRenamed).
+	self deny: (self class environment includesKey: #GtGemStoneCodeSyncExampleClassRenamed).
+	fileReference := self class testDataRoot / 'Issue3487' / 'Pharo10-SNAPSHOT-64bit-179ef65.3dsjiizgjzilekro4fb7a5dr4.ombu'.
+	self assert: fileReference exists.
+	epLog := GtEpLogEnumerator fromFile: fileReference.
+	entries := epLog priorEntriesFromHead.
+	self assert: entries size equals: 16.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: sequencedEntries isEmpty.
+	^ sequencer.
+]
+
+{ #category : #examples }
 GtEpEventSequencerExamples >> classAddModifyRenameRemoveForExport [
 	"Check that a class add, modify, rename and remove is sequenced correctly."
 	<gtExample>
