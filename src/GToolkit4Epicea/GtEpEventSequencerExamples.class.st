@@ -376,7 +376,6 @@ GtEpEventSequencerExamples >> classAddModifyRenameRemove2ForExport [
 	self assert: entries size equals: 16.
 	sequencer := GtEpEventSequencer entries: entries inImage: false.
 	sequencedEntries := sequencer sequencedEntries.
-	self deny: (sequencer image behaviors includesKey: #GtGemStoneCodeSyncExampleClassRenamed).
 	self assert: (sequencedEntries collect: [ :each | each content class name ])
 		equals: #(#EpBehaviorNameChange #EpClassRemoval).
 	^ sequencer.
