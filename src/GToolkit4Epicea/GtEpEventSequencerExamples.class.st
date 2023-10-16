@@ -21,6 +21,7 @@ GtEpEventSequencerExamples class >> removeTestClasses [
 		#Issue3398RootClass #Issue3398Subclass #Issue3398RootClassRenamed
 		#Issue3399RootClass #Issue3399Subclass1 #Issue3399Subclass2
 		#Issue3420Superclass #Issue3420Subclass 
+		#Issue3490RootClass #Issue3490SubClass
 		#GtEpEventSequencerExampleCheck) do: [ :each |
 			self class environment removeClassNamed: each ].
 		self class environment organization
@@ -34,6 +35,7 @@ GtEpEventSequencerExamples class >> removeTestClasses [
 			removeCategory: #Issue3398;
 			removeCategory: #Issue3399;
 			removeCategory: #Issue3420;
+			removeCategory: #Issue3490;
 			removeCategory: #GtEpEventSequencerExampleChecks ].
 ]
 
@@ -1549,6 +1551,46 @@ GtEpEventSequencerExamples >> superclassAndSubclassSuperclassRenameAndBothChange
 	subclassBehavior := self class environment classOrTraitNamed: #Issue3398Subclass.
 	self deny: (self class environment includesKey: #Issue3398RootClass).
 	self assert: subclassBehavior superclass name equals: 'Issue3398RootClassRenamed'.
+	
+	^ sequencer.
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> superclassAndSubclassWithSuperclassRemovalBothNewInImage [
+	"Check adding a superclass and a subclass and removing the subclass works"
+	<gtExample>
+	<noTest>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries rootClassBehavior subclassBehavior |
+
+	self deny: (self class environment includesKey: #Issue3490RootClass).
+	self deny: (self class environment includesKey: #Issue3490Subclass).
+	
+	fileReference := (self class testDataRoot / 'Issue3490' / 'Pharo10-SNAPSHOT-64bit-179ef65.3bak9h9f6v0rt870ok3zaoyvu.ombu').
+	self assert: fileReference exists.
+	epLog :=  EpLog newWithStore: (OmStoreFactory current 
+		fromFile: fileReference).
+	entries := epLog entries.
+	self assert: entries size equals: 8.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	
+	"self assert: (sequencer image behaviors includesKey: #Issue3490RootClass)."
+	self assert: (sequencer image behaviors includesKey: #Issue3490SubClass).
+	
+"	self assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassModification #EpMethodAddition #EpMethodModification).
+	
+	self assert: (sequencedEntries collect: [ :each | each content behaviorAffectedName ])
+		equals: #(#Issue3399RootClass #Issue3399Subclass1 #Issue3399RootClass)."
+	
+	EpMonitor disableDuring:
+		[ sequencedEntries do: [ :entry |
+			entry content applyCodeChange ] ].
+			
+	subclassBehavior := self class environment classOrTraitNamed: #Issue3490SubClass.
+	self assert: subclassBehavior instVarNames equals: #(#slotA #slotB).
+	self assert: subclassBehavior superclassName equals: #Object.
 	
 	^ sequencer.
 ]
