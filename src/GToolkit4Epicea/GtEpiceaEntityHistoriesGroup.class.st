@@ -1,8 +1,8 @@
 Class {
 	#name : #GtEpiceaEntityHistoriesGroup,
 	#superclass : #Object,
-	#traits : 'TGtGroup + TGtGroupItems',
-	#classTraits : 'TGtGroup classTrait + TGtGroupItems classTrait',
+	#traits : 'TGtGroupWithItems',
+	#classTraits : 'TGtGroupWithItems classTrait',
 	#category : #'GToolkit4Epicea-History'
 }
 
@@ -65,12 +65,6 @@ GtEpiceaEntityHistoriesGroup >> hasNoEffect [
 GtEpiceaEntityHistoriesGroup >> latestChange [
 	^ (self items collect: [ :anEntityHistory | anEntityHistory latestChange ])
 		detectMaxCollateWith: GtOmEntrySortFunction new
-]
-
-{ #category : #sorting }
-GtEpiceaEntityHistoriesGroup >> sorted: aBlock [
-	^ self species 
-		withAll: (self items sorted: aBlock)
 ]
 
 { #category : #sorting }
