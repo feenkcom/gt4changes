@@ -1561,7 +1561,6 @@ GtEpEventSequencerExamples >> superclassAndSubclassSuperclassRenameAndBothChange
 GtEpEventSequencerExamples >> superclassAndSubclassWithSuperclassRemovalBothExisting_addInitial_InImage [
 	"Check adding a superclass and a subclass and removing the subclass works"
 	<gtExample>
-	<noTest>
 	<after: #removeTestClasses>
 	| fileReference epLog entries sequencer sequencedEntries rootclassBehavior subclassBehavior |
 
