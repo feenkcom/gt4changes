@@ -10,7 +10,8 @@ Class {
 		'comments',
 		'previousLives',
 		'previousNames',
-		'imageModel'
+		'imageModel',
+		'superclassName'
 	],
 	#category : #'GToolkit4Epicea-Sequencer'
 }
@@ -255,6 +256,38 @@ GtEpReplayBehaviorModel >> imageModel: aGtEpReplayImageModel [
 	imageModel := aGtEpReplayImageModel
 ]
 
+{ #category : #accessing }
+GtEpReplayBehaviorModel >> inheritedFrom: aBehavior [
+	"Answer a boolean indicating whether the receiver inherited from aBehavior at any time in its history"
+
+	^ (self inheritsFrom: aBehavior) or:
+		[ entries anySatisfy: [ :entry |
+			entry content isEpClassModification and: 
+			[ entry content behaviorAffected superclassName = aBehavior name ] ] ]
+]
+
+{ #category : #accessing }
+GtEpReplayBehaviorModel >> inheritedFrom: aBehavior modifiedAfter: aDateAndTime [
+	"Answer a boolean indicating whether the receiver inherited from aBehavior at any time in its history"
+
+	^ (self inheritsFrom: aBehavior) or:
+		[ entries anySatisfy: [ :entry |
+			entry content isEpClassModification and: 
+			[ entry content behaviorAffected superclassName = aBehavior name and:
+			[ entry gtTime > aDateAndTime ] ] ] ]
+]
+
+{ #category : #accessing }
+GtEpReplayBehaviorModel >> inheritsFrom: aBehavior [
+	"Answer a boolean indicating whether the receiver inherits from aBehavior"
+
+	^ self superclassName isNotNil and:
+		[ self superclassName = aBehavior name or:
+		[ imageModel classOrTraitNamed: self superclassName
+			ifPresent: [ :clsModel | clsModel inheritsFrom: aBehavior ]
+			ifAbsent: [ false ] ] ]
+]
+
 { #category : #initialization }
 GtEpReplayBehaviorModel >> initialize [ 
 
@@ -391,4 +424,17 @@ GtEpReplayBehaviorModel >> reset [
 	classSide := GtEpReplayMetaBehaviorModel new instanceSide: self.
 	comments := OrderedCollection new.
 	previousNames := OrderedCollection new.
+]
+
+{ #category : #accessing }
+GtEpReplayBehaviorModel >> superclassName [
+
+	^ superclassName ifNil: [ 
+		self asRingDefinition ifNotNil: [ :aClassDefinition | 
+			aClassDefinition superclassName asSymbol ] ]
+]
+
+{ #category : #accessing }
+GtEpReplayBehaviorModel >> updateSuperclassNameTo: aNewSuperclassName [
+	superclassName := aNewSuperclassName asSymbol
 ]

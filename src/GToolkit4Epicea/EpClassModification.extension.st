@@ -20,3 +20,10 @@ EpClassModification >> isEpClassModification [
 
 	^ true.
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpClassModification >> isGtEpReplayBehaviorAddition [
+	"Answer a boolean indicating whether the receiver can be regarded as adding a behavior to the system."
+
+	^ true.
+]

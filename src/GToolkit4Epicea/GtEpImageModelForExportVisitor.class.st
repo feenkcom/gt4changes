@@ -25,7 +25,7 @@ GtEpImageModelForExportVisitor >> behaviorModificationEntryDiffersFromCurrent: a
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtEpImageModelForExportVisitor >> behaviorNameExists: aSymbol [
 
 	^ true
@@ -70,4 +70,17 @@ GtEpImageModelForExportVisitor >> protocolRemovalChangesRunningSystem: anOmEntry
 	"Answer a boolean indicating whether the supplied entry changes the running system"
 
 	^ true
+]
+
+{ #category : #testing }
+GtEpImageModelForExportVisitor >> shouldReplayOnBehaviorRemoval: replayEntry [ 
+	"Answer a boolean indicating whether the supplied entry should be replayed for a behavior that is later being removed, i.e. if:
+	- the entry is a name change of the behavior, or
+	- the behavior has subclasses that are changed after the supplied entry"
+	| content |
+
+	content := replayEntry content.
+	^ content isEpBehaviorNameChange or:
+	[ content isGtEpReplayBehaviorAddition and: 
+		[ self behaviorHasSubclassesAfter: replayEntry ] ]
 ]

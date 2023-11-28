@@ -48,6 +48,17 @@ GtEpImageModelInImageVisitor >> behaviorEntriesChangeRunningSystem: replayEntrie
 		[ self behaviorModificationEntryDiffersFromCurrent: replayEntries last ] ] ]
 ]
 
+{ #category : #private }
+GtEpImageModelInImageVisitor >> behaviorHasSubclassesAfter: replayEntry [
+	"Answer a boolean indicating whether the supplied behavior entry has subclasses that are modified after the replayEntry"
+	| superclass |
+
+	superclass := replayEntry content behaviorAffected.
+	^ image behaviors anySatisfy: [ :behavior | 
+		behavior inheritedFrom: superclass modifiedAfter: replayEntry gtTime ]
+
+]
+
 { #category : #testing }
 GtEpImageModelInImageVisitor >> behaviorModificationEntryDiffersFromCurrent: anOmEntry [
 	"Renames can mean the superclass doesn't match, so it is ignored in the comparison."
@@ -313,18 +324,19 @@ GtEpImageModelInImageVisitor >> replayBehaviorFrom: aGtEpReplayBehaviorModel ent
 { #category : #private }
 GtEpImageModelInImageVisitor >> replayBehaviorRemovalFrom: aGtEpReplayBehaviorModel [
 	"Add the requried entries to remove the supplied behavior.
-	If the source class (the name prior to renames) doesn't exist, there's nothing to do.
-	If the behavior is removed we only need any renames and the final removal, method events can be ignored."
-	| entries |
+	If the behavior is removed we need renames, changes that may affect subclasses and the final removal, method events can be ignored."
 
 	aGtEpReplayBehaviorModel previousLives do: [ :previousBehavior |
-		(self behaviorNameExists: previousBehavior originalBehaviorNameAffected) ifTrue:
-			[ entries := previousBehavior entries.
-			entries allButLastDo: [ :replayEntry | 
-				replayEntry content isEpBehaviorNameChange ifTrue:
-					[ stream nextPut: replayEntry ] ].
-			stream nextPut: entries last ] ].
-
+		| entries replayEntries |
+		entries := previousBehavior entries.
+		replayEntries := OrderedCollection new.
+		entries allButLastDo: [ :replayEntry | 
+			(self shouldReplayOnBehaviorRemoval: replayEntry) ifTrue:
+				[ replayEntries add: replayEntry ] ].
+		((self behaviorNameExists: previousBehavior originalBehaviorNameAffected) or:
+		[ replayEntries isNotEmpty ]) ifTrue:
+			[ replayEntries add: entries last ].
+		stream nextPutAll: replayEntries ].
 ]
 
 { #category : #private }
@@ -346,6 +358,16 @@ GtEpImageModelInImageVisitor >> sequencedEntries [
 	^ sequencedEntries
 ]
 
+{ #category : #private }
+GtEpImageModelInImageVisitor >> shouldReplayOnBehaviorRemoval: replayEntry [ 
+	"Answer a boolean indicating whether the supplied entry should be replayed for a behavior that is later being removed, i.e. if:
+	- the entry is a name change of the behavior, or
+	- the behavior has subclasses that are changed after the supplied entry"
+
+	^ replayEntry content isGtEpReplayBehaviorAddition and: 
+		[ self behaviorHasSubclassesAfter: replayEntry ]
+]
+
 { #category : #visiting }
 GtEpImageModelInImageVisitor >> visitBehaviorReplay: aGtEpReplayBehaviorModel [
 	"Add the entries required for replay to the stream"
@@ -355,7 +377,6 @@ GtEpImageModelInImageVisitor >> visitBehaviorReplay: aGtEpReplayBehaviorModel [
 	earliestBehaviorDependency := OmEntry content: EpEvent new.
 	earliestBehaviorDependency tags at: EpLog timeKey put: DateAndTime now.
 	self replayBehaviorRemovalFrom: aGtEpReplayBehaviorModel.
-	"self replayChangesFrom: aGtEpReplayBehaviorModel."
 	self visitNodes: aGtEpReplayBehaviorModel methods.
 	self visitNodes: aGtEpReplayBehaviorModel classSide methods.
 	self replayBehaviorFrom: aGtEpReplayBehaviorModel entries: aGtEpReplayBehaviorModel entries.
