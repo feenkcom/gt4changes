@@ -271,10 +271,8 @@ GtEpReplayImageModel >> classOrTraitNamed: aSymbol [
 			[ meta := false.
 			baseName := aSymbol asSymbol ] ].
 
-	behavior := behaviors at: baseName "ifAbsentPut: 
-		[ GtEpReplayBehaviorModel new
-			name: baseName ]".
-	 ^ meta 
+	behavior := behaviors at: baseName.
+	^ meta 
 		ifTrue: [ behavior classSide ]
 		ifFalse: [ behavior ]
 ]
@@ -327,6 +325,31 @@ GtEpReplayImageModel >> classOrTraitNamed: aSymbol ifAbsentPut: putBlock [
 	 ^ meta 
 		ifTrue: [ behavior classSide ]
 		ifFalse: [ behavior ]
+]
+
+{ #category : #accessing }
+GtEpReplayImageModel >> classOrTraitNamed: aSymbol ifPresent: presentBlock ifAbsent: absentBlock [
+	"Answer the class or trait with the supplied name.
+	If it is present in the running image, but not the model, add it to the model.
+	Otherwise answer nil."
+	| meta baseName behavior |
+
+	(aSymbol endsWith: ' class') ifTrue: 
+		[ meta := true.
+		baseName := (aSymbol copyFrom: 1 to: aSymbol size - 6) asSymbol ]
+	ifFalse: 
+		[ (aSymbol endsWith: ' classTrait') ifTrue: 
+			[ meta := true.
+			baseName := (aSymbol copyFrom: 1 to: aSymbol size - 11) asSymbol ]
+		ifFalse: 
+			[ meta := false.
+			baseName := aSymbol asSymbol ] ].
+
+	behavior := behaviors at: baseName 
+		ifAbsent: [ ^ absentBlock cull: baseName ].
+	 ^ presentBlock value: (meta 
+		ifTrue: [ behavior classSide ]
+		ifFalse: [ behavior ])
 ]
 
 { #category : #ui }

@@ -1,9 +1,6 @@
 Class {
 	#name : #GtEpReplayClassModel,
 	#superclass : #GtEpReplayBehaviorModel,
-	#instVars : [
-		'superclassName'
-	],
 	#category : #'GToolkit4Epicea-Sequencer'
 }
 
@@ -11,7 +8,7 @@ Class {
 GtEpReplayClassModel >> addBehaviorChange: anOmEntry [
 
 	super addBehaviorChange: anOmEntry.
-	superclassName := anOmEntry content behaviorAffected superclassName.
+	superclassName := anOmEntry content behaviorAffected superclassName asSymbol.
 ]
 
 { #category : #adding }
@@ -20,7 +17,7 @@ GtEpReplayClassModel >> addBehaviorRename: anOmEntry [
 	currentSubclasses := self subclasses.
 	
 	super addBehaviorRename: anOmEntry.
-	superclassName := anOmEntry content behaviorAffected superclassName.
+	superclassName := anOmEntry content behaviorAffected superclassName asSymbol.
 	
 	currentSubclasses do: [ :aSubclass |
 		aSubclass updateSuperclassNameTo: self name ]
@@ -30,7 +27,7 @@ GtEpReplayClassModel >> addBehaviorRename: anOmEntry [
 GtEpReplayClassModel >> addCategoryChange: anOmEntry [
 
 	super addCategoryChange: anOmEntry.
-	superclassName := anOmEntry content behaviorAffected superclassName.
+	superclassName := anOmEntry content behaviorAffected superclassName asSymbol.
 ]
 
 { #category : #testing }
@@ -82,17 +79,4 @@ GtEpReplayClassModel >> subclasses [
 	self currentDefinition ifNotNil: 
 		[ :cls | subclasses := subclasses, cls subclasses ].
 	^ subclasses
-]
-
-{ #category : #accessing }
-GtEpReplayClassModel >> superclassName [
-
-	^ superclassName ifNil: [ 
-		self asRingDefinition ifNotNil: [ :aClassDefinition | 
-			aClassDefinition superclassName ] ]
-]
-
-{ #category : #accessing }
-GtEpReplayClassModel >> updateSuperclassNameTo: aNewSuperclassName [
-	superclassName := aNewSuperclassName
 ]
