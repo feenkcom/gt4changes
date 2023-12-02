@@ -23,7 +23,10 @@ GtEpEventSequencerExamples class >> removeTestClasses [
 		#Issue3420Superclass #Issue3420Subclass 
 		#Issue3490RootClass #Issue3490SubClass
 		#Issue3491RootClass #Issue3491SubClass
-		#GtEpEventSequencerExampleCheck) do: [ :each |
+		#GtEpEventSequencerExampleCheck
+		#GtEpEventSequencerExampleClass1
+		#GtEpEventSequencerExampleClass2
+		#GtEpEventSequencerExampleClass3) do: [ :each |
 			self class environment removeClassNamed: each ].
 		self class environment organization
 			removeCategory: #Issue2924;
@@ -937,6 +940,74 @@ GtEpEventSequencerExamples >> classRenameWithExistingMethodInImage [
 	self 
 		assert: sequencedClassNames 
 		equals: #(#EpBehaviorNameChange).
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classRenameWithExistingSubclassForExport [
+	"Check that a class rename with an existing method is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleClass1).
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleClass2).
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleClass3).
+	fileReference := self class testDataRoot / 'Issue3529' / 'Issue3529-1.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 5.
+	"Get the system to the initial state"
+	EpMonitor disableDuring:
+		[ entries do: [ :each | each content applyCodeChange ] ].
+
+	fileReference := self class testDataRoot / 'Issue3529' / 'Issue3529-2.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 2.
+
+	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: sequencedEntries size equals: 2.
+	self assert: (sequencer image behaviors includesKey: #GtEpEventSequencerExampleClass1rename).
+	self assert: (sequencer image classModelNamed: #GtEpEventSequencerExampleClass2) superclassName equals: #GtEpEventSequencerExampleClass1rename.
+	self assert: (sequencer image classModelNamed: #GtEpEventSequencerExampleClass3) superclassName equals: #GtEpEventSequencerExampleClass1rename.
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classRenameWithExistingSubclassInImage [
+	"Check that a class rename with an existing method is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleClass1).
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleClass2).
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleClass3).
+	fileReference := self class testDataRoot / 'Issue3529' / 'Issue3529-1.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 5.
+	"Get the system to the initial state"
+	EpMonitor disableDuring:
+		[ entries do: [ :each | each content applyCodeChange ] ].
+
+	fileReference := self class testDataRoot / 'Issue3529' / 'Issue3529-2.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 2.
+
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: sequencedEntries size equals: 2.
+	self assert: (sequencer image behaviors includesKey: #GtEpEventSequencerExampleClass1rename).
+	self assert: (sequencer image classModelNamed: #GtEpEventSequencerExampleClass2) superclassName equals: #GtEpEventSequencerExampleClass1rename.
+	self assert: (sequencer image classModelNamed: #GtEpEventSequencerExampleClass3) superclassName equals: #GtEpEventSequencerExampleClass1rename.
 	^ sequencer
 ]
 
