@@ -49,7 +49,7 @@ GtEpReplayClassModel >> hasDependentClassIn: anEnvironment [
 	For a class this means the superclass is present (possibly with a previous name).
 	Traits have no equivalent dependency."
 
-	^ imageModel includesBehaviorSometimeNamed: superclassName asSymbol
+	^ imageModel includesBehaviorSometimeNamed: self superclassName asSymbol
 ]
 
 { #category : #testing }
