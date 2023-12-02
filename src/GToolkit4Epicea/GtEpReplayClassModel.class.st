@@ -77,6 +77,9 @@ GtEpReplayClassModel >> subclasses [
 
 	subclasses := imageModel subclassesFor: self.
 	self currentDefinition ifNotNil: 
-		[ :cls | subclasses := subclasses, cls subclasses ].
+		[ :cls | | existingSubclasses |
+			existingSubclasses := cls subclasses collect:
+				[ :each | imageModel classModelNamed: each name ].
+			subclasses := subclasses, existingSubclasses ].
 	^ subclasses
 ]
