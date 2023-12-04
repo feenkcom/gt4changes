@@ -98,6 +98,60 @@ GtEpEventSequencerExamples >> behaviorRenameWithoutDependentsInImage [
 ]
 
 { #category : #examples }
+GtEpEventSequencerExamples >> changeSuperclassForExport [
+	"Check that changing the superclass is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self removeTestClasses.
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleClass1).
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleClass2).
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleClass3).
+	fileReference := self class testDataRoot / 'Issue3530' / 'Issue3530-1.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 4.
+	"Get the system to the initial state"
+	EpMonitor disableDuring:
+		[ (entries first: 3) do: [ :each | each content applyCodeChange ] ].
+
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: sequencedEntries size equals: 1.
+	self assert: (sequencer image classModelNamed: #GtEpEventSequencerExampleClass2) superclassName equals: #Object.
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> changeSuperclassInImage [
+	"Check that changing the superclass is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self removeTestClasses.
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleClass1).
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleClass2).
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleClass3).
+	fileReference := self class testDataRoot / 'Issue3530' / 'Issue3530-1.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 4.
+	"Get the system to the initial state"
+	EpMonitor disableDuring:
+		[ (entries first: 3) do: [ :each | each content applyCodeChange ] ].
+
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: sequencedEntries size equals: 1.
+	self assert: (sequencer image classModelNamed: #GtEpEventSequencerExampleClass2) superclassName equals: #Object.
+	^ sequencer
+]
+
+{ #category : #examples }
 GtEpEventSequencerExamples >> classAddAndRenameForExport [
 	"Check that a class add and rename is sequenced correctly."
 	<gtExample>

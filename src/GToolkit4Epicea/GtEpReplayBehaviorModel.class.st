@@ -398,6 +398,12 @@ GtEpReplayBehaviorModel >> previousNames [
 ]
 
 { #category : #accessing }
+GtEpReplayBehaviorModel >> previousSuperclassNames [
+
+	^ previousLives collect: #superclassName.
+]
+
+{ #category : #accessing }
 GtEpReplayBehaviorModel >> printOn: aStream [
 
 	name ifNil: [ ^ super printOn: aStream ].

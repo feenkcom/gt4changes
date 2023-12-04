@@ -61,22 +61,22 @@ GtEpImageModelInImageVisitor >> behaviorHasSubclassesAfter: replayEntry [
 
 { #category : #testing }
 GtEpImageModelInImageVisitor >> behaviorModificationEntryDiffersFromCurrent: anOmEntry [
-	"Renames can mean the superclass doesn't match, so it is ignored in the comparison."
-	| index modificationString currentString |
+	"Renames can mean the superclass doesn't match.
+	The behavior is considered to be the same if anOmEntry = the current definition or anOmEntry superclass name is a previous name of the current definition."
+	| modificationString modificationAst currentAst classModel currentString |
 
 	modificationString := anOmEntry content behaviorAffected definitionSource.
-	index := modificationString indexOfSubCollection: 'subclass:'.
-	index > 0 ifTrue:
-		[ modificationString := modificationString copyFrom: index to: modificationString size ].
+	modificationAst := RBParser parseExpression: modificationString.
 
-	currentString := (self environment at: "currentBehavior" anOmEntry content behaviorAffectedName 
+	currentString := (self environment at: anOmEntry content behaviorAffectedName 
 			ifPresent: [ :behavior | behavior definitionString ]
-			ifAbsent: [ '' ]).
-	currentString ifNotEmpty:
-		[ index := currentString indexOfSubCollection: 'subclass:'.
-		index > 0 ifTrue:
-			[ currentString := currentString copyFrom: index to: currentString size ] ].
-	^ modificationString ~= currentString.
+			ifAbsent: [ ^ true ]).
+	currentAst := RBParser parseExpression: currentString.
+
+	modificationAst = currentAst ifTrue: [ ^ false ].
+
+	classModel := image classModelNamed: anOmEntry content behaviorAffectedName.
+	^ (classModel previousSuperclassNames includes: modificationAst receiver name) not.
 ]
 
 { #category : #testing }
