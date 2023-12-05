@@ -389,7 +389,7 @@ GtEpImageModelInImageVisitor >> visitBehaviorReplay: aGtEpReplayBehaviorModel [
 { #category : #visiting }
 GtEpImageModelInImageVisitor >> visitImageReplay: aGtEpReplayImageModel [
 
-	aGtEpReplayImageModel behaviors do: [ :behavior |
+	aGtEpReplayImageModel behaviors values do: [ :behavior |
 		behavior accept: self ].
 ]
 
