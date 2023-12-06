@@ -57,88 +57,95 @@ GtEpiceaChangeListElement >> initializeFilters [
 
 { #category : #accessing }
 GtEpiceaChangeListElement >> initializeList [
-	list := BrColumnedList new matchParent aptitude: BrColumnedMultiListAptitude.
-
-	list column
+	list := BrColumnedList new matchParent
+				aptitude: BrColumnedMultiListAptitude.
+	(list column)
 		title: 'Type';
-		cellStencil: [ BlElement new
-				layout: BlLinearLayout horizontal alignCenter;
-				constraintsDo: [ :c | 
-					c horizontal fitContent.
-					c vertical fitContent ] ];
-		dataBinder: [ :anElement :anEpEvent | 
-			anElement
-				removeChildren;
-				addChild: (anEpEvent content accept: EpIconVisitor new) asElement ];
+		cellStencil: 
+				[(BlElement new)
+					layout: BlLinearLayout horizontal alignCenter;
+					constraintsDo: 
+							[:c |
+							c horizontal fitContent.
+							c vertical fitContent]];
+		dataBinder: 
+				[:anElement :anEpEvent |
+				anElement
+					removeChildren;
+					addChild: (anEpEvent content accept: EpIconVisitor new) asElement];
 		width: 32.
-	list column
+	(list column)
 		title: 'Description';
 		matchParent;
-		cellStencil: [ BlElement new
-				layout: BlLinearLayout horizontal;
-				constraintsDo: [ :c | 
-					c horizontal fitContent.
-					c vertical exact: 26 ] ];
-		dataBinder: [ :anElement :anEpEvent | 
-			anElement
-				removeChildren;
-				addChildren: (anEpEvent content accept: GtEpiceaBrickVisitor new) ].
-	list column
+		cellStencil: 
+				[(BlElement new)
+					layout: BlLinearLayout horizontal;
+					constraintsDo: 
+							[:c |
+							c horizontal fitContent.
+							c vertical exact: 26]];
+		dataBinder: 
+				[:anElement :anEpEvent |
+				anElement
+					removeChildren;
+					addChildren: (anEpEvent content accept: GtEpiceaBrickVisitor new)].
+	(list column)
 		width: 150;
 		title: 'Timestamp';
-		cellStencil: [ :each | BrLabel new aptitude: BrGlamorousLabelAptitude new ];
-		dataBinder: [ :aLabel :anEpEvent | aLabel text: (model timeAt: anEpEvent) printToSeconds ].
-
+		cellStencil: [:each | BrLabel new aptitude: BrGlamorousLabelAptitude new];
+		dataBinder: [:aLabel :anEpEvent | aLabel text: (model timeAt: anEpEvent) printToSeconds].
 	list addEventHandler: GtPhlowListToSelectHandler new.
-
-	list
-		when: BrSelectionChanged
-		do: [ :anEvent | 
+	list when: BrSelectionChanged
+		do: 
+			[:anEvent |
 			| selected |
 			selected := anEvent indices
-					collect: [ :anIndex | model availableEvents at: anIndex ].
-			model setSelection: selected ].
-
+						collect: [:anIndex | model availableEvents at: anIndex].
+			model setSelection: selected].
 	list
-		rowStencil: (GtPhlowColumnedListItemElementWithContextMenuDecorator new
-				stencilBuilder: (BrGlamorousColumnedListSelectableRowElementStencilBuilder new
-						cellSpacing: self leftPadding);
-				contextMenuStencil: [ :element :item | 
-					| contextMenuItems |
-					contextMenuItems := {'Apply'
-								-> [  ".
-							'Revert'
-								-> [ :e | 
-									e phlow
-										spawnObject: (GtEpiceaApplyChangesDetailsElement new
-												entries: (model selectedCodeEvents collect: [:anEvent | anEvent asRevertedCodeChange ]) reversed;
-												anchor: element) ]":e | 
-									e phlow
-										spawnTool: (GtPhlowValuableTool new
-												name: 'Apply Changes';
-												valuable: [ GtEpiceaApplyChangesDetailsElement new matchParent
-														entries: model selectedCodeEvents;
-														anchor: element ]) ]} asOrderedCollection.
-					model selectedCodeEvents size = 1
-						ifTrue: [ contextMenuItems
-								add: 'Browse current version'
-										-> [ :e | 
-											(item content isKindOf: EpMethodChange)
-												ifTrue: [ item content methodAffected compiledMethod gtBrowseFrom: element ].
-
-											(item content isKindOf: EpClassChange)
-												ifTrue: [ item content behaviorAffected realClass gtBrowseFrom: element ] ] ].
-					BrGlamorousSimpleContextMenuContent new items: contextMenuItems ]).
-
-	list
-		selectionCallback: [ :indices | 
+		rowStencil: ((GtPhlowColumnedListItemElementWithContextMenuDecorator new)
+				stencilBuilder: (BrGlamorousColumnedListSelectableRowElementStencilBuilder
+							new cellSpacing: self leftPadding);
+				contextMenuStencil: 
+						[:element :item |
+						| contextMenuItems |
+						contextMenuItems := 
+								{'Apply' -> 
+										[:e |
+										e phlow spawnTool: ((GtPhlowValuableTool new)
+													name: 'Apply Changes';
+													valuable: 
+															[(GtEpiceaApplyChangesDetailsElement new matchParent)
+																entries: model selectedCodeEvents;
+																anchor: element])].
+								'Reverse' -> 
+										[:e |
+										e phlow spawnTool: ((GtPhlowValuableTool new)
+													name: 'Reverse Changes';
+													valuable: 
+															[(GtEpiceaReverseChangesDetailsElement new matchParent)
+																entries: model selectedCodeEvents;
+																anchor: element])]}
+										asOrderedCollection.
+						model selectedCodeEvents size = 1
+							ifTrue: 
+								[contextMenuItems
+									add: 'Browse current version' -> 
+												[:e |
+												(item content isKindOf: EpMethodChange)
+													ifTrue: [item content methodAffected compiledMethod gtBrowseFrom: element].
+												(item content isKindOf: EpClassChange)
+													ifTrue: [item content behaviorAffected realClass gtBrowseFrom: element]]].
+						BrGlamorousSimpleContextMenuContent new items: contextMenuItems]).
+	list selectionCallback: 
+			[:indices |
 			indices size = 1
-				ifTrue: [ list viewModel itemAt: indices first ]
-				ifFalse: [ GtEpiceaExplicitLog
-						on: (indices collect: [ :anIndex | list viewModel itemAt: anIndex ]) ] ].
-
-	list
-		addAptitude: (BrColumnedListHeaderAptitude new cellSpacing: self leftPadding)
+				ifTrue: [list viewModel itemAt: indices first]
+				ifFalse: 
+					[GtEpiceaExplicitLog
+						on: (indices collect: [:anIndex | list viewModel itemAt: anIndex])]].
+	list addAptitude: (BrColumnedListHeaderAptitude new
+				cellSpacing: self leftPadding)
 ]
 
 { #category : #accessing }

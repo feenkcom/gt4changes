@@ -216,33 +216,43 @@ GtEpiceaAbstractLog >> gtEventsFor: aView [
 	<gtViewChanges>
 	| view changeListModel |
 	changeListModel := GtEpiceaChangeListModel onLog: self.
-
-	view := aView explicit
-			title: 'Change list';
-			priority: 3;
-			stencil: [ (GtEpiceaChangeListElement forModel: changeListModel)
-					padding: (BlInsets top: 5) ].
-	view
-		actionDropdownButtonDo: [ :aDrodownAction | 
-			aDrodownAction dropdown
+	view := (aView explicit)
+				title: 'Change list';
+				priority: 3;
+				stencil: 
+						[(GtEpiceaChangeListElement forModel: changeListModel)
+							padding: (BlInsets top: 5)].
+	view actionDropdownButtonDo: 
+			[:aDrodownAction |
+			(aDrodownAction dropdown)
 				label: 'Apply';
 				tooltip: 'Apply Selected Changes';
-				content: [ :aButton | 
-					GtEpiceaApplyChangesDetailsElement new
-						entries: changeListModel selectedCodeEvents;
-						anchor: aButton ];
-				preferredExtent: GtEpiceaApplyChangesDetailsElement preferredWidgetExtent ].
-
+				content: 
+						[:aButton |
+						(GtEpiceaApplyChangesDetailsElement new)
+							entries: changeListModel selectedCodeEvents;
+							anchor: aButton];
+				preferredExtent: GtEpiceaApplyChangesDetailsElement preferredWidgetExtent].
+	view actionDropdownButtonDo: 
+			[:aDrodownAction |
+			(aDrodownAction dropdown)
+				label: 'Reverse';
+				tooltip: 'Reverse Selected Changes';
+				content: 
+						[:aButton |
+						(GtEpiceaReverseChangesDetailsElement new)
+							entries: changeListModel selectedCodeEvents;
+							anchor: aButton];
+				preferredExtent: GtEpiceaReverseChangesDetailsElement preferredWidgetExtent].
 	view
 		actionButtonLabel: 'Inspect'
 		tooltip: 'Inspect Selected Changes'
-		action: [ :aButton | 
+		action: 
+			[:aButton |
 			aButton phlow
-				spawnObject: (GtEpiceaExplicitLog on: changeListModel selectedCodeEvents) ].
-
+				spawnObject: (GtEpiceaExplicitLog on: changeListModel selectedCodeEvents)].
 	self addToolbarButtonsTo: view withModel: changeListModel.
-
-	^ view
+	^view
 ]
 
 { #category : #'gt - extensions' }
@@ -268,6 +278,19 @@ GtEpiceaAbstractLog >> gtImpactFor: aView [
 				  constraintsDo: [ :c | 
 					  c horizontal fitContent.
 					  c vertical exact: 24 ] ]
+]
+
+{ #category : #'gt - extensions' }
+GtEpiceaAbstractLog >> gtRevertFor: anAction [
+	<gtAction>
+	^(anAction dropdown)
+		label: 'Revert';
+		priority: 5;
+		content: 
+				[:aButton |
+				(GtEpiceaReverseChangesDetailsElement new)
+					entries: self entries;
+					anchor: aButton]
 ]
 
 { #category : #'gt - extensions' }
