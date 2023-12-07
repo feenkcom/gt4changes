@@ -15,6 +15,12 @@ Class {
 }
 
 { #category : #sequencing }
+GtEpEventSequencer class >> entries: anEpEntryCollection [
+
+	^ self new entries: anEpEntryCollection
+]
+
+{ #category : #sequencing }
 GtEpEventSequencer class >> entries: anEpEntryCollection inImage: inImageBoolean [
 	"Create an instance of the sequencer, chosen based on inImageBoolean.
 	This is for backward compatibility - the appropriate event sequencer should be used directly."
@@ -45,16 +51,7 @@ GtEpEventSequencer class >> forCurrentSession [
 { #category : #sequencing }
 GtEpEventSequencer class >> sequence: anEpEntryCollection [
 
-	^ self entries: anEpEntryCollection inImage: true.
-]
-
-{ #category : #sequencing }
-GtEpEventSequencer class >> sequence: anEpEntryCollection withCurrent: currentBoolean [
-	"Sequence the supplied collection of OmEntries for replay and answer an OrderedCollection of entries.
-	If currentBoolean is true, include entries that don't change the running system, if false filter them out."
-
-	self deprecated: 'Instanciate the appropriate subclass directly'.
-	^ self entries: anEpEntryCollection inImage: currentBoolean not.
+	^ (self entries: anEpEntryCollection) sequencedEntries
 ]
 
 { #category : #accessing }

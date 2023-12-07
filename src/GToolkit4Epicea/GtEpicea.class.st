@@ -65,11 +65,9 @@ GtEpicea >> applyChanges [
 	| sequencedEntries |
 	self assert: [ self log notNil ] description: [ 'Epicea log must be non-nil.' ].
 	self hasChanges ifFalse: [ ^ self ].
-	(self entries allSatisfy: #hasTime)
-		ifTrue: [ sequencedEntries := GtEpEventSequencer
-					entries: self entries
-					inImage: true ]
-		ifFalse: [ sequencedEntries := self entries ].
+	sequencedEntries := (self entries allSatisfy: #hasTime)
+		ifTrue: [ GtEpInImageEventSequencer sequence: self entries ]
+		ifFalse: [ self entries ].
 	sequencedEntries do: [ :each | each content applyCodeChangeIfHasImpact ].
 	self notifyEpiceaChanged
 ]

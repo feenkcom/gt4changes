@@ -207,9 +207,7 @@ GtEpiceaLogViewNode >> treeViewWith: mondrian [
 	| nodes hasImpactSet |
 
 	nodes := self asArray.
-	hasImpactSet := GtEpEventSequencer
-		entries: (nodes collect: #entry)
-		inImage: true.
+	hasImpactSet := GtEpInImageEventSequencer sequence: (nodes collect: #entry).
 	mondrian nodes
 		stencil: [ :each |
 			GtEpCodeChangeGeometricElement new
