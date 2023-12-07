@@ -106,7 +106,7 @@ GtEpiceaApplyChangesDetailsElement >> buildEmptyContentElement [
 
 { #category : #accessing }
 GtEpiceaApplyChangesDetailsElement >> computeSequencedEntries [
-	^ GtEpEventSequencer sequence: self entries withCurrent: false
+	^ GtEpEventSequencer entries: self entries inImage: true
 ]
 
 { #category : #accessing }
@@ -134,7 +134,7 @@ GtEpiceaApplyChangesDetailsElement >> createInspectActionButton [
 				+ (BrGlamorousWithLabelTooltipAptitude new text: 'Inspect the changes that are going to be applied.');
 		label: 'Inspect';
 		action: [ 
-			anchor phlow spawnObject: (GtEpEventSequencer entries: entries includeCurrent: false).
+			anchor phlow spawnObject: (GtEpEventSequencer entries: entries inImage: true).
 			anchor fireEvent: BrDropdownHideWish new ]
 ]
 
@@ -179,7 +179,7 @@ GtEpiceaApplyChangesDetailsElement >> initializeContent [
 
 { #category : #accessing }
 GtEpiceaApplyChangesDetailsElement >> latestEntriesFrom: previewEntriesTheNewestFirst [
-	^ GtEpEventSequencer sequence: previewEntriesTheNewestFirst withCurrent: false
+	^ GtEpEventSequencer entries: previewEntriesTheNewestFirst inImage: true
 ]
 
 { #category : #accessing }

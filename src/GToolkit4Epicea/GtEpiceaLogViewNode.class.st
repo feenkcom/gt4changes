@@ -83,7 +83,7 @@ GtEpiceaLogViewNode >> gtActionApplyAllFor: anAction [
 		label: 'Apply All...';
 		priority: 10;
 		action: [ :button | button phlow spawnObject: 
-			(GtEpEventSequencer entries: self entries includeCurrent: false) ].
+			(GtEpEventSequencer entries: self entries inImage: true) ].
 ]
 
 { #category : #accessing }
@@ -208,8 +208,8 @@ GtEpiceaLogViewNode >> treeViewWith: mondrian [
 
 	nodes := self asArray.
 	hasImpactSet := GtEpEventSequencer
-		sequence: (nodes collect: #entry)
-		withCurrent: false.
+		entries: (nodes collect: #entry)
+		inImage: true.
 	mondrian nodes
 		stencil: [ :each |
 			GtEpCodeChangeGeometricElement new

@@ -67,8 +67,8 @@ GtEpicea >> applyChanges [
 	self hasChanges ifFalse: [ ^ self ].
 	(self entries allSatisfy: #hasTime)
 		ifTrue: [ sequencedEntries := GtEpEventSequencer
-					sequence: self entries
-					withCurrent: false ]
+					entries: self entries
+					inImage: true ]
 		ifFalse: [ sequencedEntries := self entries ].
 	sequencedEntries do: [ :each | each content applyCodeChangeIfHasImpact ].
 	self notifyEpiceaChanged

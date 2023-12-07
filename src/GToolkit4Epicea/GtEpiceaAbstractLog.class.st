@@ -254,8 +254,8 @@ GtEpiceaAbstractLog >> gtImpactFor: aView [
 		  priority: 20;
 		  items: [ 
 		  	(GtEpEventSequencer 
-		  		sequence: self entries 
-		  		withCurrent: false) collect: #content ];
+		  		entries: self entries 
+		  		inImage: true) collect: #content ];
 		  column: 'Icon' 
 		  	icon: [ :anEpEvent :anIndex | 
 			  	(anEpEvent accept: EpIconVisitor new) asElement ]
