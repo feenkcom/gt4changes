@@ -9,18 +9,10 @@ Class {
 		'sequencedEntries',
 		'visitor',
 		'image',
-		'replay',
-		'inImage'
+		'replay'
 	],
 	#category : #'GToolkit4Epicea-Sequencer'
 }
-
-{ #category : #sequencing }
-GtEpEventSequencer class >> entries: anEpEntryCollection includeCurrent: currentBoolean [
-
-	self deprecated: 'Use #entries:inImage:'.
-	^ self entries: anEpEntryCollection inImage: currentBoolean not
-]
 
 { #category : #sequencing }
 GtEpEventSequencer class >> entries: anEpEntryCollection inImage: inImageBoolean [
@@ -32,6 +24,13 @@ GtEpEventSequencer class >> entries: anEpEntryCollection inImage: inImageBoolean
 	ifFalse:
 		[ GtEpForExportEventSequencer ]) new
 			entries: anEpEntryCollection
+]
+
+{ #category : #sequencing }
+GtEpEventSequencer class >> entries: anEpEntryCollection includeCurrent: currentBoolean [
+
+	self deprecated: 'Instanciate the appropriate subclass directly'.
+	^ self entries: anEpEntryCollection inImage: currentBoolean not
 ]
 
 { #category : #accessing }
@@ -54,7 +53,7 @@ GtEpEventSequencer class >> sequence: anEpEntryCollection withCurrent: currentBo
 	"Sequence the supplied collection of OmEntries for replay and answer an OrderedCollection of entries.
 	If currentBoolean is true, include entries that don't change the running system, if false filter them out."
 
-	self deprecated: 'Use #entries:inImage:'.
+	self deprecated: 'Instanciate the appropriate subclass directly'.
 	^ self entries: anEpEntryCollection inImage: currentBoolean not.
 ]
 
