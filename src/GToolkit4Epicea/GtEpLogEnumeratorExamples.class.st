@@ -66,7 +66,7 @@ GtEpLogEnumeratorExamples >> priorEntriesFromHeadForTestTrait2 [
 	self assert: fileReference resolve exists
 		description: [ fileReference fullName, ' not found' ].
 	epLog := GtEpLogEnumerator fromFile: fileReference.
-	entries := GtEpEventSequencer sequence: epLog priorEntriesFromHead.
+	entries := GtEpInImageEventSequencer sequence: epLog priorEntriesFromHead.
 	self assert: entries size equals: 7.
 	reference := entries first tagAt: #self.
 	self assert: reference localName equals: '1'.

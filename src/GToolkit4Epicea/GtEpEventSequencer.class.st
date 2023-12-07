@@ -9,42 +9,34 @@ Class {
 		'sequencedEntries',
 		'visitor',
 		'image',
-		'replay',
-		'inImage'
+		'replay'
 	],
 	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #sequencing }
+GtEpEventSequencer class >> entries: anEpEntryCollection [
+
+	^ self new entries: anEpEntryCollection
+]
+
+{ #category : #sequencing }
 GtEpEventSequencer class >> entries: anEpEntryCollection inImage: inImageBoolean [
+	"Create an instance of the sequencer, chosen based on inImageBoolean.
+	This is for backward compatibility - the appropriate event sequencer should be used directly."
 
-	^ inImageBoolean ifTrue:
-		[ self new
-			entries: anEpEntryCollection;
-			sequencedEntriesInImage;
-			yourself ]
+	^ (inImageBoolean ifTrue:
+		[ GtEpInImageEventSequencer ]
 	ifFalse:
-		[ self new
-			entries: anEpEntryCollection;
-			sequencedEntriesForExport;
-			yourself ]
-
+		[ GtEpForExportEventSequencer ]) new
+			entries: anEpEntryCollection
 ]
 
 { #category : #sequencing }
 GtEpEventSequencer class >> entries: anEpEntryCollection includeCurrent: currentBoolean [
 
-	^ currentBoolean ifTrue:
-		[ self new
-			entries: anEpEntryCollection;
-			sequencedEntriesForExport;
-			yourself ]
-	ifFalse:
-		[ self new
-			entries: anEpEntryCollection;
-			sequencedEntriesInImage;
-			yourself ]
-
+	self deprecated: 'Instanciate the appropriate subclass directly'.
+	^ self entries: anEpEntryCollection inImage: currentBoolean not
 ]
 
 { #category : #accessing }
@@ -53,29 +45,13 @@ GtEpEventSequencer class >> forCurrentSession [
 
 	^ self
 		entries: (GtEpLogEnumerator new latestLog: EpMonitor current log) priorEntriesFromHead
-		includeCurrent: true.
+		inImage: false.
 ]
 
 { #category : #sequencing }
 GtEpEventSequencer class >> sequence: anEpEntryCollection [
 
-	^ self sequence: anEpEntryCollection withCurrent: false.
-]
-
-{ #category : #sequencing }
-GtEpEventSequencer class >> sequence: anEpEntryCollection withCurrent: currentBoolean [
-	"Sequence the supplied collection of OmEntries for replay and answer an OrderedCollection of entries.
-	If currentBoolean is true, include entries that don't change the running system, if false filter them out."
-
-	^ currentBoolean ifTrue:
-		[ self new
-			entries: anEpEntryCollection;
-			sequencedEntriesForExport ]
-	ifFalse:
-		[ self new
-			entries: anEpEntryCollection;
-			sequencedEntriesInImage ]
-
+	^ (self entries: anEpEntryCollection) sequencedEntries
 ]
 
 { #category : #accessing }
@@ -99,28 +75,15 @@ GtEpEventSequencer >> entries: anObject [
 	sequencedEntries := nil.
 ]
 
-{ #category : #accessing }
+{ #category : #'private - accessing' }
 GtEpEventSequencer >> getSequencedEntries [
 	"Calculate the sequenced entries from the entries.
 	The sequence generation consists of three steps:
-	1. Iterate over the events building the image model.
+	1. Iterate over the events building the image model (see {{gtMethod:GtEpEventSequencer>>image}}).
 	2. Iterate over the image model and select required events.
 	3. Sort the events chronologically."
 
-	"1. Iterate over the events building the image model."
-	visitor := GtEpReplayEventVisitor new.
-	visitor visitNodes: entries.
-	image := visitor image.
-
-	"2. Iterate over the image model and select required events."
-	replay := inImage
-		ifTrue: [ GtEpImageModelInImageVisitor image: image ]
-		ifFalse: [ GtEpImageModelForExportVisitor image: image ].
-
-	"3. Sort the events chronologically."
-	sequencedEntries := replay sequencedEntries sorted: GtOmEntrySortFunction new.
-
-	^ sequencedEntries
+	^ self subclassResponsibility
 ]
 
 { #category : #'gt - extensions' }
@@ -174,9 +137,13 @@ GtEpEventSequencer >> gtViewSequencedEntriesFor: aView [
 
 { #category : #accessing }
 GtEpEventSequencer >> image [
+	"Answer the image model."
 	<return: #GtEpReplayImageModel>
 
-	^ image
+	^ image ifNil:
+		[ visitor := GtEpReplayEventVisitor new.
+		visitor visitNodes: entries.
+		image := visitor image ].
 ]
 
 { #category : #testing }
@@ -203,25 +170,7 @@ GtEpEventSequencer >> isEvent: currentEntry notOverriddenIn: chronologicalEntrie
 { #category : #accessing }
 GtEpEventSequencer >> sequencedEntries [
 
-	^ sequencedEntries
-]
-
-{ #category : #accessing }
-GtEpEventSequencer >> sequencedEntriesForExport [
-
-	self assert: (inImage isNil or: [ inImage not ]).
-	inImage := false.
-	entries ifEmpty: [ ^ sequencedEntries := entries ].
-	^ sequencedEntries ifNil: [ self getSequencedEntries ].
-]
-
-{ #category : #accessing }
-GtEpEventSequencer >> sequencedEntriesInImage [
-
-	self assert: (inImage isNil or: [ inImage ]).
-	inImage := true.
-	entries ifEmpty: [ ^ sequencedEntries := entries ].
-	^ sequencedEntries ifNil: [ self getSequencedEntries ].
+	^ sequencedEntries ifNil: [ sequencedEntries := self getSequencedEntries ].
 ]
 
 { #category : #accessing }

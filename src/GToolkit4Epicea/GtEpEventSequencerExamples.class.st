@@ -234,7 +234,7 @@ GtEpEventSequencerExamples >> classAddAndRenameMultipleCompressed1InImage [
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
 	self assert: entries size equals: 8.
-	sequencer := GtEpEventSequencer entries: entries includeCurrent: false.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: (sequencedEntries collect: [ :each | each content class name ])
 		equals: #(#EpClassAddition #EpMethodModification #EpClassModification #EpBehaviorNameChange #EpBehaviorNameChange).
@@ -294,7 +294,7 @@ GtEpEventSequencerExamples >> classAddAndRenameMultipleCompressed2InImage [
 	epLog := GtEpLogEnumerator fromFile: fileReference.
 	entries := epLog priorEntriesFromHead.
 	self assert: entries size equals: 16.
-	sequencer := GtEpEventSequencer entries: entries includeCurrent: false.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: (sequencedEntries collect: [ :each | each content class name ])
 		equals: #(#EpClassModification #EpMethodModification #EpBehaviorNameChange #EpBehaviorNameChange).
@@ -355,7 +355,7 @@ GtEpEventSequencerExamples >> classAddAndRenameMultipleInImage [
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
 	self assert: entries size equals:11.
-	sequencer := GtEpEventSequencer entries: entries includeCurrent: false.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: sequencedEntries size equals: 4.
 	self deny: (sequencer image behaviors includesKey: #Issue2936v4).
@@ -411,7 +411,7 @@ GtEpEventSequencerExamples >> classAddModifyRenameInImage [
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
 	self assert: entries size equals: 14.
-	sequencer := GtEpEventSequencer entries: entries includeCurrent: false.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
 	sequencedEntries := sequencer sequencedEntries.
 	self deny: (sequencer image behaviors includesKey: #Issue2936).
 	self assert: (sequencer image behaviors includesKey: #Issue2936Renamed).
@@ -844,7 +844,7 @@ GtEpEventSequencerExamples >> classRefactoringExistingInImage [
 	"Add the class and method1 to the system"
 	EpMonitor disableDuring:
 		[ entries last content applyCodeChange ].
-	sequencer := GtEpEventSequencer entries: entries includeCurrent: false.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
 	sequencedEntries := sequencer sequencedEntries.
 	self deny: (sequencer image behaviors includesKey: #Issue2936).
 	self assert: (sequencer image behaviors includesKey: #Issue2936v2).
@@ -866,7 +866,7 @@ GtEpEventSequencerExamples >> classRefactoringInImage [
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
 	self assert: entries size equals: 7.
-	sequencer := GtEpEventSequencer entries: entries includeCurrent: false.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
 	sequencedEntries := sequencer sequencedEntries.
 	self deny: (sequencer image behaviors includesKey: #Issue2936).
 	self assert: (sequencer image behaviors includesKey: #Issue2936v2).
@@ -1099,7 +1099,7 @@ GtEpEventSequencerExamples >> commentsCategoriesAndProtocolsInImage [
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
 	self assert: entries size equals: 15.
-	sequencer := GtEpEventSequencer entries: entries includeCurrent: false.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
 	sequencedEntries := sequencer sequencedEntries.
 	self deny: (sequencer image behaviors includesKey: #Issue2936).
 	self deny: (sequencer image behaviors includesKey: #Issue2936Renamed).
@@ -1143,7 +1143,7 @@ GtEpEventSequencerExamples >> commentsCategoriesAndProtocolsRemovalInImage [
 	epLog := GtEpLogEnumerator fromFile: fileReference.
 	entries := epLog priorEntriesFromHead.
 	self assert: entries size equals: 19.
-	sequencer := GtEpEventSequencer entries: entries includeCurrent: false.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
 	sequencedEntries := sequencer sequencedEntries.
 	self deny: (sequencer image behaviors includesKey: #Issue2936).
 	self deny: (sequencer image behaviors includesKey: #Issue2936Renamed).
@@ -1188,7 +1188,7 @@ GtEpEventSequencerExamples >> methodAddWithoutDependentsInImage [
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
 	self assert: entries size equals: 6.
-	sequencer := GtEpEventSequencer entries: entries includeCurrent: false.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: (sequencer image behaviors includesKey: #Issue2961Class).
 	self assert: sequencedEntries isEmpty.
@@ -1839,7 +1839,7 @@ GtEpEventSequencerExamples >> traitAdditionInImage [
 	epLog := GtEpLogEnumerator fromFile: fileReference.
 	entries := epLog priorEntriesFromHead.
 	self assert: entries size equals: 3.
-	sequencer := GtEpEventSequencer entries: entries includeCurrent: false.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: (sequencer image behaviors includesKey: #TIssue2936).
 	self assert: (sequencedEntries collect: [ :each | each content class name ])
@@ -1880,7 +1880,7 @@ GtEpEventSequencerExamples >> traitAdditionModificationInImage [
 	epLog := GtEpLogEnumerator fromFile: fileReference.
 	entries := epLog priorEntriesFromHead.
 	self assert: entries size equals: 5.
-	sequencer := GtEpEventSequencer entries: entries includeCurrent: false.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: (sequencer image behaviors includesKey: #TIssue2936v2).
 	self deny: (sequencer image behaviors includesKey: #TIssue2936).

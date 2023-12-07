@@ -103,7 +103,7 @@ GtEpiceaAbstractChangesDetailsElement >> buildEmptyContentElement [
 
 { #category : #accessing }
 GtEpiceaAbstractChangesDetailsElement >> computeSequencedEntries [
-	^ GtEpEventSequencer sequence: self entries withCurrent: false
+	^ GtEpInImageEventSequencer sequence: self entries
 ]
 
 { #category : #accessing }
@@ -174,7 +174,7 @@ GtEpiceaAbstractChangesDetailsElement >> initializeContent [
 
 { #category : #accessing }
 GtEpiceaAbstractChangesDetailsElement >> latestEntriesFrom: previewEntriesTheNewestFirst [
-	^ GtEpEventSequencer sequence: previewEntriesTheNewestFirst withCurrent: false
+	^ GtEpInImageEventSequencer sequence: previewEntriesTheNewestFirst
 ]
 
 { #category : #accessing }
