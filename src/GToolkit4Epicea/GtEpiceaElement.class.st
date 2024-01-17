@@ -46,7 +46,7 @@ GtEpiceaElement >> initialize [
 	super initialize.
 	self initializeTitleNotifier.
 	self initializeListeners.
-	self addInteractiveModelState: GtPhlowToolDetailModel new.
+
 	self layout: BlLinearLayout horizontal.
 	self matchParent.
 	self initializeView.
@@ -80,8 +80,8 @@ GtEpiceaElement >> initializeNavigationModel [
 GtEpiceaElement >> initializeSidebarElement [
 	sidebarElement := GtPhlowHorizontalSidebarElement new beLeft.
 	self addAptitude: (GtPhlowToolDetailAptitude new
-		normal: [ :theInstance | sidebarElement hide ];
-		detailed: [ :theInstance | sidebarElement show ]).
+		normal: [ :aStyle | aStyle do: [ sidebarElement hide ] ];
+		detailed: [ :aStyle | aStyle do: [ sidebarElement show ] ]).
 ]
 
 { #category : #accessing }
@@ -102,7 +102,7 @@ GtEpiceaElement >> initializeView [
 	self addChild: self sidebarElement as: #sidebar.
 	self
 		addChild: (self contentElement padding: (BlInsets all: 5))
-		as: #content.
+		as: #content
 ]
 
 { #category : #accessing }
