@@ -101,7 +101,6 @@ OmEntry >> gtDiffFor: aView [
 				fromLabelText: 'Current:';
 				toLabelText: 'Change:';
 				ombuEntry: self;
-				shouldHideDiff: previousContent = newContent;
 				change: change;
 				styler: (GtCodeDiffRBTextStyler new isForWorkspace: self content isEpMethodChange not) ]
 ]
