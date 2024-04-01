@@ -335,23 +335,24 @@ GtEpicea >> gtPreviewFor: aView [
 
 { #category : #'gt-extension' }
 GtEpicea >> gtTutorialFor: aView [
-
 	<gtView>
 	<gtViewChanges>
-
 	^ aView textEditor
-		  title: 'Code';
-		  priority: 0;
-		  aptitude: BrGlamorousCodeEditorAptitude;
-		  updateWhen: GtEpiceaUpdatedAnnouncement in: self;
-		  actionUpdateButton;
-		  actionButtonIcon: BrGlamorousVectorIcons accept
-		  tooltip: 'Apply changes'
-		  action: [ self applyChanges ];
-		  actionDropdownButtonIcon: BrGlamorousVectorIcons filter
-		  tooltip: 'Select'
-		  content: [ self createChangeTabs ];
-		  text: [ :anEditor | self tutorialStateRope ]
+		title: 'Code';
+		priority: 0;
+		aptitude: BrGlamorousCodeEditorAptitude;
+		updateWhen: GtEpiceaUpdatedAnnouncement in: self;
+		actionUpdateButton;
+		actionButtonDo: [ :aButtonAction | 
+			aButtonAction
+				id: GtEpiceaApplyChangesId;
+				icon: BrGlamorousVectorIcons accept;
+				tooltip: 'Apply changes';
+				action: [ self applyChanges ] ];
+		actionDropdownButtonIcon: BrGlamorousVectorIcons filter
+			tooltip: 'Select'
+			content: [ self createChangeTabs ];
+		text: [ :anEditor | self tutorialStateRope ]
 ]
 
 { #category : #'announcement handling' }
