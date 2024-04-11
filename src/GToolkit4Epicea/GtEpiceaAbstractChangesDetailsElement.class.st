@@ -21,7 +21,7 @@ GtEpiceaAbstractChangesDetailsElement >> action [
 	self sequencedEntries
 		do: [:each | each content applyCodeChangeIfHasImpact].
 	anchor fireEvent: BrDropdownHideWish new.
-	anchor phlow fireUpdateWish
+	anchor phlow fireToolUpdateWish
 ]
 
 { #category : #accessing }
