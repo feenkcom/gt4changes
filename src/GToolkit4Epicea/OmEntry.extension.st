@@ -17,16 +17,24 @@ OmEntry >> gtActionBrowseEntryFor: anAction [
 	self content isCodeChange ifFalse: [ ^ anAction noAction ].
 
 	(self content isKindOf: EpMethodChange)
-		ifTrue: [ ^ anAction button
+		ifTrue: [ 
+			^ anAction button
 				label: 'Browse';
 				priority: 3;
-				action: [ :button | self content methodAffected compiledMethod gtBrowseFrom: button ] ].
+				tooltip: 'Browse current version of this method';
+				action: [ :aButton | 
+					aButton phlow spawnTool: (GtMethodCoderTool compiledMethod:
+						self content methodAffected compiledMethod)  ] ].
 
 	(self content isEpBehaviorChange)
-		ifTrue: [ ^ anAction button
+		ifTrue: [ 
+			^ anAction button
 				label: 'Browse';
 				priority: 3;
-				action: [ :button | self content behaviorAffected realClass gtBrowseFrom: button ] ].
+				tooltip: 'Browse current version of this class';
+				action: [ :aButton | 
+					aButton phlow spawnTool: (GtClassCoderTool forClass:
+						self content behaviorAffected realClass) ] ].
 
 	^ anAction noAction
 ]
