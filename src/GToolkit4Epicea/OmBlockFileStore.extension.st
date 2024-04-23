@@ -9,6 +9,20 @@ OmBlockFileStore >> blockForLocalNameAsInteger: anIndex [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+OmBlockFileStore >> gtViewBlocksFor: aView [ 
+	<gtView>
+	
+	^aView columnedList 
+		title: 'Blocks';
+		items: [ blocks ];
+		priority: 45;
+		column: 'Local Name' text: [ :anOmbuBlock | anOmbuBlock firstLocalNameAsInteger ] width: 80;
+		column: 'First Entry' text: [ :anOmbuBlock | anOmbuBlock firstEntryReference ] width: 450;
+		column: 'Start Position' text: [ :anOmbuBlock | anOmbuBlock startPosition  ];
+		column: 'End Position' text: [ :anOmbuBlock | anOmbuBlock endPosition ]
+]
+
+{ #category : #'*GToolkit4Epicea' }
 OmBlockFileStore >> reset [
 	self fileReference ensureDelete ensureCreateFile.
 
