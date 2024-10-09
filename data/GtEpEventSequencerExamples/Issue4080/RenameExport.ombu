@@ -1,0 +1,123 @@
+OmEntry {
+	#tags : {
+		#author : 'AlistairGrant',
+		#time : DateAndTime [ '2024-10-09T11:01:49.104725+02:00' ],
+		#prior : OmReference [ 'Pharo11-SNAPSHOT-64bit-aece1b5.1EA40716FD68', '58' ],
+		#self : OmReference [ '1' ]
+	},
+	#content : EpCategoryRegistration {
+		#classCategoryName : #GtEpEventSequencerExampleChecks,
+		#affectedPackageName : #GtEpEventSequencerExampleChecks
+	}
+}
+OmEntry {
+	#tags : {
+		#author : 'AlistairGrant',
+		#time : DateAndTime [ '2024-10-09T11:02:10.295133+02:00' ],
+		#prior : OmReference [ '4' ],
+		#self : OmReference [ '5' ]
+	},
+	#content : EpBehaviorNameChange {
+		#oldName : #GtEpEventSequencerExampleClass1,
+		#newName : #GtEpEventSequencerExampleClass2,
+		#behavior : RGClassDefinition {
+			#annotations : IdentityDictionary {
+				#superclassName : 'Object',
+				#definitionSource : 'Object subclass: #GtEpEventSequencerExampleClass2\r\tinstanceVariableNames: \'\'\r\tclassVariableNames: \'\'\r\tpackage: \'GtEpEventSequencerExampleChecks\'',
+				#traitCompositionSource : '{}'
+			},
+			#name : #GtEpEventSequencerExampleClass2,
+			#methods : IdentityDictionary { },
+			#protocols : Set [ ],
+			#instanceVariables : OrderedCollection [ ],
+			#metaClass : RGMetaclassDefinition {
+				#annotations : IdentityDictionary {
+					#definitionSource : 'GtEpEventSequencerExampleClass2 class\r\tinstanceVariableNames: \'\'',
+					#traitCompositionSource : '{}'
+				},
+				#name : #'GtEpEventSequencerExampleClass2 class',
+				#methods : IdentityDictionary { },
+				#protocols : Set [ ],
+				#instanceVariables : OrderedCollection [ ],
+				#baseClass : @7
+			},
+			#comment : RGCommentDefinition {
+				#annotations : IdentityDictionary {
+					#className : #GtEpEventSequencerExampleClass2,
+					#isMetaSide : false
+				},
+				#parent : @7,
+				#content : ''
+			},
+			#classVariables : OrderedCollection [ ],
+			#category : #GtEpEventSequencerExampleChecks,
+			#package : #GtEpEventSequencerExampleChecks,
+			#sharedPools : OrderedCollection [ ]
+		}
+	}
+}
+OmEntry {
+	#tags : {
+		#author : 'AlistairGrant',
+		#time : DateAndTime [ '2024-10-09T11:02:15.270378+02:00' ],
+		#prior : OmReference [ '10' ],
+		#self : OmReference [ '11' ]
+	},
+	#content : EpMethodRemoval {
+		#method : RGMethodDefinition {
+			#annotations : IdentityDictionary {
+				#className : #GtEpEventSequencerExampleClass2,
+				#isMetaSide : false
+			},
+			#name : #method1,
+			#protocol : #'as yet unclassified',
+			#sourceCode : 'method1\r\r\t^ 1',
+			#stamp : 'AlistairGrant 10/9/2024 11:01',
+			#package : #GtEpEventSequencerExampleChecks
+		}
+	}
+}
+OmEntry {
+	#tags : {
+		#author : 'AlistairGrant',
+		#time : DateAndTime [ '2024-10-09T11:02:15.27057+02:00' ],
+		#prior : OmReference [ '11' ],
+		#self : OmReference [ '12' ]
+	},
+	#content : EpClassRemoval {
+		#classRemoved : RGClassDefinition {
+			#annotations : IdentityDictionary {
+				#superclassName : 'Object',
+				#definitionSource : 'Object subclass: \'GtEpEventSequencerExampleClass2\'\r\tinstanceVariableNames: \'\'\r\tclassVariableNames: \'\'\r\tpackage: #GtEpEventSequencerExampleChecks',
+				#traitCompositionSource : '{}'
+			},
+			#name : #GtEpEventSequencerExampleClass2,
+			#methods : IdentityDictionary { },
+			#protocols : Set [ ],
+			#instanceVariables : OrderedCollection [ ],
+			#metaClass : RGMetaclassDefinition {
+				#annotations : IdentityDictionary {
+					#definitionSource : 'GtEpEventSequencerExampleClass2 class\r\tinstanceVariableNames: \'\'',
+					#traitCompositionSource : '{}'
+				},
+				#name : #'AnObsoleteGtEpEventSequencerExampleClass2 class',
+				#methods : IdentityDictionary { },
+				#protocols : Set [ ],
+				#instanceVariables : OrderedCollection [ ],
+				#baseClass : @7
+			},
+			#comment : RGCommentDefinition {
+				#annotations : IdentityDictionary {
+					#className : #AnObsoleteGtEpEventSequencerExampleClass2,
+					#isMetaSide : false
+				},
+				#parent : @7,
+				#content : ''
+			},
+			#classVariables : OrderedCollection [ ],
+			#category : #GtEpEventSequencerExampleChecks,
+			#package : #GtEpEventSequencerExampleChecks,
+			#sharedPools : OrderedCollection [ ]
+		}
+	}
+}

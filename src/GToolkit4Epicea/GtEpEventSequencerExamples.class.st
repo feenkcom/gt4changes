@@ -878,6 +878,51 @@ GtEpEventSequencerExamples >> classRefactoringInImage [
 ]
 
 { #category : #examples }
+GtEpEventSequencerExamples >> classRenameAndRemovalForExport [
+	"Check that a class rename and removal is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleClass1).
+	fileReference := self class testDataRoot / 'Issue4080' / 'RenameExport.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 4.
+	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: sequencedEntries size equals: 2.
+	self assert: sequencedEntries last content isEpClassRemoval.
+	self assert: sequencedEntries last content behaviorAffectedName equals: #GtEpEventSequencerExampleClass2.
+	sequencedEntries do: [ :entry |
+		self shouldnt: [ entry content accept: GtExportedEventApplyVisitor new ]
+			raise: Error ].
+
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classRenameAndRemovalInImage [
+	"Check that a class rename and removal is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference epLog entries sequencer sequencedEntries |
+
+	self deny: (self class environment includesKey: #GtEpEventSequencerExampleClass1).
+	fileReference := self class testDataRoot / 'Issue4080' / 'RenameExport.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 4.
+	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: sequencedEntries size equals: 0.
+
+	^ sequencer
+]
+
+{ #category : #examples }
 GtEpEventSequencerExamples >> classRenameWithExistingCommentForExport [
 	"Check that a class rename with an existing method is sequenced correctly."
 	<gtExample>

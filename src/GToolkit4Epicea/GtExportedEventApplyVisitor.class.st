@@ -11,6 +11,12 @@ GtExportedEventApplyVisitor >> visitBehaviorNameChange: aClassRenameChange [
 ]
 
 { #category : #visitor }
+GtExportedEventApplyVisitor >> visitClassRemoval: aClassRemoval [
+	(environment classOrTraitNamed: aClassRemoval behaviorAffectedName)
+		ifNotNil: [ :cls | environment removeClassNamed: aClassRemoval behaviorAffectedName ]
+]
+
+{ #category : #visitor }
 GtExportedEventApplyVisitor >> visitExpressionEvaluation: anExpressionChange [
 	"Nothing to do"
 ]
