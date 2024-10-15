@@ -52,6 +52,13 @@ GtEpEventSequencerExamples class >> testDataRoot [
 		/ self name.
 ]
 
+{ #category : #asserting }
+GtEpEventSequencerExamples >> assert: actual equals: expected [
+	^ self
+		assert: (actual sameContentAs: expected)
+		description: [ self comparingStringBetween: actual and: expected ]
+]
+
 { #category : #examples }
 GtEpEventSequencerExamples >> behaviorRenameWithoutDependentsForExport [
 	"Check that adding a class and method when the required superclass / class is missing is sequenced correctly."

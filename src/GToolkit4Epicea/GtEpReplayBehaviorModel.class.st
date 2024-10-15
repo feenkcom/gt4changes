@@ -270,11 +270,12 @@ GtEpReplayBehaviorModel >> inheritedFrom: aBehavior [
 GtEpReplayBehaviorModel >> inheritedFrom: aBehavior modifiedAfter: aDateAndTime [
 	"Answer a boolean indicating whether the receiver inherited from aBehavior at any time in its history"
 
-	^ (self inheritsFrom: aBehavior) or:
-		[ entries anySatisfy: [ :entry |
-			entry content isEpClassModification and: 
-			[ entry content behaviorAffected superclassName = aBehavior name and:
-			[ entry gtTime > aDateAndTime ] ] ] ]
+	^ (self inheritsFrom: aBehavior)
+		or: [ entries
+				anySatisfy: [ :entry | 
+					entry content isEpClassModification
+						and: [ (entry content behaviorAffected superclassName sameContentAs: aBehavior name)
+								and: [ entry gtTime > aDateAndTime ] ] ] ]
 ]
 
 { #category : #accessing }
