@@ -112,17 +112,17 @@ GtEpiceaChangeListElement >> initializeList [
 						contextMenuItems := 
 								{'Apply' -> 
 										[:e |
-										e phlow spawnTool: ((GtPhlowValuableTool new)
+										e phlow spawnTool: ((GtPhlowExplicitTool new)
 													name: 'Apply Changes';
-													valuable: 
+													stencil: 
 															[(GtEpiceaApplyChangesDetailsElement new matchParent)
 																entries: model selectedCodeEvents;
 																anchor: element])].
 								'Reverse' -> 
 										[:e |
-										e phlow spawnTool: ((GtPhlowValuableTool new)
+										e phlow spawnTool: ((GtPhlowExplicitTool new)
 													name: 'Reverse Changes';
-													valuable: 
+													stencil: 
 															[(GtEpiceaReverseChangesDetailsElement new matchParent)
 																entries: model selectedCodeEvents;
 																anchor: element])]}
