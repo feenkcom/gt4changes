@@ -51,6 +51,15 @@ GtEpiceaLog >> gtChildren [
 	^ #()
 ]
 
+{ #category : #views }
+GtEpiceaLog >> gtFilePathFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'File path';
+		object: [ self log store fileReference ];
+		view: #gtPathFor:
+]
+
 { #category : #accessing }
 GtEpiceaLog >> isActive [
 	^ EpMonitor current log store globalName = self name
