@@ -18,5 +18,6 @@ GtExportedEventApplyVisitor >> visitClassRemoval: aClassRemoval [
 
 { #category : #visitor }
 GtExportedEventApplyVisitor >> visitExpressionEvaluation: anExpressionChange [
-	"Nothing to do"
+
+	self class compiler evaluate: anExpressionChange expression
 ]
