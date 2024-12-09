@@ -358,6 +358,14 @@ GtEpImageModelInImageVisitor >> sequencedEntries [
 	^ sequencedEntries
 ]
 
+{ #category : #testing }
+GtEpImageModelInImageVisitor >> shouldReplayAdditionalEntry: entry [
+	"Answer a boolean indicating whether the supplied entry should be replayed.
+	Currently only EpExpressionEvaluations are included."
+
+	^ entry content class == EpExpressionEvaluation
+]
+
 { #category : #private }
 GtEpImageModelInImageVisitor >> shouldReplayOnBehaviorRemoval: replayEntry [ 
 	"Answer a boolean indicating whether the supplied entry should be replayed for a behavior that is later being removed, i.e. if:
@@ -391,6 +399,9 @@ GtEpImageModelInImageVisitor >> visitImageReplay: aGtEpReplayImageModel [
 
 	aGtEpReplayImageModel behaviors values do: [ :behavior |
 		behavior accept: self ].
+	aGtEpReplayImageModel entries do: [ :entry |
+		(self shouldReplayAdditionalEntry: entry) ifTrue:
+			[ stream nextPut: entry ] ].
 ]
 
 { #category : #visiting }
