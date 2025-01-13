@@ -1,6 +1,30 @@
 Extension { #name : #EpMonitor }
 
 { #category : #'*GToolkit4Epicea' }
+EpMonitor >> addEvent: anEvent newEntryDo: aBlock triggerReference: triggerReference [
+	<gtPharoPatch: #Pharo>
+	
+	| newEntry |
+	newEntry := log
+		addEntryWith: anEvent
+		tags: [ :tags |
+			triggerReference isNull ifFalse: [
+				tags
+					at: EpLog triggererReferenceKey
+					put: triggerReference ].
+
+			self 
+				forPharo12: [
+					"Ensure we have a time in Pharo 12"
+					tags at: EpLog timeKey put: self time] 
+				forPharo11AndPharo10: [
+					tags at: EpLog authorKey put: self author.
+					tags at: EpLog timeKey put: self time ] ].
+
+	aBlock value: newEntry
+]
+
+{ #category : #'*GToolkit4Epicea' }
 EpMonitor >> gtViewChangeFilesFor: aView [ 
 	<gtView>
 	
