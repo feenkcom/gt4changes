@@ -171,7 +171,7 @@ OmEntry >> gtViewChangeHistoryChildren [
 
 { #category : #'*GToolkit4Epicea' }
 OmEntry >> gtViewChangeIcon [
-	^  self content accept: EpIconVisitor new
+	^  GtEpicea iconForEpiceaChange: self content 
 ]
 
 { #category : #'*GToolkit4Epicea' }

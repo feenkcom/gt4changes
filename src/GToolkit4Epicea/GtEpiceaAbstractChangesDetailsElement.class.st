@@ -74,8 +74,8 @@ GtEpiceaAbstractChangesDetailsElement >> buildChangesListElement [
 
 	newChangesList column
 		title: 'Icon';
-		stencil: [ :anOmEntry :anIndex | 
-			(anOmEntry content accept: EpIconVisitor new) asElement ];
+		stencil: [ :anOmbuEntry :anIndex | 
+			anOmbuEntry gtViewChangeIcon asElement ];
 		width: 32.
 	
 	newChangesList column

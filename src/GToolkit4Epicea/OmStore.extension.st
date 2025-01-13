@@ -15,7 +15,7 @@ OmStore >> gtViewEntriesFor: aView [
 		items: [ self entriesStream ];
 		column: 'Icon'
 			icon: [ :anOmbuEntry | 
-				anOmbuEntry content accept: EpIconVisitor new ]
+				anOmbuEntry gtViewChangeIcon ]
 			width: 32;
 		column: 'Event'
 			text: [ :anOmbuEntry | anOmbuEntry content ];

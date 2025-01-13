@@ -69,10 +69,10 @@ GtEpiceaChangeListElement >> initializeList [
 							c horizontal fitContent.
 							c vertical fitContent]];
 		dataBinder: 
-				[:anElement :anEpEvent |
+				[:anElement :anOmbuEntry |
 				anElement
 					removeChildren;
-					addChild: (anEpEvent content accept: EpIconVisitor new) asElement];
+					addChild: anOmbuEntry gtViewChangeIcon asElement];
 		width: 32.
 	(list column)
 		title: 'Description';
@@ -85,10 +85,10 @@ GtEpiceaChangeListElement >> initializeList [
 							c horizontal fitContent.
 							c vertical exact: 26]];
 		dataBinder: 
-				[:anElement :anEpEvent |
+				[:anElement :anOmbuEntry |
 				anElement
 					removeChildren;
-					addChildren: (anEpEvent content accept: GtEpiceaBrickVisitor new)].
+					addChildren: (anOmbuEntry content accept: GtEpiceaBrickVisitor new)].
 	(list column)
 		width: 150;
 		title: 'Timestamp';
