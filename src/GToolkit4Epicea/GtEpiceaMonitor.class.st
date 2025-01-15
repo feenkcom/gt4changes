@@ -22,6 +22,13 @@ GtEpiceaMonitor >> subscribeToJobAnnouncer [
 
 { #category : #accessing }
 GtEpiceaMonitor >> subscribeToSystemAnnouncer [
+	self 
+		forPharo12: [self subscribeToSystemAnnouncerPharo12] 
+		forPharo11AndPharo10: [self subscribeToSystemAnnouncerPharo11]
+]
+
+{ #category : #accessing }
+GtEpiceaMonitor >> subscribeToSystemAnnouncerPharo11 [
 	{CategoryAdded.
 		CategoryRemoved.
 		CategoryRenamed.
@@ -39,6 +46,35 @@ GtEpiceaMonitor >> subscribeToSystemAnnouncer [
 		MethodRecategorized}
 		do: [ :pair | 
 			systemAnnouncer weak
+				when: pair
+				send: #sendUpdate:
+				to: self ]
+]
+
+{ #category : #accessing }
+GtEpiceaMonitor >> subscribeToSystemAnnouncerPharo12 [
+	{
+		PackageAdded.
+		PackageRenamed.
+		PackageRemoved.
+		PackageTagAdded.
+		PackageTagRemoved.
+		PackageTagRenamed.
+		ClassAdded.
+		ClassRemoved.
+		MethodAdded.
+		MethodRemoved.
+		ProtocolAdded.
+		ProtocolRemoved.
+		ClassModifiedClassDefinition.
+		MethodModified.
+		ClassRepackaged.
+		ClassRenamed.
+		ClassCommented.
+		MethodRecategorized
+	}
+		do: [ :pair | 
+			self systemAnnouncer weak
 				when: pair
 				send: #sendUpdate:
 				to: self ]

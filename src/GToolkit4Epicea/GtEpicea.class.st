@@ -48,6 +48,15 @@ GtEpicea class >> current [
 	^ self new log: (EpMonitorLogNode for: EpMonitor current) log
 ]
 
+{ #category : #accessing }
+GtEpicea class >> iconForEpiceaChange: anEpChange [
+	^ self 
+		forPharo12: [
+			Smalltalk ui icons iconNamed: (anEpChange accept: EpIconNameVisitor new)  ] 
+		forPharo11AndPharo10: [ 
+			 anEpChange accept: EpIconVisitor new ]
+]
+
 { #category : #modification }
 GtEpicea >> addEvent: anEpEvent [
 	self log addEntryWith: anEpEvent tags: [ :tags | "ignore" ].
@@ -106,15 +115,15 @@ GtEpicea >> createChangeList [
 	aList column
 		title: 'Icon';
 		width: 32;
-		stencil: [ :anEpEvent :anIndex | 
-			(anEpEvent content accept: EpIconVisitor new) asElement
+		stencil: [ :anOmbuEntry :anIndex | 
+			anOmbuEntry gtViewChangeIcon asElement
 				margin: (BlInsets left: 5 right: 5) ].
 	aList column
 		title: 'Description';
-		stencil: [ :anEpEvent :anIndex | 
+		stencil: [ :anOmbuEntry :anIndex | 
 			BlElement new
 				layout: BlLinearLayout horizontal;
-				addChildren: (anEpEvent content accept: GtEpiceaBrickVisitor new);
+				addChildren: (anOmbuEntry content accept: GtEpiceaBrickVisitor new);
 				constraintsDo: [ :c | 
 					c horizontal fitContent.
 					c vertical fitContent ] ].
@@ -180,15 +189,15 @@ GtEpicea >> createGlobalChangeList [
 	aList column
 		title: 'Icon';
 		width: 32;
-		stencil: [ :anEpEvent :anIndex | 
-			(anEpEvent content accept: EpIconVisitor new) asElement
+		stencil: [ :anOmbuEntry :anIndex | 
+			anOmbuEntry gtViewChangeIcon asElement
 				margin: (BlInsets left: 5 right: 5) ].
 	aList column
 		title: 'Description';
-		stencil: [ :anEpEvent :anIndex | 
+		stencil: [ :anOmbuEntry :anIndex | 
 			BlElement new
 				layout: BlLinearLayout horizontal;
-				addChildren: (anEpEvent content accept: GtEpiceaBrickVisitor new);
+				addChildren: (anOmbuEntry content accept: GtEpiceaBrickVisitor new);
 				constraintsDo: [ :c | 
 					c horizontal fitContent.
 					c vertical fitContent ] ].

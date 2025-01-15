@@ -85,7 +85,7 @@ GtEpiceaEntriesGroup >> gtItemsFor: aView [
 		items: [ self items sorted: GtOmEntrySortFunction new reversed ];
 		column: 'Icon'
 			icon: [ :anOmbuEntry | 
-				anOmbuEntry content accept: EpIconVisitor new ]
+				anOmbuEntry gtViewChangeIcon ]
 			width: 32;
 		column: 'Method' do: [ :aColumn |
 			aColumn 

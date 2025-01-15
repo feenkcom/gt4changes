@@ -264,8 +264,8 @@ GtEpiceaAbstractLog >> gtImpactFor: aView [
 		  priority: 20;
 		  items: [ (GtEpInImageEventSequencer sequence: self entries) collect: #content ];
 		  column: 'Icon' 
-		  	icon: [ :anEpEvent :anIndex | 
-			  	(anEpEvent accept: EpIconVisitor new) asElement ]
+		  	icon: [ :anOmbuEntry :anIndex | 
+			  	anOmbuEntry gtViewChangeIcon asElement ]
 		 	 width: 32;
 		  column: 'Description' stencil: [ :anEpEvent :anIndex | 
 			  BlElement new
@@ -324,7 +324,7 @@ GtEpiceaAbstractLog >> gtViewEntriesListFor: aView [
 		items: [ self entriesStream ];
 		column: 'Icon'
 			icon: [ :anOmbuEntry | 
-				anOmbuEntry content accept: EpIconVisitor new ]
+				anOmbuEntry gtViewChangeIcon ]
 			width: 32;
 		column: 'Event'
 			text: [ :anOmbuEntry | anOmbuEntry content ];
