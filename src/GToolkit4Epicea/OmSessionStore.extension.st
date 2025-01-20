@@ -6,6 +6,14 @@ OmSessionStore >> entriesStream [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+OmSessionStore >> gtNextStoreNameBasedOnCurrentImage [
+	^ self resetWithStoreNamed: (self storeNameStrategy 
+		nextTo: (Smalltalk imageFile 
+			basenameWithoutExtension, '.1')
+			in: self directory)
+]
+
+{ #category : #'*GToolkit4Epicea' }
 OmSessionStore >> gtPaintNodesTreeOn: aMondrianView [ 
 	| nodes |
 	nodes := EpFileLogNode fromAllLogsIn: self directory.
