@@ -404,11 +404,6 @@ GtEpiceaAbstractLog >> impactFilter [
 		beNotDefault
 ]
 
-{ #category : #initialization }
-GtEpiceaAbstractLog >> initialize [
-	frozen := false
-]
-
 { #category : #accessing }
 GtEpiceaAbstractLog >> isActive [
 	^ self subclassResponsibility
