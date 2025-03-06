@@ -3,7 +3,6 @@ Class {
 	#superclass : #BrVerticalPane,
 	#instVars : [
 		'events',
-		'anchor',
 		'entries',
 		'changesList',
 		'sequencedEntries'
@@ -20,8 +19,8 @@ GtEpiceaAbstractChangesDetailsElement class >> preferredWidgetExtent [
 GtEpiceaAbstractChangesDetailsElement >> action [
 	self sequencedEntries
 		do: [:each | each content applyCodeChangeIfHasImpact].
-	anchor fireEvent: BrDropdownHideWish new.
-	anchor phlow fireToolUpdateWish
+	self anchor fireEvent: BrDropdownHideWish new.
+	self anchor phlow fireToolUpdateWish
 ]
 
 { #category : #accessing }
@@ -34,13 +33,8 @@ GtEpiceaAbstractChangesDetailsElement >> actionAndInspect [
 				ifTrue: 
 					[each content applyCodeChange.
 					appliedEntries add: each]].
-	anchor fireEvent: BrDropdownHideWish new.
-	anchor phlow spawnObject: (GtEpiceaExplicitLog on: appliedEntries)
-]
-
-{ #category : #accessing }
-GtEpiceaAbstractChangesDetailsElement >> anchor: aButton [
-	anchor := aButton
+	self anchor fireEvent: BrDropdownHideWish new.
+	self anchor phlow spawnObject: (GtEpiceaExplicitLog on: appliedEntries)
 ]
 
 { #category : #accessing }
@@ -131,8 +125,8 @@ GtEpiceaAbstractChangesDetailsElement >> createInspectActionButton [
 				+ (BrGlamorousWithLabelTooltipAptitude new text: 'Inspect the changes that are going to be applied.');
 		label: 'Inspect';
 		action: [ 
-			anchor phlow spawnObject: (GtEpEventSequencer entries: entries includeCurrent: false).
-			anchor fireEvent: BrDropdownHideWish new ]
+			self anchor phlow spawnObject: (GtEpEventSequencer entries: entries includeCurrent: false).
+			self anchor fireEvent: BrDropdownHideWish new ]
 ]
 
 { #category : #accessing }
