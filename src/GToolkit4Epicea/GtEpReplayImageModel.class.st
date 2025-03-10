@@ -413,7 +413,10 @@ GtEpReplayImageModel >> includesBehaviorSometimeNamed: aSymbol [
 			detect: [ :aBehavior | aBehavior previousNames includes: aSymbol ]
 			ifFound: [ :aBehavior | aBehavior ]
 			ifNone: [ ^ false ] ].
-	^ self includesBehaviorSometimeNamed: behavior superclassName asSymbol.
+	^ behavior superclassName 
+		ifNil: [ false ]
+		ifNotNil: [ :superclassName | 
+			self includesBehaviorSometimeNamed: superclassName asSymbol ].
 ]
 
 { #category : #initialization }
