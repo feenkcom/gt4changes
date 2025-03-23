@@ -104,7 +104,7 @@ GtEpiceaAbstractChangesDetailsElement >> computeSequencedEntries [
 GtEpiceaAbstractChangesDetailsElement >> createApplyAndInspectResultActionButton [
 	^ BrButton new
 		aptitude: BrGlamorousButtonWithLabelAptitude new
-				+ (BrGlamorousWithLabelTooltipAptitude new text: 'Confirm action and inspect result');
+				+ (BrGlamorousWithExplicitTooltipAptitude text: 'Confirm action and inspect result');
 		label: 'Confirm and Inspect Result';
 		action: [ self actionAndInspect ]
 ]
@@ -113,7 +113,7 @@ GtEpiceaAbstractChangesDetailsElement >> createApplyAndInspectResultActionButton
 GtEpiceaAbstractChangesDetailsElement >> createApplyChangesActionButton [
 	^ BrButton new
 		aptitude: BrGlamorousButtonWithLabelAptitude new
-				+ (BrGlamorousWithLabelTooltipAptitude new text: 'Confirm action');
+				+ (BrGlamorousWithExplicitTooltipAptitude text: 'Confirm action');
 		label: 'Confirm';
 		action: [ self action ]
 ]
@@ -122,7 +122,7 @@ GtEpiceaAbstractChangesDetailsElement >> createApplyChangesActionButton [
 GtEpiceaAbstractChangesDetailsElement >> createInspectActionButton [
 	^ BrButton new
 		aptitude: BrGlamorousButtonWithLabelAptitude new
-				+ (BrGlamorousWithLabelTooltipAptitude new text: 'Inspect the changes that are going to be applied.');
+				+ (BrGlamorousWithExplicitTooltipAptitude text: 'Inspect the changes that are going to be applied.');
 		label: 'Inspect';
 		action: [ 
 			self anchor phlow spawnObject: (GtEpEventSequencer entries: entries includeCurrent: false).
