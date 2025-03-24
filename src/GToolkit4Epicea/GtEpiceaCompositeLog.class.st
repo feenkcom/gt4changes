@@ -60,7 +60,7 @@ GtEpiceaCompositeLog >> createListFor: aView [
 				item isActive
 					ifTrue: [ BlElement new
 							background: BrGlamorousColors selectedListItemColor;
-							aptitude: (BrGlamorousWithLabelTooltipAptitude new text: 'Active');
+							aptitude: (BrGlamorousWithExplicitTooltipAptitude text: 'Active');
 							size: 12 @ 12;
 							geometry: (BlRoundedRectangleGeometry cornerRadius: 6);
 							margin: (BlInsets left: 14) ]
