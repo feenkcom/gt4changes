@@ -453,8 +453,10 @@ GtEpReplayImageModel >> subclassesFor: aBehaviorModel [
 	| behaviorName |
 
 	behaviorName := aBehaviorModel name.
-	^ behaviors values select: [ :each | each isClass and: [ 
-		each superclassName = behaviorName ] ]
+	^ behaviors values select: [ :each | 
+		each isClass and: [ 
+		each isRemoved not and: [
+		each superclassName = behaviorName ] ] ]
 ]
 
 { #category : #private }
