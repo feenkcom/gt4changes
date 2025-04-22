@@ -1735,6 +1735,50 @@ GtEpEventSequencerExamples >> superclassAndSubclassSuperclassRenameAndBothChange
 ]
 
 { #category : #examples }
+GtEpEventSequencerExamples >> superclassAndSubclassWithSuperclassAdditionAndRemovalForExport [
+	"Check adding a superclass and a subclass and removing the subclass works"
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference entries sequencer sequencedEntries |
+
+	fileReference := (self class testDataRoot / 'Issue4477' / 'Issue4477.ombu').
+	self assert: fileReference exists.
+	entries := fileReference readStreamDo: [ :stream |
+		STON fromStream: stream ].
+	self assert: entries size equals: 2.
+
+	self shouldnt: 
+		[ sequencer := GtEpEventSequencer entries: entries inImage: false.
+		sequencedEntries := sequencer sequencedEntries. 
+		] raise: Error.
+	
+
+	^ sequencedEntries
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> superclassAndSubclassWithSuperclassAdditionAndRemovalInImage [
+	"Check adding a superclass and a subclass and removing the subclass works"
+	<gtExample>
+	<after: #removeTestClasses>
+	| fileReference entries sequencer sequencedEntries |
+
+	fileReference := (self class testDataRoot / 'Issue4477' / 'Issue4477.ombu').
+	self assert: fileReference exists.
+	entries := fileReference readStreamDo: [ :stream |
+		STON fromStream: stream ].
+	self assert: entries size equals: 2.
+
+	self shouldnt: 
+		[ sequencer := GtEpEventSequencer entries: entries inImage: true.
+		sequencedEntries := sequencer sequencedEntries. 
+		] raise: Error.
+	
+
+	^ sequencedEntries
+]
+
+{ #category : #examples }
 GtEpEventSequencerExamples >> superclassAndSubclassWithSuperclassRemovalBothExisting_addInitial_InImage [
 	"Check adding a superclass and a subclass and removing the subclass works"
 	<gtExample>
