@@ -9,12 +9,13 @@ Class {
 { #category : #examples }
 GtEpiceaLogExamples >> simpleLog [
 	<gtExample>
+	<return: #GtEpiceaLog>
 	| log |
 	log := GtEpiceaLog new.
-	
+
 	self assert: log name equals: ''.
 	self assert: log entries size equals: 0.
-	
+
 	^ log
 ]
 

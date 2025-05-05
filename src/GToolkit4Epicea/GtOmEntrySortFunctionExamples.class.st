@@ -9,25 +9,27 @@ Class {
 { #category : #examples }
 GtOmEntrySortFunctionExamples >> detectMaxWithSameTimestamp [
 	"Check that retrieving the minimum of a collection of OmEntries with the same timestamp are correctly sorted."
-	<gtExample>
-	| entries max|
 
+	<gtExample>
+	<return: #GtOmEntrySortFunctionExamples>
+	| entries max |
 	entries := self exampleEntries.
 
 	max := entries detectMaxCollateWith: GtOmEntrySortFunction new.
-	self assert: max identicalTo: entries last.
+	self assert: max identicalTo: entries last
 ]
 
 { #category : #examples }
 GtOmEntrySortFunctionExamples >> detectMinWithSameTimestamp [
 	"Check that retrieving the minimum of a collection of OmEntries with the same timestamp are correctly sorted."
-	<gtExample>
-	| entries min|
 
+	<gtExample>
+	<return: #GtOmEntrySortFunctionExamples>
+	| entries min |
 	entries := self exampleEntries.
 
 	min := entries detectMinCollateWith: GtOmEntrySortFunction new.
-	self assert: min identicalTo: entries first.
+	self assert: min identicalTo: entries first
 ]
 
 { #category : #examples }
@@ -41,17 +43,13 @@ GtOmEntrySortFunctionExamples >> exampleEntries [
 { #category : #examples }
 GtOmEntrySortFunctionExamples >> sortWithSameTimestamp [
 	"Check that sorting a collection of OmEntries with the same timestamp are correctly sorted."
+
 	<gtExample>
-	| entries sortedEntries|
-
-	entries := self exampleEntries.
-
-	"First check that simple sorting doesn't work"
+	<return: #GtOmEntrySortFunctionExamples>
+	| entries sortedEntries |
+	entries := self exampleEntries.	"First check that simple sorting doesn't work"
 	sortedEntries := entries reversed sorted: #gtTime ascending.
-	self deny: sortedEntries equals: entries.
-
-	"Confirm that the sort function works as expected"
+	self deny: sortedEntries equals: entries.	"Confirm that the sort function works as expected"
 	sortedEntries := entries reversed sorted: GtOmEntrySortFunction new.
-	self assert: sortedEntries equals: entries.
-
+	self assert: sortedEntries equals: entries
 ]
