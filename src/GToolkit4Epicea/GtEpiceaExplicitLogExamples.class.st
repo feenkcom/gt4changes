@@ -9,11 +9,12 @@ Class {
 { #category : #accessing }
 GtEpiceaExplicitLogExamples >> simpleLog [
 	<gtExample>
+	<return: #GtEpiceaExplicitLog>
 	| log |
 	log := GtEpiceaExplicitLog on: {}.
-	
+
 	self assert: log name equals: 'Explicit log on 0 entries'.
 	self assert: log entries size equals: 0.
-	
+
 	^ log
 ]
