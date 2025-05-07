@@ -21,6 +21,13 @@ GtEpEventSequencer class >> entries: anEpEntryCollection [
 ]
 
 { #category : #sequencing }
+GtEpEventSequencer class >> entries: anEpEntryCollection includeCurrent: currentBoolean [
+
+	self deprecated: 'Instanciate the appropriate subclass directly'.
+	^ self entries: anEpEntryCollection inImage: currentBoolean not
+]
+
+{ #category : #sequencing }
 GtEpEventSequencer class >> entries: anEpEntryCollection inImage: inImageBoolean [
 	"Create an instance of the sequencer, chosen based on inImageBoolean.
 	This is for backward compatibility - the appropriate event sequencer should be used directly."
@@ -30,13 +37,6 @@ GtEpEventSequencer class >> entries: anEpEntryCollection inImage: inImageBoolean
 	ifFalse:
 		[ GtEpForExportEventSequencer ]) new
 			entries: anEpEntryCollection
-]
-
-{ #category : #sequencing }
-GtEpEventSequencer class >> entries: anEpEntryCollection includeCurrent: currentBoolean [
-
-	self deprecated: 'Instanciate the appropriate subclass directly'.
-	^ self entries: anEpEntryCollection inImage: currentBoolean not
 ]
 
 { #category : #accessing }
