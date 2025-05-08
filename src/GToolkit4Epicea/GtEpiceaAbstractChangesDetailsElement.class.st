@@ -17,8 +17,11 @@ GtEpiceaAbstractChangesDetailsElement class >> preferredWidgetExtent [
 
 { #category : #accessing }
 GtEpiceaAbstractChangesDetailsElement >> action [
-	self sequencedEntries
-		do: [:each | each content applyCodeChangeIfHasImpact].
+	
+	GtVmMemoryConfigurationInstaller default 
+		applyForLargeObjectAllocationsDuring:  [ self loadSequencedChanges ] 
+		epiceaMethodSourcesSize: self changedMethodsSourceCodeSize.
+	 
 	self anchor fireEvent: BrDropdownHideWish new.
 	self anchor phlow fireToolUpdateWish
 ]
@@ -26,15 +29,15 @@ GtEpiceaAbstractChangesDetailsElement >> action [
 { #category : #accessing }
 GtEpiceaAbstractChangesDetailsElement >> actionAndInspect [
 	| appliedEntries |
-	appliedEntries := OrderedCollection new.
-	self sequencedEntries do: 
-			[:each |
-			each content hasImpact
-				ifTrue: 
-					[each content applyCodeChange.
-					appliedEntries add: each]].
+	
+	GtVmMemoryConfigurationInstaller default 
+		applyForLargeObjectAllocationsDuring:  [
+			appliedEntries := self loadSequencedChangesCollectingChanged. ] 
+		epiceaMethodSourcesSize: self changedMethodsSourceCodeSize.
+	
 	self anchor fireEvent: BrDropdownHideWish new.
-	self anchor phlow spawnObject: (GtEpiceaExplicitLog on: appliedEntries)
+	self anchor phlow 
+		spawnObject: (GtEpiceaExplicitLog on: appliedEntries)
 ]
 
 { #category : #accessing }
@@ -93,6 +96,19 @@ GtEpiceaAbstractChangesDetailsElement >> buildEmptyContentElement [
 			aptitude: BrGlamorousLabelAptitude;
 			text: 'No relevant changes');
 		yourself
+]
+
+{ #category : #'as yet unclassified' }
+GtEpiceaAbstractChangesDetailsElement >> changedMethodsSourceCodeSize [
+	^(self entries 
+		select: [ :each |
+			each content notNil and: [
+				each content isEpMethodChange and: [
+					each content isEpMethodAddition or: [
+						each content isEpMethodModification ] ] ] ]) 
+		inject: 0
+		into: [ :sum :each |  
+			sum + (each content methodAffected sourceCode sizeInMemory) ]
 ]
 
 { #category : #accessing }
@@ -169,6 +185,25 @@ GtEpiceaAbstractChangesDetailsElement >> initializeContent [
 { #category : #accessing }
 GtEpiceaAbstractChangesDetailsElement >> latestEntriesFrom: previewEntriesTheNewestFirst [
 	^ GtEpInImageEventSequencer sequence: previewEntriesTheNewestFirst
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractChangesDetailsElement >> loadSequencedChanges [
+	^ self sequencedEntries
+		do: [:each | each content applyCodeChangeIfHasImpact].
+]
+
+{ #category : #accessing }
+GtEpiceaAbstractChangesDetailsElement >> loadSequencedChangesCollectingChanged [
+	| appliedEntries |
+	appliedEntries := OrderedCollection new.
+	self sequencedEntries do: 
+			[:each |
+			each content hasImpact
+				ifTrue: 
+					[each content applyCodeChange.
+					appliedEntries add: each]].
+	^ appliedEntries
 ]
 
 { #category : #accessing }
