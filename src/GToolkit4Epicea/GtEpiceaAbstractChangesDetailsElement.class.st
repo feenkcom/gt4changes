@@ -20,7 +20,7 @@ GtEpiceaAbstractChangesDetailsElement >> action [
 	
 	GtVmMemoryConfigurationInstaller default 
 		applyForLargeObjectAllocationsDuring:  [ self loadSequencedChanges ] 
-		epiceaMethodSourcesSize: self changedMethodsSourceCodeSize.
+		methodSourcesSize: self changedMethodsSourceCodeSize.
 	 
 	self anchor fireEvent: BrDropdownHideWish new.
 	self anchor phlow fireToolUpdateWish
@@ -33,7 +33,7 @@ GtEpiceaAbstractChangesDetailsElement >> actionAndInspect [
 	GtVmMemoryConfigurationInstaller default 
 		applyForLargeObjectAllocationsDuring:  [
 			appliedEntries := self loadSequencedChangesCollectingChanged. ] 
-		epiceaMethodSourcesSize: self changedMethodsSourceCodeSize.
+		methodSourcesSize: self changedMethodsSourceCodeSize.
 	
 	self anchor fireEvent: BrDropdownHideWish new.
 	self anchor phlow 
