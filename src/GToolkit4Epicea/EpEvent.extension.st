@@ -43,6 +43,11 @@ EpEvent >> isEpBehaviorNameChange [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+EpEvent >> isEpBehaviorRepackagedChange [
+	^ true
+]
+
+{ #category : #'*GToolkit4Epicea' }
 EpEvent >> isEpClassAddition [
 
 	^ false.
