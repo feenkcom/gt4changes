@@ -10,7 +10,7 @@ Class {
 { #category : #cleanup }
 GtEpiceaPackageFactoryForTesting >> cleanUp [
 	createdPackages do: [ :aPackage |
-		(RPackage organizer includesPackageNamed: aPackage name) ifTrue: [
+		(self packageOrganizer includesPackageNamed: aPackage name) ifTrue: [
 			self removePackage: aPackage ] ]
 ]
 
@@ -39,11 +39,11 @@ GtEpiceaPackageFactoryForTesting >> initialize [
 
 { #category : #accessing }
 GtEpiceaPackageFactoryForTesting >> packageNamed: aPackageName [
-	^ RPackage organizer packageNamed: aPackageName.
+	^ self packageOrganizer packageNamed: aPackageName.
 ]
 
 { #category : #actions }
 GtEpiceaPackageFactoryForTesting >> removePackage: aPackage [ 
-	RPackage organizer unregisterPackage: aPackage.
+	self packageOrganizer unregisterPackage: aPackage.
 	SystemOrganizer default removeCategory: aPackage name
 ]

@@ -466,7 +466,7 @@ GtEpiceaAbstractLog >> packageFilter [
 		named: 'In Package';
 		order: 15;
 		completion: [ GtStringsCompletionStrategy new
-				completions: [ GtPrefixTree withAll: (RPackage organizer packages collect: #name) ] ];
+				completions: [ GtPrefixTree withAll: (self packageOrganizer packages collect: #name) ] ];
 		beNotDefault
 ]
 
