@@ -17,11 +17,15 @@ GtEpiceaPackageFactoryForTesting >> cleanUp [
 { #category : #actions }
 GtEpiceaPackageFactoryForTesting >> createNewPackageNamed: aPackageName [
 	| newPackage |
-	
 	newPackage := RPackage named: aPackageName.
-	newPackage register.
-	createdPackages add: newPackage.
+	self 
+		forPharo12: [
+			self class packageOrganizer addPackage: newPackage ] 
+		forPharo11AndPharo10: [
+			newPackage register ].
 	
+	createdPackages add: newPackage.
+
 	^ newPackage
 ]
 
@@ -45,5 +49,8 @@ GtEpiceaPackageFactoryForTesting >> packageNamed: aPackageName [
 { #category : #actions }
 GtEpiceaPackageFactoryForTesting >> removePackage: aPackage [ 
 	self packageOrganizer unregisterPackage: aPackage.
-	SystemOrganizer default removeCategory: aPackage name
+	self 
+		forPharo12: [] 
+		forPharo11AndPharo10: [
+			SystemOrganizer default removeCategory: aPackage name ]
 ]
