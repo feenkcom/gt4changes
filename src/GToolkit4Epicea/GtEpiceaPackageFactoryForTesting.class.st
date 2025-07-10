@@ -17,7 +17,7 @@ GtEpiceaPackageFactoryForTesting >> cleanUp [
 { #category : #actions }
 GtEpiceaPackageFactoryForTesting >> createNewPackageNamed: aPackageName [
 	| newPackage |
-	newPackage := RPackage named: aPackageName.
+	newPackage := Package named: aPackageName.
 	self 
 		forPharo12: [
 			self class packageOrganizer addPackage: newPackage ] 

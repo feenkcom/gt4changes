@@ -10,7 +10,7 @@ EpBehaviorRepackagedChange >> newCategory [
 	^ self newTagName 
 		ifNil: [ self newPackageName ]
 		ifNotNil: [ :aTagName |
-			(aTagName = RPackage rootTagName)
+			(aTagName = Package rootTagName)
 				ifTrue: [ self newPackageName ]
 				ifFalse: [ self newPackageName, '-', aTagName ] ]
 ]
