@@ -1,73 +1,87 @@
-[
-	OmEntry {
-		#tags : {
-			#time : DateAndTime [ '1901-01-01T00:00:28+00:00' ],
-			#author : 'Author One',
-			#self : OmReference [ 'ReplayLatest', '28' ],
-			#prior : OmReference [ 'ReplayLatest', '27' ]
-		},
-		#content : EpClassRemoval {
-			#classRemoved : RGClassDefinition {
-				#name : #GtEpEventSequencerExamplesClass1,
-				#methods : IdentityDictionary { },
-				#protocols : Set [ ],
-				#instanceVariables : OrderedCollection [ ],
-				#classVariables : OrderedCollection [ ],
-				#sharedPools : OrderedCollection [ ]
-			}
-		}
+OmEntry {
+	#tags : {
+		#author : 'AlistairGrant',
+		#time : DateAndTime [ '2025-07-16T10:05:02.997865+02:00' ],
+		#prior : OmReference [ 'Pharo11-SNAPSHOT-64bit-aece1b5.20F72134FE20', '2' ],
+		#self : OmReference [ '1' ]
 	},
-	OmEntry {
-		#tags : {
-			#time : DateAndTime [ '1901-01-01T00:00:32+00:00' ],
-			#author : 'Author Two',
-			#self : OmReference [ 'ReplayLatest', '32' ],
-			#prior : OmReference [ 'ReplayLatest', '31' ]
-		},
-		#content : EpClassAddition {
-			#class : RGClassDefinition {
+	#content : EpClassRemoval {
+		#classRemoved : RGClassDefinition {
+			#annotations : IdentityDictionary {
+				#superclassName : 'Object',
+				#definitionSource : 'Object subclass: \'GtEpEventSequencerExamplesClass1\'\r\tinstanceVariableNames: \'\'\r\tclassVariableNames: \'\'\r\tpackage: #GtEqEventSequencerExamplesCategory1',
+				#traitCompositionSource : '{}'
+			},
+			#name : #GtEpEventSequencerExamplesClass1,
+			#methods : IdentityDictionary { },
+			#protocols : Set [ ],
+			#instanceVariables : OrderedCollection [ ],
+			#metaClass : RGMetaclassDefinition {
 				#annotations : IdentityDictionary {
-					#superclassName : #GtEqEventSequencerExamplesClass2,
-					#definitionSource : 'GtEqEventSequencerExamplesClass2 subclass: #GtEqEventSequencerExamplesClass3\n\tinstanceVariableNames: \'\'\n\tclassVariableNames: \'\'\n\tpoolDictionaries: \'\'\n\tcategory: \'GtEqEventSequencerExamplesCategory1\'',
+					#definitionSource : 'GtEpEventSequencerExamplesClass1 class\r\tinstanceVariableNames: \'\'',
 					#traitCompositionSource : '{}'
 				},
-				#name : #GtEpEventSequencerExamplesClass3,
+				#name : #'AnObsoleteGtEpEventSequencerExamplesClass1 class',
 				#methods : IdentityDictionary { },
 				#protocols : Set [ ],
 				#instanceVariables : OrderedCollection [ ],
-				#metaClass : RGMetaclassDefinition {
-					#annotations : IdentityDictionary {
-						#definitionSource : 'GtEpEventSequencerExamplesClass3 class\n\tinstanceVariableNames: \'\'',
-						#traitCompositionSource : '{}'
-					},
-					#name : #'GtEpEventSequencerExamplesClass3 class',
-					#methods : IdentityDictionary { },
-					#protocols : Set [ ],
-					#instanceVariables : OrderedCollection [ ],
-					#baseClass : @20
+				#baseClass : @7
+			},
+			#comment : RGCommentDefinition {
+				#annotations : IdentityDictionary {
+					#className : #AnObsoleteGtEpEventSequencerExamplesClass1,
+					#isMetaSide : false
 				},
-				#comment : RGCommentDefinition {
-					#annotations : IdentityDictionary {
-						#className : #GtEpEventSequencerExamplesClass3,
-						#isMetaSide : false
-					},
-					#name : #Comment,
-					#parent : @20,
-					#content : ''
-				},
-				#classVariables : OrderedCollection [ ],
-				#category : #GtEqEventSequencerExamplesCategory1,
-				#package : RGPackageDefinition {
-					#name : #GtEqEventSequencerExamplesCategory1,
-					#elements : IdentityDictionary {
-						#definedClasses : IdentityDictionary { },
-						#extensionMethods : IdentityDictionary { },
-						#methods : IdentityDictionary { },
-						#categories : OrderedCollection [ ]
-					}
-				},
-				#sharedPools : OrderedCollection [ ]
-			}
+				#parent : @7,
+				#content : ''
+			},
+			#classVariables : OrderedCollection [ ],
+			#category : #GtEqEventSequencerExamplesCategory1,
+			#package : #GtEqEventSequencerExamplesCategory1,
+			#sharedPools : OrderedCollection [ ]
 		}
 	}
-]
+}OmEntry {
+	#tags : {
+		#author : 'AlistairGrant',
+		#time : DateAndTime [ '2025-07-16T10:05:15.729799+02:00' ],
+		#prior : OmReference [ '1' ],
+		#self : OmReference [ '2' ]
+	},
+	#content : EpClassAddition {
+		#class : RGClassDefinition {
+			#annotations : IdentityDictionary {
+				#superclassName : 'GtEpEventSequencerExamplesClass2',
+				#definitionSource : 'GtEpEventSequencerExamplesClass2 subclass: #GtEpEventSequencerExamplesClass3\r\tinstanceVariableNames: \'\'\r\tclassVariableNames: \'\'\r\tpackage: \'GtEqEventSequencerExamplesCategory1\'',
+				#traitCompositionSource : '{}'
+			},
+			#name : #GtEpEventSequencerExamplesClass3,
+			#methods : IdentityDictionary { },
+			#protocols : Set [ ],
+			#instanceVariables : OrderedCollection [ ],
+			#metaClass : RGMetaclassDefinition {
+				#annotations : IdentityDictionary {
+					#definitionSource : 'GtEpEventSequencerExamplesClass3 class\r\tinstanceVariableNames: \'\'',
+					#traitCompositionSource : '{}'
+				},
+				#name : #'GtEpEventSequencerExamplesClass3 class',
+				#methods : IdentityDictionary { },
+				#protocols : Set [ ],
+				#instanceVariables : OrderedCollection [ ],
+				#baseClass : @7
+			},
+			#comment : RGCommentDefinition {
+				#annotations : IdentityDictionary {
+					#className : #GtEpEventSequencerExamplesClass3,
+					#isMetaSide : false
+				},
+				#parent : @7,
+				#content : ''
+			},
+			#classVariables : OrderedCollection [ ],
+			#category : #GtEqEventSequencerExamplesCategory1,
+			#package : #GtEqEventSequencerExamplesCategory1,
+			#sharedPools : OrderedCollection [ ]
+		}
+	}
+}

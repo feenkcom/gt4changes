@@ -25,6 +25,51 @@ EpMonitor >> addEvent: anEvent newEntryDo: aBlock triggerReference: triggerRefer
 ]
 
 { #category : #'*GToolkit4Epicea' }
+EpMonitor >> behaviorRemoved: aClassRemovedAnnouncement [
+	| toReplace |
+	self handleAnyErrorDuring: [
+		"Workaround: the announcement occurs after class is renamed to AnObsolete
+		and removed from package."
+
+		| classRemoved |
+		classRemoved := aClassRemovedAnnouncement classRemoved asEpiceaRingDefinition.
+
+		"Fix class name (remove AnObsolete prefix)"
+		classRemoved definitionSource:
+			(classRemoved definitionSource
+				copyReplaceAll: aClassRemovedAnnouncement classRemoved name asString
+				with: aClassRemovedAnnouncement classRemoved originalName asString).
+
+		"Fix class name in the metaclass"
+		classRemoved classSide definitionSource:
+			(classRemoved classSide definitionSource
+				copyReplaceAll: aClassRemovedAnnouncement classRemoved name
+				with: aClassRemovedAnnouncement classRemoved originalName).
+
+		"Fix category"
+		toReplace := (classRemoved definitionSource includesSubstring: '_UnpackagedPackage')
+			ifTrue: [  'package: ', '_UnpackagedPackage' printString ]
+			ifFalse: [ 'package: ', 'Unclassified' printString].
+			
+		classRemoved definitionSource:
+			(classRemoved definitionSource
+				copyReplaceAll: toReplace
+				with: 'package: ', aClassRemovedAnnouncement categoryName printString).
+	
+
+		classRemoved name: aClassRemovedAnnouncement classRemoved originalName.
+		classRemoved category: aClassRemovedAnnouncement categoryName.
+		classRemoved package: aClassRemovedAnnouncement packageAffected name.
+
+		(aClassRemovedAnnouncement classRemoved methods, aClassRemovedAnnouncement classRemoved classSide metaMethods)
+			do: [:each | self behaviorRemovedImpliesMethodRemoved: each defaultPackageName: classRemoved package ].
+
+		aClassRemovedAnnouncement classAffected isTrait
+			ifTrue:  [ self traitRemoved: classRemoved ]
+			ifFalse: [ self classRemoved: classRemoved ] ]
+]
+
+{ #category : #'*GToolkit4Epicea' }
 EpMonitor >> gtViewChangeFilesFor: aView [ 
 	<gtView>
 	
