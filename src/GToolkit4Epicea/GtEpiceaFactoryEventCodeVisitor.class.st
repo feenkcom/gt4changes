@@ -258,7 +258,9 @@ GtEpiceaFactoryEventCodeVisitor >> storeSharedPools: aCollection [
 	aCollection ifEmpty: 
 		[ codeStream << 'OrderedCollection new'.
 		^ self ].
-	self halt.
+
+	"None of the examples so far have included shared pools"
+	self notYetImplemented.
 ]
 
 { #category : #private }
@@ -472,24 +474,6 @@ GtEpiceaFactoryEventCodeVisitor >> visitMethodAddition: aChange [
 	self storeMethodDefinitionFor: aChange methodAdded.
 	self appendTagsKeywordFrom: currentEntry.
 	codeStream
-		<< '.';
-		cr.
-]
-
-{ #category : #visitor }
-GtEpiceaFactoryEventCodeVisitor >> visitMethodChange: aChange [
-
-self halt.
-	codeStream
-		tab;
-		<< 'factory changeFromSource: ';
-		print: aChange oldMethod sourceCode;
-		<< ' protocol: ';
-		print: aChange oldMethod protocol;
-		<< ' toSource: ';
-		print: aChange newMethod sourceCode;
-		<< ' protocol: ';
-		print: aChange newMethod protocol;
 		<< '.';
 		cr.
 ]
