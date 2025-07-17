@@ -80,6 +80,10 @@ GtEpiceaEventFactoryExamples >> classAddModifyRenameCategoryRemove [
 	<gtExample>
 	| sourceEpEntries visitor sourceCode generatedEpEvents |
 
+	EpMonitor current disableDuring:
+		[ RPackageOrganizer default 
+			unregisterPackageNamed: #'GToolkit4EpiceaRename-Examples';
+			removePackageNameFromCache: #'GToolkit4EpiceaRename-Examples'. ].
 	sourceEpEntries := self epEntriesFrom: 
 		[ self class evaluate:
 'Object subclass: #GtEpiceaEventFactoryExamplesExampleClass
