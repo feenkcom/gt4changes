@@ -2625,21 +2625,19 @@ GtEpEventSequencerExamples >> classAddModifyRenameInImage [
 { #category : #examples }
 GtEpEventSequencerExamples >> classAddModifyRenameRemove2ForExport [
 	"Check that a class add, modify, rename and remove is sequenced correctly."
-
 	<gtExample>
 	<return: #GtEpForExportEventSequencer>
 	| entries sequencer sequencedEntries |
-	self
-		deny: (self class environment includesKey: #GtGemStoneCodeSyncExampleClassRenamed).
-	self
-		deny: (self class environment includesKey: #GtGemStoneCodeSyncExampleClassRenamed).
+
+	self deny: (self class environment includesKey: #GtGemStoneCodeSyncExampleClass).
+	self deny: (self class environment includesKey: #GtGemStoneCodeSyncExampleClassRenamed).
 	entries := self class classAddModifyRenameRemove2Entries entries.
 	self assert: entries size equals: 16.
 	sequencer := GtEpEventSequencer entries: entries inImage: false.
 	sequencedEntries := sequencer sequencedEntries.
 	self
-		assert: (sequencedEntries collect: [ :each | each content class name ])
-		equals: #(#EpBehaviorNameChange #EpClassRemoval).
+		assert: (sequencedEntries collect: [ :each | each content class name ]) = #(#EpBehaviorNameChange #EpClassRemoval)
+		description: [ 'Sequenced entries don''t match: ', sequencedEntries printString ].
 	^ sequencer
 ]
 

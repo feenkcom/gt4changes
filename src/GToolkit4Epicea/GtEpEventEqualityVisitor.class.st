@@ -69,6 +69,16 @@ GtEpEventEqualityVisitor >> visitBehaviorCategoryChange: aChange [
 ]
 
 { #category : #visitor }
+GtEpEventEqualityVisitor >> visitBehaviorCommentChange: aChange [
+
+	self assertBehaviorDefinition: actualEvent behaviorAffected equals: aChange behaviorAffected.
+	self assert: actualEvent oldComment equals: aChange oldComment.
+	self assert: actualEvent oldStamp equals: aChange oldStamp.
+	self assert: actualEvent newComment equals: aChange newComment.
+	self assert: actualEvent newStamp equals: aChange newStamp.
+]
+
+{ #category : #visitor }
 GtEpEventEqualityVisitor >> visitBehaviorNameChange: aChange [
 
 	self assertClassDefinition: actualEvent behaviorAffected equals: aChange behaviorAffected.
@@ -128,7 +138,8 @@ GtEpEventEqualityVisitor >> visitClassRemoval: aChange [
 
 { #category : #visitor }
 GtEpEventEqualityVisitor >> visitCodeChange: aChange [
-	^ self notYetImplemented
+
+	^ self error: 'Change not handled: ', aChange printString.
 ]
 
 { #category : #visitor }
@@ -162,6 +173,12 @@ GtEpEventEqualityVisitor >> visitProtocolRemoval: aProtocolRemoved [
 
 	self assert: actualEvent protocol equals: aProtocolRemoved protocol.
 	self assertBehaviorDefinition: actualEvent behaviorAffected equals: aProtocolRemoved behaviorAffected.
+]
+
+{ #category : #visitor }
+GtEpEventEqualityVisitor >> visitSessionSnapshot: anEpSessionSnapshot [
+
+	self assert: actualEvent imageName equals: anEpSessionSnapshot imageName.
 ]
 
 { #category : #visitor }
