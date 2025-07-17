@@ -105,7 +105,8 @@ GtEpiceaEventFactoryExamples >> classAddModifyRenameCategoryRemove [
 			unregisterPackageNamed: #'GToolkit4EpiceaRename-Examples';
 			removePackageNameFromCache: #'GToolkit4EpiceaRename-Examples'.
 		 ].
-	self assert: sourceEpEntries size equals: 8.
+	"Depending on the order, the package name may have been cached"
+	self assert: (sourceEpEntries size between: 8 and: 9).
 	"Because the generated events involve a class actually being removed, the class ends up being obsolete.
 	Patch the remove event to use the same class as the add event."
 	sourceEpEntries last content initializeClassRemoved: sourceEpEntries first content classAdded.
