@@ -134,14 +134,6 @@ GtEpiceaEventFactory >> instanceVariableDefinitionNamed: variableName className:
 ]
 
 { #category : #api }
-GtEpiceaEventFactory >> logBrowserOperation: aCollection tags: aDictionary [
-
-self halt.
-	^ entries add: (self omEntryFrom: aDictionary content: 
-		(EpClassAddition class: aCollection))
-]
-
-{ #category : #api }
 GtEpiceaEventFactory >> logRedo: aCollection tags: aDictionary [
 
 	^ entries add: (self omEntryFrom: aDictionary content: 
