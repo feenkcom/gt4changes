@@ -12,7 +12,8 @@ Class {
 		'selector',
 		'codeStream',
 		'entries',
-		'currentEntry'
+		'currentEntry',
+		'sourceFile'
 	],
 	#category : #'GToolkit4Epicea-Visitor'
 }
@@ -26,6 +27,16 @@ GtEpiceaFactoryEventCodeVisitor class >> selector: aSymbol entries: aCollection 
 		entries: aCollection
 ]
 
+{ #category : #actions }
+GtEpiceaFactoryEventCodeVisitor class >> selector: aSymbol entries: aCollection sourceFile: aFileReference [
+	"Answer a receiver with the code for the supplied collection of OmEntries named aSymbol"
+
+	^ self new
+		sourceFile: aFileReference;
+		selector: aSymbol;
+		entries: aCollection
+]
+
 { #category : #private }
 GtEpiceaFactoryEventCodeVisitor >> appendTagsKeywordFrom: anOmEntry [
 
@@ -33,7 +44,20 @@ GtEpiceaFactoryEventCodeVisitor >> appendTagsKeywordFrom: anOmEntry [
 		<< ' tags: { #author -> ';
 		print: (anOmEntry tagAt: #author);
 		<< '. #time -> ';
-		print: anOmEntry gtTime printString;
+		print: anOmEntry gtTime printString.
+	anOmEntry tags
+		at: #self
+		ifPresent: [ :tag |
+			codeStream
+				<< '. #self -> ';
+				<< (self omConstructorFor: tag) ].
+	anOmEntry tags
+		at: #prior
+		ifPresent: [ :tag |
+			codeStream
+				<< '. #prior -> ';
+				<< (self omConstructorFor: tag) ].
+	codeStream
 		<< '. } asDictionary'.
 ]
 
@@ -66,6 +90,21 @@ GtEpiceaFactoryEventCodeVisitor >> generate [
 ]
 
 { #category : #private }
+GtEpiceaFactoryEventCodeVisitor >> omConstructorFor: anOmReference [
+
+	anOmReference isNull ifTrue:
+		[ ^ 'OmNullReference uniqueInstance' ].
+
+	^ String streamContents: [ :stream |
+		stream
+			<< '(OmReference globalName: ';
+			print: anOmReference globalName;
+			<< ' localName: ';
+			print: anOmReference localName;
+			<< ')' ]
+]
+
+{ #category : #private }
 GtEpiceaFactoryEventCodeVisitor >> packageTagOfClass: aRgClass [
 	| categoryName packageName |
 
@@ -93,6 +132,16 @@ GtEpiceaFactoryEventCodeVisitor >> sourceCode [
 
 	codeStream ifNil: [ self generate ].
 	^ codeStream contents
+]
+
+{ #category : #accessing }
+GtEpiceaFactoryEventCodeVisitor >> sourceFile [
+	^ sourceFile
+]
+
+{ #category : #accessing }
+GtEpiceaFactoryEventCodeVisitor >> sourceFile: anObject [
+	sourceFile := anObject
 ]
 
 { #category : #private }
@@ -277,7 +326,7 @@ GtEpiceaFactoryEventCodeVisitor >> storeTraitDefinitionFor: aRgClass [
 		print: aRgClass superclassName;
 		<< ' package: ';
 		print: aRgClass package;
-		<< ' packageTag: #';
+		<< ' packageTag: ';
 		print: (self packageTagOfClass: aRgClass);
 		<< ' classVariables: '.
 	self storeClassVariables: aRgClass classVariables.
@@ -466,6 +515,21 @@ GtEpiceaFactoryEventCodeVisitor >> visitCodeChange: aChange [
 ]
 
 { #category : #visitor }
+GtEpiceaFactoryEventCodeVisitor >> visitLogBrowserOperation: anEpRedo [ 
+
+	codeStream << 'factory logBrowserOperations: { '.
+	anEpRedo entryReferences do: [ :omReference |
+		codeStream 
+			<< (self omConstructorFor: omReference);
+			<< '. ' ].
+	codeStream << '} '.
+	self appendTagsKeywordFrom: currentEntry.
+	codeStream
+		<< '.';
+		cr.
+]
+
+{ #category : #visitor }
 GtEpiceaFactoryEventCodeVisitor >> visitMethodAddition: aChange [
 
 	codeStream
@@ -536,17 +600,42 @@ GtEpiceaFactoryEventCodeVisitor >> visitProtocolRemoval: aProtocolRemoved [
 
 { #category : #visitor }
 GtEpiceaFactoryEventCodeVisitor >> visitRedo: anEpRedo [
-	"Nothing to do"
+
+	codeStream << 'factory logRedo: { '.
+	anEpRedo entryReferences do: [ :omReference |
+		codeStream 
+			<< (self omConstructorFor: omReference);
+			<< '. ' ].
+	codeStream << '} '.
+	self appendTagsKeywordFrom: currentEntry.
+	codeStream
+		<< '.';
+		cr.
 ]
 
 { #category : #visitor }
 GtEpiceaFactoryEventCodeVisitor >> visitRefactoring: aChange [
-	"No known action required"
+
+	codeStream << 'factory genericRefactoring: '''.
+	aChange summaryOn: codeStream.
+	codeStream << ''''.
+	self appendTagsKeywordFrom: currentEntry.
+	codeStream
+		<< '.';
+		cr.
 ]
 
 { #category : #visitor }
 GtEpiceaFactoryEventCodeVisitor >> visitSessionSnapshot: anEpSessionSnapshot [
-	"Nothing to do"
+
+	codeStream
+		tab;
+		<< 'factory addSessionSnapshotImageName: ';
+		print: anEpSessionSnapshot imageName.
+	self appendTagsKeywordFrom: currentEntry.
+	codeStream
+		<< '.';
+		cr.
 ]
 
 { #category : #visitor }

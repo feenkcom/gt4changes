@@ -9,9 +9,7 @@ Class {
 { #category : #'private - helpers' }
 GtEpLogEnumeratorExamples class >> testDataRoot [
 
-	^ FileLocator gtResource 
-		/ 'feenkcom/gt4changes/data'
-		/ self name.
+	^ GtEpiceaExampleOmbuFiles new dataDir / self name
 ]
 
 { #category : #examples }

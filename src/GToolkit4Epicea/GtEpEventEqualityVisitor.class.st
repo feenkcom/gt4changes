@@ -143,6 +143,13 @@ GtEpEventEqualityVisitor >> visitCodeChange: aChange [
 ]
 
 { #category : #visitor }
+GtEpEventEqualityVisitor >> visitLogBrowserOperation: aLogBrowserEvent [ 
+
+self halt.
+	self assert: actualEvent entryReferences equals: aLogBrowserEvent entryReferences.
+]
+
+{ #category : #visitor }
 GtEpEventEqualityVisitor >> visitMethodAddition: aChange [
 
 	self assertMethodDefinition: actualEvent methodAdded equals: aChange methodAdded
@@ -173,6 +180,23 @@ GtEpEventEqualityVisitor >> visitProtocolRemoval: aProtocolRemoved [
 
 	self assert: actualEvent protocol equals: aProtocolRemoved protocol.
 	self assertBehaviorDefinition: actualEvent behaviorAffected equals: aProtocolRemoved behaviorAffected.
+]
+
+{ #category : #visitor }
+GtEpEventEqualityVisitor >> visitRedo: anEpRedo [
+
+	self visitLogBrowserOperation: anEpRedo
+]
+
+{ #category : #visitor }
+GtEpEventEqualityVisitor >> visitRefactoring: aGenericRefactoring [
+	| actualString expectedString |
+	
+	actualString := String streamContents: [ :stream |
+		actualEvent summaryOn: stream ].
+	expectedString := String streamContents: [ :stream |
+		aGenericRefactoring summaryOn: stream ].
+	self assert: actualString equals: expectedString.
 ]
 
 { #category : #visitor }
