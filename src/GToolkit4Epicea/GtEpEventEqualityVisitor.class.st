@@ -145,7 +145,6 @@ GtEpEventEqualityVisitor >> visitCodeChange: aChange [
 { #category : #visitor }
 GtEpEventEqualityVisitor >> visitLogBrowserOperation: aLogBrowserEvent [ 
 
-self halt.
 	self assert: actualEvent entryReferences equals: aLogBrowserEvent entryReferences.
 ]
 

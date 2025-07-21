@@ -474,9 +474,9 @@ GtEpEventSequencerExamples >> classAddModifyRenameRemove2ForExport [
 	<return: #GtEpForExportEventSequencer>
 	| fileReference epLog entries sequencer sequencedEntries |
 	self
-		deny: (self class environment includesKey: #GtGemStoneCodeSyncExampleClassRenamed).
+		deny: (self class environment includesKey: #GtEpEventSequencerExamplesExampleClass).
 	self
-		deny: (self class environment includesKey: #GtGemStoneCodeSyncExampleClassRenamed).
+		deny: (self class environment includesKey: #GtEpEventSequencerExamplesExampleClassRenamed).
 	fileReference := self class testDataRoot / 'Issue3487'
 			/ 'Pharo10-SNAPSHOT-64bit-179ef65.3dsjiizgjzilekro4fb7a5dr4.ombu'.
 	self assert: fileReference exists.
@@ -499,9 +499,9 @@ GtEpEventSequencerExamples >> classAddModifyRenameRemove2InImage [
 	<return: #GtEpInImageEventSequencer>
 	| fileReference epLog entries sequencer sequencedEntries |
 	self
-		deny: (self class environment includesKey: #GtGemStoneCodeSyncExampleClassRenamed).
+		deny: (self class environment includesKey: #GtEpEventSequencerExamplesExampleClass).
 	self
-		deny: (self class environment includesKey: #GtGemStoneCodeSyncExampleClassRenamed).
+		deny: (self class environment includesKey: #GtEpEventSequencerExamplesExampleClassRenamed).
 	fileReference := self class testDataRoot / 'Issue3487'
 			/ 'Pharo10-SNAPSHOT-64bit-179ef65.3dsjiizgjzilekro4fb7a5dr4.ombu'.
 	self assert: fileReference exists.
