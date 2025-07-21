@@ -24,22 +24,26 @@ GtEpiceaMigrateGt4Epicea class >> convertFromOmbuToEntriesMethod [
 ]
 
 { #category : #migration }
-GtEpiceaMigrateGt4Epicea class >> createEventMethod: selector from: aFileReference [
+GtEpiceaMigrateGt4Epicea class >> createEventMethod: selector from: aFileReference in: targetClass [
 	"Create a class method named selector that generates the Epicea events in aFileReference.
 	Used for creating a sequence of entries that can be input to the sequencer examples."
-	| epLog visitor |
+	| epLog visitor generatedEntries |
 
 	epLog := EpLog fromFile: aFileReference.
 	visitor := GtEpiceaFactoryEventCodeVisitor
 		selector: selector
-		entries: epLog entries.
-	self targetClass class 
+		entries: epLog entries
+		sourceFile: aFileReference.
+	targetClass class 
 		compile: visitor sourceCode
 		classified: #'example events'.
+	generatedEntries := (targetClass perform: selector) entries.
+	self assert: generatedEntries size = epLog entries size
+		description: [ 'Failed to generate the same number of entries: {1} and {2}' format: { generatedEntries size. epLog entries size. } ].
 ]
 
 { #category : #migration }
-GtEpiceaMigrateGt4Epicea class >> createEventMethodWithPriors: selector from: aFileReference [
+GtEpiceaMigrateGt4Epicea class >> createEventMethodWithPriors: selector from: aFileReference in: targetClass [
 	"Create a class method named selector that generates the Epicea events in aFileReference.
 	Used for creating a sequence of entries that can be input to the sequencer examples."
 	| epLog visitor |
@@ -48,7 +52,7 @@ GtEpiceaMigrateGt4Epicea class >> createEventMethodWithPriors: selector from: aF
 	visitor := GtEpiceaFactoryEventCodeVisitor
 		selector: selector
 		entries: epLog priorEntriesFromHead reversed.
-	self targetClass class 
+	targetClass class 
 		compile: visitor sourceCode
 		classified: #'example events'.
 ]
@@ -119,11 +123,12 @@ GtEpiceaMigrateGt4Epicea >> generateEntriesForMethod: method [
 	fileReference := self fileReferenceIn: fileReferenceNode.
 	entriesSelector := self entriesSelectorIn: ast.
 	createSelector := entriesSelector = #priorEntriesFromHead
-			ifTrue: [ #createEventMethodWithPriors:from: ]
-			ifFalse: [ #createEventMethod:from: ].
+			ifTrue: [ #createEventMethodWithPriors:from:in: ]
+			ifFalse: [ #createEventMethod:from:in: ].
 	self class perform: createSelector withArguments: {
 		self class entriesSelectorFor: method selector.
-		fileReference. }.
+		fileReference.
+		self class targetClass. }.
 ]
 
 { #category : #private }

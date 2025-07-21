@@ -41,6 +41,13 @@ GtEpiceaEventFactory >> addProtocol: aSymbol in: aBehavior tags: aDictionary [
 ]
 
 { #category : #api }
+GtEpiceaEventFactory >> addSessionSnapshotImageName: aString tags: aDictionary [
+
+	^ entries add: (self omEntryFrom: aDictionary content:
+		(EpSessionSnapshot imageName: aString))
+]
+
+{ #category : #api }
 GtEpiceaEventFactory >> addTrait: aTraitDefinition tags: aDictionary [
 
 	^ entries add: (self omEntryFrom: aDictionary content: 
@@ -106,6 +113,13 @@ GtEpiceaEventFactory >> entries [
 	^ entries
 ]
 
+{ #category : #api }
+GtEpiceaEventFactory >> genericRefactoring: aString tags: aDictionary [
+
+	^ entries add: (self omEntryFrom: aDictionary content: 
+		(EpGenericRefactoring for: aString))
+]
+
 { #category : #initialization }
 GtEpiceaEventFactory >> initialize [
 
@@ -117,6 +131,13 @@ GtEpiceaEventFactory >> initialize [
 GtEpiceaEventFactory >> instanceVariableDefinitionNamed: variableName className: className isMeta: isMeta [
 
 	^ RGInstanceVariableDefinition named: variableName
+]
+
+{ #category : #api }
+GtEpiceaEventFactory >> logRedo: aCollection tags: aDictionary [
+
+	^ entries add: (self omEntryFrom: aDictionary content: 
+		(EpRedo forAll: aCollection))
 ]
 
 { #category : #'api - definitions' }
