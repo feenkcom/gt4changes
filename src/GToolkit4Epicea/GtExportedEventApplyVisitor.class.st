@@ -21,3 +21,17 @@ GtExportedEventApplyVisitor >> visitExpressionEvaluation: anExpressionChange [
 
 	self class compiler evaluate: anExpressionChange expression
 ]
+
+{ #category : #'as yet unclassified' }
+GtExportedEventApplyVisitor >> visitMethodUpdateNoSource: aMethodModified [
+
+	self
+		behaviorNamed: aMethodModified behaviorAffectedName
+		ifPresent: [ :behavior |
+			behavior
+				compile: aMethodModified newSourceCode
+				classified: aMethodModified newProtocol
+				withStamp: nil
+				notifying: nil
+				logSource: false ]
+]

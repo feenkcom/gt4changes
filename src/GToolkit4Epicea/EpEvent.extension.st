@@ -84,6 +84,12 @@ EpEvent >> isEpMethodRemoval [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+EpEvent >> isEpMethodUpdateNoSource [
+
+	^ false
+]
+
+{ #category : #'*GToolkit4Epicea' }
 EpEvent >> isEpProtocolAddition [
 
 	^ false
