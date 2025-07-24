@@ -29,8 +29,8 @@ GtExportedEventApplyVisitor >> visitMethodUpdateNoSource: aMethodModified [
 		behaviorNamed: aMethodModified behaviorAffectedName
 		ifPresent: [ :behavior |
 			behavior
-				compile: aMethodModified newSourceCode
-				classified: aMethodModified newProtocol
+				compile: aMethodModified sourceCode
+				classified: aMethodModified protocol
 				withStamp: nil
 				notifying: nil
 				logSource: false ]
