@@ -43,8 +43,10 @@ EpMethodModification >> initializeWithOldMethod: anOldMethod newMethod: aNewMeth
 	self initialize.
 	oldMethod := anOldMethod asEpiceaRingDefinition.
 	newMethod := aNewMethod asEpiceaRingDefinition.
-	
+
 	self updateClassPackageName.
+	oldMethod epiceaCleanUp.
+	newMethod epiceaCleanUp.
 ]
 
 { #category : #'*GToolkit4Epicea' }
