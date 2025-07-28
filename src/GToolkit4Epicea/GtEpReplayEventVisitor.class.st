@@ -83,6 +83,12 @@ GtEpReplayEventVisitor >> visitBehaviorNameChange: aChange [
 ]
 
 { #category : #visitor }
+GtEpReplayEventVisitor >> visitBehaviorRepackagedChange: aBehaviorRepackagedChange [
+
+	image addBehaviorRepackagedChange: currentEntry.
+]
+
+{ #category : #visitor }
 GtEpReplayEventVisitor >> visitCategoryChange: aChange [
 
 	image addCategoryChange: currentEntry.

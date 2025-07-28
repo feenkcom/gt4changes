@@ -63,6 +63,12 @@ GtEpReplayBehaviorModel >> addBehaviorRename: anOmEntry [
 ]
 
 { #category : #adding }
+GtEpReplayBehaviorModel >> addBehaviorRepackagedChange: anOmEntry [
+
+	entries add: anOmEntry.
+]
+
+{ #category : #adding }
 GtEpReplayBehaviorModel >> addCategoryChange: anOmEntry [
 
 	entries add: anOmEntry.

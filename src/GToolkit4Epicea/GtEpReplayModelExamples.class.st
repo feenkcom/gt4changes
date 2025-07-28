@@ -12,16 +12,18 @@ GtEpReplayModelExamples class >> removeTestClasses [
 	EpMonitor disableDuring:
 		[ #(#GtEpReplayModelExamplesCheck) do: [ :each |
 			self class environment removeClassNamed: each ].
-		self class environment organization
-			removeCategory: #GtEpReplayModelExamplesCheck ].
+		self forPharo12: 
+			[ self class environment organization
+				removePackage: #GtEpReplayModelExamplesCheck ] 
+		forPharo11AndPharo10:
+			[ self class environment organization
+				removeCategory: #GtEpReplayModelExamplesCheck ] ].
 ]
 
 { #category : #accessing }
 GtEpReplayModelExamples class >> testDataRoot [
 
-	^ FileLocator gtResource 
-		/ 'feenkcom/gt4changes/data'
-		/ self name.
+	^ GtEpiceaExampleOmbuFiles new dataDir / self name.
 ]
 
 { #category : #private }

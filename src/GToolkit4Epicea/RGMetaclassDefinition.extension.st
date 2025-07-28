@@ -12,3 +12,9 @@ RGMetaclassDefinition >> gtDefinitionSource [
 			separatedBy: [ stream space ].
 		stream nextPut: $'; cr ].
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+RGMetaclassDefinition >> packageName [
+
+	^ baseClass packageName
+]

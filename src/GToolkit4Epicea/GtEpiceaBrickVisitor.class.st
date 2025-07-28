@@ -131,7 +131,7 @@ GtEpiceaBrickVisitor >> visitClassChange: aChange [
 { #category : #visitor }
 GtEpiceaBrickVisitor >> visitEvent: anEvent [
 
-	^ self displayString: ''
+	^ self displayString: anEvent printString
 ]
 
 { #category : #visitor }
