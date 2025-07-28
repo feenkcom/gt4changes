@@ -8,22 +8,20 @@ Class {
 }
 
 { #category : #actions }
-GtEpiceaClassesHistoryBuilder >> addMethodsHistory: aMethodHistory toGrouping: byClassNameGroups [ 
-	| targetClassName classHistory | 
+GtEpiceaClassesHistoryBuilder >> addMethodsHistory: aMethodHistory toGrouping: byClassNameGroups [
+	| targetClassName classHistory |
 	targetClassName := aMethodHistory targetClassName.
-	
-	aMethodHistory targetMethod isMetaSide ifTrue: [ 
-		(targetClassName endsWith: ' class') ifTrue: [
-			targetClassName := targetClassName withoutSuffix: ' class' ].
-		(targetClassName endsWith: ' classTrait') ifTrue: [
-			targetClassName := targetClassName withoutSuffix: ' classTrait' ] ].
-		
-	classHistory := byClassNameGroups 
-		at: targetClassName
-		ifAbsentPut: [
-			self classHistoryType   new
-				targetClassName: targetClassName ].
-	
+
+	(self forPharo12: [ aMethodHistory targetMethod isMeta ] forPharo11AndPharo10: [ aMethodHistory targetMethod isMetaSide ])
+		ifTrue: [ (targetClassName endsWith: ' class')
+				ifTrue: [ targetClassName := targetClassName withoutSuffix: ' class' ].
+			(targetClassName endsWith: ' classTrait')
+				ifTrue: [ targetClassName := targetClassName withoutSuffix: ' classTrait' ] ].
+
+	classHistory := byClassNameGroups
+			at: targetClassName
+			ifAbsentPut: [ self classHistoryType new targetClassName: targetClassName ].
+
 	classHistory addMethodHistory: aMethodHistory
 ]
 

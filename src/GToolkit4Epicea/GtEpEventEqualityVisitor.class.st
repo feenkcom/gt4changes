@@ -34,9 +34,13 @@ GtEpEventEqualityVisitor >> assertBehaviorDefinition: actual equals: expected [
 
 { #category : #private }
 GtEpEventEqualityVisitor >> assertClassDefinition: actual equals: expected [
+	| ivNames |
 
 	self assert: actual class equals: expected class.
-	expected class instVarNames do: [ :instVarName |
+	self assert: actual packageName equals: expected packageName.
+	ivNames := expected class instVarNames asOrderedCollection.
+	ivNames remove: #package ifAbsent: [].
+	ivNames do: [ :instVarName |
 		self assert: (actual instVarNamed: instVarName)
 			equals: (expected instVarNamed: instVarName) ].
 ]
@@ -52,9 +56,12 @@ GtEpEventEqualityVisitor >> assertMethodDefinition: actual equals: expected [
 
 { #category : #private }
 GtEpEventEqualityVisitor >> assertTraitDefinition: actual equals: expected [
+	| ivNames |
 
 	self assert: actual class equals: expected class.
-	expected class instVarNames do: [ :instVarName |
+	ivNames := expected class instVarNames asOrderedCollection.
+	ivNames remove: #package ifAbsent: [].
+	ivNames do: [ :instVarName |
 		self assert: (actual instVarNamed: instVarName)
 			equals: (expected instVarNamed: instVarName) ].
 ]
@@ -84,6 +91,16 @@ GtEpEventEqualityVisitor >> visitBehaviorNameChange: aChange [
 	self assertClassDefinition: actualEvent behaviorAffected equals: aChange behaviorAffected.
 	self assert: actualEvent oldName equals: aChange oldName.
 	self assert: actualEvent newName equals: aChange newName.
+]
+
+{ #category : #visitor }
+GtEpEventEqualityVisitor >> visitBehaviorRepackagedChange: aBehaviorRepackagedChange [
+
+	self assertBehaviorDefinition: actualEvent behaviorAffected equals: aBehaviorRepackagedChange behaviorAffected.
+	self assert: actualEvent oldPackageName equals: aBehaviorRepackagedChange oldPackageName.
+	self assert: actualEvent oldTagName equals: aBehaviorRepackagedChange oldTagName.
+	self assert: actualEvent newPackageName equals: aBehaviorRepackagedChange newPackageName.
+	self assert: actualEvent newTagName equals: aBehaviorRepackagedChange newTagName.
 ]
 
 { #category : #visitor }
@@ -165,6 +182,32 @@ GtEpEventEqualityVisitor >> visitMethodModification: aChange [
 GtEpEventEqualityVisitor >> visitMethodRemoval: aChange [
 
 	self assertMethodDefinition: actualEvent methodRemoved equals: aChange methodRemoved
+]
+
+{ #category : #visitor }
+GtEpEventEqualityVisitor >> visitPackageAddition: aPackageAddition [
+
+	self assert: actualEvent packageName equals: aPackageAddition packageName
+]
+
+{ #category : #visitor }
+GtEpEventEqualityVisitor >> visitPackageRemoval: aPackageRemoval [
+
+	self assert: actualEvent packageName equals: aPackageRemoval packageName
+]
+
+{ #category : #visitor }
+GtEpEventEqualityVisitor >> visitPackageTagAddition: aPackageTagAddition [
+
+	self assert: actualEvent packageName equals: aPackageTagAddition packageName.
+	self assert: actualEvent tagName equals: aPackageTagAddition tagName.
+]
+
+{ #category : #visitor }
+GtEpEventEqualityVisitor >> visitPackageTagRemoval: aPackageTagRemoval [
+
+	self assert: actualEvent packageName equals: aPackageTagRemoval packageName.
+	self assert: actualEvent tagName equals: aPackageTagRemoval tagName.
 ]
 
 { #category : #visitor }

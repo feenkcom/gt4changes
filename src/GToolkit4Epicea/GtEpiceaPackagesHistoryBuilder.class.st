@@ -27,7 +27,8 @@ GtEpiceaPackagesHistoryBuilder >> addCodeEntityChange: anOmbuEntry toPackageName
 
 { #category : #'accessing - grouping' }
 GtEpiceaPackagesHistoryBuilder >> addExtraEventForCategoryChangeFor: anOmbuEntry toGroups: groupedByPackageName [ 
-	anOmbuEntry content class = EpBehaviorCategoryChange ifFalse: [ ^ self ].
+
+	(#(EpBehaviorCategoryChange EpBehaviorRepackagedChange) includes: anOmbuEntry content class name) ifFalse: [ ^ self ].
 	anOmbuEntry content oldPackageName ifNil: [ ^ self ].
 	
 	self 
@@ -52,6 +53,18 @@ GtEpiceaPackagesHistoryBuilder >> addExtraEventForExtensionMethodFor: anOmbuEntr
 		addCodeEntityChange: anOmbuEntry
 		toPackageNamed: previousPackageName
 		inGroups: groupedByPackageName
+]
+
+{ #category : #'accessing - grouping' }
+GtEpiceaPackagesHistoryBuilder >> addPackageChangeFor: anOmbuEntry toGroups: groupedByPackageName [ 
+
+	self forPharo12: [] forPharo11AndPharo10: [ ^ self ].
+
+	anOmbuEntry content isEpPackageChange ifTrue: 
+		[ self 
+			addCodeEntityChange: anOmbuEntry 
+			toPackageNamed: anOmbuEntry content packageName
+			inGroups: groupedByPackageName ]
 ]
 
 { #category : #actions }
@@ -96,6 +109,9 @@ GtEpiceaPackagesHistoryBuilder >> groupedByPackageName [
 	groupedByPackageName := Dictionary new.
 	
 	self entriesGroup do: [ :anOmbuEntry |
+		self
+			addPackageChangeFor: anOmbuEntry
+			toGroups: groupedByPackageName.
 		self 
 			addChangeFor: anOmbuEntry
 			toGroups: groupedByPackageName.

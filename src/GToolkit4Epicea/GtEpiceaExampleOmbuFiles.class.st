@@ -2134,10 +2134,10 @@ GtEpiceaExampleOmbuFiles >> dataDir [
 ]
 
 { #category : #private }
-GtEpiceaExampleOmbuFiles >> load: pathString fromEntries: aCollection [
+GtEpiceaExampleOmbuFiles >> load: pathString fromEntries: aCollection in: dataFileReference [
 	| fileReference |
 
-	fileReference := DataDir / pathString.
+	fileReference := dataFileReference / pathString.
 	fileReference parent ensureCreateDirectory.
 	fileReference writeStreamDo: [ :wStream |
 		aCollection do: [ :epEvent |
@@ -2146,8 +2146,9 @@ GtEpiceaExampleOmbuFiles >> load: pathString fromEntries: aCollection [
 
 { #category : #private }
 GtEpiceaExampleOmbuFiles >> loadDataDir [
+	| newDataDir |
 
-	DataDir := self newMemoryFileSystem.
+	newDataDir := self newMemoryFileSystem.
 	{
 	'GtEpEventSequencerExamples/Issue4080/RenameExport.ombu' -> self class ombu_RenameExport entries.
 	'GtEpEventSequencerExamples/Issue3399/Pharo10-SNAPSHOT-64bit-179ef65.9a7osa0eaojm2sck4nxhhrnwx.ombu' -> self class ombu_9a7osa0eaojm2sck4nxhhrnwx entries.
@@ -2199,7 +2200,8 @@ GtEpiceaExampleOmbuFiles >> loadDataDir [
 	'GtEpLogEnumeratorExamples/testClass01/Pharo10-SNAPSHOT-64bit-fec28a6.4i0wvlvo02nxps5csied8ix6w.ombu' -> self class ombu_4i0wvlvo02nxps5csied8ix6w entries.
 	'GtEpReplayModelExamples/data01/Pharo10-SNAPSHOT-64bit-2314c3f.2adndgji2gjod2o288oibtkgo.ombu' -> self class ombu_2adndgji2gjod2o288oibtkgo entries.
 	} do: [ :assoc |
-		self load: assoc key fromEntries: assoc value ].
+		self load: assoc key fromEntries: assoc value in: newDataDir ].
+	DataDir := newDataDir.
 	^ DataDir
 
 ]

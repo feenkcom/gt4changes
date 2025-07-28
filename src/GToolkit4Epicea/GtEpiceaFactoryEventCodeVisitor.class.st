@@ -41,10 +41,14 @@ GtEpiceaFactoryEventCodeVisitor class >> selector: aSymbol entries: aCollection 
 GtEpiceaFactoryEventCodeVisitor >> appendTagsKeywordFrom: anOmEntry [
 
 	codeStream
-		<< ' tags: { #author -> ';
-		print: (anOmEntry tagAt: #author);
-		<< '. #time -> ';
+		<< ' tags: { #time -> ';
 		print: anOmEntry gtTime printString.
+	anOmEntry tags
+		at: #author
+		ifPresent: [ :tag |
+			codeStream
+				<< '. #author -> ';
+				print: (anOmEntry tagAt: #author) ].
 	anOmEntry tags
 		at: #self
 		ifPresent: [ :tag |
@@ -106,15 +110,16 @@ GtEpiceaFactoryEventCodeVisitor >> omConstructorFor: anOmReference [
 
 { #category : #private }
 GtEpiceaFactoryEventCodeVisitor >> packageTagOfClass: aRgClass [
-	| categoryName packageName |
 
-	categoryName := aRgClass category.
-	packageName := aRgClass package.
-	categoryName = packageName ifTrue: [ ^ nil ].
-	packageName isString ifFalse:
-		[ packageName := packageName name ].
-	categoryName = packageName ifTrue: [ ^ nil ].
-	^ (categoryName withoutPrefix: packageName) allButFirst asSymbol
+	^ self forPharo12: [ aRgClass packageTag ] forPharo11AndPharo10:
+		[ | categoryName packageName |
+		categoryName := aRgClass category.
+		packageName := aRgClass package.
+		categoryName = packageName ifTrue: [ ^ nil ].
+		packageName isString ifFalse:
+			[ packageName := packageName name ].
+		categoryName = packageName ifTrue: [ ^ nil ].
+		(categoryName withoutPrefix: packageName) allButFirst asSymbol ]
 ]
 
 { #category : #accessing }
@@ -178,15 +183,16 @@ GtEpiceaFactoryEventCodeVisitor >> storeClassDefinitionFor: aRgClass [
 ]
 
 { #category : #private }
-GtEpiceaFactoryEventCodeVisitor >> storeClassVariableDefinition: var [ 
-
+GtEpiceaFactoryEventCodeVisitor >> storeClassVariableDefinition: var [
 	codeStream
 		<< 'factory classVariableDefinitionNamed: ';
 		print: var name;
 		<< ' className: ';
 		print: var className;
 		<< ' isMeta: ';
-		print: var isMetaSide.
+		print: (self
+			forPharo12: [ var isMeta ]
+			forPharo11AndPharo10: [ var isMetaSide ])
 ]
 
 { #category : #private }
@@ -205,15 +211,16 @@ GtEpiceaFactoryEventCodeVisitor >> storeClassVariables: aCollection [
 ]
 
 { #category : #private }
-GtEpiceaFactoryEventCodeVisitor >> storeInstanceVariableDefinition: var [ 
-
+GtEpiceaFactoryEventCodeVisitor >> storeInstanceVariableDefinition: var [
 	codeStream
 		<< 'factory instanceVariableDefinitionNamed: ';
 		print: var name;
 		<< ' className: ';
 		print: var className;
 		<< ' isMeta: ';
-		print: var isMetaSide.
+		print: (self
+			forPharo12: [ var isMeta ]
+			forPharo11AndPharo10: [ var isMetaSide ])
 ]
 
 { #category : #private }
@@ -243,14 +250,15 @@ GtEpiceaFactoryEventCodeVisitor >> storeMetaclassDefinitionFor: aRgMetaclass [
 
 { #category : #private }
 GtEpiceaFactoryEventCodeVisitor >> storeMethodDefinitionFor: aRgMethodDefinition [
-
 	codeStream
 		<< '(factory methodDefinitionSelector: ';
 		print: aRgMethodDefinition selector;
 		<< ' className: ';
 		print: aRgMethodDefinition parentName;
 		<< ' meta: ';
-		print: aRgMethodDefinition isMetaSide;
+		print: (self 
+			forPharo12: [ aRgMethodDefinition isMeta ]
+			forPharo11AndPharo10: [ aRgMethodDefinition isMetaSide ]);
 		<< ' package: ';
 		print: aRgMethodDefinition package;
 		<< ' protocol: ';
@@ -259,11 +267,12 @@ GtEpiceaFactoryEventCodeVisitor >> storeMethodDefinitionFor: aRgMethodDefinition
 		print: aRgMethodDefinition sourceCode;
 		<< ' stamp: ';
 		print: aRgMethodDefinition stamp;
-		<< ')'.
+		<< ')'
 ]
 
 { #category : #private }
 GtEpiceaFactoryEventCodeVisitor >> storeOnlyClassDefinitionFor: aRgClass [
+
 	codeStream
 		<< '(factory classDefinitionName: ';
 		print: aRgClass name;
@@ -272,7 +281,7 @@ GtEpiceaFactoryEventCodeVisitor >> storeOnlyClassDefinitionFor: aRgClass [
 		<< ' superclassName: ';
 		print: aRgClass superclassName;
 		<< ' package: ';
-		print: aRgClass package;
+		print: aRgClass packageName;
 		<< ' packageTag: ';
 		print: (self packageTagOfClass: aRgClass);
 		<< ' classVariables: '.
@@ -325,7 +334,7 @@ GtEpiceaFactoryEventCodeVisitor >> storeTraitDefinitionFor: aRgClass [
 		<< ' superclassName: ';
 		print: aRgClass superclassName;
 		<< ' package: ';
-		print: aRgClass package;
+		print: aRgClass packageName;
 		<< ' packageTag: ';
 		print: (self packageTagOfClass: aRgClass);
 		<< ' classVariables: '.
@@ -394,6 +403,28 @@ GtEpiceaFactoryEventCodeVisitor >> visitBehaviorNameChange: aChange [
 	codeStream
 		<< ' from: ';
 		print: aChange oldName.
+	self appendTagsKeywordFrom: currentEntry.
+	codeStream
+		<< '.';
+		cr.
+]
+
+{ #category : #visitor }
+GtEpiceaFactoryEventCodeVisitor >> visitBehaviorRepackagedChange: aBehaviorRepackagedChange [
+
+	codeStream
+		tab;
+		<< 'factory rePackage: '.
+	self storeBehaviorDefinitionFor: aBehaviorRepackagedChange behaviorAffected.
+	codeStream
+		<< ' oldPackageName: ';
+		print: aBehaviorRepackagedChange oldPackageName;
+		<< ' oldTagName: ';
+		print: aBehaviorRepackagedChange oldTagName;
+		<< ' newPackageName: ';
+		print: aBehaviorRepackagedChange newPackageName;
+		<< ' newTagName: ';
+		print: aBehaviorRepackagedChange newTagName.
 	self appendTagsKeywordFrom: currentEntry.
 	codeStream
 		<< '.';
@@ -564,6 +595,62 @@ GtEpiceaFactoryEventCodeVisitor >> visitMethodRemoval: aChange [
 		tab;
 		<< 'factory removeMethod: '.
 	self storeMethodDefinitionFor: aChange methodRemoved.
+	self appendTagsKeywordFrom: currentEntry.
+	codeStream
+		<< '.';
+		cr.
+]
+
+{ #category : #visitor }
+GtEpiceaFactoryEventCodeVisitor >> visitPackageAddition: aPackageAddition [
+
+	codeStream
+		tab;
+		<< 'factory addPackage: ';
+		print: aPackageAddition packageName.
+	self appendTagsKeywordFrom: currentEntry.
+	codeStream
+		<< '.';
+		cr.
+]
+
+{ #category : #visitor }
+GtEpiceaFactoryEventCodeVisitor >> visitPackageRemoval: aPackageRemoval [
+
+	codeStream
+		tab;
+		<< 'factory removePackage: ';
+		print: aPackageRemoval packageName.
+	self appendTagsKeywordFrom: currentEntry.
+	codeStream
+		<< '.';
+		cr.
+]
+
+{ #category : #visitor }
+GtEpiceaFactoryEventCodeVisitor >> visitPackageTagAddition: aPackageTagAddition [
+
+	codeStream
+		tab;
+		<< 'factory addPackage: ';
+		print: aPackageTagAddition packageName;
+		<< 'tag: ';
+		print: aPackageTagAddition tagName.
+	self appendTagsKeywordFrom: currentEntry.
+	codeStream
+		<< '.';
+		cr.
+]
+
+{ #category : #visitor }
+GtEpiceaFactoryEventCodeVisitor >> visitPackageTagRemoval: aPackageTagRemoval [
+
+	codeStream
+		tab;
+		<< 'factory removePackage: ';
+		print: aPackageTagRemoval packageName;
+		<< 'tag: ';
+		print: aPackageTagRemoval tagName.
 	self appendTagsKeywordFrom: currentEntry.
 	codeStream
 		<< '.';
