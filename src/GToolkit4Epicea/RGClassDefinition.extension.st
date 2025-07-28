@@ -40,3 +40,10 @@ RGClassDefinition >> gtDefinitionSource [
 				<< self category;
 				nextPut: $'; cr ].
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+RGClassDefinition >> packageName [
+
+	^ self forPharo12: [ self package name ]
+		forPharo11AndPharo10: [ self package ]
+]

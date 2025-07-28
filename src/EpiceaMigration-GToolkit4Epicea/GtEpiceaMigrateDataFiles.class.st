@@ -43,8 +43,9 @@ GtEpiceaMigrateDataFiles >> fileSystemMethodSource [
 	^ String streamContents: [ :stream |
 		stream
 			<< 'loadDataDir'; cr;
+			tab; << '| newDataDir |'; cr;
 			cr;
-			tab; << 'DataDir := self newMemoryFileSystem.'; cr;
+			tab; << 'newDataDir := self newMemoryFileSystem.'; cr;
 			tab; << '{'; cr.
 		fileMap do: [ :assoc |
 			stream
@@ -56,7 +57,8 @@ GtEpiceaMigrateDataFiles >> fileSystemMethodSource [
 				cr ].
 		stream
 			tab; << '} do: [ :assoc |'; cr;
-			tab; tab; << 'self load: assoc key fromEntries: assoc value ].'; cr;
+			tab; tab; << 'self load: assoc key fromEntries: assoc value in: newDataDir ].'; cr;
+			tab; << 'DataDir := newDataDir.'; cr;
 			tab; << '^ DataDir'; cr. ].
 ]
 
@@ -110,10 +112,10 @@ GtEpiceaMigrateDataFiles >> recreateTargetClass [
 	^ DataDir ifNil: [ self loadDataDir ]'
 			classified: 'accessing';
 		compile:
-'load: pathString fromEntries: aCollection
+'load: pathString fromEntries: aCollection in: dataFileReference
 	| fileReference |
 
-	fileReference := DataDir / pathString.
+	fileReference := dataFileReference / pathString.
 	fileReference parent ensureCreateDirectory.
 	fileReference writeStreamDo: [ :wStream |
 		aCollection do: [ :epEvent |

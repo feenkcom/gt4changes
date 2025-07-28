@@ -13,10 +13,17 @@ Class {
 { #category : #api }
 GtEpiceaEventFactory >> addCategory: categoryName packageName: packageName tags: aDictionary [
 
-	^ entries add: (self omEntryFrom: aDictionary content:
+	^ self forPharo12: 
+		[ entries add: (self omEntryFrom: aDictionary content:
+			(EpPackageAddition packageName: packageName)).
+		(self tagFromCategory: categoryName package: packageName) ifNotNil: [ :tag |
+			entries add: (self omEntryFrom: aDictionary content:
+			(EpPackageTagAddition tagName: tag packageName: packageName)) ] ] 
+	forPharo11AndPharo10:
+		[ entries add: (self omEntryFrom: aDictionary content:
 		(EpCategoryAddition basicNew
 			initializeNamed: categoryName packageName: packageName;
-			yourself ))
+			yourself )) ]
 ]
 
 { #category : #api }
@@ -31,6 +38,20 @@ GtEpiceaEventFactory >> addMethod: aMethodDefinition tags: aDictionary [
 
 	^ entries add: (self omEntryFrom: aDictionary content:
 		(EpMethodAddition method: aMethodDefinition))
+]
+
+{ #category : #api }
+GtEpiceaEventFactory >> addPackage: aSymbol tag: tagSymbol tags: aDictionary [
+
+	^ entries add: (self omEntryFrom: aDictionary content:
+		(EpPackageTagAddition tagName: tagSymbol packageName: aSymbol))
+]
+
+{ #category : #api }
+GtEpiceaEventFactory >> addPackage: aSymbol tags: aDictionary [
+
+	^ entries add: (self omEntryFrom: aDictionary content:
+		(EpPackageAddition packageName: aSymbol))
 ]
 
 { #category : #api }
@@ -57,9 +78,18 @@ GtEpiceaEventFactory >> addTrait: aTraitDefinition tags: aDictionary [
 { #category : #api }
 GtEpiceaEventFactory >> changeBehaviorFrom: oldCategoryName package: oldPackageName to: newCategoryName in: aBehavior tags: aDictionary [
 
-	^ entries add: (self omEntryFrom: aDictionary content:
+	^ self forPharo12: 
+		[ entries add: (self omEntryFrom: aDictionary content:
+		(EpBehaviorRepackagedChange
+			oldPackage: oldPackageName
+			oldTag: (self tagFromCategory: oldCategoryName package: oldPackageName)
+			newPackage: aBehavior packageName
+			newTag: aBehavior packageTag
+			class: aBehavior))] 
+	forPharo11AndPharo10:
+		[ entries add: (self omEntryFrom: aDictionary content:
 		((EpBehaviorCategoryChange oldCategory: oldCategoryName newCategory: newCategoryName class: aBehavior)
-			oldPackageName: oldPackageName))
+			oldPackageName: oldPackageName)) ]
 ]
 
 { #category : #api }
@@ -88,11 +118,17 @@ GtEpiceaEventFactory >> classDefinitionName: className definitionSource: definit
 	classDefinition
 		definitionSource: definitionSource;
 		superclassName: superclassName;
-		category: (packageTag
-			ifNil: [ packageName ]
-			ifNotNil: [ packageName, '-', packageTag ]);
-		package: packageName;
 		comment: anRgCommentDefinition.
+	self forPharo12: 
+		[ classDefinition
+			package: (self packageDefinitionNamed: packageName);
+			packageTag: packageTag ] 
+	forPharo11AndPharo10: 
+		[ classDefinition 
+			category: (packageTag
+				ifNil: [ packageName ]
+				ifNotNil: [ packageName, '-', packageTag ]);
+			package: packageName ].
 	classVariables do: [ :cv | classDefinition addClassVariable: cv ].
 	instanceVariables do: [ :iv | classDefinition addInstanceVariable: iv ].
 	sharedPools do: [ :sp | classDefinition addSharedPool: sp ].
@@ -216,13 +252,33 @@ GtEpiceaEventFactory >> omEntryFrom: aDictionary content: anEpEvent [
 	^ entry
 ]
 
+{ #category : #'api - definitions' }
+GtEpiceaEventFactory >> packageDefinitionNamed: packageName [
+
+	^ RGPackageDefinition named: packageName
+]
+
+{ #category : #api }
+GtEpiceaEventFactory >> rePackage: aBehaviorDefinition oldPackageName: oldPackageName oldTagName: oldTagName newPackageName: newPackageName newTagName: newTagName tags: aDictionary [
+
+	^ entries add: (self omEntryFrom: aDictionary content:
+		(EpBehaviorRepackagedChange oldPackage: oldPackageName oldTag: oldTagName newPackage: newPackageName newTag: newTagName class: aBehaviorDefinition))
+]
+
 { #category : #api }
 GtEpiceaEventFactory >> registerCategory: categoryName packageName: packageName tags: aDictionary [
 
-	^ entries add: (self omEntryFrom: aDictionary content:
+	^ self forPharo12:
+		[ entries add: (self omEntryFrom: aDictionary content:
+		(EpPackageAddition packageName: packageName)).
+		(categoryName asString withoutPrefix: packageName asString) ifNotEmpty: [ :tag |
+			entries add: (self omEntryFrom: aDictionary content:
+			(EpPackageTagAddition tagName: tag asSymbol packageName: packageName)) ] ]
+	forPharo11AndPharo10: 
+		[ entries add: (self omEntryFrom: aDictionary content:
 		(EpCategoryRegistration basicNew
 			initializeNamed: categoryName packageName: packageName;
-			yourself ))
+			yourself)) ]
 ]
 
 { #category : #api }
@@ -246,6 +302,20 @@ GtEpiceaEventFactory >> removeMethod: aMethodDefinition tags: aDictionary [
 
 	^ entries add: (self omEntryFrom: aDictionary content:
 		(EpMethodRemoval method: aMethodDefinition)).
+]
+
+{ #category : #api }
+GtEpiceaEventFactory >> removePackage: aSymbol tag: tagSymbol tags: aDictionary [
+
+	^ entries add: (self omEntryFrom: aDictionary content:
+		(EpPackageTagRemoval tagName: tagSymbol packageName: aSymbol))
+]
+
+{ #category : #api }
+GtEpiceaEventFactory >> removePackage: aSymbol tags: aDictionary [
+
+	^ entries add: (self omEntryFrom: aDictionary content:
+		(EpPackageRemoval packageName: aSymbol))
 ]
 
 { #category : #api }
@@ -281,23 +351,38 @@ GtEpiceaEventFactory >> renameClass: classDefinition from: aSymbol tags: aDictio
 			class: classDefinition))
 ]
 
+{ #category : #private }
+GtEpiceaEventFactory >> tagFromCategory: categoryName package: packageName [
+
+	categoryName = packageName ifTrue: [ ^ nil ].
+	packageName ifNil: [ ^ categoryName ].
+	self notYetTested.
+	^ (categoryName withoutPrefix: packageName) allButFirst asSymbol
+]
+
 { #category : #'api - definitions' }
 GtEpiceaEventFactory >> traitDefinitionName: className definitionSource: definitionSource superclassName: superclassName package: packageName packageTag: packageTag classVariables: classVariables instanceVariables: instanceVariables sharedPools: sharedPools comment: anRgCommentDefinition [
-	| classDefinition |
+	| traitDefinition |
 
-	classDefinition := RGTraitDefinition named: className.
-	classDefinition
+	traitDefinition := RGTraitDefinition named: className.
+	traitDefinition
 		definitionSource: definitionSource;
-		superclassName: superclassName;
-		category: (packageTag
-			ifNil: [ packageName ]
-			ifNotNil: [ packageName, '-', packageTag ]);
-		package: packageName;
-		comment: anRgCommentDefinition.
-	classVariables do: [ :cv | classDefinition addClassVariable: cv ].
-	instanceVariables do: [ :iv | classDefinition addInstanceVariable: iv ].
-	sharedPools do: [ :sp | classDefinition addSharedPool: sp ].
-	anRgCommentDefinition parent: classDefinition.
+		superclassName: superclassName.
+	self forPharo12: 
+		[ traitDefinition
+			package: (self packageDefinitionNamed: packageName);
+			packageTag: packageTag ] 
+	forPharo11AndPharo10: 
+		[ traitDefinition 
+			category: (packageTag
+				ifNil: [ packageName ]
+				ifNotNil: [ packageName, '-', packageTag ]);
+			package: packageName ].
+	traitDefinition comment: anRgCommentDefinition.
+	classVariables do: [ :cv | traitDefinition addClassVariable: cv ].
+	instanceVariables do: [ :iv | traitDefinition addInstanceVariable: iv ].
+	sharedPools do: [ :sp | traitDefinition addSharedPool: sp ].
+	anRgCommentDefinition parent: traitDefinition.
 
-	^ classDefinition
+	^ traitDefinition.
 ]

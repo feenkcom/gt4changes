@@ -33,7 +33,7 @@ GtEpReplayClassModel >> addCategoryChange: anOmEntry [
 { #category : #testing }
 GtEpReplayClassModel >> definesBehaviorInImage: aGtEpReplayImageModel [
 	"Answer a boolean indicating whether the receiver defines its class / trait.
-	I.e. are there entries which add the behavior."
+	I.e. are there entries which add the behavior or it exists in the system."
 
 	^ entries reversed
 		detect: [ :entry | entry content isEpClassAddition or: [ entry content isEpClassModification ] ]
