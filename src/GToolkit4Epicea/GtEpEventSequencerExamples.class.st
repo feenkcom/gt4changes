@@ -357,7 +357,7 @@ GtEpEventSequencerExamples >> classAddAndRenameMultipleForExport [
 	sequencedClassNames := sequencedEntries collect: [ :each | each content class name ].
 	"Check sequencedClassNames against Pharo11 and Pharo12 variants"
 	self
-		assert: (sequencedClassNames = #(#EpClassModification #EpBehaviorCategoryChange #EpBehaviorNameChange #EpBehaviorNameChange) or:
+		assert: (sequencedClassNames = #(#EpClassAddition #EpBehaviorNameChange #EpClassModification #EpBehaviorCategoryChange #EpBehaviorNameChange #EpBehaviorNameChange) or:
 			[ sequencedClassNames = #(#EpClassAddition #EpBehaviorNameChange #EpClassModification #EpBehaviorRepackagedChange #EpBehaviorNameChange #EpBehaviorNameChange) ])
 		description: [ 'Unexpected class names: ', sequencedClassNames printString ].
 	self deny: (sequencer image behaviors includesKey: #Issue2936v4).
@@ -392,8 +392,10 @@ GtEpEventSequencerExamples >> classAddAndRenameMultipleInImage [
 	sequencedEntries := sequencer sequencedEntries.
 	sequencedClassNames := sequencedEntries collect: [ :each |
 		each content class name ].
-	self assert: sequencedClassNames 
-		equals: #(#EpClassAddition #EpBehaviorNameChange #EpClassModification #EpBehaviorRepackagedChange #EpBehaviorNameChange #EpBehaviorNameChange).
+	self
+		assert: (sequencedClassNames = #(#EpClassAddition #EpBehaviorNameChange #EpClassModification #EpBehaviorCategoryChange #EpBehaviorNameChange #EpBehaviorNameChange) or:
+			[ sequencedClassNames = #(#EpClassAddition #EpBehaviorNameChange #EpClassModification #EpBehaviorRepackagedChange #EpBehaviorNameChange #EpBehaviorNameChange) ])
+		description: [ 'Unexpected class names: ', sequencedClassNames printString ].
 	self deny: (sequencer image behaviors includesKey: #Issue2936v4).
 	self deny: (sequencer image behaviors includesKey: #Issue2936v41).
 	self deny: (sequencer image behaviors includesKey: #Issue2936v42).

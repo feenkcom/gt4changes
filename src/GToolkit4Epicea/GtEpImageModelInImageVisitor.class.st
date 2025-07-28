@@ -257,7 +257,9 @@ GtEpImageModelInImageVisitor >> methodModificationEntryDiffersFromCurrent: anOmE
 
 	| isMetaSide behaviorNames missingOriginal index newSource newProtocol |
 	"anOmEntry content selector = #buildImageSyncDropdown ifTrue: [ self halt ]."
-	isMetaSide := anOmEntry content methodAffected isMeta.
+	isMetaSide := self
+		forPharo12: [ anOmEntry content methodAffected isMeta ]
+		forPharo11AndPharo10: [ anOmEntry content methodAffected isMetaSide ].
 	behaviorNames := OrderedCollection new.
 	behaviorNames
 		add: (isMetaSide

@@ -15,8 +15,10 @@ GtEpiceaEventFactoryExamples >> addRemoveClassProtocol [
 	testProtocol := #factoryExampleTestProtocol.
 	self deny: (self class protocols includes: testProtocol).
 	sourceEpEntries := self epEntriesFrom: 
-		[ self class class organization addProtocol: testProtocol.
-		self class class removeProtocol: testProtocol ].
+		[ self
+			forPharo12: [ self class organization addProtocol: testProtocol ] 
+			forPharo11AndPharo10: [ self class organization addCategory: testProtocol ].
+		self class removeProtocol: testProtocol ].
 	self assert: sourceEpEntries size equals: 2.
 	visitor := GtEpiceaFactoryEventCodeVisitor
 			selector: #classAddModifyRenameRemoveFactoryMethod
@@ -35,7 +37,9 @@ GtEpiceaEventFactoryExamples >> addRemoveInstanceProtocol [
 	testProtocol := #factoryExampleTestProtocol.
 	self deny: (self class protocols includes: testProtocol).
 	sourceEpEntries := self epEntriesFrom: 
-		[ self class organization addProtocol: testProtocol.
+		[ self
+			forPharo12: [ self class organization addProtocol: testProtocol ] 
+			forPharo11AndPharo10: [ self class organization addCategory: testProtocol ].
 		self class removeProtocol: testProtocol ].
 	self assert: sourceEpEntries size equals: 2.
 	visitor := GtEpiceaFactoryEventCodeVisitor

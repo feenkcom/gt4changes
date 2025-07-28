@@ -3,5 +3,7 @@ Extension { #name : #RGTraitDefinition }
 { #category : #'*GToolkit4Epicea' }
 RGTraitDefinition >> packageName [
 
-	^ self package name
+	^ self
+		forPharo12: [ package name ]
+		forPharo11AndPharo10: [ package ]
 ]

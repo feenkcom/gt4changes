@@ -48,11 +48,21 @@ EpMonitor >> behaviorRemoved: aClassRemovedAnnouncement [
 		             ifTrue: [ 'package: ' , '_UnpackagedPackage' printString ]
 		             ifFalse: [ 'package: ' , 'Unclassified' printString ].
 
-	classRemoved definitionSource: (classRemoved definitionSource copyReplaceAll: toReplace with: 'package: ' , aClassRemovedAnnouncement packageTagAffected categoryName printString).
+	self forPharo12: 
+		[ classRemoved definitionSource: (classRemoved definitionSource copyReplaceAll: toReplace with: 'package: ' , aClassRemovedAnnouncement packageTagAffected categoryName printString).
+	
+		classRemoved name: aClassRemovedAnnouncement classRemoved originalName.
+		classRemoved package: aClassRemovedAnnouncement packageAffected name.
+		classRemoved packageTag: aClassRemovedAnnouncement packageTagAffected name. ]
+	forPharo11AndPharo10:
+		[ classRemoved definitionSource:
+			(classRemoved definitionSource
+				copyReplaceAll: toReplace
+				with: 'package: ', aClassRemovedAnnouncement categoryName printString).
 
-	classRemoved name: aClassRemovedAnnouncement classRemoved originalName.
-	classRemoved package: aClassRemovedAnnouncement packageAffected name.
-	classRemoved packageTag: aClassRemovedAnnouncement packageTagAffected name.
+		classRemoved name: aClassRemovedAnnouncement classRemoved originalName.
+		classRemoved category: aClassRemovedAnnouncement categoryName.
+		classRemoved package: aClassRemovedAnnouncement packageAffected name. ].
 
 	aClassRemovedAnnouncement classRemoved methods , aClassRemovedAnnouncement classRemoved classSide metaMethods do: [ :each |
 		self behaviorRemovedImpliesMethodRemoved: each defaultPackageName: classRemoved package ].

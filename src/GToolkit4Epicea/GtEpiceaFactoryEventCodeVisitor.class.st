@@ -190,7 +190,9 @@ GtEpiceaFactoryEventCodeVisitor >> storeClassVariableDefinition: var [
 		<< ' className: ';
 		print: var className;
 		<< ' isMeta: ';
-		print: var isMeta
+		print: (self
+			forPharo12: [ var isMeta ]
+			forPharo11AndPharo10: [ var isMetaSide ])
 ]
 
 { #category : #private }
@@ -216,7 +218,9 @@ GtEpiceaFactoryEventCodeVisitor >> storeInstanceVariableDefinition: var [
 		<< ' className: ';
 		print: var className;
 		<< ' isMeta: ';
-		print: var isMeta
+		print: (self
+			forPharo12: [ var isMeta ]
+			forPharo11AndPharo10: [ var isMetaSide ])
 ]
 
 { #category : #private }
@@ -252,7 +256,9 @@ GtEpiceaFactoryEventCodeVisitor >> storeMethodDefinitionFor: aRgMethodDefinition
 		<< ' className: ';
 		print: aRgMethodDefinition parentName;
 		<< ' meta: ';
-		print: aRgMethodDefinition isMeta;
+		print: (self 
+			forPharo12: [ aRgMethodDefinition isMeta ]
+			forPharo11AndPharo10: [ aRgMethodDefinition isMetaSide ]);
 		<< ' package: ';
 		print: aRgMethodDefinition package;
 		<< ' protocol: ';

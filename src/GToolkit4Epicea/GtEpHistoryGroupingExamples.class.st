@@ -136,6 +136,11 @@ GtEpHistoryGroupingExamples >> secondaryPackageNameForTesting [
 
 { #category : #setup }
 GtEpHistoryGroupingExamples >> tearDown [
+
+	(self mainPackageNameForTesting asPackageIfAbsent: [])
+		ifNotNil: [ :package | package removeFromSystem ].
+	(self secondaryPackageNameForTesting asPackageIfAbsent: [])
+		ifNotNil: [ :package | package removeFromSystem ].
 	theMonitor disable.	
 	theCodeFactory cleanUp.
 	theLogBuilder cleanUp.
