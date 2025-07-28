@@ -63,20 +63,26 @@ GtEpImageModelInImageVisitor >> behaviorHasSubclassesAfter: replayEntry [
 GtEpImageModelInImageVisitor >> behaviorModificationEntryDiffersFromCurrent: anOmEntry [
 	"Renames can mean the superclass doesn't match.
 	The behavior is considered to be the same if anOmEntry = the current definition or anOmEntry superclass name is a previous name of the current definition."
-	| modificationString modificationAst currentAst classModel currentString |
+	| modificationString classModel currentString modificationDefinition currentDefinition |
 
 	modificationString := anOmEntry content behaviorAffected definitionSource.
-	modificationAst := RBParser parseExpression: modificationString.
+	modificationDefinition := GtRBAddClassChange new
+				definitionString: modificationString;
+				fillOutDefinition;
+				yourself.
 
 	currentString := (self environment at: anOmEntry content behaviorAffectedName 
 			ifPresent: [ :behavior | behavior definitionString ]
 			ifAbsent: [ ^ true ]).
-	currentAst := RBParser parseExpression: currentString.
+	currentDefinition := GtRBAddClassChange new
+				definitionString: currentString;
+				fillOutDefinition;
+				yourself.
 
-	modificationAst = currentAst ifTrue: [ ^ false ].
+	(self definition: modificationDefinition equivalentTo: currentDefinition) ifTrue: [ ^ false ].
 
 	classModel := image classModelNamed: anOmEntry content behaviorAffectedName.
-	^ (classModel previousSuperclassNames includes: modificationAst receiver name) not.
+	^ (classModel previousSuperclassNames includes: modificationDefinition superclassName) not.
 ]
 
 { #category : #testing }
@@ -140,6 +146,32 @@ GtEpImageModelInImageVisitor >> currentOrPreviousBehaviorNameExists [
 		detect: [ :name | self environment includesKey: name asSymbol ]
 		ifFound: [ :name | true ]
 		ifNone: [ false ].
+]
+
+{ #category : #testing }
+GtEpImageModelInImageVisitor >> definition: definition1 equivalentTo: definition2 [
+
+	^ definition1 changeClassName = definition2 changeClassName and:
+		[ definition1 superclassName = definition2 superclassName and:
+		[ definition1 classVariableNames asSet = definition2 classVariableNames asSet and:
+		[ definition1 instanceVariableNames asSet = definition2 instanceVariableNames asSet and:
+		[ definition1 category = definition2 category and:
+		[ definition1 package = definition2 package and:
+		[ definition1 sharedPoolNames asSet = definition2 sharedPoolNames asSet and:
+		[ definition1 packageTagName = definition2 packageTagName ] ] ] ] ] ] ]
+]
+
+{ #category : #private }
+GtEpImageModelInImageVisitor >> earliestUnplayedRenameIndexIn: entries [
+	"Answer the earliest index of any unplayed rename events.
+	If none, answer the last index (entries size).
+	The may be suboptimal in that it may include events that are not required."
+
+	^ entries
+		detect: [ :entry | entry content isEpBehaviorNameChange and:
+			[ (self class environment classOrTraitNamed: entry content behaviorAffectedName) isNil ] ]
+		ifFound: [ :entry | entries indexOf: entry ]
+		ifNone: [ entries size ]
 ]
 
 { #category : #accessing }
@@ -222,37 +254,45 @@ GtEpImageModelInImageVisitor >> methodEntryChangesRunningSystem: anOmEntry [
 GtEpImageModelInImageVisitor >> methodModificationEntryDiffersFromCurrent: anOmEntry [
 	"Determine if the supplied method definition differs from what is currently in the system.  Check back through previous class names to see if the method is inherited through a rename.
 	The method's behavior must exist in the system or be defined by the previous entries."
-	| isMetaSide behaviorNames missingOriginal index newSource newProtocol |
 
+	| isMetaSide behaviorNames missingOriginal index newSource newProtocol |
 	"anOmEntry content selector = #buildImageSyncDropdown ifTrue: [ self halt ]."
-	isMetaSide := anOmEntry content methodAffected isMetaSide.
+	isMetaSide := self
+		forPharo12: [ anOmEntry content methodAffected isMeta ]
+		forPharo11AndPharo10: [ anOmEntry content methodAffected isMetaSide ].
 	behaviorNames := OrderedCollection new.
-	behaviorNames add: (isMetaSide
-		ifTrue: [ currentBehaviorModel behaviorAffectedName, ' class' ]
-		ifFalse: [ currentBehaviorModel behaviorAffectedName ]) asSymbol.
+	behaviorNames
+		add: (isMetaSide
+				ifTrue: [ currentBehaviorModel behaviorAffectedName , ' class' ]
+				ifFalse: [ currentBehaviorModel behaviorAffectedName ]) asSymbol.
 	index := currentBehaviorModel previousNames size.
 	missingOriginal := true.
-	[ missingOriginal and: [ index > 0 ] ] whileTrue:
-		[ | previousName |
-		previousName := currentBehaviorModel previousNames at: index.
-		isMetaSide ifTrue: [ previousName := previousName, ' class' ].
-		behaviorNames add: previousName.
-		previousName = anOmEntry content behaviorAffectedName 
-			ifTrue: [ missingOriginal := false ]
-			ifFalse: [ index := index - 1 ] ].
+	[ missingOriginal and: [ index > 0 ] ]
+		whileTrue: [ | previousName |
+			previousName := currentBehaviorModel previousNames at: index.
+			isMetaSide ifTrue: [ previousName := previousName , ' class' ].
+			behaviorNames add: previousName.
+			previousName = anOmEntry content behaviorAffectedName
+				ifTrue: [ missingOriginal := false ]
+				ifFalse: [ index := index - 1 ] ].
 
 	newSource := anOmEntry content methodAffectedSourceCode.
 	newProtocol := anOmEntry content methodAffectedProtocol.
-	behaviorNames do: [ :name |
-		((self environment classOrTraitNamed: name)
-			ifNotNil: [ :behavior | behavior compiledMethodAt: anOmEntry content methodAffectedSelector
-				ifPresent: [ :method | ^ newProtocol ~= method protocol or:
-					[ newSource ~= method sourceCode ] ]
-				ifAbsent: [ ] ]
-			ifNil: [ ]) ].
-
-	"If we get here the entry has an effect since this method is only valid if the behavior exists."
-	^ true.
+	behaviorNames
+		do: [ :name | 
+			(self environment classOrTraitNamed: name)
+				ifNotNil: [ :behavior | 
+					behavior
+						compiledMethodAt: anOmEntry content methodAffectedSelector
+						ifPresent: [ :method | | protocolName |
+							protocolName := method protocol.
+							protocolName isSymbol ifFalse:
+								[ self assert: protocolName class name = #Protocol.
+								protocolName := protocolName name ].
+							^ newProtocol ~= protocolName or: [ newSource ~= method sourceCode ] ]
+						ifAbsent: [  ] ]
+				ifNil: [  ] ].	"If we get here the entry has an effect since this method is only valid if the behavior exists."
+	^ true
 ]
 
 { #category : #testing }
@@ -284,8 +324,11 @@ GtEpImageModelInImageVisitor >> replayBehaviorFrom: aGtEpReplayBehaviorModel ent
 
 	replayEntries := OrderedCollection new.
 
-	"Find the latest behavior definition that is prior to the earliest dependent entry"
-	index := entries size.
+	"Find the latest behavior definition that is 
+	- prior to the earliest dependent entry
+	- includes any renames that aren't already performed."
+	"First check for renames that haven't been performed."
+	index := self earliestUnplayedRenameIndexIn: entries.
 	missingDefinition := true.
 	dependencyTime := earliestBehaviorDependency gtTime.
 	[ missingDefinition and: [ index > 0 ] ] whileTrue:[ 

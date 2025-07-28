@@ -54,6 +54,17 @@ GtEpReplayImageModel >> addBehaviorRename: anOmEntry [
 	behaviors at: event newName put: behavior.
 ]
 
+{ #category : #'as yet unclassified' }
+GtEpReplayImageModel >> addBehaviorRepackagedChange: anOmEntry [
+	| behavior event |
+
+	event := anOmEntry content.
+	behavior := self classOrTraitNamed: event behaviorAffectedName
+		ifAbsentPut: [ :baseName | (self behaviorModelFor: event) name: baseName ].
+
+	behavior addBehaviorRepackagedChange: anOmEntry.
+]
+
 { #category : #adding }
 GtEpReplayImageModel >> addCategoryChange: anOmEntry [
 

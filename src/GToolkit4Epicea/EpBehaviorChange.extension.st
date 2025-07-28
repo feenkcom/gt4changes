@@ -7,5 +7,5 @@ EpBehaviorChange >> affectedMarker [
 
 { #category : #'*GToolkit4Epicea' }
 EpBehaviorChange >> gtAffectedPackageName [ 
-	^ self behaviorAffected package
+	^ self behaviorAffected packageName
 ]

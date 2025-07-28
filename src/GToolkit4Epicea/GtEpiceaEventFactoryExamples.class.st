@@ -15,15 +15,17 @@ GtEpiceaEventFactoryExamples >> addRemoveClassProtocol [
 	testProtocol := #factoryExampleTestProtocol.
 	self deny: (self class protocols includes: testProtocol).
 	sourceEpEntries := self epEntriesFrom: 
-		[ self class class organization addCategory: testProtocol.
-		self class class removeProtocol: testProtocol.].
+		[ self
+			forPharo12: [ self class organization addProtocol: testProtocol ] 
+			forPharo11AndPharo10: [ self class organization addCategory: testProtocol ].
+		self class removeProtocol: testProtocol ].
 	self assert: sourceEpEntries size equals: 2.
 	visitor := GtEpiceaFactoryEventCodeVisitor
-		selector: #classAddModifyRenameRemoveFactoryMethod
-		entries: sourceEpEntries.
+			selector: #classAddModifyRenameRemoveFactoryMethod
+			entries: sourceEpEntries.
 	sourceCode := visitor sourceCode.
 	generatedEpEvents := self compileAndEvaluate: sourceCode.
-	self assertEntries: generatedEpEvents equals: sourceEpEntries.
+	self assertEntries: generatedEpEvents equals: sourceEpEntries
 ]
 
 { #category : #examples }
@@ -35,16 +37,17 @@ GtEpiceaEventFactoryExamples >> addRemoveInstanceProtocol [
 	testProtocol := #factoryExampleTestProtocol.
 	self deny: (self class protocols includes: testProtocol).
 	sourceEpEntries := self epEntriesFrom: 
-		[ self class organization addCategory: testProtocol.
-		self class removeProtocol: testProtocol.
-		 ].
+		[ self
+			forPharo12: [ self class organization addProtocol: testProtocol ] 
+			forPharo11AndPharo10: [ self class organization addCategory: testProtocol ].
+		self class removeProtocol: testProtocol ].
 	self assert: sourceEpEntries size equals: 2.
 	visitor := GtEpiceaFactoryEventCodeVisitor
-		selector: #classAddModifyRenameRemoveFactoryMethod
-		entries: sourceEpEntries.
+			selector: #classAddModifyRenameRemoveFactoryMethod
+			entries: sourceEpEntries.
 	sourceCode := visitor sourceCode.
 	generatedEpEvents := self compileAndEvaluate: sourceCode.
-	self assertEntries: generatedEpEvents equals: sourceEpEntries.
+	self assertEntries: generatedEpEvents equals: sourceEpEntries
 ]
 
 { #category : #'private - helpers' }
@@ -61,11 +64,8 @@ GtEpiceaEventFactoryExamples >> assertEntry: generatedEpEntry equals: sourceEpEn
 	"Check the equality of the supplied OmEntries"
 	| generated source visitor |
 
-	"Only the author and time tags are currently copied"
-	self assert: (generatedEpEntry tagAt: #author)
-		equals: (sourceEpEntry tagAt: #author).
-	self assert: (generatedEpEntry tagAt: #time)
-		equals: (sourceEpEntry tagAt: #time).
+	self assert: generatedEpEntry tags
+		equals: sourceEpEntry tags.
 
 	source := sourceEpEntry content.
 	generated := generatedEpEntry content.
@@ -78,44 +78,44 @@ GtEpiceaEventFactoryExamples >> assertEntry: generatedEpEntry equals: sourceEpEn
 GtEpiceaEventFactoryExamples >> classAddModifyRenameCategoryRemove [
 	"Demonstrate generating the factory code to produce a class definition lifecycle"
 	<gtExample>
-	| sourceEpEntries visitor sourceCode generatedEpEvents |
+	| sourceEpEntries visitor sourceCode generatedEpEvents classRemovedEntries |
 
-	EpMonitor current disableDuring:
-		[ RPackageOrganizer default 
-			unregisterPackageNamed: #'GToolkit4EpiceaRename-Examples';
-			removePackageNameFromCache: #'GToolkit4EpiceaRename-Examples'. ].
-	sourceEpEntries := self epEntriesFrom: 
-		[ self class evaluate:
-'Object subclass: #GtEpiceaEventFactoryExamplesExampleClass
+	EpMonitor current
+		disableDuring: [ 
+			self removePackageNamed: #'GToolkit4EpiceaRename-Examples'.
+			self removePackageNamed: #GToolkit4EpiceaRename ].
+	sourceEpEntries := self
+			epEntriesFrom: [ self class compiler
+					evaluate: 'Object subclass: #GtEpiceaEventFactoryExamplesExampleClass
 	instanceVariableNames: ''a b c''
 	classVariableNames: ''A1 B2''
 	package: ''GToolkit4Epicea-Examples'''.
-		#GtEpiceaEventFactoryExamplesExampleClass asClass comment: 'comment1'.
-		self class evaluate:
-'Object subclass: #GtEpiceaEventFactoryExamplesExampleClass
+				#GtEpiceaEventFactoryExamplesExampleClass asClass comment: 'comment1'.
+				self class compiler
+					evaluate: 'Object subclass: #GtEpiceaEventFactoryExamplesExampleClass
 	instanceVariableNames: ''a b c d''
 	classVariableNames: ''A1 B2''
 	package: ''GToolkit4Epicea-Examples'''.
-		self class evaluate: 'GtEpiceaEventFactoryExamplesExampleClass rename: #GtEpiceaEventFactoryExamplesExampleClass2'.
-		#GtEpiceaEventFactoryExamplesExampleClass2 asClass comment: 'comment2'.
-		#GtEpiceaEventFactoryExamplesExampleClass2 asClass category: #'GToolkit4EpiceaRename-Examples'.
-		#GtEpiceaEventFactoryExamplesExampleClass2 asClass removeFromSystem.
-		self assert: (RPackageOrganizer default packageNamed: #'GToolkit4EpiceaRename-Examples') isEmpty.
-		RPackageOrganizer default 
-			unregisterPackageNamed: #'GToolkit4EpiceaRename-Examples';
-			removePackageNameFromCache: #'GToolkit4EpiceaRename-Examples'.
-		 ].
-	"Depending on the order, the package name may have been cached"
-	self assert: (sourceEpEntries size between: 8 and: 9).
-	"Because the generated events involve a class actually being removed, the class ends up being obsolete.
+				self class compiler
+					evaluate: 'GtEpiceaEventFactoryExamplesExampleClass rename: #GtEpiceaEventFactoryExamplesExampleClass2'.
+				#GtEpiceaEventFactoryExamplesExampleClass2 asClass comment: 'comment2'.
+				#GtEpiceaEventFactoryExamplesExampleClass2 asClass
+					category: #'GToolkit4EpiceaRename-Examples'.
+				#GtEpiceaEventFactoryExamplesExampleClass2 asClass removeFromSystem.
+				self assert: (self packageNamed: #'GToolkit4EpiceaRename-Examples' ifAbsent: [ #() ]) isEmpty.
+				self removePackageNamed: #'GToolkit4EpiceaRename-Examples' ].	"Depending on the order, the package name may have been cached"
+	self assert: (sourceEpEntries size between: 8 and: 12).	"Because the generated events involve a class actually being removed, the class ends up being obsolete.
 	Patch the remove event to use the same class as the add event."
-	sourceEpEntries last content initializeClassRemoved: sourceEpEntries first content classAdded.
+	classRemovedEntries := sourceEpEntries select: [ :entry | entry content isEpClassRemoval ].
+	self assert: classRemovedEntries size equals: 1.
+	classRemovedEntries first content
+		initializeClassRemoved: sourceEpEntries first content classAdded.
 	visitor := GtEpiceaFactoryEventCodeVisitor
-		selector: #classAddModifyRenameRemoveFactoryMethod
-		entries: sourceEpEntries.
+			selector: #classAddModifyRenameRemoveFactoryMethod
+			entries: sourceEpEntries.
 	sourceCode := visitor sourceCode.
 	generatedEpEvents := self compileAndEvaluate: sourceCode.
-	self assertEntries: generatedEpEvents equals: sourceEpEntries.
+	self assertEntries: generatedEpEvents equals: sourceEpEntries
 ]
 
 { #category : #'private - helpers' }
@@ -155,7 +155,8 @@ GtEpiceaEventFactoryExamples >> methodAddModifyRemove [
 			compile: 'test1 ^ 42';
 			compile: 'test1 ^ 43';
 			removeSelector: #test1 ].
-	self assert: sourceEpEntries size equals: 3.
+	"Allow for differences between Pharo11 and Pharo12"
+	self assert: (sourceEpEntries size between: 3 and: 4).
 	visitor := GtEpiceaFactoryEventCodeVisitor
 		selector: #methodModificationFactoryMethod
 		entries: sourceEpEntries.
@@ -164,12 +165,28 @@ GtEpiceaEventFactoryExamples >> methodAddModifyRemove [
 	self assertEntries: generatedEpEvents equals: sourceEpEntries.
 ]
 
+{ #category : #'private - helpers' }
+GtEpiceaEventFactoryExamples >> packageNamed: aSymbol [
+
+	^ self forPharo12: [ PackageOrganizer default packageNamed: aSymbol ]
+		forPharo11AndPharo10: [ RPackageOrganizer default packageNamed: aSymbol ]
+]
+
+{ #category : #examples }
+GtEpiceaEventFactoryExamples >> packageNamed: aSymbol ifAbsent: aBlock [
+
+	^ self 
+		forPharo12: [ PackageOrganizer default packageNamed: aSymbol ifAbsent: aBlock ] 
+		forPharo11AndPharo10: [ RPackageOrganizer default packageNamed: aSymbol ifAbsent: aBlock ].
+]
+
 { #category : #examples }
 GtEpiceaEventFactoryExamples >> packageRegisterAddRenameRemove [
 	"Demonstrate the lifecycle of a package"
 	<gtExample>
 	| initialPackageName renamedPackageName sourceEpEntries visitor sourceCode generatedEpEntries |
 
+	self forPharo12: [ ^ self ] forPharo11AndPharo10: [].
 	initialPackageName := #PackageOne.
 	renamedPackageName := #RenamedOne.
 	sourceEpEntries := {
@@ -190,33 +207,59 @@ GtEpiceaEventFactoryExamples >> packageRegisterAddRenameRemove [
 	self assertEntries: generatedEpEntries equals: sourceEpEntries.
 ]
 
+{ #category : #'private - helpers' }
+GtEpiceaEventFactoryExamples >> removePackageNamed: aSymbol [
+
+	self forPharo12:
+		[ PackageOrganizer default removePackage: aSymbol]
+	forPharo11AndPharo10:
+		[ RPackageOrganizer default 
+			unregisterPackageNamed: aSymbol;
+			removePackageNameFromCache: aSymbol ]
+]
+
 { #category : #examples }
 GtEpiceaEventFactoryExamples >> traitAddModifyRenameRemove [
 	"Demonstrate generating the factory code to produce a trait definition lifecycle"
+
 	<gtExample>
 	| sourceEpEntries visitor sourceCode generatedEpEvents |
-
-	sourceEpEntries := self epEntriesFrom: 
-		[ self class evaluate:
-'Trait named: #GtEpiceaEventFactoryExamplesExampleTrait
+	sourceEpEntries := self
+			epEntriesFrom: [ self class compiler
+					logged: true;
+					source: 'Trait named: #GtEpiceaEventFactoryExamplesExampleTrait
 	instanceVariableNames: ''a b c''
-	package: ''GToolkit4Epicea-Examples'''.
-		(self class environment classOrTraitNamed: #GtEpiceaEventFactoryExamplesExampleTrait) comment: 'comment1'.
-		self class evaluate:
-'Trait named: #GtEpiceaEventFactoryExamplesExampleTrait
+	package: ''GToolkit4Epicea-Examples''';
+					evaluate.
+				(self class environment
+					classOrTraitNamed: #GtEpiceaEventFactoryExamplesExampleTrait)
+					comment: 'comment1'.
+				self class compiler
+					logged: true;
+					source: 'Trait named: #GtEpiceaEventFactoryExamplesExampleTrait
 	instanceVariableNames: ''a b c d''
-	package: ''GToolkit4Epicea-Examples'''.
-		self class evaluate: 'GtEpiceaEventFactoryExamplesExampleTrait rename: #GtEpiceaEventFactoryExamplesExampleTrait2'.
-		(self class environment classOrTraitNamed: #GtEpiceaEventFactoryExamplesExampleTrait2) comment: 'comment2'.
-		(self class environment classOrTraitNamed: #GtEpiceaEventFactoryExamplesExampleTrait2) removeFromSystem ].
-	self assert: sourceEpEntries size equals: 6.
+	package: ''GToolkit4Epicea-Examples''';
+					evaluate.
+				self class compiler
+					logged: true;
+					source: 'GtEpiceaEventFactoryExamplesExampleTrait rename: #GtEpiceaEventFactoryExamplesExampleTrait2';
+					evaluate.
+				(self class environment
+					classOrTraitNamed: #GtEpiceaEventFactoryExamplesExampleTrait2)
+					comment: 'comment2'.
+				(self class environment
+					classOrTraitNamed: #GtEpiceaEventFactoryExamplesExampleTrait2)
+					removeFromSystem ].
+	"Allow for differences in events between Pharo11 and Pharo12"
+	self assert: (sourceEpEntries size between: 6 and: 8).
 	"Because the generated events involve a trait actually being removed, the class ends up being obsolete.
 	Patch the remove event to use the same class as the add event."
-	sourceEpEntries last content initializeWithTrait: sourceEpEntries first content traitAdded.
+	sourceEpEntries last content
+		initializeWithTrait: sourceEpEntries first content traitAdded.
 	visitor := GtEpiceaFactoryEventCodeVisitor
-		selector: #traitAddModifyRenameRemoveFactoryMethod
-		entries: sourceEpEntries.
+			selector: #traitAddModifyRenameRemoveFactoryMethod
+			entries: sourceEpEntries.
 	sourceCode := visitor sourceCode.
 	generatedEpEvents := self compileAndEvaluate: sourceCode.
-	self assertEntries: generatedEpEvents equals: sourceEpEntries.
+	self assertEntries: generatedEpEvents equals: sourceEpEntries
 ]
