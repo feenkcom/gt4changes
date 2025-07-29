@@ -82,6 +82,19 @@ GtEpHistoryGroupingExamples >> createMethodEventsWithNoImpactInNewClass [
 	^ GtEpiceaEntriesGroup withAll: theMonitor log entries
 ]
 
+{ #category : #examples }
+GtEpHistoryGroupingExamples >> descriptionMessage: aString histories: aCollection [
+
+	^ String streamContents: [ :stream |
+		stream
+			<< aString; cr;
+			<< 'Histories:'; cr.
+		aCollection do: [ :history |
+			stream print: history; cr.
+			history entries do: [ :entry |
+				stream tab; print: entry content; cr ] ] ]
+]
+
 { #category : #setup }
 GtEpHistoryGroupingExamples >> ensureSetup [ 
 	theLogBuilder ifNotNil: [ ^ self ].
@@ -154,11 +167,13 @@ GtEpHistoryGroupingExamples >> testClassMoveBetweenPackagesWithByPackageGrouping
 	entries := self createAndMoveClassToDifferentTag.
 	packageHistories := entries packageHistories.
 
-	self assert: packageHistories hasNoEffect not.
+	self assert: packageHistories hasNoEffect not
+		description: [ self descriptionMessage: 'packageHistories hasNoEffect not' histories: packageHistories items ].
 
 	mainPackageHistory := packageHistories
 			historyForPackageNamed: self mainPackageNameForTesting.
-	self assert: mainPackageHistory hasNoEffect.
+	self assert: mainPackageHistory hasNoEffect
+		description: [ self descriptionMessage: 'mainPackageHistory hasNoEffect' histories: { mainPackageHistory } ].
 
 	^ packageHistories
 ]
@@ -174,14 +189,20 @@ GtEpHistoryGroupingExamples >> testCreateAndRemoveClassWithMethodEventsGrouping 
 	classHistories := entries classHistories.
 	packageHistories := entries classHistories.
 
-	self assert: methodHistories hasNoEffect.
-	self assert: methodHistories size equals: 2.
+	self assert: methodHistories hasNoEffect
+		description: [ self descriptionMessage: 'methodHistories hasNoEffect' histories: methodHistories items ].
+	self assert: methodHistories size = 2
+		description: [ self descriptionMessage: 'methodHistories size = 2' histories: methodHistories items ].
 
-	self assert: classHistories hasNoEffect.
-	self assert: classHistories size equals: 1.
+	self assert: classHistories hasNoEffect
+		description: [ self descriptionMessage: 'classHistories hasNoEffect' histories: classHistories items ].
+	self assert: classHistories size = 1
+		description: [ self descriptionMessage: 'classHistories size = 1' histories: classHistories items ].
 
-	self assert: packageHistories hasNoEffect.
-	self assert: packageHistories size equals: 1.
+	self assert: packageHistories hasNoEffect
+		description: [ self descriptionMessage: 'packageHistories hasNoEffect' histories: packageHistories items ].
+	self assert: packageHistories size = 1
+		description: [ self descriptionMessage: 'packageHistories size = 1' histories: packageHistories items ].
 
 	^ entries
 ]
@@ -197,15 +218,22 @@ GtEpHistoryGroupingExamples >> testMethodEventsWithNoImpactInNewClass [
 	classHistories := entries classHistories.
 	packageHistories := entries classHistories.
 
-	self assert: methodHistories hasNoEffect.
-	self assert: methodHistories size equals: 2.
+	self assert: methodHistories hasNoEffect
+		description: [ self descriptionMessage: 'methodHistories hasNoEffect' histories: methodHistories items ].
+	self assert: methodHistories size = 2
+		description: [ self descriptionMessage: 'methodHistories size = 2' histories: methodHistories items ].
 
-	self assert: classHistories hasEffect.
-	self assert: classHistories size equals: 1.
-	self assert: classHistories methodHistories hasNoEffect.
+	self assert: classHistories hasEffect
+		description: [ self descriptionMessage: 'classHistories hasEffect' histories: classHistories items ].
+	self assert: classHistories size = 1
+		description: [ self descriptionMessage: 'classHistories size = 1' histories: classHistories items ].
+	self assert: classHistories methodHistories hasNoEffect
+		description: [ self descriptionMessage: 'classHistories methodHistories hasNoEffect' histories: classHistories methodHistories items ].
 
-	self assert: packageHistories hasEffect.
-	self assert: packageHistories size equals: 1.
+	self assert: packageHistories hasEffect
+		description: [ self descriptionMessage: 'packageHistories hasEffect' histories: packageHistories items ].
+	self assert: packageHistories size = 1
+		description: [ self descriptionMessage: 'packageHistories size = 1' histories: packageHistories items ].
 
 	^ entries
 ]
@@ -218,41 +246,58 @@ GtEpHistoryGroupingExamples >> testMoveExtensionMethodBetweetPackagesByPackageGr
 	entries := self moveExtensionMethodBetweetPackagesEvents.
 	packageHistories := entries packageHistories.
 
-	self assert: packageHistories hasNoEffect not.
-	self assert: packageHistories size equals: 3.
+	self assert: packageHistories hasNoEffect not
+		description: [ self descriptionMessage: 'packageHistories hasNoEffect not' histories: packageHistories items ].
+	self assert: packageHistories size = 3
+		description: [ self descriptionMessage: 'packageHistories size = 3' histories: packageHistories items ].
 
 	mainPackageHistory := packageHistories
 			historyForPackageNamed: self mainPackageNameForTesting.
-	self assert: mainPackageHistory hasNoEffect not.
+	self assert: mainPackageHistory hasNoEffect not
+		description: [ self descriptionMessage: 'mainPackageHistory hasNoEffect not' histories: { mainPackageHistory } ].
 
 	secondPackageHistory := packageHistories
 			historyForPackageNamed: self secondaryPackageNameForTesting.
-	self assert: mainPackageHistory hasNoEffect not.
+	self assert: mainPackageHistory hasNoEffect not
+		description: [ self descriptionMessage: 'secondPackageHistory hasNoEffect not' histories: { secondPackageHistory } ].
 
 	thirdPackageHistory := packageHistories
 			historyForPackageNamed: self thirdPackageNameForTesting.
-	self assert: thirdPackageHistory hasNoEffect not.
+	self assert: thirdPackageHistory hasNoEffect not
+		description: [ self descriptionMessage: 'thirdPackageHistory hasNoEffect not' histories: { thirdPackageHistory } ].
 
 	methodHistoryInMainPackage := mainPackageHistory classHistories first
 			methodHistories first.
-	self assert: methodHistoryInMainPackage hasNoEffect.
-	self assert: methodHistoryInMainPackage changes size equals: 2.
-	self assert: methodHistoryInMainPackage isInitialChangeAddition.
-	self assert: methodHistoryInMainPackage isLatestChangeRemoval.
+	self assert: methodHistoryInMainPackage hasNoEffect
+		description: [ self descriptionMessage: 'methodHistoryInMainPackage hasNoEffect' histories: { methodHistoryInMainPackage } ].
+	self assert: methodHistoryInMainPackage changes size = 2
+		description: [ self descriptionMessage: 'methodHistoryInMainPackage size = 2' histories: { methodHistoryInMainPackage } ].
+	self assert: methodHistoryInMainPackage isInitialChangeAddition
+		description: [ 'methodHistoryInMainPackage isInitialChangeAddition assertion failed' ].
+	self assert: methodHistoryInMainPackage isLatestChangeRemoval
+		description: [ 'methodHistoryInMainPackage isLatestChangeRemoval assertion failed' ].
 
 	methodHistoryInSecondPackage := secondPackageHistory classHistories first
 			methodHistories first.
-	self assert: methodHistoryInSecondPackage hasNoEffect.
-	self assert: methodHistoryInSecondPackage changes size equals: 2.
-	self assert: methodHistoryInSecondPackage isInitialChangeAddition.
-	self assert: methodHistoryInSecondPackage isLatestChangeRemoval.
+	self assert: methodHistoryInSecondPackage hasNoEffect
+		description: [ self descriptionMessage: 'methodHistoryInSecondPackage hasNoEffect' histories: { methodHistoryInSecondPackage } ].
+	self assert: methodHistoryInSecondPackage changes size = 2
+		description: [ self descriptionMessage: 'methodHistoryInSecondPackage size = 2' histories: { methodHistoryInSecondPackage } ].
+	self assert: methodHistoryInSecondPackage isInitialChangeAddition
+		description: [ 'methodHistoryInSecondPackage isInitialChangeAddition assertion failed' ].
+	self assert: methodHistoryInSecondPackage isLatestChangeRemoval
+		description: [ 'methodHistoryInSecondPackage isLatestChangeRemoval assertion failed' ].
 
 	methodHistoryInThirdPackage := thirdPackageHistory classHistories first
 			methodHistories first.
-	self assert: methodHistoryInThirdPackage hasNoEffect not.
-	self assert: methodHistoryInThirdPackage changes size equals: 1.
-	self assert: methodHistoryInThirdPackage isInitialChangeAddition.
-	self assert: methodHistoryInThirdPackage isLatestChangeRemoval not.
+	self assert: methodHistoryInThirdPackage hasNoEffect not
+		description: [ self descriptionMessage: 'methodHistoryInThirdPackage hasNoEffect not' histories: { methodHistoryInThirdPackage } ].
+	self assert: methodHistoryInThirdPackage changes size = 1
+		description: [ self descriptionMessage: 'methodHistoryInThirdPackage size = 1' histories: { methodHistoryInThirdPackage } ].
+	self assert: methodHistoryInThirdPackage isInitialChangeAddition
+		description: [ 'methodHistoryInThirdPackage isInitialChangeAddition assertion failed' ].
+	self assert: methodHistoryInThirdPackage isLatestChangeRemoval not
+		description: [ 'methodHistoryInThirdPackage isLatestChangeRemoval not assertion failed' ].
 
 	^ entries
 ]
@@ -265,30 +310,42 @@ GtEpHistoryGroupingExamples >> testTransformMethodToExtensionMethodWithByPackage
 	entries := self transformMethodToExtensionMethodEvents.
 	packageHistories := entries packageHistories.
 
-	self assert: packageHistories hasNoEffect not.
-	self assert: packageHistories size equals: 2.
+	self assert: packageHistories hasNoEffect not
+		description: [ self descriptionMessage: 'packageHistories hasNoEffect not' histories: packageHistories items ].
+	self assert: packageHistories size = 2
+		description: [ self descriptionMessage: 'packageHistories size = 2' histories: packageHistories items ].
 
 	mainPackageHistory := packageHistories
 			historyForPackageNamed: self mainPackageNameForTesting.
-	self assert: mainPackageHistory hasNoEffect not.
+	self assert: mainPackageHistory hasNoEffect not
+		description: [ self descriptionMessage: 'mainPackageHistory hasNoEffect not' histories: { mainPackageHistory } ].
 
 	secondPackageHistory := packageHistories
 			historyForPackageNamed: self secondaryPackageNameForTesting.
-	self assert: mainPackageHistory hasNoEffect not.
+	self assert: mainPackageHistory hasNoEffect not
+		description: [ self descriptionMessage: 'secondPackageHistory hasNoEffect not' histories: { secondPackageHistory } ].
 
 	methodHistoryInMainPackage := mainPackageHistory classHistories first
 			methodHistories first.
-	self assert: methodHistoryInMainPackage hasNoEffect.
-	self assert: methodHistoryInMainPackage changes size equals: 2.
-	self assert: methodHistoryInMainPackage isInitialChangeAddition.
-	self assert: methodHistoryInMainPackage isLatestChangeRemoval.
+	self assert: methodHistoryInMainPackage hasNoEffect
+		description: [ self descriptionMessage: 'methodHistoryInMainPackage hasNoEffect' histories: { methodHistoryInMainPackage } ].
+	self assert: methodHistoryInMainPackage changes size = 2
+		description: [ self descriptionMessage: 'methodHistoryInMainPackage size = 2' histories: { methodHistoryInMainPackage } ].
+	self assert: methodHistoryInMainPackage isInitialChangeAddition
+		description: [ 'methodHistoryInMainPackage isInitialChangeAddition assertion failed' ].
+	self assert: methodHistoryInMainPackage isLatestChangeRemoval
+		description: [ 'methodHistoryInMainPackage isLatestChangeRemoval assertion failed' ].
 
 	methodHistoryInSecondPackage := secondPackageHistory classHistories first
 			methodHistories first.
-	self assert: methodHistoryInSecondPackage hasNoEffect not.
-	self assert: methodHistoryInSecondPackage changes size equals: 1.
-	self assert: methodHistoryInSecondPackage isInitialChangeAddition.
-	self assert: methodHistoryInSecondPackage isLatestChangeRemoval not.
+	self assert: methodHistoryInSecondPackage hasNoEffect not
+		description: [ self descriptionMessage: 'methodHistoryInSecondPackage hasNoEffect not' histories: { methodHistoryInSecondPackage } ].
+	self assert: methodHistoryInSecondPackage changes size = 1
+		description: [ self descriptionMessage: 'methodHistoryInSecondPackage size = 1' histories: { methodHistoryInSecondPackage } ].
+	self assert: methodHistoryInSecondPackage isInitialChangeAddition
+		description: [ 'methodHistoryInSecondPackage isInitialChangeAddition assertion failed' ].
+	self assert: methodHistoryInSecondPackage isLatestChangeRemoval not
+		description: [ 'methodHistoryInSecondPackage isLatestChangeRemoval assertion failed' ].
 
 	^ entries
 ]
