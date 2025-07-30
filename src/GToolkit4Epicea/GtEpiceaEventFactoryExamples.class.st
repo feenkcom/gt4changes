@@ -137,8 +137,10 @@ GtEpiceaEventFactoryExamples >> epEntriesFrom: aBlock [
 	epMonitor := EpMonitor newWithLog: 
 		(EpLog newWithStore: OmMemoryStore new).
 	epMonitor enable.
-	[ EpMonitor disableDuring: [ aBlock value ] ]
-		ensure: [ epMonitor disable ].
+	[ EpMonitor disableDuring: [ aBlock value ].
+	self assert: epMonitor isEnabled
+		description: 'epMonitor disabled before evaluation completed'. ]
+			ensure: [ epMonitor disable ].
 	^ Array streamContents: [ :stream |
 		epMonitor log store entriesDo: [ :entry |
 			stream nextPut: entry ] ].
