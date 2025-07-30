@@ -25,6 +25,7 @@ GtEpHistoryGroupingExamples >> createAndMoveClassToDifferentTag [
 	<gtExample>
 	<after: #tearDown>
 	<return: #GtEpiceaEntriesGroup>
+	<shouldLogWithEpicea>
 	| newClass |
 	self packageFactory
 		createNewPackageNamed: self mainPackageNameForTesting;
@@ -163,7 +164,9 @@ GtEpHistoryGroupingExamples >> tearDown [
 GtEpHistoryGroupingExamples >> testClassMoveBetweenPackagesWithByPackageGrouping [
 	<gtExample>
 	<return: #GtEpiceaPackageHistoriesGroup>
+	<shouldLogWithEpicea>
 	| entries packageHistories mainPackageHistory |
+
 	entries := self createAndMoveClassToDifferentTag.
 	packageHistories := entries packageHistories.
 
@@ -182,6 +185,7 @@ GtEpHistoryGroupingExamples >> testClassMoveBetweenPackagesWithByPackageGrouping
 GtEpHistoryGroupingExamples >> testCreateAndRemoveClassWithMethodEventsGrouping [
 	<gtExample>
 	<return: #GtEpiceaEntriesGroup>
+	<shouldLogWithEpicea>
 	| entries methodHistories classHistories packageHistories |
 	entries := self createAndRemoveClassWithMethodEvents.
 
@@ -211,6 +215,7 @@ GtEpHistoryGroupingExamples >> testCreateAndRemoveClassWithMethodEventsGrouping 
 GtEpHistoryGroupingExamples >> testMethodEventsWithNoImpactInNewClass [
 	<gtExample>
 	<return: #GtEpiceaEntriesGroup>
+	<shouldLogWithEpicea>
 	| entries methodHistories classHistories packageHistories |
 	entries := self createMethodEventsWithNoImpactInNewClass.
 
@@ -242,6 +247,7 @@ GtEpHistoryGroupingExamples >> testMethodEventsWithNoImpactInNewClass [
 GtEpHistoryGroupingExamples >> testMoveExtensionMethodBetweetPackagesByPackageGrouping [
 	<gtExample>
 	<return: #GtEpiceaEntriesGroup>
+	<shouldLogWithEpicea>
 	| entries packageHistories mainPackageHistory secondPackageHistory methodHistoryInMainPackage methodHistoryInSecondPackage thirdPackageHistory methodHistoryInThirdPackage |
 	entries := self moveExtensionMethodBetweetPackagesEvents.
 	packageHistories := entries packageHistories.
@@ -306,6 +312,7 @@ GtEpHistoryGroupingExamples >> testMoveExtensionMethodBetweetPackagesByPackageGr
 GtEpHistoryGroupingExamples >> testTransformMethodToExtensionMethodWithByPackageGrouping [
 	<gtExample>
 	<return: #GtEpiceaEntriesGroup>
+	<shouldLogWithEpicea>
 	| entries packageHistories mainPackageHistory secondPackageHistory methodHistoryInMainPackage methodHistoryInSecondPackage |
 	entries := self transformMethodToExtensionMethodEvents.
 	packageHistories := entries packageHistories.
