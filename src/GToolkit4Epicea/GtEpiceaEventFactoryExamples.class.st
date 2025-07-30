@@ -10,6 +10,7 @@ Class {
 GtEpiceaEventFactoryExamples >> addRemoveClassProtocol [
 	"Demonstrate generating the factory code to add and remove a class protocol"
 	<gtExample>
+	<shouldLogWithEpicea>
 	| testProtocol sourceEpEntries visitor sourceCode generatedEpEvents |
 
 	testProtocol := #factoryExampleTestProtocol.
@@ -32,6 +33,7 @@ GtEpiceaEventFactoryExamples >> addRemoveClassProtocol [
 GtEpiceaEventFactoryExamples >> addRemoveInstanceProtocol [
 	"Demonstrate generating the factory code to add and remove an instance protocol"
 	<gtExample>
+	<shouldLogWithEpicea>
 	| testProtocol sourceEpEntries visitor sourceCode generatedEpEvents |
 
 	testProtocol := #factoryExampleTestProtocol.
@@ -78,6 +80,7 @@ GtEpiceaEventFactoryExamples >> assertEntry: generatedEpEntry equals: sourceEpEn
 GtEpiceaEventFactoryExamples >> classAddModifyRenameCategoryRemove [
 	"Demonstrate generating the factory code to produce a class definition lifecycle"
 	<gtExample>
+	<shouldLogWithEpicea>
 	| sourceEpEntries visitor sourceCode generatedEpEvents classRemovedEntries |
 
 	EpMonitor current
@@ -150,6 +153,7 @@ GtEpiceaEventFactoryExamples >> epEntriesFrom: aBlock [
 GtEpiceaEventFactoryExamples >> methodAddModifyRemove [
 	"Demonstrate generating the factory code to produce the supplied method modification event"
 	<gtExample>
+	<shouldLogWithEpicea>
 	| sourceEpEntries visitor sourceCode generatedEpEvents |
 
 	sourceEpEntries := self epEntriesFrom: 
@@ -223,8 +227,8 @@ GtEpiceaEventFactoryExamples >> removePackageNamed: aSymbol [
 { #category : #examples }
 GtEpiceaEventFactoryExamples >> traitAddModifyRenameRemove [
 	"Demonstrate generating the factory code to produce a trait definition lifecycle"
-
 	<gtExample>
+	<shouldLogWithEpicea>
 	| sourceEpEntries visitor sourceCode generatedEpEvents |
 	sourceEpEntries := self
 			epEntriesFrom: [ self class compiler
