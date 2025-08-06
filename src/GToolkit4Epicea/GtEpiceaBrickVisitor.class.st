@@ -173,6 +173,14 @@ GtEpiceaBrickVisitor >> visitMethodRemoval: aMethodRemoved [
 ]
 
 { #category : #visitor }
+GtEpiceaBrickVisitor >> visitMethodUpdateNoSource: aMethodCreatedChange [
+
+	^ self 
+		displayBehavior: aMethodCreatedChange behaviorAffectedName
+		method: aMethodCreatedChange methodAdded selector
+]
+
+{ #category : #visitor }
 GtEpiceaBrickVisitor >> visitMonticelloVersionSave: aChange [
 
 	^	(self displayOperation: 'MC save'), 
