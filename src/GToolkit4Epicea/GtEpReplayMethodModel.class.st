@@ -197,8 +197,8 @@ GtEpReplayMethodModel >> printOn: aStream [
 GtEpReplayMethodModel >> protocol [
 
 	^ entries
-		ifEmpty: [ self currentDefinition protocol ]
-		ifNotEmpty: [ self latestEntry content methodAffected protocol ].
+		ifEmpty: [ self currentDefinition protocolName ]
+		ifNotEmpty: [ self latestEntry content methodAffected protocolName ].
 ]
 
 { #category : #accessing }
