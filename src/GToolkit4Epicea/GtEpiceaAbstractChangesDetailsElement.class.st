@@ -141,7 +141,7 @@ GtEpiceaAbstractChangesDetailsElement >> createInspectActionButton [
 				+ (BrGlamorousWithExplicitTooltipAptitude text: 'Inspect the changes that are going to be applied.');
 		label: 'Inspect';
 		action: [ 
-			self anchor phlow spawnObject: (GtEpEventSequencer entries: entries includeCurrent: false).
+			self anchor phlow spawnObject: (GtEpInImageEventSequencer entries: entries inImage: true).
 			self anchor fireEvent: BrDropdownHideWish new ]
 ]
 
