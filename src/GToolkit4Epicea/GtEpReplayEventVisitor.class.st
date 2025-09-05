@@ -142,6 +142,12 @@ GtEpReplayEventVisitor >> visitMethodRemoval: aChange [
 	image addMethodRemoval: currentEntry.
 ]
 
+{ #category : #visitor }
+GtEpReplayEventVisitor >> visitMethodUpdateNoSource: aChange [
+
+	image addMethodAddition: currentEntry
+]
+
 { #category : #visiting }
 GtEpReplayEventVisitor >> visitNode: anOmEntry [
 
