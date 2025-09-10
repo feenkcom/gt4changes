@@ -12,10 +12,10 @@ GtEpReplayModelExamples class >> removeTestClasses [
 	EpMonitor disableDuring:
 		[ #(#GtEpReplayModelExamplesCheck) do: [ :each |
 			self class environment removeClassNamed: each ].
-		self forPharo12: 
+		self forPharo12AndNewer: 
 			[ self class environment organization
 				removePackage: #GtEpReplayModelExamplesCheck ] 
-		forPharo11AndPharo10:
+		forPharo11:
 			[ self class environment organization
 				removeCategory: #GtEpReplayModelExamplesCheck ] ].
 ]

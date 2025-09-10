@@ -23,8 +23,8 @@ GtEpiceaMonitor >> subscribeToJobAnnouncer [
 { #category : #accessing }
 GtEpiceaMonitor >> subscribeToSystemAnnouncer [
 	self 
-		forPharo12: [self subscribeToSystemAnnouncerPharo12] 
-		forPharo11AndPharo10: [self subscribeToSystemAnnouncerPharo11]
+		forPharo12AndNewer: [self subscribeToSystemAnnouncerPharo12] 
+		forPharo11: [self subscribeToSystemAnnouncerPharo11]
 ]
 
 { #category : #accessing }

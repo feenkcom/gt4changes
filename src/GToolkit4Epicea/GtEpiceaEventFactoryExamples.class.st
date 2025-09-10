@@ -17,8 +17,8 @@ GtEpiceaEventFactoryExamples >> addRemoveClassProtocol [
 	self deny: (self class protocols includes: testProtocol).
 	sourceEpEntries := self epEntriesFrom: 
 		[ self
-			forPharo12: [ self class organization addProtocol: testProtocol ] 
-			forPharo11AndPharo10: [ self class organization addCategory: testProtocol ].
+			forPharo12AndNewer: [ self class organization addProtocol: testProtocol ] 
+			forPharo11: [ self class organization addCategory: testProtocol ].
 		self class removeProtocol: testProtocol ].
 	self assert: sourceEpEntries size equals: 2.
 	visitor := GtEpiceaFactoryEventCodeVisitor
@@ -40,8 +40,8 @@ GtEpiceaEventFactoryExamples >> addRemoveInstanceProtocol [
 	self deny: (self class protocols includes: testProtocol).
 	sourceEpEntries := self epEntriesFrom: 
 		[ self
-			forPharo12: [ self class organization addProtocol: testProtocol ] 
-			forPharo11AndPharo10: [ self class organization addCategory: testProtocol ].
+			forPharo12AndNewer: [ self class organization addProtocol: testProtocol ] 
+			forPharo11: [ self class organization addCategory: testProtocol ].
 		self class removeProtocol: testProtocol ].
 	self assert: sourceEpEntries size equals: 2.
 	visitor := GtEpiceaFactoryEventCodeVisitor
@@ -174,16 +174,16 @@ GtEpiceaEventFactoryExamples >> methodAddModifyRemove [
 { #category : #'private - helpers' }
 GtEpiceaEventFactoryExamples >> packageNamed: aSymbol [
 
-	^ self forPharo12: [ PackageOrganizer default packageNamed: aSymbol ]
-		forPharo11AndPharo10: [ RPackageOrganizer default packageNamed: aSymbol ]
+	^ self forPharo12AndNewer: [ PackageOrganizer default packageNamed: aSymbol ]
+		forPharo11: [ RPackageOrganizer default packageNamed: aSymbol ]
 ]
 
 { #category : #examples }
 GtEpiceaEventFactoryExamples >> packageNamed: aSymbol ifAbsent: aBlock [
 
 	^ self 
-		forPharo12: [ PackageOrganizer default packageNamed: aSymbol ifAbsent: aBlock ] 
-		forPharo11AndPharo10: [ RPackageOrganizer default packageNamed: aSymbol ifAbsent: aBlock ].
+		forPharo12AndNewer: [ PackageOrganizer default packageNamed: aSymbol ifAbsent: aBlock ] 
+		forPharo11: [ RPackageOrganizer default packageNamed: aSymbol ifAbsent: aBlock ].
 ]
 
 { #category : #examples }
@@ -192,7 +192,7 @@ GtEpiceaEventFactoryExamples >> packageRegisterAddRenameRemove [
 	<gtExample>
 	| initialPackageName renamedPackageName sourceEpEntries visitor sourceCode generatedEpEntries |
 
-	self forPharo12: [ ^ self ] forPharo11AndPharo10: [].
+	self forPharo12AndNewer: [ ^ self ] forPharo11: [].
 	initialPackageName := #PackageOne.
 	renamedPackageName := #RenamedOne.
 	sourceEpEntries := {
@@ -216,9 +216,9 @@ GtEpiceaEventFactoryExamples >> packageRegisterAddRenameRemove [
 { #category : #'private - helpers' }
 GtEpiceaEventFactoryExamples >> removePackageNamed: aSymbol [
 
-	self forPharo12:
+	self forPharo12AndNewer:
 		[ PackageOrganizer default removePackage: aSymbol]
-	forPharo11AndPharo10:
+	forPharo11:
 		[ RPackageOrganizer default 
 			unregisterPackageNamed: aSymbol;
 			removePackageNameFromCache: aSymbol ]

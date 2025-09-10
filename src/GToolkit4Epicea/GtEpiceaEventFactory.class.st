@@ -13,13 +13,13 @@ Class {
 { #category : #api }
 GtEpiceaEventFactory >> addCategory: categoryName packageName: packageName tags: aDictionary [
 
-	^ self forPharo12: 
+	^ self forPharo12AndNewer: 
 		[ entries add: (self omEntryFrom: aDictionary content:
 			(EpPackageAddition packageName: packageName)).
 		(self tagFromCategory: categoryName package: packageName) ifNotNil: [ :tag |
 			entries add: (self omEntryFrom: aDictionary content:
 			(EpPackageTagAddition tagName: tag packageName: packageName)) ] ] 
-	forPharo11AndPharo10:
+	forPharo11:
 		[ entries add: (self omEntryFrom: aDictionary content:
 		(EpCategoryAddition basicNew
 			initializeNamed: categoryName packageName: packageName;
@@ -78,7 +78,7 @@ GtEpiceaEventFactory >> addTrait: aTraitDefinition tags: aDictionary [
 { #category : #api }
 GtEpiceaEventFactory >> changeBehaviorFrom: oldCategoryName package: oldPackageName to: newCategoryName in: aBehavior tags: aDictionary [
 
-	^ self forPharo12: 
+	^ self forPharo12AndNewer: 
 		[ entries add: (self omEntryFrom: aDictionary content:
 		(EpBehaviorRepackagedChange
 			oldPackage: oldPackageName
@@ -86,7 +86,7 @@ GtEpiceaEventFactory >> changeBehaviorFrom: oldCategoryName package: oldPackageN
 			newPackage: aBehavior packageName
 			newTag: aBehavior packageTag
 			class: aBehavior))] 
-	forPharo11AndPharo10:
+	forPharo11:
 		[ entries add: (self omEntryFrom: aDictionary content:
 		((EpBehaviorCategoryChange oldCategory: oldCategoryName newCategory: newCategoryName class: aBehavior)
 			oldPackageName: oldPackageName)) ]
@@ -119,11 +119,11 @@ GtEpiceaEventFactory >> classDefinitionName: className definitionSource: definit
 		definitionSource: definitionSource;
 		superclassName: superclassName;
 		comment: anRgCommentDefinition.
-	self forPharo12: 
+	self forPharo12AndNewer: 
 		[ classDefinition
 			package: (self packageDefinitionNamed: packageName);
 			packageTag: packageTag ] 
-	forPharo11AndPharo10: 
+	forPharo11: 
 		[ classDefinition 
 			category: (packageTag
 				ifNil: [ packageName ]
@@ -268,13 +268,13 @@ GtEpiceaEventFactory >> rePackage: aBehaviorDefinition oldPackageName: oldPackag
 { #category : #api }
 GtEpiceaEventFactory >> registerCategory: categoryName packageName: packageName tags: aDictionary [
 
-	^ self forPharo12:
+	^ self forPharo12AndNewer:
 		[ entries add: (self omEntryFrom: aDictionary content:
 		(EpPackageAddition packageName: packageName)).
 		(categoryName asString withoutPrefix: packageName asString) ifNotEmpty: [ :tag |
 			entries add: (self omEntryFrom: aDictionary content:
 			(EpPackageTagAddition tagName: tag asSymbol packageName: packageName)) ] ]
-	forPharo11AndPharo10: 
+	forPharo11: 
 		[ entries add: (self omEntryFrom: aDictionary content:
 		(EpCategoryRegistration basicNew
 			initializeNamed: categoryName packageName: packageName;
@@ -368,11 +368,11 @@ GtEpiceaEventFactory >> traitDefinitionName: className definitionSource: definit
 	traitDefinition
 		definitionSource: definitionSource;
 		superclassName: superclassName.
-	self forPharo12: 
+	self forPharo12AndNewer: 
 		[ traitDefinition
 			package: (self packageDefinitionNamed: packageName);
 			packageTag: packageTag ] 
-	forPharo11AndPharo10: 
+	forPharo11: 
 		[ traitDefinition 
 			category: (packageTag
 				ifNil: [ packageName ]

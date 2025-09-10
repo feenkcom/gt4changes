@@ -14,10 +14,10 @@ EpMonitor >> addEvent: anEvent newEntryDo: aBlock triggerReference: triggerRefer
 					put: triggerReference ].
 
 			self 
-				forPharo12: [
+				forPharo12AndNewer: [
 					"Ensure we have a time in Pharo 12"
 					tags at: EpLog timeKey put: self time] 
-				forPharo11AndPharo10: [
+				forPharo11: [
 					tags at: EpLog authorKey put: self author.
 					tags at: EpLog timeKey put: self time ] ].
 
@@ -48,13 +48,13 @@ EpMonitor >> behaviorRemoved: aClassRemovedAnnouncement [
 		             ifTrue: [ 'package: ' , '_UnpackagedPackage' printString ]
 		             ifFalse: [ 'package: ' , 'Unclassified' printString ].
 
-	self forPharo12: 
+	self forPharo12AndNewer: 
 		[ classRemoved definitionSource: (classRemoved definitionSource copyReplaceAll: toReplace with: 'package: ' , aClassRemovedAnnouncement packageTagAffected categoryName printString).
 	
 		classRemoved name: aClassRemovedAnnouncement classRemoved originalName.
 		classRemoved package: aClassRemovedAnnouncement packageAffected name.
 		classRemoved packageTag: aClassRemovedAnnouncement packageTagAffected name. ]
-	forPharo11AndPharo10:
+	forPharo11:
 		[ classRemoved definitionSource:
 			(classRemoved definitionSource
 				copyReplaceAll: toReplace

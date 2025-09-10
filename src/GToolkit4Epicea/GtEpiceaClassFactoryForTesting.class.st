@@ -34,8 +34,8 @@ GtEpiceaClassFactoryForTesting >> newClassInPackageNamed: aPackageName withTagNa
 GtEpiceaClassFactoryForTesting >> newClassInTagNamed: aTagName [
 	
 	^ self 
-		forPharo12: [ self make: [ :aBuilder | aBuilder tag: aTagName ] ]
-		forPharo11AndPharo10: [ self newClassInCategory: aTagName ]
+		forPharo12AndNewer: [ self make: [ :aBuilder | aBuilder tag: aTagName ] ]
+		forPharo11: [ self newClassInCategory: aTagName ]
 ]
 
 { #category : #accessing }
@@ -47,12 +47,12 @@ GtEpiceaClassFactoryForTesting >> packageName [
 { #category : #'actions - editing' }
 GtEpiceaClassFactoryForTesting >> redefineClass: aClass inPackageNamed: aPackageName withTagName: aTagName [
 
-	^ self forPharo12: 
+	^ self forPharo12AndNewer: 
 		[ self update: aClass to: [ :aBuilder |
 		aBuilder
 			package: aPackageName;
 			tag: aTagName ] ]
-	forPharo11AndPharo10:
+	forPharo11:
 		[ self 
 		redefineClass: aClass 
 		category: (aPackageName, '-', aTagName) asSymbol ]

@@ -111,7 +111,7 @@ GtEpiceaFactoryEventCodeVisitor >> omConstructorFor: anOmReference [
 { #category : #private }
 GtEpiceaFactoryEventCodeVisitor >> packageTagOfClass: aRgClass [
 
-	^ self forPharo12: [ aRgClass packageTag ] forPharo11AndPharo10:
+	^ self forPharo12AndNewer: [ aRgClass packageTag ] forPharo11:
 		[ | categoryName packageName |
 		categoryName := aRgClass category.
 		packageName := aRgClass package.
@@ -191,8 +191,8 @@ GtEpiceaFactoryEventCodeVisitor >> storeClassVariableDefinition: var [
 		print: var className;
 		<< ' isMeta: ';
 		print: (self
-			forPharo12: [ var isMeta ]
-			forPharo11AndPharo10: [ var isMetaSide ])
+			forPharo12AndNewer: [ var isMeta ]
+			forPharo11: [ var isMetaSide ])
 ]
 
 { #category : #private }
@@ -219,8 +219,8 @@ GtEpiceaFactoryEventCodeVisitor >> storeInstanceVariableDefinition: var [
 		print: var className;
 		<< ' isMeta: ';
 		print: (self
-			forPharo12: [ var isMeta ]
-			forPharo11AndPharo10: [ var isMetaSide ])
+			forPharo12AndNewer: [ var isMeta ]
+			forPharo11: [ var isMetaSide ])
 ]
 
 { #category : #private }
@@ -257,8 +257,8 @@ GtEpiceaFactoryEventCodeVisitor >> storeMethodDefinitionFor: aRgMethodDefinition
 		print: aRgMethodDefinition parentName;
 		<< ' meta: ';
 		print: (self 
-			forPharo12: [ aRgMethodDefinition isMeta ]
-			forPharo11AndPharo10: [ aRgMethodDefinition isMetaSide ]);
+			forPharo12AndNewer: [ aRgMethodDefinition isMeta ]
+			forPharo11: [ aRgMethodDefinition isMetaSide ]);
 		<< ' package: ';
 		print: aRgMethodDefinition package;
 		<< ' protocol: ';
