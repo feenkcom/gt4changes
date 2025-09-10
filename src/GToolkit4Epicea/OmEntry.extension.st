@@ -155,7 +155,7 @@ OmEntry >> gtTagsFor: aView [
 
 { #category : #'*GToolkit4Epicea' }
 OmEntry >> gtTime [
-	^ self tagAt: #time
+	^ self tagAt: EpLog timeKey
 ]
 
 { #category : #'*GToolkit4Epicea' }
