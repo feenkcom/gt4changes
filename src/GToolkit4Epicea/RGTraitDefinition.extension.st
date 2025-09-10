@@ -4,6 +4,6 @@ Extension { #name : #RGTraitDefinition }
 RGTraitDefinition >> packageName [
 
 	^ self
-		forPharo12: [ package name ]
-		forPharo11AndPharo10: [ package ]
+		forPharo12AndNewer: [ package name ]
+		forPharo11: [ package ]
 ]

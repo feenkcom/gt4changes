@@ -113,8 +113,8 @@ GtEpHistoryGroupingExamples >> ensureSetup [
 GtEpHistoryGroupingExamples >> mainPackageNameForTesting [
 
 	^ self 
-		forPharo12: [ #'CategoryForTestToBeDeleted' ]
-		forPharo11AndPharo10: [ #'CategoryForTestToBeDeleted-Default' ]
+		forPharo12AndNewer: [ #'CategoryForTestToBeDeleted' ]
+		forPharo11: [ #'CategoryForTestToBeDeleted-Default' ]
 ]
 
 { #category : #'events generation' }

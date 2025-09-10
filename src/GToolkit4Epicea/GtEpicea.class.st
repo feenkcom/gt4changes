@@ -51,9 +51,9 @@ GtEpicea class >> current [
 { #category : #accessing }
 GtEpicea class >> iconForEpiceaChange: anEpChange [
 	^ self 
-		forPharo12: [
+		forPharo12AndNewer: [
 			Smalltalk ui icons iconNamed: (anEpChange accept: EpIconNameVisitor new)  ] 
-		forPharo11AndPharo10: [ 
+		forPharo11: [ 
 			 anEpChange accept: EpIconVisitor new ]
 ]
 

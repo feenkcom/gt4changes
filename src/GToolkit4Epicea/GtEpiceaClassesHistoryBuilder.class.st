@@ -12,7 +12,7 @@ GtEpiceaClassesHistoryBuilder >> addMethodsHistory: aMethodHistory toGrouping: b
 	| targetClassName classHistory |
 	targetClassName := aMethodHistory targetClassName.
 
-	(self forPharo12: [ aMethodHistory targetMethod isMeta ] forPharo11AndPharo10: [ aMethodHistory targetMethod isMetaSide ])
+	(self forPharo12AndNewer: [ aMethodHistory targetMethod isMeta ] forPharo11: [ aMethodHistory targetMethod isMetaSide ])
 		ifTrue: [ (targetClassName endsWith: ' class')
 				ifTrue: [ targetClassName := targetClassName withoutSuffix: ' class' ].
 			(targetClassName endsWith: ' classTrait')
