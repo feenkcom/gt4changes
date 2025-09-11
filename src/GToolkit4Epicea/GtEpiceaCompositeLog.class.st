@@ -142,7 +142,10 @@ GtEpiceaCompositeLog >> shouldUpdate [
 
 { #category : #accessing }
 GtEpiceaCompositeLog >> startTime [
-	^ self logs ifEmpty: [ nil ] ifNotEmpty: [ :logCollection | logCollection last startTime ]
+	^ self logs ifEmpty: [ nil ] ifNotEmpty: [ :logCollection | logCollection reversed 
+		detect: [ :each | each startTime notNil ]
+		ifFound: [ :each | each startTime ]
+		ifNone: [nil] ]
 ]
 
 { #category : #accessing }
