@@ -53,6 +53,6 @@ EpLog >> gtViewEntriesListFor: aView [
 EpLog >> startTime [
 
 	^ store entriesStream next wait
-		  ifSome: [ :aValue | self timeAt: aValue ]
+		  ifSome: [ :aValue | self timeAt: aValue ifAbsent: [nil]]
 		  ifNone: [ nil ]
 ]

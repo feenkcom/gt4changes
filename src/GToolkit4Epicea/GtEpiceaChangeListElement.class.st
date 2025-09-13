@@ -93,7 +93,9 @@ GtEpiceaChangeListElement >> initializeList [
 		width: 150;
 		title: 'Timestamp';
 		cellStencil: [:each | BrLabel new aptitude: BrGlamorousLabelAptitude new];
-		dataBinder: [:aLabel :anEpEvent | aLabel text: (model timeAt: anEpEvent) printToSeconds].
+		dataBinder: [:aLabel :anEpEvent | aLabel text: (anEpEvent hasTime
+			ifTrue: [(model timeAt: anEpEvent)printToSeconds]
+			ifFalse: ['-']) ].
 	list addEventHandler: GtPhlowListToSelectHandler new.
 	list when: BrSelectionChanged
 		do: 
