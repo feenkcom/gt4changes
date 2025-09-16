@@ -120,12 +120,13 @@ GtEpiceaAbstractLog >> classFilter [
 		creator: [ :aStream :aClass | 
 			aStream
 				filter: [ :anEntry | 
-					anEntry content isCodeChange and: [ anEntry content isEpCategoryChange not
-						and: [ anEntry content behaviorAffectedName = aClass ] ] ] ];
+					anEntry content isCodeChange
+						and: [ anEntry content isEpCategoryChange not
+								and: [ anEntry content behaviorAffectedName = aClass ] ] ] ];
 		named: 'In Class';
 		order: 15;
 		completion: [ GtStringsCompletionStrategy new
-				completions: [ GtPrefixTree withAll: (Smalltalk allClasses collect: #name) ] ];
+				completions: [ GtPrefixTree withAll: Smalltalk classNames ] ];
 		beNotDefault
 ]
 
