@@ -33,7 +33,8 @@ GtEpEventSequencerExamples class >> removeTestClasses [
 		#GtEpEventSequencerExampleChecks) do: [ :each |
 				self 
 					forPharo12AndNewer: [ self packageOrganizer removePackage: each ]
-					forPharo11: [ self packageOrganizer removeCategory: each ] ] ].
+					forPharo11: [ self environment organization 
+						removeCategory: each ] ] ].
 ]
 
 { #category : #'private - helpers' }

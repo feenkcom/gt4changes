@@ -17,7 +17,7 @@ GtEpReplayModelExamples class >> removeTestClasses [
 				self class packageOrganizer
 					removePackage: #GtEpReplayModelExamplesCheck ] 
 			forPharo11:[ 
-				self class packageOrganizer
+				self class environment organization
 					removeCategory: #GtEpReplayModelExamplesCheck ] ].
 ]
 
