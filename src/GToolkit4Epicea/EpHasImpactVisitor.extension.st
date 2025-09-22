@@ -12,7 +12,11 @@ EpHasImpactVisitor >> visitBehaviorCommentChange: aChange [
 				^ false ].
 			(aClass hasComment not and: [ aChange newComment isEmpty ]) ifTrue: [ ^ false ].
 			^ aClass comment ~= aChange newComment or: [
-			aClass organization commentStamp ~= aChange newStamp ] ].
+			self 
+				forPharo12AndNewer: [
+					aClass commentStamp ~= aChange newStamp] 
+				forPharo11: [
+					aClass organization commentStamp ~= aChange newStamp ] ] ].
 
 	^ true
 ]
@@ -26,9 +30,9 @@ EpHasImpactVisitor >> visitProtocolRemoval: aProtocolRemoved [
 	self 
 		behaviorNamed: aProtocolRemoved behaviorAffectedName
 		ifPresent: [ :behavior |
-			(behavior organization protocolOrganizer 
-				getProtocolNamed: aProtocolRemoved protocol
-				ifNone: [ ^ false ]) methodSelectors do: [ :each |
+			(behavior  
+				protocolNamed: aProtocolRemoved protocol
+				ifAbsent: [ ^ false ]) methodSelectors do: [ :each |
 					(behavior compiledMethodAt: each) isFromTrait ifFalse:
 						[ ^ true ] ] ].
 		
