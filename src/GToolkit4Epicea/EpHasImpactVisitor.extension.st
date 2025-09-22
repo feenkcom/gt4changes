@@ -12,7 +12,11 @@ EpHasImpactVisitor >> visitBehaviorCommentChange: aChange [
 				^ false ].
 			(aClass hasComment not and: [ aChange newComment isEmpty ]) ifTrue: [ ^ false ].
 			^ aClass comment ~= aChange newComment or: [
-			aClass organization commentStamp ~= aChange newStamp ] ].
+			self 
+				forPharo12AndNewer: [
+					aClass commentStamp ~= aChange newStamp] 
+				forPharo11: [
+					aClass organization commentStamp ~= aChange newStamp ] ] ].
 
 	^ true
 ]
