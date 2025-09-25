@@ -110,7 +110,7 @@ GtEpiceaCurrentStateVisitor >> visitMethodChange: aChange [
 				compiledMethodAt: aChange methodAffectedSelector
 				ifPresent: [ :method |
 					self 
-						printProtocol: method protocol
+						printProtocol: method protocolName
 						behaviorName: behavior name
 						sourceCode: method sourceCode ]
 				ifAbsent: [ '' ] ].

@@ -256,7 +256,7 @@ GtEpHistoryGroupingExamples >> testMoveExtensionMethodBetweetPackagesByPackageGr
 		description: [ self descriptionMessage: 'packageHistories hasNoEffect not' histories: packageHistories items ].
 	"packageHistories would normally contain 3 entries.
 	Due to https://github.com/feenkcom/gtoolkit/issues/4734 it currently contains an unpackage entry as well in Pharo12."
-	expectedSize := self forPharo12AndNewer: [4] forPharo11: [3].
+	expectedSize := self forPharo12AndNewer: [3] forPharo11: [3].
 	self assert: packageHistories size = expectedSize
 		description: [ self descriptionMessage: 'packageHistories size = ', expectedSize asString histories: packageHistories items ].
 
@@ -324,7 +324,7 @@ GtEpHistoryGroupingExamples >> testTransformMethodToExtensionMethodWithByPackage
 		description: [ self descriptionMessage: 'packageHistories hasNoEffect not' histories: packageHistories items ].
 	"packageHistories would normally contain 3 entries.
 	Due to https://github.com/feenkcom/gtoolkit/issues/4734 it currently contains an unpackage entry as well in Pharo12."
-	expectedSize := self forPharo12AndNewer: [3] forPharo11: [2].
+	expectedSize := self forPharo12AndNewer: [2] forPharo11: [2].
 	self assert: packageHistories size = expectedSize
 		description: [ self descriptionMessage: 'packageHistories size = ', expectedSize asString histories: packageHistories items ].
 
