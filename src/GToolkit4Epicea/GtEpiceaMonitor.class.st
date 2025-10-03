@@ -45,7 +45,7 @@ GtEpiceaMonitor >> subscribeToSystemAnnouncerPharo11 [
 		ClassCommented.
 		MethodRecategorized}
 		do: [ :pair | 
-			self systemAnnouncer weak
+			systemAnnouncer weak
 				when: pair
 				send: #sendUpdate:
 				to: self ]
