@@ -28,7 +28,9 @@ GtStonObjectModelReader class >> enabled [
 	"Answer a boolean indicating whether the receiver should be enabled or not.
 	Currently this only affects the reader used by {{gtClass:OmSTONEntryReader}}"
 
-	^ Enabled ifNil: [ false ]
+	^ self 
+		forPharo12AndNewer: [ Enabled ifNil: [ false ] ] 
+		forPharo11: [ false ].
 ]
 
 { #category : #accessing }
