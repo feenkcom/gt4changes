@@ -252,6 +252,20 @@ GtEpiceaEventFactory >> omEntryFrom: aDictionary content: anEpEvent [
 	^ entry
 ]
 
+{ #category : #utility }
+GtEpiceaEventFactory >> packageAndTagFromCategory: categoryName [
+	"Answer the package and tag from the supplied categoryName.
+	Separate the tag based on existing package names."
+	| package |
+
+	package := self class packageOrganizer packageMatchingExtensionName: categoryName.
+	package ifNil: [ ^ { categoryName. nil. } ].
+	^ {
+		package name.
+		self tagFromCategory: categoryName package: package name.
+	}
+]
+
 { #category : #'api - definitions' }
 GtEpiceaEventFactory >> packageDefinitionNamed: packageName [
 
@@ -353,6 +367,7 @@ GtEpiceaEventFactory >> renameClass: classDefinition from: aSymbol tags: aDictio
 
 { #category : #private }
 GtEpiceaEventFactory >> tagFromCategory: categoryName package: packageName [
+	"Answer the tag given a category and package names"
 
 	categoryName = packageName ifTrue: [ ^ nil ].
 	packageName ifNil: [ ^ categoryName ].
