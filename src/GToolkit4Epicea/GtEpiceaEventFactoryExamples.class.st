@@ -99,7 +99,7 @@ GtEpiceaEventFactoryExamples >> classAddModifyRenameCategoryRemove [
 	"Demonstrate generating the factory code to produce a class definition lifecycle"
 	<gtExample>
 	<shouldLogWithEpicea>
-	| sourceEpEntries visitor sourceCode generatedEpEvents classRemovedEntries |
+	| sourceEpEntries visitor sourceCode generatedEpEvents classRemovedEntries classAddedEvent |
 
 	EpMonitor current
 		disableDuring: [ 
@@ -128,13 +128,15 @@ GtEpiceaEventFactoryExamples >> classAddModifyRenameCategoryRemove [
 	"Depending on the order, the package name may have been cached"
 	"sourceEpEntries would normally not contain more than 12 entries, but
 	due to https://github.com/feenkcom/gtoolkit/issues/4734 it currently contains additional EpClassAddition events as well."
-	self assert: (sourceEpEntries size between: 8 and: 14).
+	self assert: (sourceEpEntries size between: 8 and: 15).
 	"Because the generated events involve a class actually being removed, the class ends up being obsolete.
 	Patch the remove event to use the same class as the add event."
 	classRemovedEntries := sourceEpEntries select: [ :entry | entry content isEpClassRemoval ].
 	self assert: classRemovedEntries size equals: 1.
+	classAddedEvent := sourceEpEntries detect: [ :each |
+		each content class = EpClassAddition ].
 	classRemovedEntries first content
-		initializeClassRemoved: sourceEpEntries first content classAdded.
+		initializeClassRemoved: classAddedEvent content classAdded.
 	visitor := GtEpiceaFactoryEventCodeVisitor
 			selector: #classAddModifyRenameRemoveFactoryMethod
 			entries: sourceEpEntries.
