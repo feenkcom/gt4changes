@@ -235,7 +235,7 @@ GtEpiceaEventFactoryExamples >> traitAddModifyRenameRemove [
 	"Demonstrate generating the factory code to produce a trait definition lifecycle"
 	<gtExample>
 	<shouldLogWithEpicea>
-	| sourceEpEntries visitor sourceCode generatedEpEvents |
+	| sourceEpEntries visitor sourceCode generatedEpEvents traitAddedEvent |
 	sourceEpEntries := self class
 			epEntriesFrom: [ self class compiler
 					logged: true;
@@ -268,8 +268,10 @@ GtEpiceaEventFactoryExamples >> traitAddModifyRenameRemove [
 	self assert: (sourceEpEntries size between: 6 and: 9).
 	"Because the generated events involve a trait actually being removed, the class ends up being obsolete.
 	Patch the remove event to use the same class as the add event."
+	traitAddedEvent := sourceEpEntries detect: [ :each |
+		each content class = EpTraitAddition ].
 	sourceEpEntries last content
-		initializeWithTrait: sourceEpEntries first content traitAdded.
+		initializeWithTrait: traitAddedEvent content traitAdded.
 	visitor := GtEpiceaFactoryEventCodeVisitor
 			selector: #traitAddModifyRenameRemoveFactoryMethod
 			entries: sourceEpEntries.
