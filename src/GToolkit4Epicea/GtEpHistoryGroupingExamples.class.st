@@ -93,7 +93,12 @@ GtEpHistoryGroupingExamples >> descriptionMessage: aString histories: aCollectio
 		aCollection do: [ :history |
 			stream print: history; cr.
 			history entries do: [ :entry |
-				stream tab; print: entry content; cr ] ] ]
+				stream tab; print: entry content; cr ] ].
+		stream
+			<< 'Log Entries: '; cr.
+			
+		theMonitor log entries do: [ :entry |
+			stream tab; print: entry content; cr ] ]
 ]
 
 { #category : #setup }
@@ -275,7 +280,7 @@ GtEpHistoryGroupingExamples >> testMoveExtensionMethodBetweetPackagesByPackageGr
 	thirdPackageHistory := packageHistories
 			historyForPackageNamed: self thirdPackageNameForTesting.
 	self assert: thirdPackageHistory hasNoEffect not
-		description: [ self descriptionMessage: 'thirdPackageHistory hasNoEffect not' histories: { thirdPackageHistory } ].
+		description: [ self descriptionMessage: 'thirdPackageHistory hasNoEffect not' histories: { thirdPackageHistory . packageHistories } ].
 
 	methodHistoryInMainPackage := mainPackageHistory classHistories first
 			methodHistories first.
