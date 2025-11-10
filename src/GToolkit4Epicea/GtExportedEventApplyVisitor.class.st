@@ -28,10 +28,16 @@ GtExportedEventApplyVisitor >> visitMethodUpdateNoSource: aMethodModified [
 	self
 		behaviorNamed: aMethodModified behaviorAffectedName
 		ifPresent: [ :behavior |
-			behavior
+			| selector |
+			selector := behavior
 				compile: aMethodModified sourceCode
 				classified: aMethodModified protocol
 				withStamp: nil
 				notifying: nil
-				logSource: false ]
+				logSource: false.
+			self 
+				forPharo12AndNewer: [
+					(behavior includesSelector: selector) ifTrue: [
+						(behavior>>selector) removeProperty: #source ] ] 
+				forPharo11: [] ]
 ]
