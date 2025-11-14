@@ -66,7 +66,9 @@ GtEpiceaElementExamples >> expandedElementWithDeletedChange [
 		checkStep: [ :s | 
 			s
 				label: 'Check no change';
-				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNil ] ].
+				satisfies: [ :aPaneElement | aPaneElement realToolElement change isNil ];
+				// #'maximizer--overlay';
+				// GtTreePagerPaneContentElement ].
 
 	^ aScripter
 ]
@@ -120,15 +122,19 @@ GtEpiceaElementExamples >> scripterOnExpandedElementWithChange [
 		checkStep: [ :s | 
 			s
 				label: 'Check change';
-				satisfies: [ :aChangeView | aChangeView pages last contentElement tool change isNotNil ] ].
+				satisfies: [ :aPaneElement | aPaneElement realToolElement change isNotNil ];
+				// #'maximizer--overlay';
+				// GtTreePagerPaneContentElement ].
 
 	aScripter
 		checkStep: [ :s | 
 			s
 				label: 'Check change name';
-				satisfies: [ :aChangeView | 
-					((aChangeView pages last contentElement tool childNamed: #title) childAt: 1)
-						text asString = 'Explicit log on 0 entries' ] ].
+				satisfies: [ :aPaneElement | 
+					((aPaneElement realToolElement childNamed: #title) childAt: 1)
+						text asString = 'Explicit log on 0 entries' ];
+				// #'maximizer--overlay';
+				// GtTreePagerPaneContentElement ].
 
 	^ aScripter
 ]
