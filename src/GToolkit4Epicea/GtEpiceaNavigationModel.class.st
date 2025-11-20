@@ -26,7 +26,8 @@ GtEpiceaNavigationModel >> createListFor: aView [
 	<gtEpiceaNavigation>
 	^ aView forward
 		title: 'Changes';
-		send: [ :change | self announce: (GtEpiceaChangeSelected new change: change) ];
+		send: [ :change | self announce: (GtEpiceaChangeSelected new change: change).
+			change ];
 		actionDropdownButtonIcon: BrGlamorousVectorIcons folder
 			tooltip: 'Select change directory'
 			content: [ :aDropdown | 

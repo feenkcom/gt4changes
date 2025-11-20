@@ -10,7 +10,16 @@ Class {
 
 { #category : #accessing }
 GtChangePhlowTool >> asElementDo: aBlock [
-	^ aBlock value: GtEpiceaElement new
+	| anElement |
+	anElement := GtEpiceaElement new.
+	self change ifNotNil: [ :aChange | 
+		anElement change: aChange ].
+	
+	anElement
+		when: GtPhlowToolObjectChangeWish
+		do: [ :aWish | self change: aWish object ].
+
+	^ aBlock value: anElement
 ]
 
 { #category : #accessing }
