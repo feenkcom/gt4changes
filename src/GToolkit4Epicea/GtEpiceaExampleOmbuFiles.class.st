@@ -529,68 +529,6 @@ GtEpiceaExampleOmbuFiles class >> ombu_3699hxpexw9en86vig1dlpbso [
 ]
 
 { #category : #'example events' }
-GtEpiceaExampleOmbuFiles class >> ombu_3D1E2A5A5F98 [
-	| factory |
-
-	factory := GtEpiceaEventFactory new.
-
-	factory addCategory: #Issue3420 packageName: #Issue3420 tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:41:03.329895+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '1'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.36BA03008E28' localName: '332'). } asDictionary.
-	factory addClass: ((factory classDefinitionName: #Issue3420Superclass definitionSource: 'Object subclass: #Issue3420Superclass
-	instanceVariableNames: ''''
-	classVariableNames: ''''
-	package: ''Issue3420''' superclassName: 'Object' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Superclass class' definitionSource: 'Issue3420Superclass class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:41:03.352174+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '2'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '1'). } asDictionary.
-	factory addClass: ((factory classDefinitionName: #Issue3420Subclass definitionSource: 'Issue3420Superclass subclass: #Issue3420Subclass
-	instanceVariableNames: ''varA varB''
-	classVariableNames: ''''
-	package: ''Issue3420''' superclassName: 'Issue3420Superclass' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: (OrderedCollection withAll: { factory instanceVariableDefinitionNamed: #varA className: #Issue3420Subclass isMeta: false. factory instanceVariableDefinitionNamed: #varB className: #Issue3420Subclass isMeta: false}) sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Subclass class' definitionSource: 'Issue3420Subclass class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:41:58.066324+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '3'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '2'). } asDictionary.
-	factory addMethod: (factory methodDefinitionSelector: #methodA className: #Issue3420Subclass meta: false package: #Issue3420 protocol: #accessing sourceCode: 'methodA
-	^ ''A''' stamp: '') tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:42:23.78674+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '4'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '3'). } asDictionary.
-	factory addMethod: (factory methodDefinitionSelector: #methodB className: #Issue3420Superclass meta: false package: #Issue3420 protocol: #accessing sourceCode: 'methodB
-	^ ''B''' stamp: '') tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:42:31.408341+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '5'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '4'). } asDictionary.
-	factory modifyClass: ((factory classDefinitionName: #Issue3420Subclass definitionSource: 'Issue3420Superclass subclass: #Issue3420Subclass
-	instanceVariableNames: ''varA varB''
-	classVariableNames: ''''
-	package: ''Issue3420''' superclassName: 'Issue3420Superclass' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: (OrderedCollection withAll: { factory instanceVariableDefinitionNamed: #varA className: #Issue3420Subclass isMeta: false. factory instanceVariableDefinitionNamed: #varB className: #Issue3420Subclass isMeta: false}) sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Subclass class' definitionSource: 'Issue3420Subclass class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) to: ((factory classDefinitionName: #Issue3420Subclass definitionSource: 'Issue3420Superclass subclass: #Issue3420Subclass
-	instanceVariableNames: ''varB''
-	classVariableNames: ''''
-	package: ''Issue3420''' superclassName: 'Issue3420Superclass' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: (OrderedCollection withAll: { factory instanceVariableDefinitionNamed: #varB className: #Issue3420Subclass isMeta: false}) sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Subclass class' definitionSource: 'Issue3420Subclass class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:43:29.215229+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '6'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '5'). } asDictionary.
-	factory modifyClass: ((factory classDefinitionName: #Issue3420Superclass definitionSource: 'Object subclass: #Issue3420Superclass
-	instanceVariableNames: ''''
-	classVariableNames: ''''
-	package: ''Issue3420''' superclassName: 'Object' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Superclass class' definitionSource: 'Issue3420Superclass class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) to: ((factory classDefinitionName: #Issue3420Superclass definitionSource: 'Object subclass: #Issue3420Superclass
-	instanceVariableNames: ''varA''
-	classVariableNames: ''''
-	package: ''Issue3420''' superclassName: 'Object' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: (OrderedCollection withAll: { factory instanceVariableDefinitionNamed: #varA className: #Issue3420Superclass isMeta: false}) sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Superclass class' definitionSource: 'Issue3420Superclass class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:43:29.712222+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '7'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '6'). } asDictionary.
-	factory modifyClass: ((factory classDefinitionName: #Issue3420Subclass definitionSource: 'Issue3420Superclass subclass: #Issue3420Subclass
-	instanceVariableNames: ''varB''
-	classVariableNames: ''''
-	package: ''Issue3420''' superclassName: 'Issue3420Superclass' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: (OrderedCollection withAll: { factory instanceVariableDefinitionNamed: #varB className: #Issue3420Subclass isMeta: false}) sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Subclass class' definitionSource: 'Issue3420Subclass class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) to: ((factory classDefinitionName: #Issue3420Subclass definitionSource: 'Issue3420Superclass subclass: #Issue3420Subclass
-	instanceVariableNames: ''''
-	classVariableNames: ''''
-	package: ''Issue3420''' superclassName: 'Issue3420Superclass' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Subclass class' definitionSource: 'Issue3420Subclass class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:43:33.894749+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '8'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '7'). } asDictionary.
-	factory modifyClass: ((factory classDefinitionName: #Issue3420Superclass definitionSource: 'Object subclass: #Issue3420Superclass
-	instanceVariableNames: ''varA''
-	classVariableNames: ''''
-	package: ''Issue3420''' superclassName: 'Object' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: (OrderedCollection withAll: { factory instanceVariableDefinitionNamed: #varA className: #Issue3420Superclass isMeta: false}) sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Superclass class' definitionSource: 'Issue3420Superclass class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) to: ((factory classDefinitionName: #Issue3420Superclass definitionSource: 'Object subclass: #Issue3420Superclass
-	instanceVariableNames: ''varA varB''
-	classVariableNames: ''''
-	package: ''Issue3420''' superclassName: 'Object' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: (OrderedCollection withAll: { factory instanceVariableDefinitionNamed: #varA className: #Issue3420Superclass isMeta: false. factory instanceVariableDefinitionNamed: #varB className: #Issue3420Superclass isMeta: false}) sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Superclass class' definitionSource: 'Issue3420Superclass class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:43:34.405576+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '9'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '8'). } asDictionary.
-
-	^ factory
-
-]
-
-{ #category : #'example events' }
 GtEpiceaExampleOmbuFiles class >> ombu_3bak9h9f6v0rt870ok3zaoyvu [
 	| factory |
 
@@ -664,6 +602,68 @@ GtEpiceaExampleOmbuFiles class >> ombu_3bak9h9f6v0rt870ok8lrvvor [
 	package: ''Issue3491''' superclassName: 'Issue3491RootClass' package: #Issue3491 packageTag: nil classVariables: OrderedCollection new instanceVariables: (OrderedCollection withAll: { factory instanceVariableDefinitionNamed: #slotB className: #Issue3491SubClass isMeta: false}) sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3491SubClass class' definitionSource: 'Issue3491SubClass class
 	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'GlamorousAuthor'. #time -> '2023-10-16T13:15:34.189928+02:00'. #self -> (OmReference globalName: 'Pharo10-SNAPSHOT-64bit-179ef65.3bak9h9f6v0rt870ok8lrvvor' localName: '3'). #prior -> (OmReference globalName: 'Pharo10-SNAPSHOT-64bit-179ef65.3bak9h9f6v0rt870ok8lrvvor' localName: '2'). } asDictionary.
 	factory addSessionSnapshotImageName: '/Users/andrei/Downloads/GlamorousToolkit-MacOS-x86_64-v1.0.166/GlamorousToolkit.image' tags: { #author -> 'GlamorousAuthor'. #time -> '2023-10-16T13:15:51.131913+02:00'. #self -> (OmReference globalName: 'Pharo10-SNAPSHOT-64bit-179ef65.3bak9h9f6v0rt870ok8lrvvor' localName: '4'). #prior -> (OmReference globalName: 'Pharo10-SNAPSHOT-64bit-179ef65.3bak9h9f6v0rt870ok8lrvvor' localName: '3'). } asDictionary.
+
+	^ factory
+
+]
+
+{ #category : #'example events' }
+GtEpiceaExampleOmbuFiles class >> ombu_3D1E2A5A5F98 [
+	| factory |
+
+	factory := GtEpiceaEventFactory new.
+
+	factory addCategory: #Issue3420 packageName: #Issue3420 tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:41:03.329895+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '1'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.36BA03008E28' localName: '332'). } asDictionary.
+	factory addClass: ((factory classDefinitionName: #Issue3420Superclass definitionSource: 'Object subclass: #Issue3420Superclass
+	instanceVariableNames: ''''
+	classVariableNames: ''''
+	package: ''Issue3420''' superclassName: 'Object' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Superclass class' definitionSource: 'Issue3420Superclass class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:41:03.352174+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '2'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '1'). } asDictionary.
+	factory addClass: ((factory classDefinitionName: #Issue3420Subclass definitionSource: 'Issue3420Superclass subclass: #Issue3420Subclass
+	instanceVariableNames: ''varA varB''
+	classVariableNames: ''''
+	package: ''Issue3420''' superclassName: 'Issue3420Superclass' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: (OrderedCollection withAll: { factory instanceVariableDefinitionNamed: #varA className: #Issue3420Subclass isMeta: false. factory instanceVariableDefinitionNamed: #varB className: #Issue3420Subclass isMeta: false}) sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Subclass class' definitionSource: 'Issue3420Subclass class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:41:58.066324+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '3'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '2'). } asDictionary.
+	factory addMethod: (factory methodDefinitionSelector: #methodA className: #Issue3420Subclass meta: false package: #Issue3420 protocol: #accessing sourceCode: 'methodA
+	^ ''A''' stamp: '') tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:42:23.78674+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '4'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '3'). } asDictionary.
+	factory addMethod: (factory methodDefinitionSelector: #methodB className: #Issue3420Superclass meta: false package: #Issue3420 protocol: #accessing sourceCode: 'methodB
+	^ ''B''' stamp: '') tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:42:31.408341+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '5'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '4'). } asDictionary.
+	factory modifyClass: ((factory classDefinitionName: #Issue3420Subclass definitionSource: 'Issue3420Superclass subclass: #Issue3420Subclass
+	instanceVariableNames: ''varA varB''
+	classVariableNames: ''''
+	package: ''Issue3420''' superclassName: 'Issue3420Superclass' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: (OrderedCollection withAll: { factory instanceVariableDefinitionNamed: #varA className: #Issue3420Subclass isMeta: false. factory instanceVariableDefinitionNamed: #varB className: #Issue3420Subclass isMeta: false}) sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Subclass class' definitionSource: 'Issue3420Subclass class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) to: ((factory classDefinitionName: #Issue3420Subclass definitionSource: 'Issue3420Superclass subclass: #Issue3420Subclass
+	instanceVariableNames: ''varB''
+	classVariableNames: ''''
+	package: ''Issue3420''' superclassName: 'Issue3420Superclass' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: (OrderedCollection withAll: { factory instanceVariableDefinitionNamed: #varB className: #Issue3420Subclass isMeta: false}) sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Subclass class' definitionSource: 'Issue3420Subclass class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:43:29.215229+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '6'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '5'). } asDictionary.
+	factory modifyClass: ((factory classDefinitionName: #Issue3420Superclass definitionSource: 'Object subclass: #Issue3420Superclass
+	instanceVariableNames: ''''
+	classVariableNames: ''''
+	package: ''Issue3420''' superclassName: 'Object' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Superclass class' definitionSource: 'Issue3420Superclass class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) to: ((factory classDefinitionName: #Issue3420Superclass definitionSource: 'Object subclass: #Issue3420Superclass
+	instanceVariableNames: ''varA''
+	classVariableNames: ''''
+	package: ''Issue3420''' superclassName: 'Object' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: (OrderedCollection withAll: { factory instanceVariableDefinitionNamed: #varA className: #Issue3420Superclass isMeta: false}) sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Superclass class' definitionSource: 'Issue3420Superclass class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:43:29.712222+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '7'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '6'). } asDictionary.
+	factory modifyClass: ((factory classDefinitionName: #Issue3420Subclass definitionSource: 'Issue3420Superclass subclass: #Issue3420Subclass
+	instanceVariableNames: ''varB''
+	classVariableNames: ''''
+	package: ''Issue3420''' superclassName: 'Issue3420Superclass' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: (OrderedCollection withAll: { factory instanceVariableDefinitionNamed: #varB className: #Issue3420Subclass isMeta: false}) sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Subclass class' definitionSource: 'Issue3420Subclass class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) to: ((factory classDefinitionName: #Issue3420Subclass definitionSource: 'Issue3420Superclass subclass: #Issue3420Subclass
+	instanceVariableNames: ''''
+	classVariableNames: ''''
+	package: ''Issue3420''' superclassName: 'Issue3420Superclass' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Subclass class' definitionSource: 'Issue3420Subclass class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:43:33.894749+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '8'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '7'). } asDictionary.
+	factory modifyClass: ((factory classDefinitionName: #Issue3420Superclass definitionSource: 'Object subclass: #Issue3420Superclass
+	instanceVariableNames: ''varA''
+	classVariableNames: ''''
+	package: ''Issue3420''' superclassName: 'Object' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: (OrderedCollection withAll: { factory instanceVariableDefinitionNamed: #varA className: #Issue3420Superclass isMeta: false}) sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Superclass class' definitionSource: 'Issue3420Superclass class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) to: ((factory classDefinitionName: #Issue3420Superclass definitionSource: 'Object subclass: #Issue3420Superclass
+	instanceVariableNames: ''varA varB''
+	classVariableNames: ''''
+	package: ''Issue3420''' superclassName: 'Object' package: #Issue3420 packageTag: nil classVariables: OrderedCollection new instanceVariables: (OrderedCollection withAll: { factory instanceVariableDefinitionNamed: #varA className: #Issue3420Superclass isMeta: false. factory instanceVariableDefinitionNamed: #varB className: #Issue3420Superclass isMeta: false}) sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue3420Superclass class' definitionSource: 'Issue3420Superclass class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'GlamorousAuthor'. #time -> '2023-08-24T18:43:34.405576+03:00'. #self -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '9'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-53659ed.3D1E2A5A5F98' localName: '8'). } asDictionary.
 
 	^ factory
 
@@ -1440,52 +1440,6 @@ GtEpiceaExampleOmbuFiles class >> ombu_9a7osa0eaojm2sck4nxhhrnwx [
 ]
 
 { #category : #'example events' }
-GtEpiceaExampleOmbuFiles class >> ombu_Issue4477 [
-	| factory |
-
-	factory := GtEpiceaEventFactory new.
-
-factory removeClass: ((factory classDefinitionName: #GtEpEventSequencerExamplesClass1 definitionSource: 'Object subclass: ''GtEpEventSequencerExamplesClass1''
-	instanceVariableNames: ''''
-	classVariableNames: ''''
-	package: #GtEqEventSequencerExamplesCategory1' superclassName: 'Object' package: #GtEqEventSequencerExamplesCategory1 packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'AnObsoleteGtEpEventSequencerExamplesClass1 class' definitionSource: 'GtEpEventSequencerExamplesClass1 class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'AlistairGrant'. #time -> '2025-07-16T10:05:02.997865+02:00'. #self -> (OmReference globalName: 'Issue4477' localName: '1'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-aece1b5.20F72134FE20' localName: '2'). } asDictionary.
-	factory addClass: ((factory classDefinitionName: #GtEpEventSequencerExamplesClass3 definitionSource: 'GtEpEventSequencerExamplesClass2 subclass: #GtEpEventSequencerExamplesClass3
-	instanceVariableNames: ''''
-	classVariableNames: ''''
-	package: ''GtEqEventSequencerExamplesCategory1''' superclassName: 'GtEpEventSequencerExamplesClass2' package: #GtEqEventSequencerExamplesCategory1 packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'GtEpEventSequencerExamplesClass3 class' definitionSource: 'GtEpEventSequencerExamplesClass3 class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'AlistairGrant'. #time -> '2025-07-16T10:05:15.729799+02:00'. #self -> (OmReference globalName: 'Issue4477' localName: '2'). #prior -> (OmReference globalName: 'Issue4477' localName: '1'). } asDictionary.
-
-	^ factory
-
-]
-
-{ #category : #'example events' }
-GtEpiceaExampleOmbuFiles class >> ombu_RenameExport [
-	| factory |
-
-	factory := GtEpiceaEventFactory new.
-
-	factory registerCategory: #GtEpEventSequencerExampleChecks packageName: #GtEpEventSequencerExampleChecks tags: { #author -> 'AlistairGrant'. #time -> '2024-10-09T11:01:49.104725+02:00'. #self -> (OmReference globalName: 'RenameExport' localName: '1'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-aece1b5.1EA40716FD68' localName: '58'). } asDictionary.
-	factory renameClass: ((factory classDefinitionName: #GtEpEventSequencerExampleClass2 definitionSource: 'Object subclass: #GtEpEventSequencerExampleClass2
-	instanceVariableNames: ''''
-	classVariableNames: ''''
-	package: ''GtEpEventSequencerExampleChecks''' superclassName: 'Object' package: #GtEpEventSequencerExampleChecks packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'GtEpEventSequencerExampleClass2 class' definitionSource: 'GtEpEventSequencerExampleClass2 class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) from: #GtEpEventSequencerExampleClass1 tags: { #author -> 'AlistairGrant'. #time -> '2024-10-09T11:02:10.295133+02:00'. #self -> (OmReference globalName: 'RenameExport' localName: '5'). #prior -> (OmReference globalName: 'RenameExport' localName: '4'). } asDictionary.
-	factory removeMethod: (factory methodDefinitionSelector: #method1 className: #GtEpEventSequencerExampleClass2 meta: false package: #GtEpEventSequencerExampleChecks protocol: #'as yet unclassified' sourceCode: 'method1
-
-	^ 1' stamp: 'AlistairGrant 10/9/2024 11:01') tags: { #author -> 'AlistairGrant'. #time -> '2024-10-09T11:02:15.270378+02:00'. #self -> (OmReference globalName: 'RenameExport' localName: '11'). #prior -> (OmReference globalName: 'RenameExport' localName: '10'). } asDictionary.
-factory removeClass: ((factory classDefinitionName: #GtEpEventSequencerExampleClass2 definitionSource: 'Object subclass: ''GtEpEventSequencerExampleClass2''
-	instanceVariableNames: ''''
-	classVariableNames: ''''
-	package: #GtEpEventSequencerExampleChecks' superclassName: 'Object' package: #GtEpEventSequencerExampleChecks packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'AnObsoleteGtEpEventSequencerExampleClass2 class' definitionSource: 'GtEpEventSequencerExampleClass2 class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'AlistairGrant'. #time -> '2024-10-09T11:02:15.27057+02:00'. #self -> (OmReference globalName: 'RenameExport' localName: '12'). #prior -> (OmReference globalName: 'RenameExport' localName: '11'). } asDictionary.
-
-	^ factory
-
-]
-
-{ #category : #'example events' }
 GtEpiceaExampleOmbuFiles class >> ombu_a3go932rm46kbo5k07xd6d0lo [
 	| factory |
 
@@ -2101,6 +2055,27 @@ factory logRedo: { (OmReference globalName: 'exvcqivei33mj3fm4dy56zw83' localNam
 ]
 
 { #category : #'example events' }
+GtEpiceaExampleOmbuFiles class >> ombu_Issue4477 [
+	| factory |
+
+	factory := GtEpiceaEventFactory new.
+
+factory removeClass: ((factory classDefinitionName: #GtEpEventSequencerExamplesClass1 definitionSource: 'Object subclass: ''GtEpEventSequencerExamplesClass1''
+	instanceVariableNames: ''''
+	classVariableNames: ''''
+	package: #GtEqEventSequencerExamplesCategory1' superclassName: 'Object' package: #GtEqEventSequencerExamplesCategory1 packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'AnObsoleteGtEpEventSequencerExamplesClass1 class' definitionSource: 'GtEpEventSequencerExamplesClass1 class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'AlistairGrant'. #time -> '2025-07-16T10:05:02.997865+02:00'. #self -> (OmReference globalName: 'Issue4477' localName: '1'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-aece1b5.20F72134FE20' localName: '2'). } asDictionary.
+	factory addClass: ((factory classDefinitionName: #GtEpEventSequencerExamplesClass3 definitionSource: 'GtEpEventSequencerExamplesClass2 subclass: #GtEpEventSequencerExamplesClass3
+	instanceVariableNames: ''''
+	classVariableNames: ''''
+	package: ''GtEqEventSequencerExamplesCategory1''' superclassName: 'GtEpEventSequencerExamplesClass2' package: #GtEqEventSequencerExamplesCategory1 packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'GtEpEventSequencerExamplesClass3 class' definitionSource: 'GtEpEventSequencerExamplesClass3 class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'AlistairGrant'. #time -> '2025-07-16T10:05:15.729799+02:00'. #self -> (OmReference globalName: 'Issue4477' localName: '2'). #prior -> (OmReference globalName: 'Issue4477' localName: '1'). } asDictionary.
+
+	^ factory
+
+]
+
+{ #category : #'example events' }
 GtEpiceaExampleOmbuFiles class >> ombu_kl93xmyxa83xq55wcrbwgz13bjqqnkh4e19d8h19x9yaxxekt [
 	| factory |
 
@@ -2116,6 +2091,31 @@ GtEpiceaExampleOmbuFiles class >> ombu_kl93xmyxa83xq55wcrbwgz13bjqqnkh4e19d8h19x
 	classVariableNames: ''''
 	package: ''GtEpEventSequencerExampleChecks''' superclassName: 'Object' package: #GtEpEventSequencerExampleChecks packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'GtEpEventSequencerExampleClass1rename class' definitionSource: 'GtEpEventSequencerExampleClass1rename class
 	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) from: #GtEpEventSequencerExampleClass1 tags: { #author -> 'AlistairGrant'. #time -> '2023-12-01T12:19:15.134036+01:00'. #self -> (OmReference globalName: 'Issue3529-2' localName: '2'). #prior -> (OmReference globalName: 'Issue3529-2' localName: '1'). } asDictionary.
+
+	^ factory
+
+]
+
+{ #category : #'example events' }
+GtEpiceaExampleOmbuFiles class >> ombu_RenameExport [
+	| factory |
+
+	factory := GtEpiceaEventFactory new.
+
+	factory registerCategory: #GtEpEventSequencerExampleChecks packageName: #GtEpEventSequencerExampleChecks tags: { #author -> 'AlistairGrant'. #time -> '2024-10-09T11:01:49.104725+02:00'. #self -> (OmReference globalName: 'RenameExport' localName: '1'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-aece1b5.1EA40716FD68' localName: '58'). } asDictionary.
+	factory renameClass: ((factory classDefinitionName: #GtEpEventSequencerExampleClass2 definitionSource: 'Object subclass: #GtEpEventSequencerExampleClass2
+	instanceVariableNames: ''''
+	classVariableNames: ''''
+	package: ''GtEpEventSequencerExampleChecks''' superclassName: 'Object' package: #GtEpEventSequencerExampleChecks packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'GtEpEventSequencerExampleClass2 class' definitionSource: 'GtEpEventSequencerExampleClass2 class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) from: #GtEpEventSequencerExampleClass1 tags: { #author -> 'AlistairGrant'. #time -> '2024-10-09T11:02:10.295133+02:00'. #self -> (OmReference globalName: 'RenameExport' localName: '5'). #prior -> (OmReference globalName: 'RenameExport' localName: '4'). } asDictionary.
+	factory removeMethod: (factory methodDefinitionSelector: #method1 className: #GtEpEventSequencerExampleClass2 meta: false package: #GtEpEventSequencerExampleChecks protocol: #'as yet unclassified' sourceCode: 'method1
+
+	^ 1' stamp: 'AlistairGrant 10/9/2024 11:01') tags: { #author -> 'AlistairGrant'. #time -> '2024-10-09T11:02:15.270378+02:00'. #self -> (OmReference globalName: 'RenameExport' localName: '11'). #prior -> (OmReference globalName: 'RenameExport' localName: '10'). } asDictionary.
+factory removeClass: ((factory classDefinitionName: #GtEpEventSequencerExampleClass2 definitionSource: 'Object subclass: ''GtEpEventSequencerExampleClass2''
+	instanceVariableNames: ''''
+	classVariableNames: ''''
+	package: #GtEpEventSequencerExampleChecks' superclassName: 'Object' package: #GtEpEventSequencerExampleChecks packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'AnObsoleteGtEpEventSequencerExampleClass2 class' definitionSource: 'GtEpEventSequencerExampleClass2 class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'AlistairGrant'. #time -> '2024-10-09T11:02:15.27057+02:00'. #self -> (OmReference globalName: 'RenameExport' localName: '12'). #prior -> (OmReference globalName: 'RenameExport' localName: '11'). } asDictionary.
 
 	^ factory
 

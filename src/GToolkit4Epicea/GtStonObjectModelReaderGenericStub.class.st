@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'name'
 	],
-	#category : #'GToolkit4Epicea-Examples'
+	#category : 'GToolkit4Epicea-Examples'
 }
 
 { #category : #'llm-generated' }

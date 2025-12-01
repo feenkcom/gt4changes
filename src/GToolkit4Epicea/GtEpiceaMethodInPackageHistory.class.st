@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'targetPackageName'
 	],
-	#category : #'GToolkit4Epicea-History'
+	#category : 'GToolkit4Epicea-History'
 }
 
 { #category : #accessing }

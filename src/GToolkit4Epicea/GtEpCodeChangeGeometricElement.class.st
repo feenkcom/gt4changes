@@ -5,7 +5,7 @@ Class {
 		'node',
 		'hasImpact'
 	],
-	#category : #'GToolkit4Epicea-UI'
+	#category : 'GToolkit4Epicea-UI'
 }
 
 { #category : #accessing }
@@ -54,6 +54,13 @@ GtEpCodeChangeGeometricElement >> initialize [
 ]
 
 { #category : #accessing }
+GtEpCodeChangeGeometricElement >> node: aGtEpiceaLogViewNode [
+
+	node := aGtEpiceaLogViewNode.
+	self updateDisplay.
+]
+
+{ #category : #accessing }
 GtEpCodeChangeGeometricElement >> noImpactElement [
 
 	^ BlElement new
@@ -61,13 +68,6 @@ GtEpCodeChangeGeometricElement >> noImpactElement [
 		geometry: BlCircleGeometry new;
 		size: 40@40;
 		background: Color white.
-]
-
-{ #category : #accessing }
-GtEpCodeChangeGeometricElement >> node: aGtEpiceaLogViewNode [
-
-	node := aGtEpiceaLogViewNode.
-	self updateDisplay.
 ]
 
 { #category : #accessing }

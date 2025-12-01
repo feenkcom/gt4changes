@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'createdPackages'
 	],
-	#category : #'GToolkit4Epicea-Factories'
+	#category : 'GToolkit4Epicea-Factories'
 }
 
 { #category : #cleanup }

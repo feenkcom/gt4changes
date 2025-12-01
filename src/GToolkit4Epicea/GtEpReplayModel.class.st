@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'entries'
 	],
-	#category : #'GToolkit4Epicea-Sequencer'
+	#category : 'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #visiting }

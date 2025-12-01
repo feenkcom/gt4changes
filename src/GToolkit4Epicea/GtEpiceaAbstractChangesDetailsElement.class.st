@@ -7,7 +7,7 @@ Class {
 		'changesList',
 		'sequencedEntries'
 	],
-	#category : #'GToolkit4Epicea-Model'
+	#category : 'GToolkit4Epicea-Model'
 }
 
 { #category : #acccessing }

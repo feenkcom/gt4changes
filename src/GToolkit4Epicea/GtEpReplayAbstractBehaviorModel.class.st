@@ -6,7 +6,7 @@ Class {
 		'protocolChanges',
 		'removedMethods'
 	],
-	#category : #'GToolkit4Epicea-Sequencer'
+	#category : 'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #adding }

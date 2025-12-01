@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'text'
 	],
-	#category : #'GToolkit4Epicea-Attributes'
+	#category : 'GToolkit4Epicea-Attributes'
 }
 
 { #category : #accessing }

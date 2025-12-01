@@ -13,7 +13,7 @@ Class {
 		'imageModel',
 		'superclassName'
 	],
-	#category : #'GToolkit4Epicea-Sequencer'
+	#category : 'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #visiting }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtEpiceaReverseChangesDetailsElement,
 	#superclass : #GtEpiceaAbstractChangesDetailsElement,
-	#category : #'GToolkit4Epicea-Model'
+	#category : 'GToolkit4Epicea-Model'
 }
 
 { #category : #accessing }

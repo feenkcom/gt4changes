@@ -20,3 +20,10 @@ OmFileStore >> entriesStream [
 
 	^ stream
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+OmFileStore >> isFileStore [
+	"Answer a boolean indicating whether the receiver has a disk file as the store"
+	
+	^ true
+]

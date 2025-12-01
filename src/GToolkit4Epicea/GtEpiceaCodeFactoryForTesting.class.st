@@ -5,7 +5,7 @@ Class {
 		'packageFactory',
 		'classFactory'
 	],
-	#category : #'GToolkit4Epicea-Factories'
+	#category : 'GToolkit4Epicea-Factories'
 }
 
 { #category : #accessing }

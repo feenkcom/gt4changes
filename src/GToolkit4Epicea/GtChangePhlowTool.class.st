@@ -5,7 +5,7 @@ Class {
 		'change',
 		'navigationModel'
 	],
-	#category : #'GToolkit4Epicea-Tools'
+	#category : 'GToolkit4Epicea-Tools'
 }
 
 { #category : #accessing }

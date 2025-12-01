@@ -35,6 +35,13 @@ OmStore >> gtViewEntriesListFor: aView [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+OmStore >> isFileStore [
+	"Answer a boolean indicating whether the receiver has a disk file as the store"
+	
+	^ true
+]
+
+{ #category : #'*GToolkit4Epicea' }
 OmStore >> isMemoryStore [
 	"Answer a boolean indicating if the current store is memory only (or on disk)"
 
