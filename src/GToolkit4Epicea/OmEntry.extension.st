@@ -1,6 +1,18 @@
 Extension { #name : #OmEntry }
 
 { #category : #'*GToolkit4Epicea' }
+OmEntry >> applyCodeChange [
+
+	^ content applyCodeChange
+]
+
+{ #category : #'*GToolkit4Epicea' }
+OmEntry >> applyCodeChangeIfHasImpact [
+
+	^ content applyCodeChangeIfHasImpact
+]
+
+{ #category : #'*GToolkit4Epicea' }
 OmEntry >> gtActionApplyFor: anAction [
 	<gtAction>
 	self content isCodeChange ifFalse: [ ^ anAction noAction ].
@@ -8,7 +20,7 @@ OmEntry >> gtActionApplyFor: anAction [
 	^ anAction button
 		label: 'Apply';
 		priority: 1;
-		action: [ :button | self content applyCodeChange ]
+		action: [ :button | self applyCodeChange ]
 ]
 
 { #category : #'*GToolkit4Epicea' }
@@ -177,6 +189,12 @@ OmEntry >> gtViewChangeIcon [
 { #category : #'*GToolkit4Epicea' }
 OmEntry >> gtViewLatestChangeTime [
 	^ self gtTime
+]
+
+{ #category : #'*GToolkit4Epicea' }
+OmEntry >> hasImpact [
+
+	^ content hasImpact
 ]
 
 { #category : #'*GToolkit4Epicea' }
