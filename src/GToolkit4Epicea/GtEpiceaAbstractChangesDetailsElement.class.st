@@ -198,11 +198,10 @@ GtEpiceaAbstractChangesDetailsElement >> loadSequencedChangesCollectingChanged [
 	| appliedEntries |
 	appliedEntries := OrderedCollection new.
 	self sequencedEntries do: 
-			[:each |
-			each content hasImpact
-				ifTrue: 
-					[each content applyCodeChange.
-					appliedEntries add: each]].
+			[ :each |
+			each hasImpact ifTrue: 
+				[ each applyCodeChange.
+				appliedEntries add: each ] ].
 	^ appliedEntries
 ]
 
