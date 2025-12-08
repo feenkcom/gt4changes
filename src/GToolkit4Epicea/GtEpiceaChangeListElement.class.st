@@ -10,7 +10,7 @@ Class {
 		'selection',
 		'model'
 	],
-	#category : 'GToolkit4Epicea-Element'
+	#category : #'GToolkit4Epicea-Element'
 }
 
 { #category : #'instance creation' }

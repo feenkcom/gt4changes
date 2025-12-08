@@ -1,7 +1,7 @@
 Class {
 	#name : #GtEpiceaUtilities,
 	#superclass : #Object,
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #accessing }

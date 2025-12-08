@@ -11,7 +11,7 @@ Class {
 		'currentEntry',
 		'image'
 	],
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #accessing }

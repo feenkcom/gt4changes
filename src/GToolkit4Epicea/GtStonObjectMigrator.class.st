@@ -5,7 +5,7 @@ Class {
 		'defaultMigration',
 		'classMigrators'
 	],
-	#category : 'GToolkit4Epicea-Reader'
+	#category : #'GToolkit4Epicea-Reader'
 }
 
 { #category : #'instance creation' }

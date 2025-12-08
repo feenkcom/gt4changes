@@ -1,5 +1,5 @@
 Class {
 	#name : #GtEpiceaApplyChangesDetailsElement,
 	#superclass : #GtEpiceaAbstractChangesDetailsElement,
-	#category : 'GToolkit4Epicea-Model'
+	#category : #'GToolkit4Epicea-Model'
 }

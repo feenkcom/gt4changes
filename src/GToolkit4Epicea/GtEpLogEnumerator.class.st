@@ -9,7 +9,7 @@ Class {
 	#instVars : [
 		'latestLog'
 	],
-	#category : 'GToolkit4Epicea-Model'
+	#category : #'GToolkit4Epicea-Model'
 }
 
 { #category : #'instance creation' }
@@ -109,23 +109,24 @@ GtEpLogEnumerator >> priorEntriesFrom: aReference [
 
 { #category : #enumerating }
 GtEpLogEnumerator >> priorEntriesFrom: endOmReference backTo: startOmReference do: aBlock [
-	"Evaluate aBlock for each event in the chain of events leading up to the supplied reference, in reverse chronological order.
-	Events that are not part of the headReference are excluded."
-	| currentLog currentReference previousReference |
+	"Evaluate aBlock for each event in the chain of events leading up to the supplied reference, in reverse chronological order.	Events that are not part of the headReference are excluded."
 
+	| currentLog currentReference previousReference |
 	self assert: endOmReference globalName = latestLog headReference globalName.
 	currentLog := latestLog.
 	currentReference := endOmReference.
-	[ currentReference isNull or: [ currentReference = startOmReference ] ] whileFalse:
-		[ previousReference := currentReference.
-		currentReference := self 
-			priorEntriesIn: currentLog 
-			from: currentReference 
-			backTo: startOmReference 
-			do: aBlock.
-		currentReference isNull ifFalse:
-			[ currentLog := self previousLogFrom: currentReference.
-			currentLog ifNil: [ currentReference := OmNullReference uniqueInstance ] ] ].
+	[ currentReference isNull or: [ currentReference = startOmReference ] ]
+		whileFalse: [ previousReference := currentReference.
+			currentReference := self
+					priorEntriesIn: currentLog
+					from: currentReference
+					backTo: startOmReference
+					do: aBlock.
+			currentReference = previousReference
+				ifTrue: [ currentReference := OmNullReference uniqueInstance ].
+			currentReference isNull
+				ifFalse: [ currentLog := self previousLogFrom: currentReference.
+					currentLog ifNil: [ currentReference := OmNullReference uniqueInstance ] ] ]
 ]
 
 { #category : #enumerating }

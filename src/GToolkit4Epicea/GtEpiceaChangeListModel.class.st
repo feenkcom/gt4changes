@@ -9,7 +9,7 @@ Class {
 		'available',
 		'all'
 	],
-	#category : 'GToolkit4Epicea-View Model'
+	#category : #'GToolkit4Epicea-View Model'
 }
 
 { #category : #'instance creation' }

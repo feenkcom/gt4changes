@@ -8,7 +8,7 @@ Class {
 	#classVars : [
 		'Enabled'
 	],
-	#category : 'GToolkit4Epicea-Reader'
+	#category : #'GToolkit4Epicea-Reader'
 }
 
 { #category : #'enabling/disabling' }

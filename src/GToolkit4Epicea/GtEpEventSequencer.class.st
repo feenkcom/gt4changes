@@ -11,20 +11,13 @@ Class {
 		'image',
 		'replay'
 	],
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #sequencing }
 GtEpEventSequencer class >> entries: anEpEntryCollection [
 
 	^ self new entries: anEpEntryCollection
-]
-
-{ #category : #sequencing }
-GtEpEventSequencer class >> entries: anEpEntryCollection includeCurrent: currentBoolean [
-
-	self deprecated: 'Instanciate the appropriate subclass directly'.
-	^ self entries: anEpEntryCollection inImage: currentBoolean not
 ]
 
 { #category : #sequencing }
@@ -37,6 +30,13 @@ GtEpEventSequencer class >> entries: anEpEntryCollection inImage: inImageBoolean
 	ifFalse:
 		[ GtEpForExportEventSequencer ]) new
 			entries: anEpEntryCollection
+]
+
+{ #category : #sequencing }
+GtEpEventSequencer class >> entries: anEpEntryCollection includeCurrent: currentBoolean [
+
+	self deprecated: 'Instanciate the appropriate subclass directly'.
+	^ self entries: anEpEntryCollection inImage: currentBoolean not
 ]
 
 { #category : #accessing }

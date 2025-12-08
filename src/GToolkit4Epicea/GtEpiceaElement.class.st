@@ -10,7 +10,7 @@ Class {
 		'contentElement',
 		'sidebarElement'
 	],
-	#category : 'GToolkit4Epicea-Element'
+	#category : #'GToolkit4Epicea-Element'
 }
 
 { #category : #accessing }
