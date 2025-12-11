@@ -42,6 +42,37 @@ GtEpLogEnumeratorExamples >> entriesFromStartTo [
 ]
 
 { #category : #examples }
+GtEpLogEnumeratorExamples >> priorEntriesFromEmpty [
+	"Demonstrate retrieving all entries from the head reference
+	simulating the state where changes have been made in a previous session, but not the current session."
+	<gtExample>
+	<return: #GtEpLogEnumeratorExamples>
+	| entries epLog reference fileReference existingLog sessionStore |
+
+	fileReference := self testClass01Directory.
+	self
+		assert: fileReference resolve exists
+		description: [ fileReference fullName , ' not found' ].
+	existingLog := EpLog fromFile: fileReference.
+	"Create a new session store, and then force it in to the state where the image has just been started, but nothing has been written to the latest ombu file."
+	sessionStore := OmSessionStore newWithBaseLocator: fileReference parent.
+	sessionStore instVarNamed: #headReference put: existingLog headReference.
+	epLog := GtEpLogEnumerator new latestLog: (EpLog newWithStore: sessionStore).
+	entries := epLog priorEntriesFromHead.
+	self assert: entries size equals: 11.
+	reference := entries first tagAt: #self.
+	self assert: reference localName equals: '1'.
+	self
+		assert: reference globalName
+		equals: 'Pharo10-SNAPSHOT-64bit-fec28a6.em8gtmjvf6qouoyjm5tk4q4dm'.
+	reference := entries last tagAt: #self.
+	self assert: reference localName equals: '1'.
+	self
+		assert: reference globalName
+		equals: 'Pharo10-SNAPSHOT-64bit-fec28a6.7699qwkejd20k4j8pduw5i4uz'
+]
+
+{ #category : #examples }
 GtEpLogEnumeratorExamples >> priorEntriesFromHead [
 	"Demonstrate retrieving all entries from the head reference"
 
