@@ -86,7 +86,7 @@ GtEpLogEnumerator >> logDirectory [
 ]
 
 { #category : #private }
-GtEpLogEnumerator >> previousLogFrom: anOmReference [
+GtEpLogEnumerator >> logFrom: anOmReference [
 	"Answer an EpLog based on the supplied reference"
 	| fileReference |
 
@@ -113,7 +113,10 @@ GtEpLogEnumerator >> priorEntriesFrom: endOmReference backTo: startOmReference d
 
 	| currentLog currentReference previousReference |
 	self assert: endOmReference globalName = latestLog headReference globalName.
-	currentLog := latestLog.
+	currentLog := latestLog isEmpty ifTrue:
+		[ self logFrom: latestLog headReference ]
+	ifFalse:
+		[ latestLog ].
 	currentReference := endOmReference.
 	[ currentReference isNull or: [ currentReference = startOmReference ] ]
 		whileFalse: [ previousReference := currentReference.
@@ -125,7 +128,7 @@ GtEpLogEnumerator >> priorEntriesFrom: endOmReference backTo: startOmReference d
 			currentReference = previousReference
 				ifTrue: [ currentReference := OmNullReference uniqueInstance ].
 			currentReference isNull
-				ifFalse: [ currentLog := self previousLogFrom: currentReference.
+				ifFalse: [ currentLog := self logFrom: currentReference.
 					currentLog ifNil: [ currentReference := OmNullReference uniqueInstance ] ] ]
 ]
 
