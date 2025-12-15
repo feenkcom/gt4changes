@@ -117,6 +117,7 @@ GtEpLogEnumerator >> priorEntriesFrom: endOmReference backTo: startOmReference d
 		[ self logFrom: latestLog headReference ]
 	ifFalse:
 		[ latestLog ].
+	currentLog ifNil: [ ^ self ].
 	currentReference := endOmReference.
 	[ currentReference isNull or: [ currentReference = startOmReference ] ]
 		whileFalse: [ previousReference := currentReference.
