@@ -562,7 +562,7 @@ GtEpEventSequencerExamples >> classAddModifyRenameRemoveInImage [
 
 { #category : #examples }
 GtEpEventSequencerExamples >> classAddWithoutDependentsForExport [
-	"Check that adding a class and method when the required superclass / class is missing is sequenced correctly."
+	"Check that adding a class and method when the required superclass / class is missing signals GtEpInvalidSuperclassError."
 
 	<gtExample>
 	<after: #removeTestClasses>
@@ -576,12 +576,11 @@ GtEpEventSequencerExamples >> classAddWithoutDependentsForExport [
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
 	self assert: entries size equals: 3.
-	sequencer := GtEpEventSequencer entries: entries inImage: false.
-	sequencedEntries := sequencer sequencedEntries.
-	self assert: (sequencer image behaviors includesKey: #Issue2961Class).
 	self
-		assert: (sequencedEntries collect: [ :each | each content class name ])
-		equals: #(#EpClassAddition).
+		should: [ sequencer := GtEpEventSequencer entries: entries inImage: false.
+			sequencedEntries := sequencer sequencedEntries ]
+		raise: GtEpInvalidSuperclassError.
+
 	^ sequencer
 ]
 
@@ -601,10 +600,11 @@ GtEpEventSequencerExamples >> classAddWithoutDependentsInImage [
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
 	self assert: entries size equals: 3.
-	sequencer := GtEpEventSequencer entries: entries inImage: true.
-	sequencedEntries := sequencer sequencedEntries.
-	self assert: (sequencer image behaviors includesKey: #Issue2961Class).
-	self assert: sequencedEntries isEmpty.
+	self
+		should: [ sequencer := GtEpEventSequencer entries: entries inImage: false.
+			sequencedEntries := sequencer sequencedEntries ]
+		raise: GtEpInvalidSuperclassError.
+
 	^ sequencer
 ]
 
@@ -669,11 +669,10 @@ GtEpEventSequencerExamples >> classAdditionWithoutSuperclassForExport [
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
 	self assert: entries size equals: 5.
-	sequencer := GtEpEventSequencer entries: entries inImage: false.
-	sequencedEntries := sequencer sequencedEntries.
 	self
-		assert: (sequencedEntries collect: [ :each | each content class name ])
-		equals: #(#EpClassAddition #EpClassAddition #EpClassAddition #EpMethodAddition #EpMethodAddition).
+		should: [ sequencer := GtEpEventSequencer entries: entries inImage: false.
+			sequencedEntries := sequencer sequencedEntries ]
+		raise: GtEpInvalidSuperclassError.
 	^ sequencer
 ]
 
@@ -692,9 +691,10 @@ GtEpEventSequencerExamples >> classAdditionWithoutSuperclassInImage [
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
 	self assert: entries size equals: 5.
-	sequencer := GtEpEventSequencer entries: entries inImage: true.
-	sequencedEntries := sequencer sequencedEntries.
-	self assert: sequencedEntries isEmpty.
+	self
+		should: [ sequencer := GtEpEventSequencer entries: entries inImage: false.
+			sequencedEntries := sequencer sequencedEntries ]
+		raise: GtEpInvalidSuperclassError.
 	^ sequencer
 ]
 
@@ -1249,6 +1249,28 @@ GtEpEventSequencerExamples >> classRenameWithExistingSubclassInImage [
 ]
 
 { #category : #examples }
+GtEpEventSequencerExamples >> classWithObsoleteSuperclass [
+	"Check exporting a class with an obsolete superclass raises an error"
+	<gtExample>
+	<after: #removeTestClasses>
+	<return: #Array>
+	| fileReference entries sequencer sequencedEntries epLog |
+
+	fileReference := self class testDataRoot / 'Issue4908' / 'Issue4908.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 3.
+
+	self
+		should: [ sequencer := GtEpEventSequencer entries: entries inImage: false.
+			sequencedEntries := sequencer sequencedEntries ]
+		raise: GtEpInvalidSuperclassError.
+
+	^ sequencedEntries
+]
+
+{ #category : #examples }
 GtEpEventSequencerExamples >> commentsCategoriesAndProtocolsForExport [
 	"Check that a comments, categories and protocols sequenced correctly."
 
@@ -1363,11 +1385,10 @@ GtEpEventSequencerExamples >> methodAddWithoutDependentsForExport [
 	entries := epLog entries.
 	self assert: entries size equals: 6.
 	sequencer := GtEpEventSequencer entries: entries inImage: false.
-	sequencedEntries := sequencer sequencedEntries.
-	self assert: (sequencer image behaviors includesKey: #Issue2961Class).
 	self
-		assert: (sequencedEntries collect: [ :each | each content class name ])
-		equals: #(#EpMethodAddition #EpMethodAddition #EpMethodAddition #EpMethodAddition).
+		should: [ sequencer := GtEpEventSequencer entries: entries inImage: false.
+			sequencedEntries := sequencer sequencedEntries ]
+		raise: GtEpInvalidSuperclassError.
 	^ sequencer
 ]
 
@@ -1387,10 +1408,10 @@ GtEpEventSequencerExamples >> methodAddWithoutDependentsInImage [
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
 	self assert: entries size equals: 6.
-	sequencer := GtEpEventSequencer entries: entries inImage: true.
-	sequencedEntries := sequencer sequencedEntries.
-	self assert: (sequencer image behaviors includesKey: #Issue2961Class).
-	self assert: sequencedEntries isEmpty.
+	self
+		should: [ sequencer := GtEpEventSequencer entries: entries inImage: false.
+			sequencedEntries := sequencer sequencedEntries ]
+		raise: GtEpInvalidSuperclassError.
 	^ sequencer
 ]
 
@@ -1410,13 +1431,10 @@ GtEpEventSequencerExamples >> methodRemovalWithoutDependentsForExport [
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
 	self assert: entries size equals: 10.
-	sequencer := GtEpEventSequencer entries: entries inImage: false.
-	sequencedEntries := sequencer sequencedEntries.
-	self assert: (sequencer image behaviors includesKey: #Issue2961ClassRenamed).
-	self assert: (sequencer image behaviors includesKey: #Issue2961TraitRenamed).
 	self
-		assert: (sequencedEntries collect: [ :each | each content class name ])
-		equals: #(#EpMethodRemoval #EpMethodRemoval #EpMethodRemoval #EpMethodRemoval).
+		should: [ sequencer := GtEpEventSequencer entries: entries inImage: false.
+			sequencedEntries := sequencer sequencedEntries ]
+		raise: GtEpInvalidSuperclassError.
 	^ sequencer
 ]
 
@@ -1436,11 +1454,10 @@ GtEpEventSequencerExamples >> methodRemovalWithoutDependentsInImage [
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
 	self assert: entries size equals: 10.
-	sequencer := GtEpEventSequencer entries: entries inImage: true.
-	sequencedEntries := sequencer sequencedEntries.
-	self assert: (sequencer image behaviors includesKey: #Issue2961ClassRenamed).
-	self assert: (sequencer image behaviors includesKey: #Issue2961TraitRenamed).
-	self assert: sequencedEntries isEmpty.
+	self
+		should: [ sequencer := GtEpEventSequencer entries: entries inImage: false.
+			sequencedEntries := sequencer sequencedEntries ]
+		raise: GtEpInvalidSuperclassError.
 	^ sequencer
 ]
 
@@ -1955,13 +1972,15 @@ GtEpEventSequencerExamples >> superclassAndSubclassWithSuperclassAdditionAndRemo
 	self assert: fileReference exists.
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
-	self assert: entries size equals: 2.
+	self assert: entries size equals: 3.
 
 	self
 		shouldnt: [ sequencer := GtEpEventSequencer entries: entries inImage: false.
 			sequencedEntries := sequencer sequencedEntries ]
 		raise: Error.
-
+	self
+		assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassAddition #EpClassRemoval).
 
 	^ sequencedEntries
 ]
@@ -1978,13 +1997,15 @@ GtEpEventSequencerExamples >> superclassAndSubclassWithSuperclassAdditionAndRemo
 	self assert: fileReference exists.
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
-	self assert: entries size equals: 2.
+	self assert: entries size equals: 3.
 
 	self
 		shouldnt: [ sequencer := GtEpEventSequencer entries: entries inImage: true.
 			sequencedEntries := sequencer sequencedEntries ]
 		raise: Error.
-
+	self
+		assert: (sequencedEntries collect: [ :each | each content class name ])
+		equals: #(#EpClassAddition).
 
 	^ sequencedEntries
 ]

@@ -422,8 +422,17 @@ GtEpImageModelInImageVisitor >> shouldReplayOnBehaviorRemoval: replayEntry [
 { #category : #visiting }
 GtEpImageModelInImageVisitor >> visitBehaviorReplay: aGtEpReplayBehaviorModel [
 	"Add the entries required for replay to the stream"
+	| superclass |
 
 	currentBehaviorModel := aGtEpReplayBehaviorModel.
+	"The class can't be exported if it's superclass doesn't exist.
+	Avoid adding the superclass to the image model as it shouldn't be considered known (knowsSuperclassInModel)."
+	superclass := image classOrTraitNamed: currentBehaviorModel superclassName
+		ifAbsent: [ :clsName | clsName ifNotNil: [ self class environment classOrTraitNamed: clsName ] ].
+	(superclass isNil or:
+		[ superclass isObsolete ]) ifTrue:
+			[ GtEpInvalidSuperclassError signalClassModel: currentBehaviorModel ].
+
 	"The latest event has to be earlier than now, set a dummy entry for comparison"
 	earliestBehaviorDependency := OmEntry content: EpEvent new.
 	earliestBehaviorDependency tags at: EpLog timeKey put: DateAndTime now.
