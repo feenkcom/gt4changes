@@ -321,6 +321,14 @@ GtEpReplayBehaviorModel >> isMeta [
 ]
 
 { #category : #testing }
+GtEpReplayBehaviorModel >> isObsolete [
+	"Answer a boolean indicating whether the receiver is obsolete.
+	The image model currently doesn't explicitly model being obsolete, being removed is equivalent."
+	
+	^ self isRemoved
+]
+
+{ #category : #testing }
 GtEpReplayBehaviorModel >> isRemoved [
 	"Answer a boolean indicating whether the receiver has been removed from the system."
 

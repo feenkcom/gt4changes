@@ -1445,16 +1445,89 @@ GtEpiceaExampleOmbuFiles class >> ombu_Issue4477 [
 
 	factory := GtEpiceaEventFactory new.
 
-factory removeClass: ((factory classDefinitionName: #GtEpEventSequencerExamplesClass1 definitionSource: 'Object subclass: ''GtEpEventSequencerExamplesClass1''
+	factory 
+		addClass: ((factory classDefinitionName: #GtEpEventSequencerExamplesClass2 
+			definitionSource: 'Object subclass: #GtEpEventSequencerExamplesClass2
 	instanceVariableNames: ''''
 	classVariableNames: ''''
-	package: #GtEqEventSequencerExamplesCategory1' superclassName: 'Object' package: #GtEqEventSequencerExamplesCategory1 packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'AnObsoleteGtEpEventSequencerExamplesClass1 class' definitionSource: 'GtEpEventSequencerExamplesClass1 class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'AlistairGrant'. #time -> '2025-07-16T10:05:02.997865+02:00'. #self -> (OmReference globalName: 'Issue4477' localName: '1'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-aece1b5.20F72134FE20' localName: '2'). } asDictionary.
-	factory addClass: ((factory classDefinitionName: #GtEpEventSequencerExamplesClass3 definitionSource: 'GtEpEventSequencerExamplesClass2 subclass: #GtEpEventSequencerExamplesClass3
+	package: ''GtEqEventSequencerExamplesCategory1''' 
+			superclassName: 'Object' 
+			package: #GtEqEventSequencerExamplesCategory1 
+			packageTag: nil 
+			classVariables: OrderedCollection new 
+			instanceVariables: OrderedCollection new 
+			sharedPools: OrderedCollection new 
+			comment: (factory classComment: '')) 
+			withMetaclass: (factory metaclassDefinitionName: #'GtEpEventSequencerExamplesClass2 class' definitionSource: 'GtEpEventSequencerExamplesClass2 class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) 
+	tags: { #author -> 'AlistairGrant'. 
+			#time -> '2025-07-16T10:05:15+02:00'. 
+			#self -> (OmReference globalName: 'Issue4477' localName: '2'). 
+			#prior -> (OmReference globalName: 'Issue4477' localName: '1'). } asDictionary.
+
+	factory 
+		addClass: ((factory classDefinitionName: #GtEpEventSequencerExamplesClass1 
+			definitionSource: 'GtEpEventSequencerExamplesClass2 subclass: #GtEpEventSequencerExamplesClass1
 	instanceVariableNames: ''''
 	classVariableNames: ''''
-	package: ''GtEqEventSequencerExamplesCategory1''' superclassName: 'GtEpEventSequencerExamplesClass2' package: #GtEqEventSequencerExamplesCategory1 packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'GtEpEventSequencerExamplesClass3 class' definitionSource: 'GtEpEventSequencerExamplesClass3 class
-	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'AlistairGrant'. #time -> '2025-07-16T10:05:15.729799+02:00'. #self -> (OmReference globalName: 'Issue4477' localName: '2'). #prior -> (OmReference globalName: 'Issue4477' localName: '1'). } asDictionary.
+	package: ''GtEqEventSequencerExamplesCategory1''' 
+			superclassName: 'GtEpEventSequencerExamplesClass2' 
+			package: #GtEqEventSequencerExamplesCategory1 
+			packageTag: nil 
+			classVariables: OrderedCollection new 
+			instanceVariables: OrderedCollection new 
+			sharedPools: OrderedCollection new 
+			comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'GtEpEventSequencerExamplesClass1 class' definitionSource: 'GtEpEventSequencerExamplesClass1 class
+		instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) 
+	tags: { #author -> 'AlistairGrant'. 
+			#time -> '2025-07-16T10:05:16+02:00'. 
+			#self -> (OmReference globalName: 'Issue4477' localName: '3'). 
+			#prior -> (OmReference globalName: 'Issue4477' localName: '2'). } asDictionary.
+
+
+	factory 
+		removeClass: ((factory classDefinitionName: #GtEpEventSequencerExamplesClass1 
+			definitionSource: 'Object subclass: ''GtEpEventSequencerExamplesClass1''
+	instanceVariableNames: ''''
+	classVariableNames: ''''
+	package: #GtEqEventSequencerExamplesCategory1' 
+			superclassName: 'Object' 
+			package: #GtEqEventSequencerExamplesCategory1 
+			packageTag: nil 
+			classVariables: OrderedCollection new 
+			instanceVariables: OrderedCollection new 
+			sharedPools: OrderedCollection new 
+			comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'GtEpEventSequencerExamplesClass1 class' definitionSource: 'GtEpEventSequencerExamplesClass1 class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) 
+	tags: { #author -> 'AlistairGrant'. 
+			#time -> '2025-07-16T10:05:17+02:00'. 
+			#self -> (OmReference globalName: 'Issue4477' localName: '4'). 
+			#prior -> (OmReference globalName: 'Issue4477' localName: '3'). } asDictionary.
+
+	^ factory
+
+]
+
+{ #category : #'example events' }
+GtEpiceaExampleOmbuFiles class >> ombu_Issue4908 [
+	| factory |
+
+	factory := GtEpiceaEventFactory new.
+
+	factory addClass: ((factory classDefinitionName: #Issue4908Superclass definitionSource: 'Object << #Issue4908Superclass
+	slots: {};
+	package: ''GtEqEventSequencerExamplesCategory1''' superclassName: 'Object' package: #GtEqEventSequencerExamplesCategory1 packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue4908Superclass class' definitionSource: 'Object class << Issue4908Superclass class
+	slots: {}' instanceVariables: OrderedCollection new)) tags: { #author -> 'AlistairGrant'. #time -> '2025-12-22T10:35:15.729799+01:00'. #self -> (OmReference globalName: 'Issue4908' localName: '2'). #prior -> (OmReference globalName: 'Issue4908' localName: '1'). } asDictionary.
+
+	factory addClass: ((factory classDefinitionName: #Issue4908Subclass definitionSource: 'Issue4908Superclass << #Issue4908Subclass
+	slots: {};
+	package: ''GtEqEventSequencerExamplesCategory1''' superclassName: 'Issue4908Superclass' package: #GtEqEventSequencerExamplesCategory1 packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue4908Subclass class' definitionSource: 'Issue4908Superclass class << Issue4908Subclass class
+	slots: {}' instanceVariables: OrderedCollection new)) tags: { #author -> 'AlistairGrant'. #time -> '2025-12-22T10:35:16+01:00'. #self -> (OmReference globalName: 'Issue4908' localName: '2'). #prior -> (OmReference globalName: 'Issue4908' localName: '1'). } asDictionary.
+	
+factory removeClass: ((factory classDefinitionName: #Issue4908Superclass definitionSource: 'Object << #Issue4908Superclass
+	slots: {};
+	package: ''GtEqEventSequencerExamplesCategory1''' superclassName: 'Object' package: #GtEqEventSequencerExamplesCategory1 packageTag: nil classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'Issue4908Superclass class' definitionSource: 'Issue4908Superclass class
+	instanceVariableNames: ''''' instanceVariables: OrderedCollection new)) tags: { #author -> 'AlistairGrant'. #time -> '2025-12-22T10:35:17+01:00'. #self -> (OmReference globalName: 'Issue4477' localName: '1'). #prior -> (OmReference globalName: 'Pharo11-SNAPSHOT-64bit-aece1b5.20F72134FE20' localName: '2'). } asDictionary.
 
 	^ factory
 
@@ -2199,6 +2272,7 @@ GtEpiceaExampleOmbuFiles >> loadDataDir [
 	'GtEpLogEnumeratorExamples/testClass01/Pharo10-SNAPSHOT-64bit-fec28a6.7699qwkejd20k4j8pduw5i4uz.ombu' -> self class ombu_7699qwkejd20k4j8pduw5i4uz entries.
 	'GtEpLogEnumeratorExamples/testClass01/Pharo10-SNAPSHOT-64bit-fec28a6.4i0wvlvo02nxps5csied8ix6w.ombu' -> self class ombu_4i0wvlvo02nxps5csied8ix6w entries.
 	'GtEpReplayModelExamples/data01/Pharo10-SNAPSHOT-64bit-2314c3f.2adndgji2gjod2o288oibtkgo.ombu' -> self class ombu_2adndgji2gjod2o288oibtkgo entries.
+	'GtEpEventSequencerExamples/Issue4908/Issue4908.ombu' -> self class ombu_Issue4908 entries.
 	} do: [ :assoc |
 		self load: assoc key fromEntries: assoc value in: newDataDir ].
 	DataDir := newDataDir.
