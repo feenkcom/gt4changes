@@ -279,7 +279,7 @@ GtEpReplayBehaviorModel >> inheritedFrom: aBehavior modifiedAfter: aDateAndTime 
 	^ (self inheritsFrom: aBehavior)
 		or: [ entries
 				anySatisfy: [ :entry | 
-					entry content isEpClassModification
+					entry content isEpClassChange
 						and: [ (entry content behaviorAffected superclassName sameContentAs: aBehavior name)
 								and: [ entry gtTime > aDateAndTime ] ] ] ]
 ]

@@ -1630,6 +1630,32 @@ GtEpEventSequencerExamples >> removeMethodAndClassInImage [
 	^ sequencer
 ]
 
+{ #category : #examples }
+GtEpEventSequencerExamples >> removeSuperclassWithEarlierSubclass [
+	"Check the following sequence:
+	- Add ClassA.
+	- Add ClassB.
+	- Add ClassC as a subclass of ClassA.
+	- Modify ClassC as a subclass of ClassB.
+	- Remove ClassA."
+	<gtExample>
+	<after: #removeTestClasses>
+	<return: #Array>
+	| fileReference entries sequencer sequencedEntries epLog |
+
+	GtEpiceaExampleOmbuFiles reset.
+	fileReference := self class testDataRoot / 'Issue4909' / 'Issue4909.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 5.
+	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: sequencedEntries asArray equals: entries asArray.
+
+	^ sequencedEntries
+]
+
 { #category : #private }
 GtEpEventSequencerExamples >> removeTestClasses [
 
