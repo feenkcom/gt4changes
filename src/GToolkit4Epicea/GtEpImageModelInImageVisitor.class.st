@@ -429,8 +429,9 @@ GtEpImageModelInImageVisitor >> visitBehaviorReplay: aGtEpReplayBehaviorModel [
 	Avoid adding the superclass to the image model as it shouldn't be considered known (knowsSuperclassInModel)."
 	superclass := image classOrTraitNamed: currentBehaviorModel superclassName
 		ifAbsent: [ :clsName | clsName ifNotNil: [ self class environment classOrTraitNamed: clsName ] ].
-	(superclass isNil or:
-		[ superclass isObsolete ]) ifTrue:
+	(currentBehaviorModel isRemoved not and:
+	[ superclass isNil or:
+		[ superclass isObsolete ] ]) ifTrue:
 			[ GtEpInvalidSuperclassError signalClassModel: currentBehaviorModel ].
 
 	"The latest event has to be earlier than now, set a dummy entry for comparison"
