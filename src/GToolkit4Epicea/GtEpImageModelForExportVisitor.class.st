@@ -84,3 +84,21 @@ GtEpImageModelForExportVisitor >> shouldReplayOnBehaviorRemoval: replayEntry [
 	[ content isGtEpReplayBehaviorAddition and: 
 		[ self behaviorHasSubclassesAfter: replayEntry ] ]
 ]
+
+{ #category : #visiting }
+GtEpImageModelForExportVisitor >> visitBehaviorReplay: aGtEpReplayBehaviorModel [
+	"Add the entries required for replay to the stream"
+
+	currentBehaviorModel := aGtEpReplayBehaviorModel.
+	"The class can't be exported if it's superclass doesn't exist.
+	Avoid adding the superclass to the image model as it shouldn't be considered known (knowsSuperclassInModel)."
+	currentBehaviorModel isRemoved ifFalse:
+		[ | superclass |
+		superclass := image classOrTraitNamed: currentBehaviorModel superclassName
+			ifAbsent: [ :clsName | clsName ifNotNil: [ self class environment classOrTraitNamed: clsName ] ].
+		(superclass isNil or:
+			[ superclass isObsolete ]) ifTrue:
+				[ GtEpInvalidSuperclassError signalClassModel: currentBehaviorModel ] ].
+
+	super visitBehaviorReplay: aGtEpReplayBehaviorModel
+]
