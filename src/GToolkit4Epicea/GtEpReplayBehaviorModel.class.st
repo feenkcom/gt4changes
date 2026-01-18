@@ -452,7 +452,7 @@ GtEpReplayBehaviorModel >> superclassName [
 
 	^ superclassName ifNil: [ 
 		self asRingDefinition ifNotNil: [ :aClassDefinition | 
-			aClassDefinition superclassName asSymbol ] ]
+			aClassDefinition superclassName ifNotNil: #asSymbol ] ]
 ]
 
 { #category : #accessing }
