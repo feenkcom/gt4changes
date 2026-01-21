@@ -161,7 +161,7 @@ GtEpicea >> createChangeTabs [
 						aptitude: BrGlamorousButtonWithIconAptitude;
 						icon: BrGlamorousVectorIcons add;
 						label: 'Add Selected';
-						action: [ globalChangesList selectedIndices
+						action: [ globalChangesList selectedIndices reversed
 								do: [ :anIndex | self addEvent: (globalChangesList items at: anIndex) content ].
 							changesList itemsProvider: self log entriesStream asBrItemsProvider ]);
 				addItem: (BrButton new
