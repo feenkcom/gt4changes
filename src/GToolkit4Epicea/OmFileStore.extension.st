@@ -1,6 +1,12 @@
 Extension { #name : #OmFileStore }
 
 { #category : #'*GToolkit4Epicea' }
+OmFileStore >> critical: aBlock [
+	lock ifNil: [ lock := Mutex new ].
+	^ lock critical: aBlock
+]
+
+{ #category : #'*GToolkit4Epicea' }
 OmFileStore >> directory [
 
 	^ fileReference parent
@@ -26,4 +32,12 @@ OmFileStore >> isFileStore [
 	"Answer a boolean indicating whether the receiver has a disk file as the store"
 	
 	^ true
+]
+
+{ #category : #'*GToolkit4Epicea' }
+OmFileStore >> reset [
+	self
+		critical: [ mustRefresh := false.
+			self fileReference ensureDelete ensureCreateFile.
+			self initialize ]
 ]
