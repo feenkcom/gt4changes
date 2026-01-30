@@ -543,6 +543,19 @@ GtEpiceaAbstractLog >> recoverLatest [
 	^ GtEpiceaExplicitLog on: entries.
 ]
 
+{ #category : #saving }
+GtEpiceaAbstractLog >> saveToOmbu: aFileReference [
+	"Save the receiver's entries to aFileReference in ombu format"
+
+	aFileReference asFileReference writeStreamDo: [ :fStream |
+		| sStream |
+		sStream := STONWriter on: fStream.
+		self entries do: [ :omEntry |
+			sStream
+				reset;
+				nextPut: omEntry ] ].
+]
+
 { #category : #accessing }
 GtEpiceaAbstractLog >> shouldUpdate [
 	^ self subclassResponsibility
