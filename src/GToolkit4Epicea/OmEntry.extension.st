@@ -171,6 +171,11 @@ OmEntry >> gtTime [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+OmEntry >> gtTimeOrEpoch [
+	^ self tags at: EpLog timeKey ifAbsent: [ DateAndTime epoch ]
+]
+
+{ #category : #'*GToolkit4Epicea' }
 OmEntry >> gtViewChangeDescriptionElements [
 	^  self content 
 			accept: GtEpiceaBrickVisitor new
