@@ -30,8 +30,8 @@ GtOmEntrySortFunction >> collate: object1 with: object2 [
 	omEntry1 := accessorBlock ifNil: [ object1 ] ifNotNil: [ accessorBlock value: object1 ].
 	omEntry2 := accessorBlock ifNil: [ object2 ] ifNotNil: [ accessorBlock value: object2 ].
 
-	time1 := omEntry1 gtTime.
-	time2 := omEntry2 gtTime.
+	time1 := omEntry1 gtTimeOrEpoch.
+	time2 := omEntry2 gtTimeOrEpoch.
 
 	^ time1 = time2 ifTrue: 
 		[ localName1 := (omEntry1 tagAt: #self) localName asNumber.
