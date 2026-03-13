@@ -44,6 +44,8 @@ RGClassDefinition >> gtDefinitionSource [
 { #category : #'*GToolkit4Epicea' }
 RGClassDefinition >> packageName [
 
-	^ self forPharo12AndNewer: [ self package name ]
+	^ self forPharo12AndNewer: [ self package isString
+			ifTrue: [self package  ] 
+			ifFalse: [ self package name ] ]
 		forPharo11: [ self package ]
 ]
