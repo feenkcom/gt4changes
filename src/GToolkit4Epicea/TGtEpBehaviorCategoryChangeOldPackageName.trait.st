@@ -8,9 +8,9 @@ Trait {
 
 { #category : #utils }
 TGtEpBehaviorCategoryChangeOldPackageName >> inferOldPackageNameFromOldCategoryName [
-	RPackageOrganizer default packages 
+	self packageOrganizer packages 
 		detect: [ :each | 
-			RPackageOrganizer default 
+			self packageOrganizer
 				category: self oldCategory 
 				matches: each packageName ]
 		ifFound: [ :aPackage | 
