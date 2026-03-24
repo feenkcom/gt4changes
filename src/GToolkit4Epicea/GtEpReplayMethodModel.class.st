@@ -178,7 +178,7 @@ GtEpReplayMethodModel >> package [
 
 	protocol := self protocol.
 	^ protocol first = $*
-		ifTrue: [ RPackageOrganizer default packageMatchingExtensionName: protocol allButFirst ]
+		ifTrue: [ self packageOrganizer packageMatchingExtensionName: protocol allButFirst ]
 		ifFalse: [ behaviorModel package ]
 ]
 

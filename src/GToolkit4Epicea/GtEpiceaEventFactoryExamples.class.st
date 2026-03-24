@@ -180,16 +180,13 @@ GtEpiceaEventFactoryExamples >> methodAddModifyRemove [
 { #category : #'private - helpers' }
 GtEpiceaEventFactoryExamples >> packageNamed: aSymbol [
 
-	^ self forPharo12AndNewer: [ PackageOrganizer default packageNamed: aSymbol ]
-		forPharo11: [ RPackageOrganizer default packageNamed: aSymbol ]
+	^ self packageOrganizer packageNamed: aSymbol
 ]
 
 { #category : #examples }
 GtEpiceaEventFactoryExamples >> packageNamed: aSymbol ifAbsent: aBlock [
 
-	^ self 
-		forPharo12AndNewer: [ PackageOrganizer default packageNamed: aSymbol ifAbsent: aBlock ] 
-		forPharo11: [ RPackageOrganizer default packageNamed: aSymbol ifAbsent: aBlock ].
+	^ self packageOrganizer packageNamed: aSymbol ifAbsent: aBlock
 ]
 
 { #category : #examples }
@@ -222,12 +219,7 @@ GtEpiceaEventFactoryExamples >> packageRegisterAddRenameRemove [
 { #category : #'private - helpers' }
 GtEpiceaEventFactoryExamples >> removePackageNamed: aSymbol [
 
-	self forPharo12AndNewer:
-		[ PackageOrganizer default removePackage: aSymbol]
-	forPharo11:
-		[ RPackageOrganizer default 
-			unregisterPackageNamed: aSymbol;
-			removePackageNameFromCache: aSymbol ]
+	self packageOrganizer removePackage: aSymbol
 ]
 
 { #category : #examples }
