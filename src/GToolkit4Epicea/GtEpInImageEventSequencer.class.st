@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #'private - accessing' }
+GtEpInImageEventSequencer >> getReplayVisitor [
+
+	^ GtEpImageModelReplayVisitor new wrappedEntries: wrappedEntries.
+]
+
+{ #category : #'private - accessing' }
 GtEpInImageEventSequencer >> getSequencedEntries [
 	"Calculate the sequenced entries from the entries.
 	The sequence generation consists of three steps:
@@ -13,6 +19,6 @@ GtEpInImageEventSequencer >> getSequencedEntries [
 	3. Sort the events chronologically."
 
 	wrappedEntries ifEmpty: [ ^ wrappedEntries ].
-	replay := GtEpImageModelReplayVisitor new wrappedEntries: wrappedEntries.
-	^ replay sequencedEntries.
+	replayVisitor := GtEpImageModelReplayVisitor new wrappedEntries: wrappedEntries.
+	^ replayVisitor sequencedEntries.
 ]

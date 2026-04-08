@@ -8,8 +8,8 @@ Class {
 		'sequencedEntries',
 		'visitor',
 		'image',
-		'replay',
-		'wrappedEntries'
+		'wrappedEntries',
+		'replayVisitor'
 	],
 	#category : #'GToolkit4Epicea-Sequencer'
 }
@@ -62,6 +62,12 @@ GtEpEventSequencer >> apply [
 		each content applyCodeChangeIfHasImpact ].
 ]
 
+{ #category : #asserting }
+GtEpEventSequencer >> assertDependencies [
+
+	self replayVisitor assertDependencies
+]
+
 { #category : #accessing }
 GtEpEventSequencer >> entries [
 
@@ -79,14 +85,17 @@ GtEpEventSequencer >> entries: aCollection [
 ]
 
 { #category : #'private - accessing' }
-GtEpEventSequencer >> getSequencedEntries [
-	"Calculate the sequenced entries from the entries.
-	The sequence generation consists of three steps:
-	1. Iterate over the events building the image model (see {{gtMethod:GtEpEventSequencer>>image}}).
-	2. Iterate over the image model and select required events.
-	3. Sort the events chronologically."
+GtEpEventSequencer >> getReplayVisitor [
 
 	^ self subclassResponsibility
+]
+
+{ #category : #'private - accessing' }
+GtEpEventSequencer >> getSequencedEntries [
+
+	wrappedEntries ifEmpty: [ ^ wrappedEntries ].
+	replayVisitor := self getReplayVisitor.
+	^ replayVisitor sequencedEntries.
 ]
 
 { #category : #'gt - extensions' }
@@ -140,13 +149,13 @@ GtEpEventSequencer >> gtViewSequencedEntriesFor: aView [
 
 { #category : #accessing }
 GtEpEventSequencer >> image [
-	"Answer the image model."
-	<return: #GtEpReplayImageModel>
 
-	^ image ifNil:
-		[ visitor := GtEpReplayEventVisitor new.
-		visitor visitNodes: wrappedEntries.
-		image := visitor image ].
+	^ self replayVisitor image
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> replayVisitor [
+	^ replayVisitor
 ]
 
 { #category : #accessing }

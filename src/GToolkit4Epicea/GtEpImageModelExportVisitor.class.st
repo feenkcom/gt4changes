@@ -46,18 +46,6 @@ GtEpImageModelExportVisitor >> addBehaviorEntriesFrom: aGtEpReplayBehaviorModel 
 		entry classification: #required ].
 ]
 
-{ #category : #private }
-GtEpImageModelExportVisitor >> assertDependents [
-	| visitor |
-
-	visitor := GtEpDependentCheckExportVisitor new
-		image: image.
-	wrappedEntries
-		select: #isRequired
-		thenDo: [ :wrappedEntry |
-			wrappedEntry content accept: visitor ].
-]
-
 { #category : #accessing }
 GtEpImageModelExportVisitor >> classChains [
 	"Answer the wrapped entries organised in to chains of class definitions."
@@ -101,7 +89,6 @@ GtEpImageModelExportVisitor >> getSequencedEntries [
 
 	self visitNode: self image.
 	self postProcessWrappedEntries.
-	self assertDependents.
 	^ wrappedEntries select: #isRequired thenCollect: #omEntry
 ]
 

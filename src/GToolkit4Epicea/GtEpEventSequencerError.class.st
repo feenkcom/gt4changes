@@ -2,25 +2,25 @@ Class {
 	#name : #GtEpEventSequencerError,
 	#superclass : #GtEpError,
 	#instVars : [
-		'model'
+		'entry'
 	],
 	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #'instance creation' }
-GtEpEventSequencerError class >> signalModel: aGtEpReplayModel [
+GtEpEventSequencerError class >> signalEntry: aGtEpSequencerEntry [
 
 	^ self new
-		model: aGtEpReplayModel;
+		entry: aGtEpSequencerEntry;
 		signal.
 ]
 
 { #category : #accessing }
-GtEpEventSequencerError >> model [
-	^ model
+GtEpEventSequencerError >> entry [
+	^ entry
 ]
 
 { #category : #accessing }
-GtEpEventSequencerError >> model: anObject [
-	model := anObject
+GtEpEventSequencerError >> entry: anObject [
+	entry := anObject
 ]

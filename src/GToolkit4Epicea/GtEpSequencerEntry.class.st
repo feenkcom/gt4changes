@@ -17,12 +17,20 @@ GtEpSequencerEntry >> applyCodeChange [
 
 { #category : #accessing }
 GtEpSequencerEntry >> classification [
+	<return: #Symbol>
+	
 	^ classification
 ]
 
 { #category : #accessing }
-GtEpSequencerEntry >> classification: anObject [
-	classification := anObject
+GtEpSequencerEntry >> classification: aSymbol [
+	"Set the receiver's classification.
+	nil is allowed for serialisation."
+
+	(#(#required #requiredMissingDependency #superseeded nil) includes: aSymbol) ifFalse:
+		[ self error: 'Invalid classification: ', aSymbol printString ].
+
+	classification := aSymbol
 ]
 
 { #category : #accessing }
@@ -129,11 +137,19 @@ GtEpSequencerEntry >> hasTime [
 ]
 
 { #category : #testing }
+GtEpSequencerEntry >> isMissingDependency [
+	"Answer a boolean indicating whether the receiver is classified as required but missing a dependency.
+	Superseeded / not needed entries are never missing a dependency."
+
+	^ classification == #requiredMissingDependency
+]
+
+{ #category : #testing }
 GtEpSequencerEntry >> isRequired [
 	"Answer a boolean indicating whether the receiver is required.
 	nil = not required."
 
-	^ classification == #required
+	^ #(#required #requiredMissingDependency) includes: classification
 ]
 
 { #category : #accessing }

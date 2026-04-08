@@ -17,6 +17,21 @@ GtEpImageModelReplayVisitor >> addBehaviorEntriesFrom: aGtEpReplayBehaviorModel 
 		[ entry classification: #superseeded ].
 ]
 
+{ #category : #'as yet unclassified' }
+GtEpImageModelReplayVisitor >> assertDependencies [
+
+	wrappedEntries 
+		detect: [ :aGtEpSequencerEntry | aGtEpSequencerEntry isMissingDependency ]
+		ifFound: [ :aGtEpSequencerEntry |
+			GtEpMissingClassError signalEntry: aGtEpSequencerEntry ]
+]
+
+{ #category : #private }
+GtEpImageModelReplayVisitor >> checkDependencies [
+
+	GtEpDependentsCheckVisitor visitNodes: wrappedEntries
+]
+
 { #category : #testing }
 GtEpImageModelReplayVisitor >> modelOrEnvironmentIncludesBehaviorNamed: aSymbol [
 	"Answer a boolean indicating whether the named behaviour exists in the system or model.
@@ -45,6 +60,7 @@ GtEpImageModelReplayVisitor >> postProcessWrappedEntries [
 	self removeNoImpactMethodDefinitions.
 	super postProcessWrappedEntries.
 	self removeNoImpactRenamesAndRemoves.
+	self checkDependencies.
 ]
 
 { #category : #private }
