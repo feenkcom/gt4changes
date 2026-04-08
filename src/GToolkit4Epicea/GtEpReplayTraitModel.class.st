@@ -35,9 +35,9 @@ GtEpReplayTraitModel >> fromClassModel: aGtEpReplayClassModel [
 	imageModel := aGtEpReplayClassModel imageModel.
 	classSide := aGtEpReplayClassModel classSide.
 	comments := aGtEpReplayClassModel comments.
+	methods := aGtEpReplayClassModel methods.
 	previousLives := aGtEpReplayClassModel previousLives.
 	previousNames := aGtEpReplayClassModel previousNames.
-	aGtEpReplayClassModel becomeForward: self.
 ]
 
 { #category : #testing }

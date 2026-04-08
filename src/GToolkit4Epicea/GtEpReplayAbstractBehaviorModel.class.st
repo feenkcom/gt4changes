@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'methods',
 		'protocolChanges',
-		'removedMethods'
+		'removedMethods',
+		'subclassed'
 	],
 	#category : #'GToolkit4Epicea-Sequencer'
 }
@@ -299,6 +300,7 @@ GtEpReplayAbstractBehaviorModel >> reset [
 	methods := IdentityDictionary new.
 	protocolChanges := IdentityDictionary new.
 	removedMethods := OrderedCollection new.
+	subclassed := false.
 ]
 
 { #category : #accessing }
@@ -311,4 +313,17 @@ GtEpReplayAbstractBehaviorModel >> selectors [
 		at: self name
 		ifPresent: [ :cls | selectors addAll: cls selectors ].
 	^ selectors
+]
+
+{ #category : #accessing }
+GtEpReplayAbstractBehaviorModel >> subclassed [
+	^ subclassed
+]
+
+{ #category : #accessing }
+GtEpReplayAbstractBehaviorModel >> subclassed: aBoolean [
+	"Subclassed is set true when a subclass definition event is found.
+	If true, previous lives will need to be maintained."
+
+	subclassed := aBoolean
 ]

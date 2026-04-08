@@ -5,11 +5,11 @@ Class {
 	#name : #GtEpEventSequencer,
 	#superclass : #Object,
 	#instVars : [
-		'entries',
 		'sequencedEntries',
 		'visitor',
 		'image',
-		'replay'
+		'replay',
+		'wrappedEntries'
 	],
 	#category : #'GToolkit4Epicea-Sequencer'
 }
@@ -65,13 +65,16 @@ GtEpEventSequencer >> apply [
 { #category : #accessing }
 GtEpEventSequencer >> entries [
 
-	^ entries
+	^ wrappedEntries collect: [ :gtEpSequencerEntry | gtEpSequencerEntry omEntry ]
 ]
 
 { #category : #accessing }
-GtEpEventSequencer >> entries: anObject [
+GtEpEventSequencer >> entries: aCollection [
 
-	entries := anObject.
+	wrappedEntries := aCollection collectWithIndex: [ :omEntry :index |
+		GtEpSequencerEntry new
+			omEntry: omEntry;
+			sortOrder: index ].
 	sequencedEntries := nil.
 ]
 
@@ -112,10 +115,10 @@ GtEpEventSequencer >> gtViewAllEntriesFor: aView [
 	^ aView columnedList
 		title: 'All entries';
 		priority: 20;
-		items: [ entries ];
-		column: 'Change' text: [ :anOmbuEntry | 
-			anOmbuEntry content asRopedText 
-				foreground: (self gtBackgroundColorForEntry: anOmbuEntry) ];
+		items: [ wrappedEntries ];
+		column: 'Change' text: [ :anEntry | 
+			anEntry asRopedText 
+				foreground: (self gtBackgroundColorForEntry: anEntry) ];
 		column: 'Timestamp' 
 			text: [ :anOmbuEntry | 
 				anOmbuEntry gtTime asString asRopedText 
@@ -142,29 +145,8 @@ GtEpEventSequencer >> image [
 
 	^ image ifNil:
 		[ visitor := GtEpReplayEventVisitor new.
-		visitor visitNodes: entries.
+		visitor visitNodes: wrappedEntries.
 		image := visitor image ].
-]
-
-{ #category : #testing }
-GtEpEventSequencer >> isBehaviorDefinitionChange: anEpEvent [
-	"Answer a boolean indicating whether the supplied event is a behavior change that must be replayed first."
-
-	^ anEpEvent isEpBehaviorChange and:
-		[ anEpEvent isEpProtocolChange not and:
-		[ anEpEvent isEpBehaviorCommentChange not ] ].
-]
-
-{ #category : #private }
-GtEpEventSequencer >> isEvent: currentEntry notOverriddenIn: chronologicalEntries startingFrom: startIndex [
-	"Answer a boolean indicating whether the supplied event is not overridden later in the collection"
-	| entry |
-
-	startIndex to: chronologicalEntries size do: [ :index |
-		entry := chronologicalEntries at: index.
-		(entry content isCodeChange and: [ entry content doesOverride: currentEntry content ]) ifTrue:
-			[ ^ false ] ].
-	^ true
 ]
 
 { #category : #accessing }
@@ -177,4 +159,14 @@ GtEpEventSequencer >> sequencedEntries [
 GtEpEventSequencer >> visitor [
 
 	^ visitor
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> wrappedEntries [
+	^ wrappedEntries
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> wrappedEntries: anObject [
+	wrappedEntries := anObject
 ]

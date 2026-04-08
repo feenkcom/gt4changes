@@ -69,7 +69,7 @@ GtEpReplayMethodModel >> behaviorModel: anObject [
 
 { #category : #accessing }
 GtEpReplayMethodModel >> currentDefinition [
-
+self halt: 'image access'.
 	^ (self class environment classOrTraitNamed: behaviorModel name) methodNamed: selector
 ]
 
@@ -83,7 +83,7 @@ GtEpReplayMethodModel >> exists [
 
 { #category : #testing }
 GtEpReplayMethodModel >> existsInSystem [
-
+self halt: 'image access'.
 	^ (self class environment classOrTraitNamed: behaviorModel name)
 		ifNil: [ false ]
 		ifNotNil: [ :behavior | behavior includesSelector: selector ]

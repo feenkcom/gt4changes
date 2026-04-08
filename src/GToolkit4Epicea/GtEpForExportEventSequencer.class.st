@@ -12,7 +12,7 @@ GtEpForExportEventSequencer >> getSequencedEntries [
 	2. Iterate over the image model and select required events.
 	3. Sort the events chronologically."
 
-	entries ifEmpty: [ ^ entries ].
-	replay := GtEpImageModelForExportVisitor image: self image.
-	^ replay sequencedEntries sorted: GtOmEntrySortFunction new.
+	wrappedEntries ifEmpty: [ ^ wrappedEntries ].
+	replay := GtEpImageModelExportVisitor new wrappedEntries: wrappedEntries.
+	^ replay sequencedEntries.
 ]

@@ -121,7 +121,7 @@ GtEpReplayMetaBehaviorModel >> printOn: aStream [
 GtEpReplayMetaBehaviorModel >> selectors [
 	"Answer the selectors defined by the receiver, including the current definition"
 	| selectors |
-
+self halt: 'image access'.
 	selectors := methods keys asSet.
 	self class environment 
 		at: instanceSide name
