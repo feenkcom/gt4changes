@@ -634,7 +634,7 @@ GtEpiceaFactoryEventCodeVisitor >> visitPackageTagAddition: aPackageTagAddition 
 		tab;
 		<< 'factory addPackage: ';
 		print: aPackageTagAddition packageName;
-		<< 'tag: ';
+		<< ' tag: ';
 		print: aPackageTagAddition tagName.
 	self appendTagsKeywordFrom: currentEntry.
 	codeStream
@@ -649,7 +649,7 @@ GtEpiceaFactoryEventCodeVisitor >> visitPackageTagRemoval: aPackageTagRemoval [
 		tab;
 		<< 'factory removePackage: ';
 		print: aPackageTagRemoval packageName;
-		<< 'tag: ';
+		<< ' tag: ';
 		print: aPackageTagRemoval tagName.
 	self appendTagsKeywordFrom: currentEntry.
 	codeStream

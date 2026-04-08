@@ -1,5 +1,5 @@
 "
-A GtEpReplayImageModel models the state of the image code base using the current image as the starting state.
+A GtEpReplayImageModel holds a model of a collection of Epicea events.
 "
 Class {
 	#name : #GtEpReplayImageModel,
@@ -41,17 +41,22 @@ GtEpReplayImageModel >> addBehaviorCommentChange: anOmEntry [
 
 { #category : #adding }
 GtEpReplayImageModel >> addBehaviorRename: anOmEntry [
-	| behavior event |
+	| oldBehavior newBehavior event |
 
 	event := anOmEntry content.
-	behavior := self classOrTraitNamed: event oldName
+	oldBehavior := self classOrTraitNamed: event oldName
 		ifAbsentPut: [ :baseName | 
 			(self behaviorModelFor: event) name: baseName ].
-	behavior addBehaviorRename: anOmEntry.
+	oldBehavior addBehaviorRename: anOmEntry.
 	behaviors 
 		removeKey: event oldName
 		ifAbsent: [ ].
-	behaviors at: event newName put: behavior.
+	newBehavior := self classOrTraitNamed: event newName
+		ifPresent: [ :behavior |
+			behavior isRemoved ifFalse:
+				[ behavior addBehaviorRemoval: anOmEntry ].
+			oldBehavior previousLives addAll: behavior previousLives. ].
+	behaviors at: event newName put: oldBehavior.
 ]
 
 { #category : #'as yet unclassified' }
@@ -163,19 +168,6 @@ GtEpReplayImageModel >> addTraitRemoval: anOmEntry [
 	behavior addBehaviorRemoval: anOmEntry.
 ]
 
-{ #category : #testing }
-GtEpReplayImageModel >> basicIncludesBehaviorSometimeNamed: aSymbol [
-	"Answer a boolean indicating whether the named behaviour exists in the list of behaviours with its current or a previous name, without looking at superclasses"
-
-	^ behaviors
-		at: aSymbol
-		ifPresent: [ :aBehavior | true ]
-		ifAbsent: [ behaviors 
-			detect: [ :aBehavior | aBehavior previousNames includes: aSymbol ]
-			ifFound: [ :aBehavior | aBehavior ]
-			ifNone: [ ^ false ] ].
-]
-
 { #category : #accessing }
 GtEpReplayImageModel >> behaviorAt: aSymbol [
 	"Answer the behavior model for the given name"
@@ -267,21 +259,11 @@ GtEpReplayImageModel >> classModelNamed: aSymbol [
 { #category : #accessing }
 GtEpReplayImageModel >> classOrTraitNamed: aSymbol [
 	"Answer the class or trait with the supplied name, or nil if not found"
-	| meta baseName behavior |
+	| nameAndMeta behavior |
 
-	(aSymbol endsWith: ' class') ifTrue: 
-		[ meta := true.
-		baseName := (aSymbol copyFrom: 1 to: aSymbol size - 6) asSymbol ]
-	ifFalse: 
-		[ (aSymbol endsWith: ' classTrait') ifTrue: 
-			[ meta := true.
-			baseName := (aSymbol copyFrom: 1 to: aSymbol size - 11) asSymbol ]
-		ifFalse: 
-			[ meta := false.
-			baseName := aSymbol asSymbol ] ].
-
-	behavior := behaviors at: baseName ifAbsent: [ ^ nil ].
-	^ meta 
+	nameAndMeta := self class classNameAndMeta: aSymbol.
+	behavior := behaviors at: nameAndMeta first ifAbsent: [ ^ nil ].
+	^ nameAndMeta second
 		ifTrue: [ behavior classSide ]
 		ifFalse: [ behavior ]
 ]
@@ -289,23 +271,12 @@ GtEpReplayImageModel >> classOrTraitNamed: aSymbol [
 { #category : #accessing }
 GtEpReplayImageModel >> classOrTraitNamed: aSymbol ifAbsent: absentBlock [
 	"Answer the class or trait with the supplied name"
-	| meta baseName behavior |
+	| nameAndMeta behavior |
 
-	aSymbol ifNil: [ ^ absentBlock value: aSymbol ].
-	(aSymbol endsWith: ' class') ifTrue: 
-		[ meta := true.
-		baseName := (aSymbol copyFrom: 1 to: aSymbol size - 6) asSymbol ]
-	ifFalse: 
-		[ (aSymbol endsWith: ' classTrait') ifTrue: 
-			[ meta := true.
-			baseName := (aSymbol copyFrom: 1 to: aSymbol size - 11) asSymbol ]
-		ifFalse: 
-			[ meta := false.
-			baseName := aSymbol asSymbol ] ].
-
-	behavior := behaviors at: baseName 
-		ifAbsent: [ absentBlock value: baseName ].
-	 ^ meta 
+	nameAndMeta := self class classNameAndMeta: aSymbol.
+	behavior := behaviors at: nameAndMeta first 
+		ifAbsent: [ absentBlock value: nameAndMeta first ].
+	 ^ nameAndMeta second 
 		ifTrue: [ behavior classSide ]
 		ifFalse: [ behavior ]
 ]
@@ -315,24 +286,22 @@ GtEpReplayImageModel >> classOrTraitNamed: aSymbol ifAbsentPut: putBlock [
 	"Answer the class or trait with the supplied name.
 	If it is present in the running image, but not the model, add it to the model.
 	Otherwise answer nil."
-	| meta baseName behavior |
+	| nameAndMeta behavior |
 
-	(aSymbol endsWith: ' class') ifTrue: 
-		[ meta := true.
-		baseName := (aSymbol copyFrom: 1 to: aSymbol size - 6) asSymbol ]
-	ifFalse: 
-		[ (aSymbol endsWith: ' classTrait') ifTrue: 
-			[ meta := true.
-			baseName := (aSymbol copyFrom: 1 to: aSymbol size - 11) asSymbol ]
-		ifFalse: 
-			[ meta := false.
-			baseName := aSymbol asSymbol ] ].
-
-	behavior := behaviors at: baseName 
-		ifAbsentPut: [ putBlock value: baseName ].
-	 ^ meta 
+	nameAndMeta := self class classNameAndMeta: aSymbol.
+	behavior := behaviors at: nameAndMeta first 
+		ifAbsentPut: [ putBlock value: nameAndMeta first ].
+	 ^ nameAndMeta second 
 		ifTrue: [ behavior classSide ]
 		ifFalse: [ behavior ]
+]
+
+{ #category : #accessing }
+GtEpReplayImageModel >> classOrTraitNamed: aSymbol ifPresent: presentBlock [
+
+	^ self classOrTraitNamed: aSymbol
+		ifPresent: presentBlock
+		ifAbsent: [ :basename | ]
 ]
 
 { #category : #accessing }
@@ -340,22 +309,29 @@ GtEpReplayImageModel >> classOrTraitNamed: aSymbol ifPresent: presentBlock ifAbs
 	"Answer the class or trait with the supplied name.
 	If it is present in the running image, but not the model, add it to the model.
 	Otherwise answer nil."
-	| meta baseName behavior |
+	| nameAndMeta behavior |
 
-	(aSymbol endsWith: ' class') ifTrue: 
-		[ meta := true.
-		baseName := (aSymbol copyFrom: 1 to: aSymbol size - 6) asSymbol ]
-	ifFalse: 
-		[ (aSymbol endsWith: ' classTrait') ifTrue: 
-			[ meta := true.
-			baseName := (aSymbol copyFrom: 1 to: aSymbol size - 11) asSymbol ]
-		ifFalse: 
-			[ meta := false.
-			baseName := aSymbol asSymbol ] ].
+	nameAndMeta := self class classNameAndMeta: aSymbol.
+	behavior := behaviors at: nameAndMeta first 
+		ifAbsent: [ ^ absentBlock cull: nameAndMeta first ].
+	 ^ presentBlock value: (nameAndMeta second 
+		ifTrue: [ behavior classSide ]
+		ifFalse: [ behavior ])
+]
 
-	behavior := behaviors at: baseName 
-		ifAbsent: [ ^ absentBlock cull: baseName ].
-	 ^ presentBlock value: (meta 
+{ #category : #accessing }
+GtEpReplayImageModel >> classOrTraitSometimeNamed: aSymbol ifPresent: presentBlock ifAbsent: absentBlock [
+	"Search for the model that is either currently or was previously named aSymbol"
+	| nameAndMeta basename behavior |
+
+	nameAndMeta := self class classNameAndMeta: aSymbol.
+	basename := nameAndMeta first.
+	behavior := behaviors at: basename ifAbsent: 
+		[ behaviors
+			detect: [ :aBehavior | aBehavior previousNames includes: basename ]
+			ifFound: [ :aBehavior | aBehavior ]
+			ifNone: [ ^ absentBlock cull: basename ] ].
+	^ presentBlock value: (nameAndMeta second 
 		ifTrue: [ behavior classSide ]
 		ifFalse: [ behavior ])
 ]
@@ -402,29 +378,21 @@ GtEpReplayImageModel >> hasChanges [
 ]
 
 { #category : #testing }
-GtEpReplayImageModel >> includesBehaviorNamed: aSymbol [
-	"Answer a boolean indicating whether the named behaviour exists in the system at the current point in replay"
-
-	^ (behaviors includesKey: aSymbol) or:
-		[ self environment includesKey: aSymbol ]
-]
-
-{ #category : #testing }
 GtEpReplayImageModel >> includesBehaviorSometimeNamed: aSymbol [
-	"Answer a boolean indicating whether the named behaviour exists in the system with its current or a previous name"
-	| behavior |
+	"Answer a boolean indicating whether the named behaviour exists in the list of behaviours with its current or a previous name, without looking at superclasses"
+	| basenameAndMeta basename |
 
-	(self environment includesKey: aSymbol) ifTrue: [ ^ true ].
-	behavior := behaviors
-		at: aSymbol
+	basenameAndMeta := self class classNameAndMeta: aSymbol.
+	basename := basenameAndMeta first.
+	^ behaviors
+		at: basename
+		ifPresent: [ :aBehavior | true ]
 		ifAbsent: [ behaviors 
-			detect: [ :aBehavior | aBehavior previousNames includes: aSymbol ]
-			ifFound: [ :aBehavior | aBehavior ]
-			ifNone: [ ^ false ] ].
-	^ behavior superclassName 
-		ifNil: [ false ]
-		ifNotNil: [ :superclassName | 
-			self includesBehaviorSometimeNamed: superclassName asSymbol ].
+			detect: [ :aBehavior | 
+				aBehavior isDefined and:
+					[ aBehavior previousNames includes: basename ] ]
+			ifFound: [ :aBehavior | true ]
+			ifNone: [ false ] ].
 ]
 
 { #category : #initialization }
@@ -478,6 +446,7 @@ GtEpReplayImageModel >> traitNamed: aSymbol [
 			imageModel: self;
 			name: baseName ].
 	behavior isClass ifTrue:
-		[ behavior := GtEpReplayTraitModel fromClassModel: behavior ].
+		[ behavior := GtEpReplayTraitModel fromClassModel: behavior.
+		behaviors at: aSymbol put: behavior. ].
 	^ behavior.
 ]

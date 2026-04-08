@@ -83,7 +83,7 @@ GtEpiceaLogViewNode >> gtActionApplyAllFor: anAction [
 		label: 'Apply All...';
 		priority: 10;
 		action: [ :button | button phlow spawnObject: 
-			(GtEpEventSequencer entries: self entries inImage: true) ].
+			(GtEpInImageEventSequencer entries: self entries) ].
 ]
 
 { #category : #accessing }

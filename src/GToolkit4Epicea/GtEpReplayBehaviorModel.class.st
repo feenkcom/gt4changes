@@ -86,7 +86,7 @@ GtEpReplayBehaviorModel >> behaviorAffected [
 	"Answer the Ring model of the receiver's behavior.
 	Either the latest entry, or if none, on the system class"
 	<return: #RGClassDefinition>
-	
+"self halt: 'image access'."
 	^ entries
 		ifEmpty: [ self isRemoved ifTrue:
 				[ previousLives 
@@ -143,13 +143,30 @@ GtEpReplayBehaviorModel >> comments [
 	^ comments
 ]
 
+{ #category : #accessing }
+GtEpReplayBehaviorModel >> currentComment [
+
+	^ self comment ifEmpty:
+		[ (self environment
+			classOrTraitNamed: self behaviorAffectedName)
+			ifNil: [ '' ]
+			ifNotNil: [ :cls | cls comment ] ]
+]
+
+{ #category : #testing }
+GtEpReplayBehaviorModel >> existed [
+	"Answer a boolean indicating whether the receiver currently exists, or previously existed, in the modelled system."
+
+	^ self exists or: 
+		[ previousLives anySatisfy: [ :previousLife | previousLife isDefined ] ].
+]
+
 { #category : #testing }
 GtEpReplayBehaviorModel >> exists [
 	"Answer a boolean indicating whether the receiver exists in the modelled system."
 
 	^ self isRemoved not and:
-		[ entries isNotEmpty or: 
-			[ self environment includesKey: name ] ].
+		[ self isDefined ].
 ]
 
 { #category : #ui }
@@ -199,6 +216,7 @@ GtEpReplayBehaviorModel >> gtPreviousNamesFor: aView [
 
 { #category : #accessing }
 GtEpReplayBehaviorModel >> gtViewChangeIcon [
+"self halt: 'image access'."
 	self isRemoved ifTrue: [
 		^ (self environment includesKey: name) 
 			ifTrue: [ Smalltalk ui icons iconNamed: #changeRemoveIcon ] 
@@ -312,6 +330,14 @@ GtEpReplayBehaviorModel >> instanceSide [
 GtEpReplayBehaviorModel >> isClass [ 
 
 	^ false
+]
+
+{ #category : #testing }
+GtEpReplayBehaviorModel >> isDefined [
+	"Answer a boolean indicating whether the receiver entries that define it."
+
+	^ entries anySatisfy: [ :entry | 
+		self class isBehaviorDefinition: entry content ]
 ]
 
 { #category : #testing }

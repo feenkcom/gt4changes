@@ -69,8 +69,38 @@ GtEpReplayMethodModel >> behaviorModel: anObject [
 
 { #category : #accessing }
 GtEpReplayMethodModel >> currentDefinition [
+	"Answer the image definition of the receiver"
 
 	^ (self class environment classOrTraitNamed: behaviorModel name) methodNamed: selector
+]
+
+{ #category : #accessing }
+GtEpReplayMethodModel >> currentPackage [
+	| protocol |
+
+	protocol := self currentProtocol.
+	^ protocol first = $*
+		ifTrue: [ self packageOrganizer packageMatchingExtensionName: protocol allButFirst ]
+		ifFalse: [ behaviorModel package ]
+]
+
+{ #category : #accessing }
+GtEpReplayMethodModel >> currentProtocol [
+
+	^ entries
+		ifEmpty: [ self currentDefinition protocolName ]
+		ifNotEmpty: [ self latestEntry content methodAffected protocolName ].
+]
+
+{ #category : #accessing }
+GtEpReplayMethodModel >> currentSourceCode [
+	"Answer the most recent definition of the receiver,
+	falling back to the image definition"
+	
+	self isRemoved ifTrue: [ ^ '' ].
+	^ entries 
+		ifEmpty: [ self currentDefinition sourceCode ]
+		ifNotEmpty: [ self latestEntry content methodAffected sourceCode ].
 ]
 
 { #category : #testing }
@@ -177,6 +207,7 @@ GtEpReplayMethodModel >> package [
 	| protocol |
 
 	protocol := self protocol.
+	protocol ifNil: [ ^ nil ].
 	^ protocol first = $*
 		ifTrue: [ self packageOrganizer packageMatchingExtensionName: protocol allButFirst ]
 		ifFalse: [ behaviorModel package ]
@@ -197,7 +228,7 @@ GtEpReplayMethodModel >> printOn: aStream [
 GtEpReplayMethodModel >> protocol [
 
 	^ entries
-		ifEmpty: [ self currentDefinition protocolName ]
+		ifEmpty: [ self deprecated: 'Use #currentProtocol to include the image definition'. nil ]
 		ifNotEmpty: [ self latestEntry content methodAffected protocolName ].
 ]
 
@@ -217,6 +248,6 @@ GtEpReplayMethodModel >> sourceCode [
 
 	self isRemoved ifTrue: [ ^ '' ].
 	^ entries 
-		ifEmpty: [ self currentDefinition sourceCode ]
+		ifEmpty: [ self deprecated: 'Use #currentSourceCode to include the image definition'. '' ]
 		ifNotEmpty: [ self latestEntry content methodAffected sourceCode ].
 ]

@@ -28,3 +28,15 @@ EpBehaviorNameChange >> isGtEpReplayBehaviorAddition [
 
 	^ true.
 ]
+
+{ #category : #'*GToolkit4Epicea' }
+EpBehaviorNameChange >> printOn: aStream [
+
+	aStream
+		<< self class name;
+		<< '(';
+		print: oldName;
+		<< '->';
+		print: newName;
+		<< ')'.
+]

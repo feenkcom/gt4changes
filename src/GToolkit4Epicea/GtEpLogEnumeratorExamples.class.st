@@ -101,17 +101,17 @@ GtEpLogEnumeratorExamples >> priorEntriesFromHead [
 { #category : #examples }
 GtEpLogEnumeratorExamples >> priorEntriesFromHeadForTestTrait2 [
 	"Demonstrate retrieving all entries from the head reference"
-
 	<gtExample>
 	<return: #GtEpLogEnumeratorExamples>
 	| entries epLog reference fileReference |
+	
 	fileReference := self class testDataRoot / 'testTrait2'
 			/ 'Pharo10-SNAPSHOT-64bit-fec28a6.313x18caa4oyvcekylktb7i4k.ombu'.
 	self
 		assert: fileReference resolve exists
 		description: [ fileReference fullName , ' not found' ].
 	epLog := GtEpLogEnumerator fromFile: fileReference.
-	entries := GtEpInImageEventSequencer sequence: epLog priorEntriesFromHead.
+	entries := GtEpInImageEventSequencer sequence: epLog priorEntriesFromHead reversed.
 	self assert: entries size equals: 7.
 	reference := entries first tagAt: #self.
 	self assert: reference localName equals: '1'.

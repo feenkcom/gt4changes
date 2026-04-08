@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #'private - accessing' }
+GtEpForExportEventSequencer >> getReplayVisitor [
+
+	^ GtEpImageModelExportVisitor new wrappedEntries: wrappedEntries.
+]
+
+{ #category : #'private - accessing' }
 GtEpForExportEventSequencer >> getSequencedEntries [
 	"Calculate the sequenced entries from the entries.
 	The sequence generation consists of three steps:
@@ -12,7 +18,7 @@ GtEpForExportEventSequencer >> getSequencedEntries [
 	2. Iterate over the image model and select required events.
 	3. Sort the events chronologically."
 
-	entries ifEmpty: [ ^ entries ].
-	replay := GtEpImageModelForExportVisitor image: self image.
-	^ replay sequencedEntries sorted: GtOmEntrySortFunction new.
+	wrappedEntries ifEmpty: [ ^ wrappedEntries ].
+	replayVisitor := GtEpImageModelExportVisitor new wrappedEntries: wrappedEntries.
+	^ replayVisitor sequencedEntries.
 ]

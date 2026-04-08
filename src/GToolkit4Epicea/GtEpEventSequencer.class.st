@@ -5,11 +5,11 @@ Class {
 	#name : #GtEpEventSequencer,
 	#superclass : #Object,
 	#instVars : [
-		'entries',
 		'sequencedEntries',
 		'visitor',
 		'image',
-		'replay'
+		'wrappedEntries',
+		'replayVisitor'
 	],
 	#category : #'GToolkit4Epicea-Sequencer'
 }
@@ -25,6 +25,8 @@ GtEpEventSequencer class >> entries: anEpEntryCollection inImage: inImageBoolean
 	"Create an instance of the sequencer, chosen based on inImageBoolean.
 	This is for backward compatibility - the appropriate event sequencer should be used directly."
 
+	self deprecated: 'Use the appropriate subclass'.
+
 	^ (inImageBoolean ifTrue:
 		[ GtEpInImageEventSequencer ]
 	ifFalse:
@@ -32,20 +34,12 @@ GtEpEventSequencer class >> entries: anEpEntryCollection inImage: inImageBoolean
 			entries: anEpEntryCollection
 ]
 
-{ #category : #sequencing }
-GtEpEventSequencer class >> entries: anEpEntryCollection includeCurrent: currentBoolean [
-
-	self deprecated: 'Instanciate the appropriate subclass directly'.
-	^ self entries: anEpEntryCollection inImage: currentBoolean not
-]
-
 { #category : #accessing }
 GtEpEventSequencer class >> forCurrentSession [
 	"Answer the receiver with the current session sequenced, including changes which are already in the image."
 
-	^ self
-		entries: (GtEpLogEnumerator new latestLog: EpMonitor current log) priorEntriesFromHead
-		inImage: false.
+	^ GtEpForExportEventSequencer entries: 
+			(GtEpLogEnumerator new latestLog: EpMonitor current log) priorEntriesFromHead reversed
 ]
 
 { #category : #sequencing }
@@ -62,28 +56,40 @@ GtEpEventSequencer >> apply [
 		each content applyCodeChangeIfHasImpact ].
 ]
 
-{ #category : #accessing }
-GtEpEventSequencer >> entries [
+{ #category : #asserting }
+GtEpEventSequencer >> assertDependencies [
 
-	^ entries
+	self replayVisitor assertDependencies
 ]
 
 { #category : #accessing }
-GtEpEventSequencer >> entries: anObject [
+GtEpEventSequencer >> entries [
 
-	entries := anObject.
+	^ wrappedEntries collect: [ :gtEpSequencerEntry | gtEpSequencerEntry omEntry ]
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> entries: aCollection [
+
+	wrappedEntries := aCollection collectWithIndex: [ :omEntry :index |
+		GtEpSequencerEntry new
+			omEntry: omEntry;
+			sortOrder: index ].
 	sequencedEntries := nil.
 ]
 
 { #category : #'private - accessing' }
-GtEpEventSequencer >> getSequencedEntries [
-	"Calculate the sequenced entries from the entries.
-	The sequence generation consists of three steps:
-	1. Iterate over the events building the image model (see {{gtMethod:GtEpEventSequencer>>image}}).
-	2. Iterate over the image model and select required events.
-	3. Sort the events chronologically."
+GtEpEventSequencer >> getReplayVisitor [
 
 	^ self subclassResponsibility
+]
+
+{ #category : #'private - accessing' }
+GtEpEventSequencer >> getSequencedEntries [
+
+	wrappedEntries ifEmpty: [ ^ wrappedEntries ].
+	replayVisitor := self getReplayVisitor.
+	^ replayVisitor sequencedEntries.
 ]
 
 { #category : #'gt - extensions' }
@@ -112,10 +118,10 @@ GtEpEventSequencer >> gtViewAllEntriesFor: aView [
 	^ aView columnedList
 		title: 'All entries';
 		priority: 20;
-		items: [ entries ];
-		column: 'Change' text: [ :anOmbuEntry | 
-			anOmbuEntry content asRopedText 
-				foreground: (self gtBackgroundColorForEntry: anOmbuEntry) ];
+		items: [ wrappedEntries ];
+		column: 'Change' text: [ :anEntry | 
+			anEntry asRopedText 
+				foreground: (self gtBackgroundColorForEntry: anEntry) ];
 		column: 'Timestamp' 
 			text: [ :anOmbuEntry | 
 				anOmbuEntry gtTime asString asRopedText 
@@ -137,34 +143,13 @@ GtEpEventSequencer >> gtViewSequencedEntriesFor: aView [
 
 { #category : #accessing }
 GtEpEventSequencer >> image [
-	"Answer the image model."
-	<return: #GtEpReplayImageModel>
 
-	^ image ifNil:
-		[ visitor := GtEpReplayEventVisitor new.
-		visitor visitNodes: entries.
-		image := visitor image ].
+	^ self replayVisitor image
 ]
 
-{ #category : #testing }
-GtEpEventSequencer >> isBehaviorDefinitionChange: anEpEvent [
-	"Answer a boolean indicating whether the supplied event is a behavior change that must be replayed first."
-
-	^ anEpEvent isEpBehaviorChange and:
-		[ anEpEvent isEpProtocolChange not and:
-		[ anEpEvent isEpBehaviorCommentChange not ] ].
-]
-
-{ #category : #private }
-GtEpEventSequencer >> isEvent: currentEntry notOverriddenIn: chronologicalEntries startingFrom: startIndex [
-	"Answer a boolean indicating whether the supplied event is not overridden later in the collection"
-	| entry |
-
-	startIndex to: chronologicalEntries size do: [ :index |
-		entry := chronologicalEntries at: index.
-		(entry content isCodeChange and: [ entry content doesOverride: currentEntry content ]) ifTrue:
-			[ ^ false ] ].
-	^ true
+{ #category : #accessing }
+GtEpEventSequencer >> replayVisitor [
+	^ replayVisitor
 ]
 
 { #category : #accessing }
@@ -177,4 +162,14 @@ GtEpEventSequencer >> sequencedEntries [
 GtEpEventSequencer >> visitor [
 
 	^ visitor
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> wrappedEntries [
+	^ wrappedEntries
+]
+
+{ #category : #accessing }
+GtEpEventSequencer >> wrappedEntries: anObject [
+	wrappedEntries := anObject
 ]
