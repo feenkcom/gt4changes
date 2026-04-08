@@ -1098,7 +1098,7 @@ GtEpEventSequencerExamples >> classRenameWithExistingCommentForExport [
 	EpMonitor
 		disableDuring: [ entries second content applyCodeChange.
 			entries third content applyCodeChange ].
-	sequencer := GtEpEventSequencer entries: entries inImage: false.
+	sequencer := GtEpForExportEventSequencer entries: entries.
 	sequencedEntries := sequencer sequencedEntries.
 	self deny: (sequencer image behaviors includesKey: #Issue2936).
 	self assert: (sequencer image behaviors includesKey: #Issue2936v1).
@@ -1441,7 +1441,7 @@ GtEpEventSequencerExamples >> existingRemoveAddClass [
 	EpMonitor disableDuring: 
 		[ (entries first: 8) do: [ :entry | entry content applyCodeChange ] ].
 
-	sequencer := GtEpEventSequencer entries: entries inImage: true.
+	sequencer := GtEpInImageEventSequencer entries: entries.
 	sequencedEntries := sequencer sequencedEntries.
 	^ sequencer
 ]

@@ -25,6 +25,8 @@ GtEpEventSequencer class >> entries: anEpEntryCollection inImage: inImageBoolean
 	"Create an instance of the sequencer, chosen based on inImageBoolean.
 	This is for backward compatibility - the appropriate event sequencer should be used directly."
 
+	self deprecated: 'Use the appropriate subclass'.
+
 	^ (inImageBoolean ifTrue:
 		[ GtEpInImageEventSequencer ]
 	ifFalse:
@@ -43,9 +45,8 @@ GtEpEventSequencer class >> entries: anEpEntryCollection includeCurrent: current
 GtEpEventSequencer class >> forCurrentSession [
 	"Answer the receiver with the current session sequenced, including changes which are already in the image."
 
-	^ self
-		entries: (GtEpLogEnumerator new latestLog: EpMonitor current log) priorEntriesFromHead
-		inImage: false.
+	^ GtEpForExportEventSequencer entries: 
+			(GtEpLogEnumerator new latestLog: EpMonitor current log) priorEntriesFromHead reversed
 ]
 
 { #category : #sequencing }
