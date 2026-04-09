@@ -5,7 +5,7 @@ Class {
 		'dropdown',
 		'onCreated'
 	],
-	#category : 'GToolkit4Epicea-Element'
+	#category : #'GToolkit4Epicea-Element'
 }
 
 { #category : #accessing }

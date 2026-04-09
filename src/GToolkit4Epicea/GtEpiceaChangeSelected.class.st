@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'change'
 	],
-	#category : 'GToolkit4Epicea-Announcements'
+	#category : #'GToolkit4Epicea-Announcements'
 }
 
 { #category : #accessing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #GtStonEpCategoryAdditionMigrator,
 	#superclass : #GtStonEpCategoryChangeMigrator,
-	#category : 'GToolkit4Epicea-Reader'
+	#category : #'GToolkit4Epicea-Reader'
 }
 
 { #category : #'as yet unclassified' }

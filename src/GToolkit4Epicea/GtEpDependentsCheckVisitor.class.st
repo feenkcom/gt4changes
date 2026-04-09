@@ -12,7 +12,7 @@ Class {
 		'behaviors',
 		'currentEntry'
 	],
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #actions }

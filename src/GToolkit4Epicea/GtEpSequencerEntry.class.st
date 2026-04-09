@@ -6,7 +6,7 @@ Class {
 		'classification',
 		'sortOrder'
 	],
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #'as yet unclassified' }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'accessorBlock'
 	],
-	#category : 'GToolkit4Epicea-Tools'
+	#category : #'GToolkit4Epicea-Tools'
 }
 
 { #category : #accessing }
