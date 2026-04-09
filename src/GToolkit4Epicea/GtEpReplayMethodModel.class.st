@@ -83,7 +83,7 @@ GtEpReplayMethodModel >> exists [
 
 { #category : #testing }
 GtEpReplayMethodModel >> existsInSystem [
-self halt: 'image access'.
+
 	^ (self class environment classOrTraitNamed: behaviorModel name)
 		ifNil: [ false ]
 		ifNotNil: [ :behavior | behavior includesSelector: selector ]

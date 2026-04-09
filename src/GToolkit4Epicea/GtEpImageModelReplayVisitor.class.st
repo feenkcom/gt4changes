@@ -32,18 +32,6 @@ GtEpImageModelReplayVisitor >> checkDependencies [
 	GtEpDependentsCheckVisitor visitNodes: wrappedEntries
 ]
 
-{ #category : #testing }
-GtEpImageModelReplayVisitor >> modelOrEnvironmentIncludesBehaviorNamed: aSymbol [
-	"Answer a boolean indicating whether the named behaviour exists in the system or model.
-	Previous names and lives are not considered."
-
-	^ (self environment includesKey: aSymbol) or:
-		[ image
-			classOrTraitNamed: aSymbol
-			ifPresent: [ :cls | self halt. cls isRemoved not ]
-			ifAbsent: [ false ] ]
-]
-
 { #category : #private }
 GtEpImageModelReplayVisitor >> modelWithPreviousNamesOrEnvironmentIncludesBehaviorNamed: aSymbol [
 	"Answer a boolean indicating whether the named behaviour exists in the system or model,
@@ -68,7 +56,7 @@ GtEpImageModelReplayVisitor >> removeNoImpactMethodDefinitions [
 	"Remove EpMethodChanges that have no impact, i.e. any of the follow are true:
 	- the class never existed.
 	- the change is a removal and the method is already gone.
-	- the change matches the current definition."
+	- the change is not a removal and the change matches the current definition."
 
 	wrappedEntries do: [ :entry | | event |
 		event := entry content.
@@ -77,11 +65,12 @@ GtEpImageModelReplayVisitor >> removeNoImpactMethodDefinitions [
 					[ | realClass |
 					realClass := self environment classOrTraitNamed: event behaviorAffectedName.
 					(event isEpMethodRemoval and: [ realClass isNil or: [ (realClass methodDict includesKey: event selector) not ] ]) or:
+							[ event isEpMethodRemoval not and: 
 							[ realClass isNotNil and: [ realClass compiledMethodAt: event selector
 								ifPresent: [ :compiledMethod |
 									compiledMethod protocol name = event protocol and:
 										[ compiledMethod sourceCode = event sourceCode ] ]
-								ifAbsent: [ false ] ] ] ]) 
+								ifAbsent: [ false ] ] ] ] ]) 
 				ifTrue:
 					[ entry classification: #superseeded ] ] ].
 ]

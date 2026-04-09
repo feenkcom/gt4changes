@@ -232,7 +232,7 @@ GtEpReplayImageModel >> behaviorModelForBehavior: aBehavior [
 { #category : #private }
 GtEpReplayImageModel >> behaviorModelNamed: aSymbol [
 	"Answer the appropriate behavior model for the supplied name.  If the behavior exists, use its type, otherwise assume Class"
-self halt: 'image access'.
+
 	^ (self class environment
 		at: aSymbol
 		ifPresent: [ :behavior | self behaviorModelForBehavior: behavior ]

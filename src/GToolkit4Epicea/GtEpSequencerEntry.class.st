@@ -106,6 +106,12 @@ GtEpSequencerEntry >> gtTimeOrEpoch [
 	^ omEntry gtTimeOrEpoch
 ]
 
+{ #category : #ui }
+GtEpSequencerEntry >> gtViewChangeDescriptionElements [
+	^  self content 
+			accept: GtEpiceaBrickVisitor new
+]
+
 { #category : #accessing }
 GtEpSequencerEntry >> gtViewChangeIcon [
 
@@ -122,6 +128,11 @@ GtEpSequencerEntry >> gtViewChangeIcon [
 			[ BrGlamorousVectorIcons yellowcircle ]
 		ifFalse: [ impact = #invalid ifTrue:
 			[ BrGlamorousVectorIcons redcircle ] ] ] ]"
+]
+
+{ #category : #ui }
+GtEpSequencerEntry >> gtViewLatestChangeTime [
+	^ self gtTime
 ]
 
 { #category : #'as yet unclassified' }
