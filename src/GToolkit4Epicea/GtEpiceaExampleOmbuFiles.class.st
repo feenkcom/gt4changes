@@ -9,6 +9,8 @@ Class {
 
 { #category : #maintenance }
 GtEpiceaExampleOmbuFiles class >> methodFileFrom: aFileReference selector: aSymbol [
+	"Generate the factory event method that produces the supplied ombu file.
+	The mapping from the file location to the generated method still has to be manually added to {{gtMethod:GtEpiceaExampleOmbuFiles>>#loadDataDir}}"
 	| sourceEpEntries visitor sourceCode |
 
 	sourceEpEntries := aFileReference readStreamDo: [ :fStream |
@@ -24,6 +26,7 @@ GtEpiceaExampleOmbuFiles class >> methodFileFrom: aFileReference selector: aSymb
 	self class
 		compile: sourceCode
 		classified: 'example events'.
+	self reset.
 ]
 
 { #category : #'example events' }
@@ -1711,6 +1714,56 @@ factory removeClass: ((factory classDefinitionName: #Issue3491RootClass definiti
 ]
 
 { #category : #'example events' }
+GtEpiceaExampleOmbuFiles class >> ombu_addRemoveAddClass [
+	| factory |
+
+	factory := GtEpiceaEventFactory new.
+
+	factory addPackage: #SeqPlay tags: { #time -> '2026-04-02T11:07:36.756061+02:00'. #self -> (OmReference globalName: nil localName: '1'). #prior -> (OmReference globalName: 'Pharo12.0-SNAPSHOT-64bit-e35513ca60.36DA5CAD64593100' localName: '30'). } asDictionary.
+	factory addPackage: #SeqPlay tag: #Uncategorized tags: { #time -> '2026-04-02T11:07:36.8932+02:00'. #self -> (OmReference globalName: nil localName: '2'). #prior -> (OmReference globalName: nil localName: '1'). } asDictionary.
+	factory addClass: ((factory classDefinitionName: #ClassA definitionSource: 'Object << #ClassA
+	slots: {};
+	package: ''SeqPlay''' superclassName: #Object package: #SeqPlay packageTag: #Uncategorized classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'ClassA class' definitionSource: 'Object class << ClassA class
+	slots: {}' instanceVariables: OrderedCollection new)) tags: { #time -> '2026-04-02T11:07:36.897203+02:00'. #self -> (OmReference globalName: nil localName: '3'). #prior -> (OmReference globalName: nil localName: '2'). } asDictionary.
+factory addProtocol: #'as yet unclassified' in: ((factory classDefinitionName: #ClassA definitionSource: 'Object << #ClassA
+	slots: {};
+	package: ''SeqPlay''' superclassName: #Object package: #SeqPlay packageTag: #Uncategorized classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'ClassA class' definitionSource: 'Object class << ClassA class
+	slots: {}' instanceVariables: OrderedCollection new)) tags: { #time -> '2026-04-02T11:07:43.035278+02:00'. #self -> (OmReference globalName: nil localName: '4'). #prior -> (OmReference globalName: nil localName: '3'). } asDictionary.
+	factory addMethod: (factory methodDefinitionSelector: #method1 className: #ClassA meta: false package: #SeqPlay protocol: #'as yet unclassified' sourceCode: 'method1' stamp: '') tags: { #time -> '2026-04-02T11:07:43.043286+02:00'. #self -> (OmReference globalName: nil localName: '5'). #prior -> (OmReference globalName: nil localName: '4'). } asDictionary.
+factory addProtocol: #accessing in: ((factory classDefinitionName: #ClassA definitionSource: 'Object << #ClassA
+	slots: {};
+	package: ''SeqPlay''' superclassName: #Object package: #SeqPlay packageTag: #Uncategorized classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'ClassA class' definitionSource: 'Object class << ClassA class
+	slots: {}' instanceVariables: OrderedCollection new)) tags: { #time -> '2026-04-02T11:07:46.150384+02:00'. #self -> (OmReference globalName: nil localName: '6'). #prior -> (OmReference globalName: nil localName: '5'). } asDictionary.
+	factory modifyMethod: (factory methodDefinitionSelector: #method1 className: #ClassA meta: false package: #SeqPlay protocol: #'as yet unclassified' sourceCode: 'method1' stamp: '4/2/2026 11:07') to: (factory methodDefinitionSelector: #method1 className: #ClassA meta: false package: #SeqPlay protocol: #accessing sourceCode: 'method1' stamp: '4/2/2026 11:07') tags: { #time -> '2026-04-02T11:07:46.15734+02:00'. #self -> (OmReference globalName: nil localName: '7'). #prior -> (OmReference globalName: nil localName: '6'). } asDictionary.
+	factory modifyMethod: (factory methodDefinitionSelector: #method1 className: #ClassA meta: false package: #SeqPlay protocol: #accessing sourceCode: 'method1' stamp: '4/2/2026 11:07') to: (factory methodDefinitionSelector: #method1 className: #ClassA meta: false package: #SeqPlay protocol: #accessing sourceCode: 'method1' stamp: '4/2/2026 11:07') tags: { #time -> '2026-04-02T11:07:46.161969+02:00'. #self -> (OmReference globalName: nil localName: '8'). #prior -> (OmReference globalName: nil localName: '7'). } asDictionary.
+	factory removePackage: #SeqPlay tag: #Uncategorized tags: { #time -> '2026-04-02T11:07:55.975852+02:00'. #self -> (OmReference globalName: nil localName: '9'). #prior -> (OmReference globalName: nil localName: '8'). } asDictionary.
+	factory removeMethod: (factory methodDefinitionSelector: #method1 className: #ClassA meta: false package: #SeqPlay protocol: #accessing sourceCode: 'method1' stamp: '4/2/2026 11:07') tags: { #time -> '2026-04-02T11:07:55.985407+02:00'. #self -> (OmReference globalName: nil localName: '10'). #prior -> (OmReference globalName: nil localName: '9'). } asDictionary.
+factory removeClass: ((factory classDefinitionName: #ClassA definitionSource: 'Object << #ClassA
+	slots: {};
+	package: ''SeqPlay''' superclassName: #Object package: #SeqPlay packageTag: #Uncategorized classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'AnObsoleteClassA class' definitionSource: 'Object class << ClassA class
+	slots: {}' instanceVariables: OrderedCollection new)) tags: { #time -> '2026-04-02T11:07:55.985508+02:00'. #self -> (OmReference globalName: nil localName: '11'). #prior -> (OmReference globalName: nil localName: '10'). } asDictionary.
+	factory addPackage: #SeqPlay tag: #Uncategorized tags: { #time -> '2026-04-02T11:08:13.450243+02:00'. #self -> (OmReference globalName: nil localName: '12'). #prior -> (OmReference globalName: nil localName: '11'). } asDictionary.
+	factory addClass: ((factory classDefinitionName: #ClassA definitionSource: 'Object << #ClassA
+	slots: {};
+	package: ''SeqPlay''' superclassName: #Object package: #SeqPlay packageTag: #Uncategorized classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'ClassA class' definitionSource: 'Object class << ClassA class
+	slots: {}' instanceVariables: OrderedCollection new)) tags: { #time -> '2026-04-02T11:08:13.454928+02:00'. #self -> (OmReference globalName: nil localName: '13'). #prior -> (OmReference globalName: nil localName: '12'). } asDictionary.
+factory addProtocol: #'as yet unclassified' in: ((factory classDefinitionName: #ClassA definitionSource: 'Object << #ClassA
+	slots: {};
+	package: ''SeqPlay''' superclassName: #Object package: #SeqPlay packageTag: #Uncategorized classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'ClassA class' definitionSource: 'Object class << ClassA class
+	slots: {}' instanceVariables: OrderedCollection new)) tags: { #time -> '2026-04-02T11:08:19.799471+02:00'. #self -> (OmReference globalName: nil localName: '14'). #prior -> (OmReference globalName: nil localName: '13'). } asDictionary.
+	factory addMethod: (factory methodDefinitionSelector: #method2 className: #ClassA meta: false package: #SeqPlay protocol: #'as yet unclassified' sourceCode: 'method2' stamp: '') tags: { #time -> '2026-04-02T11:08:19.805045+02:00'. #self -> (OmReference globalName: nil localName: '15'). #prior -> (OmReference globalName: nil localName: '14'). } asDictionary.
+factory addProtocol: #accessing in: ((factory classDefinitionName: #ClassA definitionSource: 'Object << #ClassA
+	slots: {};
+	package: ''SeqPlay''' superclassName: #Object package: #SeqPlay packageTag: #Uncategorized classVariables: OrderedCollection new instanceVariables: OrderedCollection new sharedPools: OrderedCollection new comment: (factory classComment: '')) withMetaclass: (factory metaclassDefinitionName: #'ClassA class' definitionSource: 'Object class << ClassA class
+	slots: {}' instanceVariables: OrderedCollection new)) tags: { #time -> '2026-04-02T11:08:23.288548+02:00'. #self -> (OmReference globalName: nil localName: '16'). #prior -> (OmReference globalName: nil localName: '15'). } asDictionary.
+	factory modifyMethod: (factory methodDefinitionSelector: #method2 className: #ClassA meta: false package: #SeqPlay protocol: #'as yet unclassified' sourceCode: 'method2' stamp: '4/2/2026 11:08') to: (factory methodDefinitionSelector: #method2 className: #ClassA meta: false package: #SeqPlay protocol: #accessing sourceCode: 'method2' stamp: '4/2/2026 11:08') tags: { #time -> '2026-04-02T11:08:23.298733+02:00'. #self -> (OmReference globalName: nil localName: '17'). #prior -> (OmReference globalName: nil localName: '16'). } asDictionary.
+	factory modifyMethod: (factory methodDefinitionSelector: #method2 className: #ClassA meta: false package: #SeqPlay protocol: #accessing sourceCode: 'method2' stamp: '4/2/2026 11:08') to: (factory methodDefinitionSelector: #method2 className: #ClassA meta: false package: #SeqPlay protocol: #accessing sourceCode: 'method2' stamp: '4/2/2026 11:08') tags: { #time -> '2026-04-02T11:08:23.303359+02:00'. #self -> (OmReference globalName: nil localName: '18'). #prior -> (OmReference globalName: nil localName: '17'). } asDictionary.
+
+	^ factory
+
+]
+
+{ #category : #'example events' }
 GtEpiceaExampleOmbuFiles class >> ombu_aje0o0eb1zbt8670wq78g31mk [
 	| factory |
 
@@ -2410,6 +2463,7 @@ GtEpiceaExampleOmbuFiles >> loadDataDir [
 	'GtEpEventSequencerExamples/Issue4908/Issue4908.ombu' -> self class ombu_Issue4908 entries.
 	'GtEpEventSequencerExamples/Issue4909/Issue4909.ombu' -> self class ombu_Issue4909 entries.
 	'GtEpEventSequencerExamples/remove_Bag_postCopy.ombu' -> self class ombu_removeBagPostCopy entries.
+	'GtEpEventSequencerExamples/addRemoveAddClass.ombu' -> self class ombu_addRemoveAddClass entries.
 	} do: [ :assoc |
 		self load: assoc key fromEntries: assoc value in: newDataDir ].
 	DataDir := newDataDir.

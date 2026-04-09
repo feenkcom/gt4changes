@@ -49,7 +49,7 @@ GtEpEventSequencerExamples >> addRemoveAddClassForExport [
 	<gtExample>
 	| fileReference epLog entries sequencer sequencedEntries |
 
-	fileReference := '/home/alistair/gt/gt174/glamoroustoolkit/pharo-local/ombu-sessions/AddClassARemoveClassAAddClassA.ombu' asFileReference.
+	fileReference := self class testDataRoot / 'addRemoveAddClass.ombu'.
 	self assert: fileReference exists.
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
@@ -1432,7 +1432,7 @@ GtEpEventSequencerExamples >> existingRemoveAddClass [
 	<gtExample>
 	| fileReference epLog entries sequencer sequencedEntries |
 
-	fileReference := '/home/alistair/gt/gt174/glamoroustoolkit/pharo-local/ombu-sessions/AddClassARemoveClassAAddClassA.ombu' asFileReference.
+	fileReference := self class testDataRoot / 'addRemoveAddClass.ombu'.
 	self assert: fileReference exists.
 	epLog := EpLog fromFile: fileReference.
 	entries := epLog entries.
