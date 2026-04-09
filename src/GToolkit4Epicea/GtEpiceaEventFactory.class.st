@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'entries'
 	],
-	#category : #'GToolkit4Epicea-Factories'
+	#category : 'GToolkit4Epicea-Factories'
 }
 
 { #category : #api }
@@ -273,13 +273,6 @@ GtEpiceaEventFactory >> packageDefinitionNamed: packageName [
 ]
 
 { #category : #api }
-GtEpiceaEventFactory >> rePackage: aBehaviorDefinition oldPackageName: oldPackageName oldTagName: oldTagName newPackageName: newPackageName newTagName: newTagName tags: aDictionary [
-
-	^ entries add: (self omEntryFrom: aDictionary content:
-		(EpBehaviorRepackagedChange oldPackage: oldPackageName oldTag: oldTagName newPackage: newPackageName newTag: newTagName class: aBehaviorDefinition))
-]
-
-{ #category : #api }
 GtEpiceaEventFactory >> registerCategory: categoryName packageName: packageName tags: aDictionary [
 
 	^ self forPharo12AndNewer:
@@ -363,6 +356,13 @@ GtEpiceaEventFactory >> renameClass: classDefinition from: aSymbol tags: aDictio
 			oldName: aSymbol
 			newName: classDefinition name
 			class: classDefinition))
+]
+
+{ #category : #api }
+GtEpiceaEventFactory >> rePackage: aBehaviorDefinition oldPackageName: oldPackageName oldTagName: oldTagName newPackageName: newPackageName newTagName: newTagName tags: aDictionary [
+
+	^ entries add: (self omEntryFrom: aDictionary content:
+		(EpBehaviorRepackagedChange oldPackage: oldPackageName oldTag: oldTagName newPackage: newPackageName newTag: newTagName class: aBehaviorDefinition))
 ]
 
 { #category : #private }

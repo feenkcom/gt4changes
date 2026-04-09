@@ -1,5 +1,5 @@
 Class {
 	#name : #GtEpNilCommentSignal,
 	#superclass : #ContextStackSignal,
-	#category : #'GToolkit4Epicea-Model'
+	#category : 'GToolkit4Epicea-Model'
 }

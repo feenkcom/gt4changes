@@ -7,7 +7,7 @@ Class {
 		'removedMethods',
 		'subclassed'
 	],
-	#category : #'GToolkit4Epicea-Sequencer'
+	#category : 'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #adding }

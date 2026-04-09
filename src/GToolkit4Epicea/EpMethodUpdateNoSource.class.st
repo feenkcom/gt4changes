@@ -1,7 +1,7 @@
 Class {
 	#name : #EpMethodUpdateNoSource,
 	#superclass : #EpMethodAddition,
-	#category : #'GToolkit4Epicea-Model'
+	#category : 'GToolkit4Epicea-Model'
 }
 
 { #category : #visitor }

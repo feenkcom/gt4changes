@@ -1,7 +1,7 @@
 Class {
 	#name : #GtStonClassMigrator,
 	#superclass : #Object,
-	#category : #'GToolkit4Epicea-Reader'
+	#category : 'GToolkit4Epicea-Reader'
 }
 
 { #category : #migrating }

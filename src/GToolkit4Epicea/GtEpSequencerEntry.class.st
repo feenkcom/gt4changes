@@ -6,7 +6,7 @@ Class {
 		'classification',
 		'sortOrder'
 	],
-	#category : #'GToolkit4Epicea-Sequencer'
+	#category : 'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #'as yet unclassified' }
@@ -182,6 +182,12 @@ GtEpSequencerEntry >> sortOrder [
 { #category : #accessing }
 GtEpSequencerEntry >> sortOrder: anObject [
 	sortOrder := anObject
+]
+
+{ #category : #accessing }
+GtEpSequencerEntry >> tagAt: aSymbol [
+
+	^ omEntry tagAt: aSymbol
 ]
 
 { #category : #accessing }

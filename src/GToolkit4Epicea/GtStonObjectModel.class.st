@@ -9,7 +9,7 @@ Class {
 		'instanceVariables',
 		'targetInstance'
 	],
-	#category : #'GToolkit4Epicea-Reader'
+	#category : 'GToolkit4Epicea-Reader'
 }
 
 { #category : #'as yet unclassified' }
