@@ -9,7 +9,8 @@ Class {
 		'visitor',
 		'image',
 		'wrappedEntries',
-		'replayVisitor'
+		'replayVisitor',
+		'entries'
 	],
 	#category : #'GToolkit4Epicea-Sequencer'
 }
@@ -25,8 +26,6 @@ GtEpEventSequencer class >> entries: anEpEntryCollection inImage: inImageBoolean
 	"Create an instance of the sequencer, chosen based on inImageBoolean.
 	This is for backward compatibility - the appropriate event sequencer should be used directly."
 
-	self deprecated: 'Use the appropriate subclass'.
-
 	^ (inImageBoolean ifTrue:
 		[ GtEpInImageEventSequencer ]
 	ifFalse:
@@ -38,8 +37,9 @@ GtEpEventSequencer class >> entries: anEpEntryCollection inImage: inImageBoolean
 GtEpEventSequencer class >> forCurrentSession [
 	"Answer the receiver with the current session sequenced, including changes which are already in the image."
 
-	^ GtEpForExportEventSequencer entries: 
-			(GtEpLogEnumerator new latestLog: EpMonitor current log) priorEntriesFromHead reversed
+	^ self
+		entries: (GtEpLogEnumerator new latestLog: EpMonitor current log) priorEntriesFromHead
+		inImage: false.
 ]
 
 { #category : #sequencing }
@@ -65,16 +65,13 @@ GtEpEventSequencer >> assertDependencies [
 { #category : #accessing }
 GtEpEventSequencer >> entries [
 
-	^ wrappedEntries collect: [ :gtEpSequencerEntry | gtEpSequencerEntry omEntry ]
+	^ entries
 ]
 
 { #category : #accessing }
-GtEpEventSequencer >> entries: aCollection [
+GtEpEventSequencer >> entries: anObject [
 
-	wrappedEntries := aCollection collectWithIndex: [ :omEntry :index |
-		GtEpSequencerEntry new
-			omEntry: omEntry;
-			sortOrder: index ].
+	entries := anObject.
 	sequencedEntries := nil.
 ]
 
@@ -86,10 +83,13 @@ GtEpEventSequencer >> getReplayVisitor [
 
 { #category : #'private - accessing' }
 GtEpEventSequencer >> getSequencedEntries [
+	"Calculate the sequenced entries from the entries.
+	The sequence generation consists of three steps:
+	1. Iterate over the events building the image model (see {{gtMethod:GtEpEventSequencer>>image}}).
+	2. Iterate over the image model and select required events.
+	3. Sort the events chronologically."
 
-	wrappedEntries ifEmpty: [ ^ wrappedEntries ].
-	replayVisitor := self getReplayVisitor.
-	^ replayVisitor sequencedEntries.
+	^ self subclassResponsibility
 ]
 
 { #category : #'gt - extensions' }
@@ -143,8 +143,13 @@ GtEpEventSequencer >> gtViewSequencedEntriesFor: aView [
 
 { #category : #accessing }
 GtEpEventSequencer >> image [
+	"Answer the image model."
+	<return: #GtEpReplayImageModel>
 
-	^ self replayVisitor image
+	^ image ifNil:
+		[ visitor := GtEpReplayEventVisitor new.
+		visitor visitNodes: entries.
+		image := visitor image ].
 ]
 
 { #category : #accessing }
