@@ -17,9 +17,8 @@ GtEpInImageEventSequencer >> getSequencedEntries [
 	1. Iterate over the events building the image model (see {{gtMethod:GtEpEventSequencer>>image}}).
 	2. Iterate over the image model and select required events.
 	3. Sort the events chronologically."
-	| replay |
-	
-	entries ifEmpty: [ ^ entries ].
-	replay := GtEpImageModelInImageVisitor image: self image.
-	^ replay sequencedEntries sorted: GtOmEntrySortFunction new.
+
+	wrappedEntries ifEmpty: [ ^ wrappedEntries ].
+	replayVisitor := GtEpImageModelReplayVisitor new wrappedEntries: wrappedEntries.
+	^ replayVisitor sequencedEntries.
 ]
