@@ -7,7 +7,7 @@ Class {
 		'removedMethods',
 		'subclassed'
 	],
-	#category : #'GToolkit4Epicea-Sequencer'
+	#category : 'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #adding }
@@ -154,7 +154,15 @@ GtEpReplayAbstractBehaviorModel >> gtViewChangeDescriptionElements [
 
 { #category : #'gt - extensions' }
 GtEpReplayAbstractBehaviorModel >> gtViewChangeHistoryChildren [
-	^ methods values sorted: #selector ascending
+
+	^ { 
+		GtEpiceaChangeDisplayNode new
+			description: 'methods';
+			children: (methods values sorted: #selector ascending).
+		GtEpiceaChangeDisplayNode new
+			description: 'entries';
+			children: entries.
+		}
 ]
 
 { #category : #'gt - extensions' }

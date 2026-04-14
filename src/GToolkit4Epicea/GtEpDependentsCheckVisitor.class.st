@@ -12,7 +12,7 @@ Class {
 		'behaviors',
 		'currentEntry'
 	],
-	#category : #'GToolkit4Epicea-Sequencer'
+	#category : 'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #actions }
@@ -28,10 +28,12 @@ GtEpDependentsCheckVisitor >> checkBehaviorNamePresent: aSymbol [
 	self
 		classOrTraitNamed: aSymbol
 		ifPresent: [ :anObject | anObject == #removed ifTrue:
-			[ currentEntry classification: #requiredMissingDependency ] ]
+			[ currentEntry classification: #requiredMissingDependency
+				reason: #dependencyMarkedRemoved ] ]
 		ifAbsent: [ :name |
 			(self environment classOrTraitNamed: name) ifNil:
-				[ currentEntry classification: #requiredMissingDependency ] ]
+				[ currentEntry classification: #requiredMissingDependency
+					reason: #dependencyNotFound ] ]
 ]
 
 { #category : #private }

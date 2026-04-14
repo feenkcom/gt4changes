@@ -13,7 +13,7 @@ Class {
 		'imageModel',
 		'superclassName'
 	],
-	#category : #'GToolkit4Epicea-Sequencer'
+	#category : 'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #visiting }
@@ -126,13 +126,18 @@ GtEpReplayBehaviorModel >> classSide [
 GtEpReplayBehaviorModel >> comment [
 	<return: #String>
 
+	^ self commentOrNil ifNil: [ '' ]
+]
+
+{ #category : #accessing }
+GtEpReplayBehaviorModel >> commentOrNil [
+	"Answer the receiver's comment, or nil if not defined in the model"
+	<return: #String or: nil>
+
 	^ comments
 		ifEmpty: [ entries
-			ifEmpty: [ self exists
-				ifTrue: [ self currentDefinition comment ]
-				ifFalse: [ '' ] ]
+			ifEmpty: [ nil ]
 			ifNotEmpty: [ entries last content behaviorAffected comment 
-				ifNil: [ '' ]
 				ifNotNil: [ :rgComment | rgComment content ] ] ]
 		ifNotEmpty: [ comments last content newComment ].
 ]
@@ -146,7 +151,7 @@ GtEpReplayBehaviorModel >> comments [
 { #category : #accessing }
 GtEpReplayBehaviorModel >> currentComment [
 
-	^ self comment ifEmpty:
+	^ self commentOrNil ifNil:
 		[ (self environment
 			classOrTraitNamed: self behaviorAffectedName)
 			ifNil: [ '' ]
@@ -212,6 +217,19 @@ GtEpReplayBehaviorModel >> gtPreviousNamesFor: aView [
 		priority: 45;
 		items: [ previousNames ];
 		actionUpdateButton
+]
+
+{ #category : #'gt - extensions' }
+GtEpReplayBehaviorModel >> gtViewChangeHistoryChildren [
+
+	^ super gtViewChangeHistoryChildren, { 
+		GtEpiceaChangeDisplayNode new
+			description: 'previous names';
+			children: (previousNames collect: [ :aSymbol | GtEpiceaChangeDisplayTextItem new text: aSymbol ]).
+		GtEpiceaChangeDisplayNode new
+			description: 'previous lives';
+			children: previousLives.
+		}
 ]
 
 { #category : #accessing }

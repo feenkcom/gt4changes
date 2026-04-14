@@ -6,7 +6,7 @@ In practice this means that the state of the running image is unknown, and addit
 Class {
 	#name : #GtEpImageModelForExportVisitor,
 	#superclass : #GtEpImageModelInImageVisitor,
-	#category : #'GToolkit4Epicea-Sequencer'
+	#category : 'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #testing }

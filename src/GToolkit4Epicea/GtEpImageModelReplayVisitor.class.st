@@ -1,7 +1,7 @@
 Class {
 	#name : #GtEpImageModelReplayVisitor,
 	#superclass : #GtEpImageModelExportVisitor,
-	#category : #'GToolkit4Epicea-Sequencer'
+	#category : 'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #private }
@@ -14,7 +14,7 @@ GtEpImageModelReplayVisitor >> addBehaviorEntriesFrom: aGtEpReplayBehaviorModel 
 	entry := aGtEpReplayBehaviorModel entries first.
 	"Note that this test is not reliable as it depends on the behaviour definition string, which can be in multiple forms (old vs. shift), in which case the entry will be left in unncessarily."
 	(entry content accept: (EpHasImpactVisitor inEnvironment: self environment)) ifFalse:
-		[ entry classification: #superseeded ].
+		[ entry classification: #superseeded reason: #classDefinitionHasNoImpact ].
 ]
 
 { #category : #'as yet unclassified' }
@@ -61,18 +61,24 @@ GtEpImageModelReplayVisitor >> removeNoImpactMethodDefinitions [
 	wrappedEntries do: [ :entry | | event |
 		event := entry content.
 		event isEpMethodChange ifTrue:
-			[ ((self modelWithPreviousNamesOrEnvironmentIncludesBehaviorNamed: event behaviorAffectedName) not or:
-					[ | realClass |
+			[ | reason |
+			(self modelWithPreviousNamesOrEnvironmentIncludesBehaviorNamed: event behaviorAffectedName) not ifTrue:
+				[ reason := #methodsClassDoesntExist ].
+			reason ifNil:
+				[ | realClass |
 					realClass := self environment classOrTraitNamed: event behaviorAffectedName.
-					(event isEpMethodRemoval and: [ realClass isNil or: [ (realClass methodDict includesKey: event selector) not ] ]) or:
-							[ event isEpMethodRemoval not and: 
-							[ realClass isNotNil and: [ realClass compiledMethodAt: event selector
-								ifPresent: [ :compiledMethod |
-									compiledMethod protocol name = event protocol and:
-										[ compiledMethod sourceCode = event sourceCode ] ]
-								ifAbsent: [ false ] ] ] ] ]) 
-				ifTrue:
-					[ entry classification: #superseeded ] ] ].
+					(event isEpMethodRemoval and: [ realClass isNil or: [ (realClass methodDict includesKey: event selector) not ] ]) ifTrue:
+						[ reason := #methodRemovalAndNoMethod ]
+					ifFalse:
+						[ event isEpMethodRemoval not and: 
+							[ realClass isNotNil and: 
+								[ realClass compiledMethodAt: event selector
+									ifPresent: [ :compiledMethod |
+										(compiledMethod protocol name = event protocol and:
+											[ compiledMethod sourceCode = event sourceCode ]) ifTrue:
+												[ reason := #methodDefinitionTheSame ] ] ] ] ] ].
+			reason ifNotNil:
+				[ entry classification: #superseeded reason: reason ] ] ].
 ]
 
 { #category : #private }
@@ -101,7 +107,7 @@ GtEpImageModelReplayVisitor >> removeNoImpactRenamesAndRemoves [
 				ifFalse:
 					[ classExists ] ] ].
 				classExists ifFalse:
-					[ entry classification: #superseeded ] ] ] ].
+					[ entry classification: #superseeded reason: #classDoesntExist ] ] ] ].
 ]
 
 { #category : #testing }
@@ -114,9 +120,11 @@ GtEpImageModelReplayVisitor >> shouldAddMethod: aGtEpReplayMethodModel [
 	(self environment classOrTraitNamed: currentClassName) ifNotNil: [ :classOrTrait |
 		classOrTrait methodDict at: selector
 			ifPresent: [ :method |
-				^ method sourceCode ~= aGtEpReplayMethodModel sourceCode or:
-					[ method protocol ~= aGtEpReplayMethodModel protocol ] ] ].
-	^ true
+				^ (method sourceCode ~= aGtEpReplayMethodModel sourceCode or:
+					[ method protocol ~= aGtEpReplayMethodModel protocol ])
+						ifTrue: [ #methodDefinitionDiffers ]
+						ifFalse: [ nil ] ] ].
+	^ #addMethodDefault
 ]
 
 { #category : #testing }

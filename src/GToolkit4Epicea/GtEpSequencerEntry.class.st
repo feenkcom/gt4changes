@@ -4,9 +4,10 @@ Class {
 	#instVars : [
 		'omEntry',
 		'classification',
-		'sortOrder'
+		'sortOrder',
+		'reason'
 	],
-	#category : #'GToolkit4Epicea-Sequencer'
+	#category : 'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #'as yet unclassified' }
@@ -34,6 +35,17 @@ GtEpSequencerEntry >> classification: aSymbol [
 ]
 
 { #category : #accessing }
+GtEpSequencerEntry >> classification: cSymbol reason: rSymbol [
+	"Set the receiver's classification and reason."
+
+	classification == cSymbol ifTrue: [ ^ self ].
+
+	self 
+		classification: cSymbol;
+		reason: rSymbol.
+]
+
+{ #category : #accessing }
 GtEpSequencerEntry >> content [
 
 	^ omEntry ifNotNil: #content
@@ -56,7 +68,7 @@ GtEpSequencerEntry >> gtDiffCurrentFor: aView [
 
 	^ aView forward
 		title: 'Diff current';
-		priority: 15;
+		priority: 25;
 		object: [ omEntry ];
 		view: #gtDiffCurrentFor:
 ]
@@ -67,9 +79,15 @@ GtEpSequencerEntry >> gtDiffFor: aView [
 
 	^ aView forward
 		title: 'Diff';
-		priority: 10;
+		priority: 20;
 		object: [ omEntry ];
 		view: #gtDiffFor:
+]
+
+{ #category : #printing }
+GtEpSequencerEntry >> gtDisplayOn: aStream [
+
+	self content gtDisplayOn: aStream
 ]
 
 { #category : #ui }
@@ -78,7 +96,7 @@ GtEpSequencerEntry >> gtNewSourceFor: aView [
 
 	^ aView forward
 		title: 'New source';
-		priority: 20;
+		priority: 28;
 		object: [ omEntry ];
 		view: #gtNewSourceFor:
 ]
@@ -89,9 +107,23 @@ GtEpSequencerEntry >> gtOldSourceFor: aView [
 
 	^ aView forward
 		title: 'Old source';
-		priority: 25;
+		priority: 26;
 		object: [ omEntry ];
 		view: #gtOldSourceFor:
+]
+
+{ #category : #'as yet unclassified' }
+GtEpSequencerEntry >> gtSummaryFor: aView [
+	<gtView>
+
+	^ aView columnedList
+		  title: 'Summary';
+		  priority: 10;
+		  items: [ self summaryAttributes ];
+		  column: #Attribute text: [ :item | item first ];
+		  column: #Value text: [ :item | item second ];
+		  send: [ :item | item last ];
+		  actionUpdateButton
 ]
 
 { #category : #accessing }
@@ -110,6 +142,12 @@ GtEpSequencerEntry >> gtTimeOrEpoch [
 GtEpSequencerEntry >> gtViewChangeDescriptionElements [
 	^  self content 
 			accept: GtEpiceaBrickVisitor new
+]
+
+{ #category : #ui }
+GtEpSequencerEntry >> gtViewChangeHistoryChildren [
+
+	^ omEntry gtViewChangeHistoryChildren
 ]
 
 { #category : #accessing }
@@ -186,6 +224,17 @@ GtEpSequencerEntry >> printOn: aStream [
 ]
 
 { #category : #accessing }
+GtEpSequencerEntry >> reason [
+	^ reason
+]
+
+{ #category : #accessing }
+GtEpSequencerEntry >> reason: aSymbol [
+
+	reason := aSymbol
+]
+
+{ #category : #accessing }
 GtEpSequencerEntry >> sortOrder [
 	^ sortOrder
 ]
@@ -193,6 +242,16 @@ GtEpSequencerEntry >> sortOrder [
 { #category : #accessing }
 GtEpSequencerEntry >> sortOrder: anObject [
 	sortOrder := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GtEpSequencerEntry >> summaryAttributes [
+
+	^ {
+		{ 'Content type'. self content class. }.
+		{ 'Classification'. classification. }.
+		{ 'Reason'. reason. }.
+		}
 ]
 
 { #category : #accessing }

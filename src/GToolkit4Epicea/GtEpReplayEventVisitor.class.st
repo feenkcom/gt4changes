@@ -11,7 +11,7 @@ Class {
 		'currentEntry',
 		'image'
 	],
-	#category : #'GToolkit4Epicea-Sequencer'
+	#category : 'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #accessing }
@@ -159,7 +159,7 @@ GtEpReplayEventVisitor >> visitNode: anOmEntry [
 GtEpReplayEventVisitor >> visitNodes: aCollectionOfOmEntry [
 	"Visit each of the nodes in chronological order."
 
-	allEntries := aCollectionOfOmEntry sorted: GtOmEntrySortFunction new.
+	allEntries := aCollectionOfOmEntry.
 	allEntries do: [ :omEntry | self visitNode: omEntry ].
 ]
 

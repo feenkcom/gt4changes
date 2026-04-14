@@ -1,7 +1,7 @@
 Class {
 	#name : #GtEpiceaDiffElement,
 	#superclass : #GtDiffElement,
-	#category : #'GToolkit4Epicea-Element'
+	#category : 'GToolkit4Epicea-Element'
 }
 
 { #category : #initialize }

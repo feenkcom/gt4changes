@@ -6,7 +6,7 @@ Class {
 		'theMonitor',
 		'theCodeFactory'
 	],
-	#category : #'GToolkit4Epicea-Examples'
+	#category : 'GToolkit4Epicea-Examples'
 }
 
 { #category : #accessing }

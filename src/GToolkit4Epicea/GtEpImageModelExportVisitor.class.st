@@ -7,7 +7,7 @@ Class {
 		'currentBehaviorModel',
 		'wrappedEntries'
 	],
-	#category : #'GToolkit4Epicea-Sequencer'
+	#category : 'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #'instance creation' }
@@ -34,16 +34,18 @@ GtEpImageModelExportVisitor >> addBehaviorEntriesFrom: aGtEpReplayBehaviorModel 
 	aGtEpReplayBehaviorModel previousLives do: [ :behaviorModel |
 		"If the previous life has subclasses all class modifications must be kept"
 		behaviorModel subclassed ifTrue:
-			[ behaviorModel entries do: [ :entry | entry classification: #required ] ]
+			[ behaviorModel entries do: [ :entry | 
+				entry classification: #required reason: #previousLifeSubclassed ] ]
 		ifFalse:
 		[ "Otherwise only name changes and the final remove event are required"
-		behaviorModel entries last classification: #required.
+		behaviorModel entries last 
+			classification: #required reason: #previousLifeLastBehaviorEntryRequired.
 		behaviorModel entries do: [ :entry |
 			entry content isEpBehaviorNameChange ifTrue:
-				[ entry classification: #required ] ] ] ].
+				[ entry classification: #required reason: #previousLifeBehaviorNameChangeEntryRequired ] ] ] ].
 	"All entries are required for the supplied behavior."
 	aGtEpReplayBehaviorModel entries do: [ :entry |
-		entry classification: #required ].
+		entry classification: #required reason: #behaviorEntryRequired ].
 ]
 
 { #category : #accessing }
@@ -139,7 +141,7 @@ GtEpImageModelExportVisitor >> removeContigousClassDefinitions [
 				whileTrue: [ nextIndex := nextIndex + 1 ].
 			(self isClassDefinition: nextEntry) ifTrue:
 				[ (wrappedEntry content behaviorAffectedName = nextEntry content behaviorAffectedName) ifTrue:
-					[ wrappedEntry classification: #superseeded ] ] ] ]
+					[ wrappedEntry classification: #superseeded reason: #contigousClassDefinition ] ] ] ]
 ]
 
 { #category : #visiting }
@@ -151,7 +153,8 @@ GtEpImageModelExportVisitor >> replayCommentEntriesFrom: aGtEpReplayBehaviorMode
 
 	latestCommentEntry := aGtEpReplayBehaviorModel latestCommentEntry.
 	(self shouldReplayCommentEntry: latestCommentEntry) ifTrue:
-		[ aGtEpReplayBehaviorModel latestCommentEntry classification: #required ].
+		[ aGtEpReplayBehaviorModel latestCommentEntry 
+			classification: #required reason: #lastCommentEntryRequired ].
 ]
 
 { #category : #accessing }
@@ -163,15 +166,17 @@ GtEpImageModelExportVisitor >> sequencedEntries [
 GtEpImageModelExportVisitor >> shouldAddMethod: aGtEpReplayMethodModel [
 	"The relevant method entry is always added for export"
 	
-	^ true
+	^ #methodRequired
 ]
 
 { #category : #testing }
 GtEpImageModelExportVisitor >> shouldReplayAdditionalEntry: entry [
-	"Answer a boolean indicating whether the supplied entry should be replayed.
+	"Answer a Symbol indicating why the entry is required, or nil if not required.
 	Currently only EpExpressionEvaluations are included."
 
-	^ entry content class == EpExpressionEvaluation
+	entry content class == EpExpressionEvaluation ifTrue:
+		[ ^ #expressionEvaluationRequired ].
+	^ nil
 ]
 
 { #category : #testing }
@@ -201,16 +206,16 @@ GtEpImageModelExportVisitor >> visitImageReplay: aGtEpReplayImageModel [
 	aGtEpReplayImageModel behaviors values do: [ :behavior |
 		behavior accept: self ].
 	aGtEpReplayImageModel entries do: [ :entry |
-		(self shouldReplayAdditionalEntry: entry) ifTrue:
-			[ entry classification: #required ] ].
+		(self shouldReplayAdditionalEntry: entry) ifNotNil:
+			[ :reason | entry classification: #required reason: reason ] ].
 ]
 
 { #category : #visiting }
 GtEpImageModelExportVisitor >> visitMethodReplay: aGtEpReplayMethodModel [
 
 	aGtEpReplayMethodModel entries ifNotEmpty: [ :entries |
-	(self shouldAddMethod: aGtEpReplayMethodModel) ifTrue:
-			[ entries last classification: #required ] ].
+	(self shouldAddMethod: aGtEpReplayMethodModel) ifNotNil:
+			[ :reason | entries last classification: #required reason: reason ] ].
 ]
 
 { #category : #visiting }
@@ -240,6 +245,9 @@ GtEpImageModelExportVisitor >> wrappedEntries [
 ]
 
 { #category : #accessing }
-GtEpImageModelExportVisitor >> wrappedEntries: anObject [
-	wrappedEntries := anObject
+GtEpImageModelExportVisitor >> wrappedEntries: aCollectionOfGtEpSequencerEntry [
+	"Set the receiver's wrapped entries.
+	The entries are assumed to be sorted in ascending order."
+	
+	wrappedEntries := aCollectionOfGtEpSequencerEntry
 ]

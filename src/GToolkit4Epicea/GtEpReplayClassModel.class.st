@@ -1,7 +1,7 @@
 Class {
 	#name : #GtEpReplayClassModel,
 	#superclass : #GtEpReplayBehaviorModel,
-	#category : #'GToolkit4Epicea-Sequencer'
+	#category : 'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #adding }
@@ -42,6 +42,16 @@ GtEpReplayClassModel >> definesBehaviorInImage: aGtEpReplayImageModel [
 			"The definition actually defines only if the superclass is defined"
 			aGtEpReplayImageModel includesBehaviorSometimeNamed: entry content behaviorAffected superclassName asSymbol ]
 		ifNone: [ self environment includesKey: self behaviorAffectedName asSymbol. ]
+]
+
+{ #category : #'as yet unclassified' }
+GtEpReplayClassModel >> gtViewChangeHistoryChildren [
+
+	^ super gtViewChangeHistoryChildren, { 
+		GtEpiceaChangeDisplayNode new
+			description: 'classSide';
+			children: { classSide }.
+		}
 ]
 
 { #category : #testing }

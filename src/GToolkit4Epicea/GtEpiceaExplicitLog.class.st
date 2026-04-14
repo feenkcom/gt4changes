@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'entries'
 	],
-	#category : #'GToolkit4Epicea-Model'
+	#category : 'GToolkit4Epicea-Model'
 }
 
 { #category : #'instance creation' }

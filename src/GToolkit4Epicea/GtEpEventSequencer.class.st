@@ -11,7 +11,7 @@ Class {
 		'wrappedEntries',
 		'replayVisitor'
 	],
-	#category : #'GToolkit4Epicea-Sequencer'
+	#category : 'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #sequencing }
@@ -62,6 +62,26 @@ GtEpEventSequencer >> assertDependencies [
 	self replayVisitor assertDependencies
 ]
 
+{ #category : #asserting }
+GtEpEventSequencer >> assertEntryOrder: aCollection [
+	| epoch index firstWithTime lastWithTime |
+
+	aCollection size <= 1 ifTrue: [ ^ self ].
+	epoch := DateAndTime epoch.
+	firstWithTime := aCollection detect: [ :entry | entry gtTimeOrEpoch > epoch ].
+	index := aCollection size.
+	[ lastWithTime isNil and: [ index >= 1 ] ] whileTrue:
+		[ | entry |
+		entry := aCollection at: index.
+		entry gtTimeOrEpoch > epoch ifTrue:
+			[ lastWithTime := entry ].
+		index := index - 1 ].
+	self assert: lastWithTime isNotNil
+		description: 'Unable to find entry with time'.
+	self assert: lastWithTime gtTime >= firstWithTime gtTime
+		description: 'Entries are not chronological'.
+]
+
 { #category : #accessing }
 GtEpEventSequencer >> entries [
 
@@ -70,8 +90,10 @@ GtEpEventSequencer >> entries [
 
 { #category : #accessing }
 GtEpEventSequencer >> entries: aCollection [
+	| sortedEntries |
 
-	wrappedEntries := aCollection collectWithIndex: [ :omEntry :index |
+	sortedEntries := aCollection sorted: GtOmEntrySortFunction new.
+	wrappedEntries := sortedEntries collectWithIndex: [ :omEntry :index |
 		GtEpSequencerEntry new
 			omEntry: omEntry;
 			sortOrder: index ].
@@ -119,14 +141,23 @@ GtEpEventSequencer >> gtViewAllEntriesFor: aView [
 		title: 'All entries';
 		priority: 20;
 		items: [ wrappedEntries ];
+		column: 'SortOrder' text: [ :anEntry |
+			anEntry sortOrder printString asRopedText
+				foreground: (self gtBackgroundColorForEntry: anEntry) ]
+			width: 70;
 		column: 'Change' text: [ :anEntry | 
-			anEntry asRopedText 
+			anEntry gtDisplayString asRopedText 
 				foreground: (self gtBackgroundColorForEntry: anEntry) ];
-		column: 'Timestamp' 
-			text: [ :anOmbuEntry | 
-				anOmbuEntry gtTime asString asRopedText 
-					foreground: (self gtBackgroundColorForEntry: anOmbuEntry) ] 
-			width: 250
+		column: 'Classification' 
+			text: [ :anEntry | 
+				anEntry classification printString asRopedText 
+					foreground: (self gtBackgroundColorForEntry: anEntry) ]
+			width: 250;
+		column: 'Reason'
+			text: [ :anEntry |
+				anEntry reason asString asRopedText
+					foreground: (self gtBackgroundColorForEntry: anEntry) ]
+			width: 250.
 ]
 
 { #category : #'gt - extensions' }

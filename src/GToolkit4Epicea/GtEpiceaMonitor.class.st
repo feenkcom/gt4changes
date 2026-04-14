@@ -3,7 +3,7 @@ Class {
 	#superclass : #EpMonitor,
 	#traits : 'TGtAnnouncer',
 	#classTraits : 'TGtAnnouncer classTrait',
-	#category : #'GToolkit4Epicea-Monitor'
+	#category : 'GToolkit4Epicea-Monitor'
 }
 
 { #category : #accessing }
