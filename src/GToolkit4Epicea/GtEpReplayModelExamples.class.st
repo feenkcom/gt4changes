@@ -32,7 +32,7 @@ GtEpReplayModelExamples >> checkImageModelWithData01: aGtReplayImageModel [
 	"Check the behavior of the supplied image model matches expectations."
 	| behavior method classSide |
 
-	self assert: aGtReplayImageModel behaviors size equals: 1.
+	self assert: aGtReplayImageModel behaviors size equals: 2.
 	behavior := aGtReplayImageModel classOrTraitNamed: #GtEpReplayModelExamplesCheck.
 	self deny: behavior hasCommentEntry.
 	self assert: behavior package name equals: #GtEpReplayModelExamplesCheck.
@@ -64,7 +64,7 @@ GtEpReplayModelExamples >> classAddition [
 	visitor := GtEpReplayEventVisitor new.
 	visitor visitNodes: entries.
 	image := visitor image.
-	self assert: image behaviors size equals: 1.
+	self assert: image behaviors size equals: 2.
 	behavior := image classOrTraitNamed: #ATestClass.
 	history := behavior entries.
 	self assert: behavior methods size equals: 6
@@ -134,7 +134,7 @@ GtEpReplayModelExamples >> inImageModelHasCorrectSuperclassOnRename [
 	visitor visitNodes: entries.
 	model := visitor image.
 
-	self assert: model behaviors size equals: 2.
+	self assert: model behaviors size equals: 3.
 	superclassModel := model classOrTraitNamed: #Issue3398RootClassRenamed.
 	subclassModel := model classOrTraitNamed: #Issue3398Subclass.
 

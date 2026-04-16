@@ -25,6 +25,18 @@ GtEpReplayMetaBehaviorModel >> classSide [
 	^ self
 ]
 
+{ #category : #accessing }
+GtEpReplayMetaBehaviorModel >> currentSelectors [
+	"Answer the selectors defined by the receiver, including the current definition"
+	| selectors |
+
+	selectors := methods keys asSet.
+	self class environment 
+		at: instanceSide name
+		ifPresent: [ :cls | selectors addAll: cls class selectors ].
+	^ selectors
+]
+
 { #category : #testing }
 GtEpReplayMetaBehaviorModel >> definesBehaviorInImage: aGtEpReplayImageModel [
 	"Answer a boolean indicating whether the receiver defines its class / trait.
@@ -119,12 +131,8 @@ GtEpReplayMetaBehaviorModel >> printOn: aStream [
 
 { #category : #accessing }
 GtEpReplayMetaBehaviorModel >> selectors [
-	"Answer the selectors defined by the receiver, including the current definition"
-	| selectors |
+	"Answer the selectors defined by the receiver"
 
-	selectors := methods keys asSet.
-	self class environment 
-		at: instanceSide name
-		ifPresent: [ :cls | selectors addAll: cls class selectors ].
-	^ selectors
+	^ methods keys asSet.
+
 ]

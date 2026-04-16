@@ -177,9 +177,7 @@ GtEpiceaAbstractLog >> exportFilter [
 	^ GtFilterDescriptor new
 		creator: [ :aStream | | explicitLog sorted |
 			explicitLog := GtEpiceaExplicitLog on: aStream toArray wait.
-			sorted := (GtEpEventSequencer 
-				entries: explicitLog entries 
-				inImage: false)
+			sorted := (GtEpForExportEventSequencer entries: explicitLog entries)
 					sequencedEntries.
 			AsyncSequenceStream forCollection: sorted reversed ];
 		named: 'Export';
@@ -520,9 +518,7 @@ GtEpiceaAbstractLog >> recoverFilter [
 	^ GtFilterDescriptor new
 		creator: [ :aStream | | explicitLog sorted |
 			explicitLog := GtEpiceaExplicitLog on: aStream toArray wait.
-			sorted := (GtEpEventSequencer 
-				entries: explicitLog entries 
-				inImage: true)
+			sorted := (GtEpInImageEventSequencer entries: explicitLog entries)
 					sequencedEntries.
 			AsyncSequenceStream forCollection: sorted reversed ];
 		named: 'Recover';
@@ -536,11 +532,9 @@ GtEpiceaAbstractLog >> recoverLatest [
 	"Answer a branch history filtered to the changes required to recover the image."
 	| entries |
 
-	entries := (GtEpEventSequencer
-		entries: self entriesGroup changesGroupedByBranch first value
-		inImage: true)
+	entries := (GtEpInImageEventSequencer entries: self entriesGroup changesGroupedByBranch first value reversed)
 			sequencedEntries.
-	^ GtEpiceaExplicitLog on: entries.
+	^ GtEpiceaExplicitLog on: entries reversed.
 ]
 
 { #category : #saving }

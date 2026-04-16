@@ -5,14 +5,7 @@ Class {
 }
 
 { #category : #'private - accessing' }
-GtEpInImageEventSequencer >> getSequencedEntries [
-	"Calculate the sequenced entries from the entries.
-	The sequence generation consists of three steps:
-	1. Iterate over the events building the image model (see {{gtMethod:GtEpEventSequencer>>image}}).
-	2. Iterate over the image model and select required events.
-	3. Sort the events chronologically."
+GtEpInImageEventSequencer >> getReplayVisitor [
 
-	entries ifEmpty: [ ^ entries ].
-	replay := GtEpImageModelInImageVisitor image: self image.
-	^ replay sequencedEntries sorted: GtOmEntrySortFunction new.
+	^ GtEpImageModelReplayVisitor new wrappedEntries: wrappedEntries.
 ]

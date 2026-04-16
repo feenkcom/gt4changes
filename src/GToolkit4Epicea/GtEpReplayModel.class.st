@@ -10,6 +10,32 @@ Class {
 	#category : #'GToolkit4Epicea-Sequencer'
 }
 
+{ #category : #utilities }
+GtEpReplayModel class >> classNameAndMeta: aSymbol [
+	"Answer an array containing the class basename and meta flag for the supplied name"
+	| meta baseName |
+
+	(aSymbol endsWith: ' class') ifTrue: 
+		[ meta := true.
+		baseName := (aSymbol copyFrom: 1 to: aSymbol size - 6) asSymbol ]
+	ifFalse: 
+		[ (aSymbol endsWith: ' classTrait') ifTrue: 
+			[ meta := true.
+			baseName := (aSymbol copyFrom: 1 to: aSymbol size - 11) asSymbol ]
+		ifFalse: 
+			[ meta := false.
+			baseName := aSymbol asSymbol ] ].
+
+	^ { baseName. meta. }
+]
+
+{ #category : #testing }
+GtEpReplayModel class >> isBehaviorDefinition: anEpEvent [
+	"Answer a boolean indicating whether the supplied event is considerd a behavior definition"
+	
+	^ #(#EpClassAddition #EpClassModification #EpTraitAddition #EpTraitModification) includes: anEpEvent class name
+]
+
 { #category : #visiting }
 GtEpReplayModel >> accept: aVisitor [
 
@@ -38,6 +64,7 @@ GtEpReplayModel >> currentDefinition [
 
 { #category : #accessing }
 GtEpReplayModel >> entries [
+	<return: #SequenceableCollection of: #GtEpSequncerEntry>
 
 	^ entries
 ]

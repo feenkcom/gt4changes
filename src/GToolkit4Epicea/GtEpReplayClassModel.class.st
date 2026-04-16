@@ -9,6 +9,7 @@ GtEpReplayClassModel >> addBehaviorChange: anOmEntry [
 
 	super addBehaviorChange: anOmEntry.
 	superclassName := anOmEntry content behaviorAffected superclassName asSymbol.
+	(imageModel classModelNamed: superclassName) subclassed: true.
 ]
 
 { #category : #adding }
@@ -34,13 +35,23 @@ GtEpReplayClassModel >> addCategoryChange: anOmEntry [
 GtEpReplayClassModel >> definesBehaviorInImage: aGtEpReplayImageModel [
 	"Answer a boolean indicating whether the receiver defines its class / trait.
 	I.e. are there entries which add the behavior or it exists in the system."
-
+"self halt: 'image access'."
 	^ entries reversed
 		detect: [ :entry | entry content isEpClassAddition or: [ entry content isEpClassModification ] ]
 		ifFound: [ :entry |
 			"The definition actually defines only if the superclass is defined"
 			aGtEpReplayImageModel includesBehaviorSometimeNamed: entry content behaviorAffected superclassName asSymbol ]
 		ifNone: [ self environment includesKey: self behaviorAffectedName asSymbol. ]
+]
+
+{ #category : #'as yet unclassified' }
+GtEpReplayClassModel >> gtViewChangeHistoryChildren [
+
+	^ super gtViewChangeHistoryChildren, { 
+		GtEpiceaChangeDisplayNode new
+			description: 'classSide';
+			children: { classSide }.
+		}
 ]
 
 { #category : #testing }
@@ -68,7 +79,7 @@ GtEpReplayClassModel >> isClass [
 GtEpReplayClassModel >> knowsSuperclassInModel [
 
 	^ superclassName notNil and: [
-		imageModel basicIncludesBehaviorSometimeNamed:  superclassName ]
+		imageModel includesBehaviorSometimeNamed:  superclassName ]
 ]
 
 { #category : #accessing }
