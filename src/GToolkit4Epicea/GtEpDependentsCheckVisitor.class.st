@@ -22,18 +22,25 @@ GtEpDependentsCheckVisitor class >> visitNodes: aCollection [
 		visitNodes: aCollection
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 GtEpDependentsCheckVisitor >> checkBehaviorNamePresent: aSymbol [
+	| normalizedName |
 
+	normalizedName := (GtEpReplayImageModel classNameAndMeta: aSymbol) first.
 	self
 		classOrTraitNamed: aSymbol
 		ifPresent: [ :anObject | anObject == #removed ifTrue:
 			[ currentEntry classification: #requiredMissingDependency
-				reason: #dependencyMarkedRemoved ] ]
+				reason: (GtEpDependencyMarkedRemovedReason
+					dependencyName: normalizedName
+					dependencyEntry: nil
+					dependentEntry: currentEntry) ] ]
 		ifAbsent: [ :name |
 			(self environment classOrTraitNamed: name) ifNil:
 				[ currentEntry classification: #requiredMissingDependency
-					reason: #dependencyNotFound ] ]
+					reason: (GtEpDependencyNotFoundReason
+						dependencyName: name
+						dependentEntry: currentEntry) ] ]
 ]
 
 { #category : #private }
@@ -48,7 +55,7 @@ GtEpDependentsCheckVisitor >> classOrTraitNamed: aSymbol ifAbsent: absentBlock [
 		ifAbsent: absentBlock
 ]
 
-{ #category : #private }
+{ #category : #accessing }
 GtEpDependentsCheckVisitor >> classOrTraitNamed: aSymbol ifPresent: presentBlock ifAbsent: absentBlock [
 	"Answer the class or trait with the supplied name.
 	If it is present in the running image, but not the model, add it to the model.

@@ -133,7 +133,7 @@ GtEpEventSequencer >> gtChangeListFor: aView [
 		view: #gtEventsFor:
 ]
 
-{ #category : #'gt - extensions' }
+{ #category : #'gt-extensions' }
 GtEpEventSequencer >> gtViewAllEntriesFor: aView [
 	<gtView>
 
@@ -154,8 +154,7 @@ GtEpEventSequencer >> gtViewAllEntriesFor: aView [
 					foreground: (self gtBackgroundColorForEntry: anEntry) ]
 			width: 250;
 		column: 'Reason'
-			text: [ :anEntry |
-				anEntry reason asString asRopedText
+			text: [ :anEntry | anEntry reasonExplanation asRopedText
 					foreground: (self gtBackgroundColorForEntry: anEntry) ]
 			width: 250.
 ]

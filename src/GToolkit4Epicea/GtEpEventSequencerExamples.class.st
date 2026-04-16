@@ -423,8 +423,8 @@ GtEpEventSequencerExamples >> classAddAndRenameMultipleInImage [
 	self assert: entries size equals: 11.
 	sequencer := GtEpInImageEventSequencer entries: entries.
 	sequencedEntries := sequencer sequencedEntries.
-	self assert: (sequencer wrappedEntries collect: #classification) asArray equals:
-		#(nil #required #required #required nil #required #superseeded nil #superseeded #required #required).
+	self assert: (sequencer wrappedEntries collect: #classification as: Array) equals:
+		#(nil #required #required #required nil #required nil nil #superseeded #required #required).
 	sequencedClassNames := sequencedEntries collect: [ :each |
 		each content class name ].
 	self
@@ -625,7 +625,7 @@ GtEpEventSequencerExamples >> classAddModifyRenameRemove2InImage [
 	sequencer := GtEpInImageEventSequencer entries: entries.
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: (sequencer wrappedEntries collect: #classification as: Array) equals:
-		#(nil #superseeded #superseeded #superseeded nil #superseeded #superseeded #superseeded #superseeded #superseeded #superseeded nil #superseeded nil #superseeded #superseeded).
+		#(nil nil nil nil nil nil #superseeded #superseeded #superseeded #superseeded #superseeded nil #superseeded nil #superseeded #superseeded).
 	self assert: sequencedEntries isEmpty.
 	^ sequencer
 ]
@@ -674,7 +674,7 @@ GtEpEventSequencerExamples >> classAddModifyRenameRemoveInImage [
 	sequencer := GtEpInImageEventSequencer entries: entries.
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: (sequencer wrappedEntries collect: #classification as: Array) equals:
-		#(nil #superseeded #superseeded #superseeded #superseeded #superseeded #superseeded #superseeded nil nil nil nil nil #superseeded nil nil nil #superseeded #superseeded #superseeded #superseeded #superseeded).
+		#(nil nil nil #superseeded #superseeded #superseeded nil nil nil nil nil nil nil #superseeded nil nil nil #superseeded #superseeded #superseeded #superseeded #superseeded).
 	self deny: (sequencer image behaviors includesKey: #Issue2936).
 	self assert: sequencedEntries isEmpty.
 	^ sequencer
@@ -949,7 +949,7 @@ GtEpEventSequencerExamples >> classProtocolRemovalInImage [
 	sequencer := GtEpInImageEventSequencer entries: entries.
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: (sequencer wrappedEntries collect: #classification as: Array) equals:
-		#(nil #required nil nil nil nil #superseeded #superseeded nil #superseeded #superseeded).
+		#(nil #required nil nil nil nil #superseeded nil nil #superseeded nil).
 	self assert: (sequencer image behaviors includesKey: #Issue2958).
 	behavior := sequencer image classOrTraitNamed: #Issue2958.
 	self assert: behavior methods keys isEmpty.
@@ -1025,7 +1025,7 @@ GtEpEventSequencerExamples >> classRenameAndRemovalForExport [
 	<gtExample>
 	<after: #removeTestClasses>
 	<return: #GtEpForExportEventSequencer>
-	| fileReference epLog entries sequencer sequencedEntries |
+	| fileReference epLog entries sequencer sequencedEntries reason |
 
 	self
 		deny: (self class environment includesKey: #GtEpEventSequencerExampleClass1).
@@ -1038,6 +1038,9 @@ GtEpEventSequencerExamples >> classRenameAndRemovalForExport [
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: (sequencer wrappedEntries collect: #classification as: Array) equals:
 		#(nil #required nil #required).
+	reason := sequencer wrappedEntries second reason.
+	self assert: reason class equals: GtEpPreviousLifeBehaviorNameChangeEntryRequiredReason.
+	self assert: reason kind equals: #previousLifeBehaviorNameChangeEntryRequired.
 	self assert: sequencedEntries size equals: 2.
 	self assert: sequencedEntries last content isEpClassRemoval.
 	self
@@ -1059,7 +1062,7 @@ GtEpEventSequencerExamples >> classRenameAndRemovalInImage [
 	<gtExample>
 	<after: #removeTestClasses>
 	<return: #GtEpInImageEventSequencer>
-	| fileReference epLog entries sequencer sequencedEntries |
+	| fileReference epLog entries sequencer sequencedEntries reason |
 	self
 		deny: (self class environment includesKey: #GtEpEventSequencerExampleClass1).
 	fileReference := self class testDataRoot / 'Issue4080' / 'RenameExport.ombu'.
@@ -1071,6 +1074,10 @@ GtEpEventSequencerExamples >> classRenameAndRemovalInImage [
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: (sequencer wrappedEntries collect: #classification as: Array) equals:
 		#(nil #superseeded #superseeded #superseeded).
+	reason := sequencer wrappedEntries second reason.
+	self assert: reason class equals: GtEpBehaviorRemovedReason.
+	self assert: reason kind equals: #behaviorRemoved.
+	self assert: reason removalEntry identicalTo: sequencer wrappedEntries last.
 	self assert: sequencedEntries size equals: 0.
 
 	^ sequencer
@@ -1629,8 +1636,8 @@ GtEpEventSequencerExamples >> removeExistingMethodInImage [
 
 	sequencer := GtEpInImageEventSequencer entries: entries.
 	sequencedEntries := sequencer sequencedEntries.
-	self assert: (sequencer wrappedEntries collect: #classification) asArray equals:
-		#(#superseeded #required).
+	self assert: (sequencer wrappedEntries collect: #classification as: Array) equals:
+		#(nil #required).
 	self
 		assert: (sequencedEntries collect: [ :each | each content class name ] as: Array)
 		equals: #(#EpMethodRemoval).

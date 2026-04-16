@@ -35,14 +35,15 @@ GtEpSequencerEntry >> classification: aSymbol [
 ]
 
 { #category : #accessing }
-GtEpSequencerEntry >> classification: cSymbol reason: rSymbol [
-	"Set the receiver's classification and reason."
+GtEpSequencerEntry >> classification: cSymbol reason: aReason [
+	"Set the receiver's classification and reason.
+	Don't over-write an existing classification with a new reason."
 
 	classification == cSymbol ifTrue: [ ^ self ].
 
 	self 
 		classification: cSymbol;
-		reason: rSymbol.
+		reason: aReason.
 ]
 
 { #category : #accessing }
@@ -219,19 +220,43 @@ GtEpSequencerEntry >> printOn: aStream [
 		<< ': ';
 		print: self content;
 		<< '(';
-		print: classification;
-		<< ')'
+		print: classification.
+	reason ifNotNil: [
+		aStream
+			<< ' - ';
+			print: reason ].
+	aStream << ')'
 ]
 
 { #category : #accessing }
 GtEpSequencerEntry >> reason [
+	<return: #GtEpSequencerEntryReason>
+
 	^ reason
 ]
 
 { #category : #accessing }
-GtEpSequencerEntry >> reason: aSymbol [
+GtEpSequencerEntry >> reason: aGtEpSequencerEntryReason [
+	"Set the reason for the receiver's classification.
+	Allow aGtEpSequencerEntryReason to be a symbol for backward compatibility."
+	reason := aGtEpSequencerEntryReason
+		ifNil: [ nil ]
+		ifNotNil: [ aGtEpSequencerEntryReason isSymbol
+			ifTrue: [ GtEpLegacySequencerEntryReason kind: aGtEpSequencerEntryReason ]
+			ifFalse: [ aGtEpSequencerEntryReason ] ]
+]
 
-	reason := aSymbol
+{ #category : #accessing }
+GtEpSequencerEntry >> reasonExplanation [
+
+	^ reason
+		ifNil: [ 'Rejected on first pass' ]
+		ifNotNil: #explanation
+]
+
+{ #category : #accessing }
+GtEpSequencerEntry >> reasonKind [
+	^ reason ifNil: [ nil ] ifNotNil: [ reason kind ]
 ]
 
 { #category : #accessing }
@@ -244,13 +269,14 @@ GtEpSequencerEntry >> sortOrder: anObject [
 	sortOrder := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GtEpSequencerEntry >> summaryAttributes [
 
 	^ {
 		{ 'Content type'. self content class. }.
 		{ 'Classification'. classification. }.
-		{ 'Reason'. reason. }.
+		{ 'Reason'. self reasonExplanation. }.
+		{ 'Reason kind'. self reasonKind. }.
 		}
 ]
 

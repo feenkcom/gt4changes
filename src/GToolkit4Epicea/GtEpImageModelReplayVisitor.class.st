@@ -14,7 +14,9 @@ GtEpImageModelReplayVisitor >> addBehaviorEntriesFrom: aGtEpReplayBehaviorModel 
 	entry := aGtEpReplayBehaviorModel entries first.
 	"Note that this test is not reliable as it depends on the behaviour definition string, which can be in multiple forms (old vs. shift), in which case the entry will be left in unncessarily."
 	(entry content accept: (EpHasImpactVisitor inEnvironment: self environment)) ifFalse:
-		[ entry classification: #superseeded reason: #classDefinitionHasNoImpact ].
+		[ entry classification: #superseeded reason: (GtEpHasNoImpactReason
+			requiredEntry: entry
+			model: aGtEpReplayBehaviorModel) ].
 ]
 
 { #category : #'as yet unclassified' }
@@ -63,12 +65,12 @@ GtEpImageModelReplayVisitor >> removeNoImpactMethodDefinitions [
 		event isEpMethodChange ifTrue:
 			[ | reason |
 			(self modelWithPreviousNamesOrEnvironmentIncludesBehaviorNamed: event behaviorAffectedName) not ifTrue:
-				[ reason := #methodsClassDoesntExist ].
+				[ reason := GtEpMethodsClassDoesntExistReason entry: entry ].
 			reason ifNil:
 				[ | realClass |
 					realClass := self environment classOrTraitNamed: event behaviorAffectedName.
 					(event isEpMethodRemoval and: [ realClass isNil or: [ (realClass methodDict includesKey: event selector) not ] ]) ifTrue:
-						[ reason := #methodRemovalAndNoMethod ]
+						[ reason := GtEpMethodDoesntExistReason entry: entry ]
 					ifFalse:
 						[ event isEpMethodRemoval not and: 
 							[ realClass isNotNil and: 
@@ -76,7 +78,9 @@ GtEpImageModelReplayVisitor >> removeNoImpactMethodDefinitions [
 									ifPresent: [ :compiledMethod |
 										(compiledMethod protocol name = event protocol and:
 											[ compiledMethod sourceCode = event sourceCode ]) ifTrue:
-												[ reason := #methodDefinitionTheSame ] ] ] ] ] ].
+												[ reason := GtEpMethodDefinitionTheSameReason 
+														entry: entry
+														image: image ] ] ] ] ] ].
 			reason ifNotNil:
 				[ entry classification: #superseeded reason: reason ] ] ].
 ]
@@ -88,26 +92,40 @@ GtEpImageModelReplayVisitor >> removeNoImpactRenamesAndRemoves [
 	| chains |
 
 	chains := self classChains.
-	chains do: [ :chain | | classExists |
+	chains do: [ :chain | | classExists removalEntry |
 		classExists := false.
+		removalEntry := (GtEpReplayModel isBehaviorRemoval: chain last content) ifTrue:
+			[ chain last ]
+		ifFalse:
+			[ nil ].
 		chain do: [ :entry |
 			classExists ifFalse:
 				[ | event |
 				event := entry content.
-				classExists := event isEpBehaviorNameChange ifTrue: 
+				event isEpBehaviorNameChange ifTrue: 
 					[ "Name changes are considered to exist if they:
 					- exist in the system with the old name, or
 					- exist in the model (either current or previous name)."
-					self modelWithPreviousNamesOrEnvironmentIncludesBehaviorNamed: event oldName ]
+					classExists := self modelWithPreviousNamesOrEnvironmentIncludesBehaviorNamed: event oldName.
+					classExists ifFalse:
+						[ entry classification: #superseeded reason: (removalEntry
+							ifNil: [ GtEpBehaviorDoesntExistReason 
+								behaviorName: event behaviorAffectedName
+								supersededEntry: entry]
+							ifNotNil: [ GtEpBehaviorRemovedReason
+								behaviorName: event behaviorAffectedName
+								removalEntry: removalEntry
+								supersededEntry: entry ]) ] ]
 				ifFalse: [ (event isEpClassRemoval or: [ event isEpTraitRemoval ]) ifTrue:
 					[ "Behaviours are considered to exist if they exist in the system."
-					(self environment classOrTraitNamed: event behaviorAffectedName) isNotNil ]
-				ifFalse: [ (event isEpClassChange or: [ event isEpTraitChange ]) ifTrue:
-					[ entry isRequired ]
-				ifFalse:
-					[ classExists ] ] ].
-				classExists ifFalse:
-					[ entry classification: #superseeded reason: #classDoesntExist ] ] ] ].
+					classExists := (self environment classOrTraitNamed: event behaviorAffectedName) isNotNil.
+					classExists ifFalse:
+						[ entry classification: #superseeded reason: (GtEpBehaviorDoesntExistReason 
+							behaviorName: event behaviorAffectedName
+							supersededEntry: entry) ] ]
+				ifFalse: 
+					[ (event isEpClassChange or: [ event isEpTraitChange ]) ifTrue:
+						[ classExists := entry isRequired. ] ] ] ] ] ].
 ]
 
 { #category : #testing }
@@ -122,9 +140,13 @@ GtEpImageModelReplayVisitor >> shouldAddMethod: aGtEpReplayMethodModel [
 			ifPresent: [ :method |
 				^ (method sourceCode ~= aGtEpReplayMethodModel sourceCode or:
 					[ method protocol ~= aGtEpReplayMethodModel protocol ])
-						ifTrue: [ #methodDefinitionDiffers ]
+						ifTrue: [ GtEpMethodDefinitionDiffersReason 
+							entry: aGtEpReplayMethodModel entries last
+							image: image ]
 						ifFalse: [ nil ] ] ].
-	^ #addMethodDefault
+	^ GtEpLegacySequencerEntryReason 
+		kind: #addMethodByDefault
+		entry: aGtEpReplayMethodModel entries last
 ]
 
 { #category : #testing }
