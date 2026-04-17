@@ -36,6 +36,13 @@ GtEpReplayModel class >> isBehaviorDefinition: anEpEvent [
 	^ #(#EpClassAddition #EpClassModification #EpTraitAddition #EpTraitModification) includes: anEpEvent class name
 ]
 
+{ #category : #testing }
+GtEpReplayModel class >> isBehaviorRemoval: anEpEvent [
+	"Answer a boolean indicating whether the supplied event is considerd a behavior removal"
+	
+	^ anEpEvent isEpClassRemoval or: [ anEpEvent isEpTraitRemoval ]
+]
+
 { #category : #visiting }
 GtEpReplayModel >> accept: aVisitor [
 

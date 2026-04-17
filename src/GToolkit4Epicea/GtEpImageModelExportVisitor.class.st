@@ -35,17 +35,25 @@ GtEpImageModelExportVisitor >> addBehaviorEntriesFrom: aGtEpReplayBehaviorModel 
 		"If the previous life has subclasses all class modifications must be kept"
 		behaviorModel subclassed ifTrue:
 			[ behaviorModel entries do: [ :entry | 
-				entry classification: #required reason: #previousLifeSubclassed ] ]
+				entry classification: #required reason: (GtEpPreviousLifeSubclassedReason
+					requiredEntry: entry
+					previousLifeBehaviorModel: behaviorModel) ] ]
 		ifFalse:
 		[ "Otherwise only name changes and the final remove event are required"
 		behaviorModel entries last 
-			classification: #required reason: #previousLifeLastBehaviorEntryRequired.
+			classification: #required reason: (GtEpPreviousLifeLastBehaviorEntryRequiredReason
+				requiredEntry: behaviorModel entries last
+				previousLifeBehaviorModel: behaviorModel).
 		behaviorModel entries do: [ :entry |
 			entry content isEpBehaviorNameChange ifTrue:
-				[ entry classification: #required reason: #previousLifeBehaviorNameChangeEntryRequired ] ] ] ].
+				[ entry classification: #required reason: (GtEpPreviousLifeBehaviorNameChangeEntryRequiredReason
+					requiredEntry: entry
+					previousLifeBehaviorModel: behaviorModel) ] ] ] ].
 	"All entries are required for the supplied behavior."
 	aGtEpReplayBehaviorModel entries do: [ :entry |
-		entry classification: #required reason: #behaviorEntryRequired ].
+		entry classification: #required reason: (GtEpBehaviorEntryRequiredReason
+			requiredEntry: entry
+			previousLifeBehaviorModel: aGtEpReplayBehaviorModel) ].
 ]
 
 { #category : #accessing }
@@ -141,10 +149,12 @@ GtEpImageModelExportVisitor >> removeContigousClassDefinitions [
 				whileTrue: [ nextIndex := nextIndex + 1 ].
 			(self isClassDefinition: nextEntry) ifTrue:
 				[ (wrappedEntry content behaviorAffectedName = nextEntry content behaviorAffectedName) ifTrue:
-					[ wrappedEntry classification: #superseeded reason: #contigousClassDefinition ] ] ] ]
+					[ wrappedEntry classification: #superseeded reason: (GtEpContigousClassDefinitionReason
+						requiredEntry: wrappedEntry
+						nextEntry: nextEntry) ] ] ] ]
 ]
 
-{ #category : #visiting }
+{ #category : #private }
 GtEpImageModelExportVisitor >> replayCommentEntriesFrom: aGtEpReplayBehaviorModel [
 	"Only the latest comment entry counts"
 	| latestCommentEntry |
@@ -153,8 +163,10 @@ GtEpImageModelExportVisitor >> replayCommentEntriesFrom: aGtEpReplayBehaviorMode
 
 	latestCommentEntry := aGtEpReplayBehaviorModel latestCommentEntry.
 	(self shouldReplayCommentEntry: latestCommentEntry) ifTrue:
-		[ aGtEpReplayBehaviorModel latestCommentEntry 
-			classification: #required reason: #lastCommentEntryRequired ].
+		[ latestCommentEntry
+			classification: #required reason: (GtEpLastCommentEntryRequiredReason
+				requiredEntry: latestCommentEntry
+				behaviorModel: aGtEpReplayBehaviorModel) ].
 ]
 
 { #category : #accessing }
@@ -162,20 +174,24 @@ GtEpImageModelExportVisitor >> sequencedEntries [
 	^ sequencedEntries ifNil: [ sequencedEntries := self getSequencedEntries ]
 ]
 
-{ #category : #testing }
+{ #category : #private }
 GtEpImageModelExportVisitor >> shouldAddMethod: aGtEpReplayMethodModel [
 	"The relevant method entry is always added for export"
 	
-	^ #methodRequired
+	^ GtEpLegacySequencerEntryReason 
+		kind: #methodRequired
+		entry: aGtEpReplayMethodModel entries last
 ]
 
-{ #category : #testing }
+{ #category : #private }
 GtEpImageModelExportVisitor >> shouldReplayAdditionalEntry: entry [
-	"Answer a Symbol indicating why the entry is required, or nil if not required.
+	"Answer a reason object indicating why the entry is required, or nil if not required.
 	Currently only EpExpressionEvaluations are included."
 
 	entry content class == EpExpressionEvaluation ifTrue:
-		[ ^ #expressionEvaluationRequired ].
+		[ ^ GtEpLegacySequencerEntryReason 
+			kind: #expressionEvaluationRequired
+			entry: entry ].
 	^ nil
 ]
 
@@ -200,7 +216,7 @@ GtEpImageModelExportVisitor >> visitBehaviorReplay: aGtEpReplayBehaviorModel [
 		currentBehaviorModel := nil. ].
 ]
 
-{ #category : #visiting }
+{ #category : #private }
 GtEpImageModelExportVisitor >> visitImageReplay: aGtEpReplayImageModel [
 
 	aGtEpReplayImageModel behaviors values do: [ :behavior |
@@ -210,7 +226,7 @@ GtEpImageModelExportVisitor >> visitImageReplay: aGtEpReplayImageModel [
 			[ :reason | entry classification: #required reason: reason ] ].
 ]
 
-{ #category : #visiting }
+{ #category : #private }
 GtEpImageModelExportVisitor >> visitMethodReplay: aGtEpReplayMethodModel [
 
 	aGtEpReplayMethodModel entries ifNotEmpty: [ :entries |
