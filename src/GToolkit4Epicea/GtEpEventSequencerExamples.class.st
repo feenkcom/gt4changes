@@ -1553,6 +1553,21 @@ GtEpEventSequencerExamples >> modifyMethodChangeProtocolInImage [
 ]
 
 { #category : #examples }
+GtEpEventSequencerExamples >> modifyMethodUnchangedInImage [
+	"Check that a redundant method definition is sequenced correctly"
+	<gtExample>
+	<return: #GtEpInImageEventSequencer>
+	| entries sequencer sequencedEntries |
+
+	entries := { GtEpReplayImageModel new omEntryFor:
+		(EpMethodAddition method: thisContext method) }.
+	sequencer := GtEpInImageEventSequencer entries: entries.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: sequencedEntries isEmpty.
+	^ sequencer
+]
+
+{ #category : #examples }
 GtEpEventSequencerExamples >> removeExistingClassForExport [
 	"Check that removing a class that is already in the image is sequenced correctly."
 	<gtExample>
@@ -1622,7 +1637,7 @@ GtEpEventSequencerExamples >> removeExistingClassInImage [
 
 { #category : #examples }
 GtEpEventSequencerExamples >> removeExistingMethodInImage [
-	"Check that removing a class that is already in the image is sequenced correctly."
+	"Check that removing a method that is in the image is sequenced correctly."
 	<gtExample>
 	<return: #GtEpInImageEventSequencer>
 	| fileReference epLog entries sequencer sequencedEntries |
@@ -1637,7 +1652,7 @@ GtEpEventSequencerExamples >> removeExistingMethodInImage [
 	sequencer := GtEpInImageEventSequencer entries: entries.
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: (sequencer wrappedEntries collect: #classification as: Array) equals:
-		#(nil #required).
+		#(#superseeded #required).
 	self
 		assert: (sequencedEntries collect: [ :each | each content class name ] as: Array)
 		equals: #(#EpMethodRemoval).

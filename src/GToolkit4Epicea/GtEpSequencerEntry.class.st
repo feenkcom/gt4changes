@@ -127,6 +127,17 @@ GtEpSequencerEntry >> gtSummaryFor: aView [
 		  actionUpdateButton
 ]
 
+{ #category : #ui }
+GtEpSequencerEntry >> gtTagsFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Tags';
+		priority: 30;
+		object: [ omEntry ];
+		view: #gtTagsFor:
+]
+
 { #category : #accessing }
 GtEpSequencerEntry >> gtTime [
 

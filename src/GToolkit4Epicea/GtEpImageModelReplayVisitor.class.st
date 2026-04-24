@@ -46,15 +46,60 @@ GtEpImageModelReplayVisitor >> modelWithPreviousNamesOrEnvironmentIncludesBehavi
 
 { #category : #private }
 GtEpImageModelReplayVisitor >> postProcessWrappedEntries [
-
-	self removeNoImpactMethodDefinitions.
+	| chains |
+	
+	self superseedNoImpactMethodDefinitions.
 	super postProcessWrappedEntries.
-	self removeNoImpactRenamesAndRemoves.
+	chains := self classChains.
+	self superseedFinalDefinitionMatchesFrom: chains.
+	self superseedNoImpactRenamesAndRemovesFrom: chains.
 	self checkDependencies.
 ]
 
+{ #category : #testing }
+GtEpImageModelReplayVisitor >> shouldAddMethod: aGtEpReplayMethodModel [
+	"Removals are always included.  Method definitions are included if it doesn't match the current definition."
+	| currentClassName selector |
+
+	currentClassName := currentBehaviorModel name.
+	selector := aGtEpReplayMethodModel selector.
+	(self environment classOrTraitNamed: currentClassName) ifNotNil: [ :classOrTrait |
+		classOrTrait methodDict at: selector
+			ifPresent: [ :method |
+				^ (method sourceCode ~= aGtEpReplayMethodModel sourceCode or:
+					[ method protocol name ~= aGtEpReplayMethodModel protocol ])
+						ifTrue: [ GtEpMethodDefinitionDiffersReason 
+							entry: aGtEpReplayMethodModel entries last
+							image: image ]
+						ifFalse: [ nil ] ] ].
+	^ GtEpLegacySequencerEntryReason 
+		kind: #addMethodByDefault
+		entry: aGtEpReplayMethodModel entries last
+]
+
+{ #category : #testing }
+GtEpImageModelReplayVisitor >> shouldReplayCommentEntry: latestCommentEntry [
+	| event |
+
+	event := latestCommentEntry content.
+	^ (self environment classOrTraitNamed: event behaviorAffectedName)
+		ifNil: [ image includesBehaviorSometimeNamed: event behaviorAffectedName ]
+		ifNotNil: [ :cls | cls comment ~= event newComment ].
+]
+
 { #category : #private }
-GtEpImageModelReplayVisitor >> removeNoImpactMethodDefinitions [
+GtEpImageModelReplayVisitor >> superseedFinalDefinitionMatchesFrom: chains [
+	"Mark as superseeded any chains where the final definition matches the current definition."
+
+	chains do: [ :chain |
+		(GtEpReplayModel isBehaviorDefinitionCurrent: chain last content behaviorAffected) ifTrue:
+			[ chain do: [ :entry |
+				entry classification: #superseeded reason:
+					(GtEpBehaviorDefinitionMatchesReason matchingEntry: chain last) ] ] ].
+]
+
+{ #category : #private }
+GtEpImageModelReplayVisitor >> superseedNoImpactMethodDefinitions [
 	"Remove EpMethodChanges that have no impact, i.e. any of the follow are true:
 	- the class never existed.
 	- the change is a removal and the method is already gone.
@@ -85,13 +130,11 @@ GtEpImageModelReplayVisitor >> removeNoImpactMethodDefinitions [
 				[ entry classification: #superseeded reason: reason ] ] ].
 ]
 
-{ #category : #private }
-GtEpImageModelReplayVisitor >> removeNoImpactRenamesAndRemoves [
+{ #category : #'as yet unclassified' }
+GtEpImageModelReplayVisitor >> superseedNoImpactRenamesAndRemovesFrom: chains [
 	"Remove EpBehaviorNameChange and EpClassRemoval events that have no impact in the current image.
-	Organise the events in to chains of class modifications.  Iterate over each chain marking rename and remove events up until the time the class/trait is known to exist."
-	| chains |
+Iterate over each chain marking rename and remove events up until the time the class/trait is known to exist."
 
-	chains := self classChains.
 	chains do: [ :chain | | classExists removalEntry |
 		classExists := false.
 		removalEntry := (GtEpReplayModel isBehaviorRemoval: chain last content) ifTrue:
@@ -126,35 +169,4 @@ GtEpImageModelReplayVisitor >> removeNoImpactRenamesAndRemoves [
 				ifFalse: 
 					[ (event isEpClassChange or: [ event isEpTraitChange ]) ifTrue:
 						[ classExists := entry isRequired. ] ] ] ] ] ].
-]
-
-{ #category : #testing }
-GtEpImageModelReplayVisitor >> shouldAddMethod: aGtEpReplayMethodModel [
-	"Removals are always included.  Method definitions are included if it doesn't match the current definition."
-	| currentClassName selector |
-
-	currentClassName := currentBehaviorModel name.
-	selector := aGtEpReplayMethodModel selector.
-	(self environment classOrTraitNamed: currentClassName) ifNotNil: [ :classOrTrait |
-		classOrTrait methodDict at: selector
-			ifPresent: [ :method |
-				^ (method sourceCode ~= aGtEpReplayMethodModel sourceCode or:
-					[ method protocol ~= aGtEpReplayMethodModel protocol ])
-						ifTrue: [ GtEpMethodDefinitionDiffersReason 
-							entry: aGtEpReplayMethodModel entries last
-							image: image ]
-						ifFalse: [ nil ] ] ].
-	^ GtEpLegacySequencerEntryReason 
-		kind: #addMethodByDefault
-		entry: aGtEpReplayMethodModel entries last
-]
-
-{ #category : #testing }
-GtEpImageModelReplayVisitor >> shouldReplayCommentEntry: latestCommentEntry [
-	| event |
-
-	event := latestCommentEntry content.
-	^ (self environment classOrTraitNamed: event behaviorAffectedName)
-		ifNil: [ image includesBehaviorSometimeNamed: event behaviorAffectedName ]
-		ifNotNil: [ :cls | cls comment ~= event newComment ].
 ]

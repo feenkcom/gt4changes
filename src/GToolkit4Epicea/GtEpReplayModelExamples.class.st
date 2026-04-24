@@ -148,3 +148,31 @@ GtEpReplayModelExamples >> removeTestClasses [
 
 	self class removeTestClasses
 ]
+
+{ #category : #examples }
+GtEpReplayModelExamples >> replayVisitorShouldAddMethod [
+	<gtExample>
+	| visitor method wrappedEntries imageModel behaviorModel methodModel methodDefinition |
+
+	method := thisContext method.
+	wrappedEntries := { GtEpSequencerEntry new omEntry:
+		(GtEpReplayImageModel new omEntryFor:
+			(EpMethodAddition method: method)) }.
+	visitor := GtEpReplayEventVisitor new.
+	visitor visitNodes: wrappedEntries.
+	imageModel := visitor image.
+	behaviorModel := imageModel behaviorAt: self class name.
+	methodModel := behaviorModel methodNamed: method selector.
+	visitor := GtEpImageModelReplayVisitor new.
+	visitor currentBehaviorModel: behaviorModel.
+	self assert: (visitor shouldAddMethod: methodModel) isNil.
+
+	methodDefinition := wrappedEntries first content methodAffected.
+
+	self assert: methodDefinition protocol equals: #examples.
+	methodDefinition protocol: #different.
+	self assert: (visitor shouldAddMethod: methodModel) isNotNil.
+	methodDefinition protocol: #examples.
+	methodDefinition sourceCode: 'different'.
+	self assert: (visitor shouldAddMethod: methodModel) isNotNil.
+]

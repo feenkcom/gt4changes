@@ -67,7 +67,9 @@ GtEpImageModelExportVisitor >> classChains [
 		event := entry content.
 		event isEpBehaviorChange ifTrue:
 			[ | behaviorName chain |
-			behaviorName := event behaviorAffectedName.
+			behaviorName := event isEpBehaviorNameChange
+				ifTrue: [ event oldName ]
+				ifFalse: [ event behaviorAffectedName ].
 			"Find the appropriate chain, or start a new one"
 			chain := chains
 				detect: [ :aChain | aChain last content behaviorAffectedName = behaviorName ]
@@ -81,6 +83,16 @@ GtEpImageModelExportVisitor >> classChains [
 
 	completedChains addAll: chains.
 	^ completedChains
+]
+
+{ #category : #private }
+GtEpImageModelExportVisitor >> currentBehaviorModel [
+	^ currentBehaviorModel
+]
+
+{ #category : #private }
+GtEpImageModelExportVisitor >> currentBehaviorModel: anObject [
+	currentBehaviorModel := anObject
 ]
 
 { #category : #accessing }
@@ -133,25 +145,7 @@ GtEpImageModelExportVisitor >> isClassDefinition: wrappedEntry [
 { #category : #private }
 GtEpImageModelExportVisitor >> postProcessWrappedEntries [
 
-	self removeContigousClassDefinitions
-]
-
-{ #category : #private }
-GtEpImageModelExportVisitor >> removeContigousClassDefinitions [
-	"Contiguous class definitions require only the final entry.
-	Any other required entry in between means that both class definition will be left in."
-
-	wrappedEntries allButLast doWithIndex: [ :wrappedEntry :index | | nextEntry |
-		(wrappedEntry isRequired and: [ self isClassDefinition: wrappedEntry ]) ifTrue:
-			[ | nextIndex |
-			nextIndex := index + 1.
-			[ nextIndex <= wrappedEntries size and: [ (nextEntry := wrappedEntries at: nextIndex) isRequired not ] ]
-				whileTrue: [ nextIndex := nextIndex + 1 ].
-			(self isClassDefinition: nextEntry) ifTrue:
-				[ (wrappedEntry content behaviorAffectedName = nextEntry content behaviorAffectedName) ifTrue:
-					[ wrappedEntry classification: #superseeded reason: (GtEpContigousClassDefinitionReason
-						requiredEntry: wrappedEntry
-						nextEntry: nextEntry) ] ] ] ]
+	self superseedContigousClassDefinitions
 ]
 
 { #category : #private }
@@ -199,6 +193,24 @@ GtEpImageModelExportVisitor >> shouldReplayAdditionalEntry: entry [
 GtEpImageModelExportVisitor >> shouldReplayCommentEntry: latestCommentEntry [
 
 	^ true
+]
+
+{ #category : #private }
+GtEpImageModelExportVisitor >> superseedContigousClassDefinitions [
+	"Contiguous class definitions require only the final entry.
+	Any other required entry in between means that both class definition will be left in."
+
+	wrappedEntries allButLast doWithIndex: [ :wrappedEntry :index | | nextEntry |
+		(wrappedEntry isRequired and: [ self isClassDefinition: wrappedEntry ]) ifTrue:
+			[ | nextIndex |
+			nextIndex := index + 1.
+			[ nextIndex <= wrappedEntries size and: [ (nextEntry := wrappedEntries at: nextIndex) isRequired not ] ]
+				whileTrue: [ nextIndex := nextIndex + 1 ].
+			(self isClassDefinition: nextEntry) ifTrue:
+				[ (wrappedEntry content behaviorAffectedName = nextEntry content behaviorAffectedName) ifTrue:
+					[ wrappedEntry classification: #superseeded reason: (GtEpContigousClassDefinitionReason
+						requiredEntry: wrappedEntry
+						nextEntry: nextEntry) ] ] ] ]
 ]
 
 { #category : #visiting }
