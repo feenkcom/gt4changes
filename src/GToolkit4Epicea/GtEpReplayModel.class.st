@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'entries'
 	],
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #utilities }
@@ -34,6 +34,26 @@ GtEpReplayModel class >> isBehaviorDefinition: anEpEvent [
 	"Answer a boolean indicating whether the supplied event is considerd a behavior definition"
 	
 	^ #(#EpClassAddition #EpClassModification #EpTraitAddition #EpTraitModification) includes: anEpEvent class name
+]
+
+{ #category : #testing }
+GtEpReplayModel class >> isBehaviorDefinitionCurrent: aRgBehaviorDefinition [
+	| current |
+
+	current := self environment classOrTraitNamed: aRgBehaviorDefinition name.
+	current ifNil: [ ^ false ].
+	current := current asEpiceaRingDefinition.
+	(aRgBehaviorDefinition superclassName = current superclassName and:
+	[ (aRgBehaviorDefinition instanceVariables collect: #name as: Array) = (current instanceVariables collect: #name as: Array) ]) ifFalse:
+		[ ^ false ].
+	aRgBehaviorDefinition isMeta ifTrue: [ ^ true ].
+	
+	^ (self isBehaviorDefinitionCurrent: aRgBehaviorDefinition classSide) and:
+	[ aRgBehaviorDefinition comment content = current comment content and:
+	[ (aRgBehaviorDefinition classVariables collect: #name as: Set) = (current classVariables collect: #name as: Set) and:
+	[ aRgBehaviorDefinition package name = current package name and:
+	[ aRgBehaviorDefinition packageTag = current packageTag and:
+	[ (aRgBehaviorDefinition sharedPools collect: #name as: Set) = (current sharedPools collect: #name as: Set) ] ] ] ] ]
 ]
 
 { #category : #testing }
@@ -74,6 +94,13 @@ GtEpReplayModel >> entries [
 	<return: #SequenceableCollection of: #GtEpSequncerEntry>
 
 	^ entries
+]
+
+{ #category : #'private - accessing' }
+GtEpReplayModel >> entries: aCollection [
+	"For testing purposes only"
+
+	entries := aCollection
 ]
 
 { #category : #accessing }

@@ -6,7 +6,7 @@ Class {
 		'removalEntry',
 		'supersededEntry'
 	],
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #'instance creation' }

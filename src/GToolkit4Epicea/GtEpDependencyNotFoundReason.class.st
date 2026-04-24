@@ -8,7 +8,7 @@ Class {
 		'dependencyName',
 		'dependentEntry'
 	],
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #'instance creation' }

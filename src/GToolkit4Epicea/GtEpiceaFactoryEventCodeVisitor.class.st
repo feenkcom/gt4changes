@@ -15,7 +15,7 @@ Class {
 		'currentEntry',
 		'sourceFile'
 	],
-	#category : 'GToolkit4Epicea-Visitor'
+	#category : #'GToolkit4Epicea-Visitor'
 }
 
 { #category : #actions }

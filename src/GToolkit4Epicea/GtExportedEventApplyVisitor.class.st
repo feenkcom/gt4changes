@@ -1,7 +1,7 @@
 Class {
 	#name : #GtExportedEventApplyVisitor,
 	#superclass : #EpApplyVisitor,
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #visitor }

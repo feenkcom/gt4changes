@@ -8,7 +8,7 @@ Class {
 		'requiredEntry',
 		'nextEntry'
 	],
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #'instance creation' }

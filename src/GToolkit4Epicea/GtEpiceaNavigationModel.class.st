@@ -7,7 +7,7 @@ Class {
 		'announcer',
 		'directory'
 	],
-	#category : 'GToolkit4Epicea-View Model'
+	#category : #'GToolkit4Epicea-View Model'
 }
 
 { #category : #announcer }

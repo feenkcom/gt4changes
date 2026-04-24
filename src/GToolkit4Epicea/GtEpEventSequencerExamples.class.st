@@ -6,7 +6,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TAssertable',
 	#classTraits : 'TAssertable classTrait',
-	#category : 'GToolkit4Epicea-Examples'
+	#category : #'GToolkit4Epicea-Examples'
 }
 
 { #category : #private }
@@ -444,79 +444,6 @@ GtEpEventSequencerExamples >> classAddAndRenameMultipleInImage [
 ]
 
 { #category : #examples }
-GtEpEventSequencerExamples >> classAdditionWithoutSuperclassInImage [
-	"Check that adding a class when one of the superclasses is missing is sequenced correctly."
-	<gtExample>
-	<after: #removeTestClasses>
-	<return: #GtEpInImageEventSequencer>
-	| fileReference epLog entries sequencer |
-	
-	self deny: (self class environment includesKey: #SuperClassGone).
-	fileReference := self class testDataRoot / 'Issue2961-2'
-			/ 'Pharo10-SNAPSHOT-64bit-2314c3f.cfubabs62s0q03px5en9hhqlp.ombu'.
-	self assert: fileReference exists.
-	epLog := EpLog fromFile: fileReference.
-	entries := epLog entries.
-	self assert: entries size equals: 5.
-	sequencer := GtEpInImageEventSequencer entries: entries.
-	sequencer sequencedEntries.
-	self
-		should: [ sequencer assertDependencies ]
-		raise: GtEpMissingClassError.
-	^ sequencer
-]
-
-{ #category : #examples }
-GtEpEventSequencerExamples >> classAdditionWithSuperclassMethodModificationForExport [
-	"Check that adding a class when the superclass only has methods modified is sequenced correctly."
-	<gtExample>
-	<after: #removeTestClasses>
-	<return: #GtEpInImageEventSequencer>
-	| fileReference epLog entries sequencer sequencedEntries |
-	
-	self deny: (self class environment includesKey: #SuperClassGone).
-	fileReference := self class testDataRoot / 'Issue2961-2'
-			/ 'Pharo10-SNAPSHOT-64bit-2314c3f.3699hxpexw9en86vig1dlpbso.ombu'.
-	self assert: fileReference exists.
-	epLog := EpLog fromFile: fileReference.
-	entries := epLog entries.
-	self assert: entries size equals: 4.
-	sequencer := GtEpForExportEventSequencer entries: entries.
-	sequencedEntries := sequencer sequencedEntries.
-	self assert: (sequencer wrappedEntries collect: #classification) asArray equals:
-		#(nil #required nil #required).
-	self
-		assert: (sequencedEntries collect: [ :each | each content class name ]) asArray
-		equals: #(#EpClassAddition #EpMethodModification).
-	^ sequencer
-]
-
-{ #category : #examples }
-GtEpEventSequencerExamples >> classAdditionWithSuperclassMethodModificationInImage [
-	"Check that adding a class when the superclass only has methods modified is sequenced correctly."
-
-	<gtExample>
-	<after: #removeTestClasses>
-	<return: #GtEpInImageEventSequencer>
-	| fileReference epLog entries sequencer sequencedEntries |
-	self deny: (self class environment includesKey: #SuperClassGone).
-	fileReference := self class testDataRoot / 'Issue2961-2'
-			/ 'Pharo10-SNAPSHOT-64bit-2314c3f.3699hxpexw9en86vig1dlpbso.ombu'.
-	self assert: fileReference exists.
-	epLog := EpLog fromFile: fileReference.
-	entries := epLog entries.
-	self assert: entries size equals: 4.
-	sequencer := GtEpInImageEventSequencer entries: entries.
-	sequencedEntries := sequencer sequencedEntries.
-	self assert: (sequencer wrappedEntries collect: #classification) asArray equals:
-		#(nil #required nil #required).
-	self
-		assert: (sequencedEntries collect: [ :each | each content class name ]) asArray
-		equals: #(#EpClassAddition #EpMethodModification).
-	^ sequencer
-]
-
-{ #category : #examples }
 GtEpEventSequencerExamples >> classAddModifyRenameForExport [
 	"Check that a class add, modify and rename is sequenced correctly."
 	<gtExample>
@@ -703,6 +630,79 @@ GtEpEventSequencerExamples >> classAddWithoutDependentsInImage [
 		raise: GtEpMissingClassError.
 	self assert: (sequencer wrappedEntries collect: #classification as: Array) equals:
 		#(nil nil #requiredMissingDependency).
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classAdditionWithSuperclassMethodModificationForExport [
+	"Check that adding a class when the superclass only has methods modified is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	<return: #GtEpInImageEventSequencer>
+	| fileReference epLog entries sequencer sequencedEntries |
+	
+	self deny: (self class environment includesKey: #SuperClassGone).
+	fileReference := self class testDataRoot / 'Issue2961-2'
+			/ 'Pharo10-SNAPSHOT-64bit-2314c3f.3699hxpexw9en86vig1dlpbso.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 4.
+	sequencer := GtEpForExportEventSequencer entries: entries.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencer wrappedEntries collect: #classification) asArray equals:
+		#(nil #required nil #required).
+	self
+		assert: (sequencedEntries collect: [ :each | each content class name ]) asArray
+		equals: #(#EpClassAddition #EpMethodModification).
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classAdditionWithSuperclassMethodModificationInImage [
+	"Check that adding a class when the superclass only has methods modified is sequenced correctly."
+
+	<gtExample>
+	<after: #removeTestClasses>
+	<return: #GtEpInImageEventSequencer>
+	| fileReference epLog entries sequencer sequencedEntries |
+	self deny: (self class environment includesKey: #SuperClassGone).
+	fileReference := self class testDataRoot / 'Issue2961-2'
+			/ 'Pharo10-SNAPSHOT-64bit-2314c3f.3699hxpexw9en86vig1dlpbso.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 4.
+	sequencer := GtEpInImageEventSequencer entries: entries.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: (sequencer wrappedEntries collect: #classification) asArray equals:
+		#(nil #required nil #required).
+	self
+		assert: (sequencedEntries collect: [ :each | each content class name ]) asArray
+		equals: #(#EpClassAddition #EpMethodModification).
+	^ sequencer
+]
+
+{ #category : #examples }
+GtEpEventSequencerExamples >> classAdditionWithoutSuperclassInImage [
+	"Check that adding a class when one of the superclasses is missing is sequenced correctly."
+	<gtExample>
+	<after: #removeTestClasses>
+	<return: #GtEpInImageEventSequencer>
+	| fileReference epLog entries sequencer |
+	
+	self deny: (self class environment includesKey: #SuperClassGone).
+	fileReference := self class testDataRoot / 'Issue2961-2'
+			/ 'Pharo10-SNAPSHOT-64bit-2314c3f.cfubabs62s0q03px5en9hhqlp.ombu'.
+	self assert: fileReference exists.
+	epLog := EpLog fromFile: fileReference.
+	entries := epLog entries.
+	self assert: entries size equals: 5.
+	sequencer := GtEpInImageEventSequencer entries: entries.
+	sequencer sequencedEntries.
+	self
+		should: [ sequencer assertDependencies ]
+		raise: GtEpMissingClassError.
 	^ sequencer
 ]
 
@@ -1553,6 +1553,21 @@ GtEpEventSequencerExamples >> modifyMethodChangeProtocolInImage [
 ]
 
 { #category : #examples }
+GtEpEventSequencerExamples >> modifyMethodUnchangedInImage [
+	"Check that a redundant method definition is sequenced correctly"
+	<gtExample>
+	<return: #GtEpInImageEventSequencer>
+	| entries sequencer sequencedEntries |
+
+	entries := { GtEpReplayImageModel new omEntryFor:
+		(EpMethodAddition method: thisContext method) }.
+	sequencer := GtEpInImageEventSequencer entries: entries.
+	sequencedEntries := sequencer sequencedEntries.
+	self assert: sequencedEntries isEmpty.
+	^ sequencer
+]
+
+{ #category : #examples }
 GtEpEventSequencerExamples >> removeExistingClassForExport [
 	"Check that removing a class that is already in the image is sequenced correctly."
 	<gtExample>
@@ -1622,7 +1637,7 @@ GtEpEventSequencerExamples >> removeExistingClassInImage [
 
 { #category : #examples }
 GtEpEventSequencerExamples >> removeExistingMethodInImage [
-	"Check that removing a class that is already in the image is sequenced correctly."
+	"Check that removing a method that is in the image is sequenced correctly."
 	<gtExample>
 	<return: #GtEpInImageEventSequencer>
 	| fileReference epLog entries sequencer sequencedEntries |
@@ -1637,7 +1652,7 @@ GtEpEventSequencerExamples >> removeExistingMethodInImage [
 	sequencer := GtEpInImageEventSequencer entries: entries.
 	sequencedEntries := sequencer sequencedEntries.
 	self assert: (sequencer wrappedEntries collect: #classification as: Array) equals:
-		#(nil #required).
+		#(#superseeded #required).
 	self
 		assert: (sequencedEntries collect: [ :each | each content class name ] as: Array)
 		equals: #(#EpMethodRemoval).

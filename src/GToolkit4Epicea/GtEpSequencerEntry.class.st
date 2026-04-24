@@ -7,7 +7,7 @@ Class {
 		'sortOrder',
 		'reason'
 	],
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #'as yet unclassified' }
@@ -125,6 +125,17 @@ GtEpSequencerEntry >> gtSummaryFor: aView [
 		  column: #Value text: [ :item | item second ];
 		  send: [ :item | item last ];
 		  actionUpdateButton
+]
+
+{ #category : #ui }
+GtEpSequencerEntry >> gtTagsFor: aView [
+	<gtView>
+
+	^ aView forward
+		title: 'Tags';
+		priority: 30;
+		object: [ omEntry ];
+		view: #gtTagsFor:
 ]
 
 { #category : #accessing }
