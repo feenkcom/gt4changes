@@ -44,7 +44,8 @@ GtEpReplayModel class >> isBehaviorDefinitionCurrent: aRgBehaviorDefinition [
 	current ifNil: [ ^ false ].
 	current := current asEpiceaRingDefinition.
 	(aRgBehaviorDefinition superclassName = current superclassName and:
-	[ (aRgBehaviorDefinition instanceVariables collect: #name as: Array) = (current instanceVariables collect: #name as: Array) ]) ifFalse:
+	[ (aRgBehaviorDefinition instanceVariables collect: #name as: Array) = (current instanceVariables collect: #name as: Array) and:
+	[ aRgBehaviorDefinition traitNames = current traitNames ] ]) ifFalse:
 		[ ^ false ].
 	aRgBehaviorDefinition isMeta ifTrue: [ ^ true ].
 	

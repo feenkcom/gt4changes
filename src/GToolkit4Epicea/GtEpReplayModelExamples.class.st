@@ -27,6 +27,21 @@ GtEpReplayModelExamples class >> testDataRoot [
 	^ GtEpiceaExampleOmbuFiles new dataDir / self name.
 ]
 
+{ #category : #examples }
+GtEpReplayModelExamples >> behaviorModelTraitChange [
+	"Check the behavior of GtEpReplayModel class>>#isBehaviorDefinitionCurrent: for trait changes"
+	<gtExample>
+	| testClass rgModel |
+
+	testClass := self class.
+	self assert: ((testClass traits collect: #name)
+		includes: #TAssertable).
+	rgModel := testClass asEpiceaRingDefinition.
+	self assert: (rgModel traitNames includes: #TAssertable).
+	rgModel annotations removeKey: #traitCompositionSource.
+	self deny: (GtEpReplayModel isBehaviorDefinitionCurrent: rgModel).
+]
+
 { #category : #private }
 GtEpReplayModelExamples >> checkImageModelWithData01: aGtReplayImageModel [
 	"Check the behavior of the supplied image model matches expectations."
