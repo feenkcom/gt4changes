@@ -231,18 +231,18 @@ GtEpiceaEventFactoryExamples >> traitAddModifyRenameRemove [
 	sourceEpEntries := self class
 			epEntriesFrom: [ self class compiler
 					logged: true;
-					source: 'Trait named: #GtEpiceaEventFactoryExamplesExampleTrait
-	instanceVariableNames: ''a b c''
-	package: ''GToolkit4Epicea-Examples''';
+					source: '(Trait << #GtEpiceaEventFactoryExamplesExampleTrait
+	slotsFromString: ''a b c'';
+	package: ''GToolkit4Epicea-Examples'') install';
 					evaluate.
 				(self class environment
 					classOrTraitNamed: #GtEpiceaEventFactoryExamplesExampleTrait)
 					comment: 'comment1'.
 				self class compiler
 					logged: true;
-					source: 'Trait named: #GtEpiceaEventFactoryExamplesExampleTrait
-	instanceVariableNames: ''a b c d''
-	package: ''GToolkit4Epicea-Examples''';
+					source: '(Trait << #GtEpiceaEventFactoryExamplesExampleTrait
+	slotsFromString: ''a b c d'';
+	package: ''GToolkit4Epicea-Examples'') install';
 					evaluate.
 				self class compiler
 					logged: true;
