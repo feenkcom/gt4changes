@@ -66,7 +66,7 @@ GtEpImageModelReplayVisitor >> shouldAddMethod: aGtEpReplayMethodModel [
 	(self environment classOrTraitNamed: currentClassName) ifNotNil: [ :classOrTrait |
 		classOrTrait methodDict at: selector
 			ifPresent: [ :method |
-				^ (method sourceCode ~= aGtEpReplayMethodModel sourceCode or:
+				^ ((self method: method hasSameSourceAs: aGtEpReplayMethodModel) not or:
 					[ method protocol name ~= aGtEpReplayMethodModel protocol ])
 						ifTrue: [ GtEpMethodDefinitionDiffersReason 
 							entry: aGtEpReplayMethodModel entries last
@@ -122,7 +122,7 @@ GtEpImageModelReplayVisitor >> superseedNoImpactMethodDefinitions [
 								[ realClass compiledMethodAt: event selector
 									ifPresent: [ :compiledMethod |
 										(compiledMethod protocol name = event protocol and:
-											[ compiledMethod sourceCode = event sourceCode ]) ifTrue:
+											[ self method:compiledMethod hasSameSourceAs: event ]) ifTrue:
 												[ reason := GtEpMethodDefinitionTheSameReason 
 														entry: entry
 														image: image ] ] ] ] ] ].

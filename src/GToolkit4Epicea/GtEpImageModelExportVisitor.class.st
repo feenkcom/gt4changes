@@ -142,6 +142,14 @@ GtEpImageModelExportVisitor >> isClassDefinition: wrappedEntry [
 	^ event isEpClassAddition or: [ event isEpClassModification ]
 ]
 
+{ #category : #testing }
+GtEpImageModelExportVisitor >> method: method1 hasSameSourceAs: method2 [
+	"Answer a boolean indicating whether the supplied methods have the same source code or not.
+	This may be overwritten to handle custom environments."
+
+	^ method1 sourceCode = method2 sourceCode
+]
+
 { #category : #private }
 GtEpImageModelExportVisitor >> postProcessWrappedEntries [
 
