@@ -99,7 +99,7 @@ GtEpiceaAbstractChangesDetailsElement >> buildEmptyContentElement [
 ]
 
 { #category : #'as yet unclassified' }
-GtEpiceaAbstractChangesDetailsElement >> changedMethodsRelevantSize [
+GtEpiceaAbstractChangesDetailsElement >> changedMethodsRelevantSizeForCompilation [
 	^(self entries 
 		select: [ :each |
 			each content notNil and: [
