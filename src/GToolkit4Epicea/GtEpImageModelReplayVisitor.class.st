@@ -61,12 +61,12 @@ GtEpImageModelReplayVisitor >> shouldAddMethod: aGtEpReplayMethodModel [
 	"Removals are always included.  Method definitions are included if it doesn't match the current definition."
 	| currentClassName selector |
 
-	currentClassName := currentBehaviorModel name.
+	currentClassName := aGtEpReplayMethodModel behaviorAffectedName.
 	selector := aGtEpReplayMethodModel selector.
 	(self environment classOrTraitNamed: currentClassName) ifNotNil: [ :classOrTrait |
 		classOrTrait methodDict at: selector
 			ifPresent: [ :method |
-				^ ((self method: method hasSameSourceAs: aGtEpReplayMethodModel) not or:
+				^ ((self class method: method hasSameSourceAs: aGtEpReplayMethodModel) not or:
 					[ method protocol name ~= aGtEpReplayMethodModel protocol ])
 						ifTrue: [ GtEpMethodDefinitionDiffersReason 
 							entry: aGtEpReplayMethodModel entries last
@@ -122,7 +122,7 @@ GtEpImageModelReplayVisitor >> superseedNoImpactMethodDefinitions [
 								[ realClass compiledMethodAt: event selector
 									ifPresent: [ :compiledMethod |
 										(compiledMethod protocol name = event protocol and:
-											[ self method:compiledMethod hasSameSourceAs: event ]) ifTrue:
+											[ self class method:compiledMethod hasSameSourceAs: event ]) ifTrue:
 												[ reason := GtEpMethodDefinitionTheSameReason 
 														entry: entry
 														image: image ] ] ] ] ] ].
