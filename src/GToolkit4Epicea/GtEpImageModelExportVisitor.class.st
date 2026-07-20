@@ -16,6 +16,14 @@ GtEpImageModelExportVisitor class >> image: aGtEpReplayImageModel [
 	^ self new image: aGtEpReplayImageModel
 ]
 
+{ #category : #testing }
+GtEpImageModelExportVisitor class >> method: method1 hasSameSourceAs: method2 [
+	"Answer a boolean indicating whether the supplied methods have the same source code or not.
+	This may be overwritten to handle custom environments."
+
+	^ method1 sourceCode = method2 sourceCode
+]
+
 { #category : #sequencing }
 GtEpImageModelExportVisitor class >> sequencedEntriesFrom: aCollectionOfEntries [
 	| visitor image replay |
