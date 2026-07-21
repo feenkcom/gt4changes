@@ -99,6 +99,21 @@ GtEpiceaAbstractChangesDetailsElement >> buildEmptyContentElement [
 ]
 
 { #category : #'as yet unclassified' }
+GtEpiceaAbstractChangesDetailsElement >> changedMethodsRelevantSizeForCompilation [
+	^(self entries 
+		select: [ :each |
+			each content notNil and: [
+				each content isEpMethodChange and: [
+					each content isEpMethodAddition or: [
+						each content isEpMethodModification ] ] ] ]) 
+		inject: 0
+		into: [ :sum :each |  
+			sum 
+				+ (each content methodAffected sourceCode sizeInMemory)
+				+ (each content methodAffected gtApproximateSizeOfData) ]
+]
+
+{ #category : #'as yet unclassified' }
 GtEpiceaAbstractChangesDetailsElement >> changedMethodsSourceCodeSize [
 	^(self entries 
 		select: [ :each |
