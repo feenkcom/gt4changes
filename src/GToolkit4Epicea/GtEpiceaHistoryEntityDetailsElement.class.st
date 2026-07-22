@@ -5,7 +5,7 @@ Class {
 		'iconContainerElement',
 		'detailsContainerElement'
 	],
-	#category : #'GToolkit4Epicea-UI'
+	#category : 'GToolkit4Epicea-UI'
 }
 
 { #category : #initialization }

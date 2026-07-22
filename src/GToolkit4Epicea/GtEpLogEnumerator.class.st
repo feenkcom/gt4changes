@@ -9,7 +9,7 @@ Class {
 	#instVars : [
 		'latestLog'
 	],
-	#category : #'GToolkit4Epicea-Model'
+	#category : 'GToolkit4Epicea-Model'
 }
 
 { #category : #'instance creation' }

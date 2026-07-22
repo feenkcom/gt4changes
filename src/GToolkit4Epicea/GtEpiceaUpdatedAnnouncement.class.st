@@ -7,7 +7,7 @@ Class {
 		'numberOfEvents',
 		'previousNumberOfEvents'
 	],
-	#category : #'GToolkit4Epicea-Announcements'
+	#category : 'GToolkit4Epicea-Announcements'
 }
 
 { #category : #accessing }

@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtExampleAssertable',
 	#classTraits : 'TGtExampleAssertable classTrait',
-	#category : #'GToolkit4Epicea-Examples'
+	#category : 'GToolkit4Epicea-Examples'
 }
 
 { #category : #accessing }

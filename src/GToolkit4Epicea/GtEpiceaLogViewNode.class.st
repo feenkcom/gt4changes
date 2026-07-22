@@ -8,7 +8,7 @@ Class {
 		'entry',
 		'prior'
 	],
-	#category : #'GToolkit4Epicea-UI'
+	#category : 'GToolkit4Epicea-UI'
 }
 
 { #category : #'instance creation' }

@@ -4,7 +4,7 @@ Class {
 	#classInstVars : [
 		'defaultInstance'
 	],
-	#category : #'GToolkit4Epicea-Brick'
+	#category : 'GToolkit4Epicea-Brick'
 }
 
 { #category : #accessing }

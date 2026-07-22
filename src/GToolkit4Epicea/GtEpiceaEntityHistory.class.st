@@ -1,7 +1,7 @@
 Class {
 	#name : #GtEpiceaEntityHistory,
 	#superclass : #Object,
-	#category : #'GToolkit4Epicea-History'
+	#category : 'GToolkit4Epicea-History'
 }
 
 { #category : #accessing }

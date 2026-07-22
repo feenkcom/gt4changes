@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TGtGroupWithItems',
 	#classTraits : 'TGtGroupWithItems classTrait',
-	#category : #'GToolkit4Epicea-History'
+	#category : 'GToolkit4Epicea-History'
 }
 
 { #category : #accessing }

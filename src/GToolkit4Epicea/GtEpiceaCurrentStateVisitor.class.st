@@ -5,7 +5,7 @@ Class {
 		'theEnvironment',
 		'showClassNameInMethodSource'
 	],
-	#category : #'GToolkit4Epicea-Visitor'
+	#category : 'GToolkit4Epicea-Visitor'
 }
 
 { #category : #'instance creation' }
