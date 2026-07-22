@@ -20,7 +20,7 @@ GtEpiceaAbstractChangesDetailsElement >> action [
 	
 	GtVmMemoryConfigurationInstaller default 
 		applyForLargeObjectAllocationsDuring:  [ self loadSequencedChanges ] 
-		methodSourcesSize: self changedMethodsSourceCodeSize.
+		methodSourcesSize: self changedMethodsRelevantSizeForCompilation.
 	 
 	self anchor fireEvent: BrDropdownHideWish new.
 	self anchor phlow fireToolUpdateWish
@@ -33,7 +33,7 @@ GtEpiceaAbstractChangesDetailsElement >> actionAndInspect [
 	GtVmMemoryConfigurationInstaller default 
 		applyForLargeObjectAllocationsDuring:  [
 			appliedEntries := self loadSequencedChangesCollectingChanged. ] 
-		methodSourcesSize: self changedMethodsSourceCodeSize.
+		methodSourcesSize: self changedMethodsRelevantSizeForCompilation.
 	
 	self anchor fireEvent: BrDropdownHideWish new.
 	self anchor phlow 
@@ -111,19 +111,6 @@ GtEpiceaAbstractChangesDetailsElement >> changedMethodsRelevantSizeForCompilatio
 			sum 
 				+ (each content methodAffected sourceCode sizeInMemory)
 				+ (each content methodAffected gtApproximateSizeOfData) ]
-]
-
-{ #category : #'as yet unclassified' }
-GtEpiceaAbstractChangesDetailsElement >> changedMethodsSourceCodeSize [
-	^(self entries 
-		select: [ :each |
-			each content notNil and: [
-				each content isEpMethodChange and: [
-					each content isEpMethodAddition or: [
-						each content isEpMethodModification ] ] ] ]) 
-		inject: 0
-		into: [ :sum :each |  
-			sum + (each content methodAffected sourceCode sizeInMemory) ]
 ]
 
 { #category : #accessing }
