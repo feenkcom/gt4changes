@@ -8,7 +8,7 @@ Class {
 		'behaviors',
 		'nextOmEntryLocalName'
 	],
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #visiting }

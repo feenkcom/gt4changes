@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'currentPackageName'
 	],
-	#category : 'GToolkit4Epicea-Factories'
+	#category : #'GToolkit4Epicea-Factories'
 }
 
 { #category : #accessing }

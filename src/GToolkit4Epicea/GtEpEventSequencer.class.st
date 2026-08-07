@@ -11,7 +11,7 @@ Class {
 		'wrappedEntries',
 		'replayVisitor'
 	],
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #sequencing }

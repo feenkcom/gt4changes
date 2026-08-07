@@ -1,7 +1,7 @@
 Class {
 	#name : #GtEpiceaBranchesHistoryBuilder,
 	#superclass : #GtEpiceaHistoryBuilder,
-	#category : 'GToolkit4Epicea-History'
+	#category : #'GToolkit4Epicea-History'
 }
 
 { #category : #accessing }

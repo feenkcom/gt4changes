@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'logs'
 	],
-	#category : 'GToolkit4Epicea-Model'
+	#category : #'GToolkit4Epicea-Model'
 }
 
 { #category : #accessing }

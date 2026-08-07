@@ -8,7 +8,7 @@ Class {
 		'requiredEntry',
 		'behaviorModel'
 	],
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #'instance creation' }

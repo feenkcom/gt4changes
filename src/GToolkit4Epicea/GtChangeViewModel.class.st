@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'changeModel'
 	],
-	#category : 'GToolkit4Epicea-View Model'
+	#category : #'GToolkit4Epicea-View Model'
 }
 
 { #category : #accessing }

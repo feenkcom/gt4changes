@@ -1,6 +1,6 @@
 Trait {
 	#name : #TGtEpiceaLogView,
-	#category : 'GToolkit4Epicea-UI'
+	#category : #'GToolkit4Epicea-UI'
 }
 
 { #category : #accessing }

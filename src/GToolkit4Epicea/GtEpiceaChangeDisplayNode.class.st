@@ -6,7 +6,7 @@ Class {
 		'children',
 		'icon'
 	],
-	#category : 'GToolkit4Epicea-UI'
+	#category : #'GToolkit4Epicea-UI'
 }
 
 { #category : #accessing }

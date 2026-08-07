@@ -7,7 +7,7 @@ Class {
 		'currentBehaviorModel',
 		'wrappedEntries'
 	],
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #'instance creation' }

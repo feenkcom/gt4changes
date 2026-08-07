@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#traits : 'TAssertable',
 	#classTraits : 'TAssertable classTrait',
-	#category : 'GToolkit4Epicea-Examples'
+	#category : #'GToolkit4Epicea-Examples'
 }
 
 { #category : #'test data' }
@@ -247,12 +247,6 @@ GtStonObjectModelReaderExamples >> defaultMigratorCopiesValues [
 	^ target
 ]
 
-{ #category : #'llm-generated' }
-GtStonObjectModelReaderExamples >> readerWithRGClassMigrator [
-
-	^ GtStonObjectModelReader forPharo11Epicea
-]
-
 { #category : #examples }
 GtStonObjectModelReaderExamples >> readPharo11RGClassDefinition [
 	| readStream entries rgClassDefinition |
@@ -275,6 +269,12 @@ GtStonObjectModelReaderExamples >> readPharo11RGClassDefinition [
 	self assert: rgClassDefinition classSide instanceVariables isEmpty.
 	rgClassDefinition := entries fourth content behaviorAffected.
 	self assert: rgClassDefinition classSide instanceVariables first name equals: #cVar1.
+]
+
+{ #category : #'llm-generated' }
+GtStonObjectModelReaderExamples >> readerWithRGClassMigrator [
+
+	^ GtStonObjectModelReader forPharo11Epicea
 ]
 
 { #category : #'llm-generated' }

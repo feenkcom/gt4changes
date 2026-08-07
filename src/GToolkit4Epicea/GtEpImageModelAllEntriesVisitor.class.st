@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'stream'
 	],
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #visiting }

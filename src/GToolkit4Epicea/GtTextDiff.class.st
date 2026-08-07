@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'stylerStencil'
 	],
-	#category : 'GToolkit4Epicea-Element'
+	#category : #'GToolkit4Epicea-Element'
 }
 
 { #category : #accessing }

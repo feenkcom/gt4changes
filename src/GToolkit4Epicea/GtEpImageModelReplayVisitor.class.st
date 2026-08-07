@@ -1,7 +1,7 @@
 Class {
 	#name : #GtEpImageModelReplayVisitor,
 	#superclass : #GtEpImageModelExportVisitor,
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #private }

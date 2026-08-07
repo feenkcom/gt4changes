@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'entries'
 	],
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #utilities }
@@ -43,10 +43,19 @@ GtEpReplayModel class >> isBehaviorDefinitionCurrent: aRgBehaviorDefinition [
 	current := self environment classOrTraitNamed: aRgBehaviorDefinition name.
 	current ifNil: [ ^ false ].
 	current := current asEpiceaRingDefinition.
+
+	(aRgBehaviorDefinition class == current class and:
+	[ aRgBehaviorDefinition traitNames = current traitNames ])
+		ifFalse: [ ^ false ].
+	
+	"MetaTraits don't have any of the attributes tested below"
+	(aRgBehaviorDefinition isMeta and: [ aRgBehaviorDefinition isTrait ]) ifTrue: [ ^ true ].
+	
 	(aRgBehaviorDefinition superclassName = current superclassName and:
-	[ (aRgBehaviorDefinition instanceVariables collect: #name as: Array) = (current instanceVariables collect: #name as: Array) and:
-	[ aRgBehaviorDefinition traitNames = current traitNames ] ]) ifFalse:
+	[ (aRgBehaviorDefinition instanceVariables collect: #name as: Array) = (current instanceVariables collect: #name as: Array)]) ifFalse:
 		[ ^ false ].
+
+	"MetaClasses don't have any of the attributes tested below"
 	aRgBehaviorDefinition isMeta ifTrue: [ ^ true ].
 	
 	^ (self isBehaviorDefinitionCurrent: aRgBehaviorDefinition classSide) and:

@@ -11,7 +11,7 @@ Class {
 	#instVars : [
 		'actualEvent'
 	],
-	#category : 'GToolkit4Epicea-Visitor'
+	#category : #'GToolkit4Epicea-Visitor'
 }
 
 { #category : #accessing }

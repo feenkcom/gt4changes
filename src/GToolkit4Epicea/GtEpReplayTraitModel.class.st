@@ -1,7 +1,7 @@
 Class {
 	#name : #GtEpReplayTraitModel,
 	#superclass : #GtEpReplayBehaviorModel,
-	#category : 'GToolkit4Epicea-Sequencer'
+	#category : #'GToolkit4Epicea-Sequencer'
 }
 
 { #category : #'instance creation' }
