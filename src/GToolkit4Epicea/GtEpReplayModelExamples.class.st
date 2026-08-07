@@ -28,6 +28,28 @@ GtEpReplayModelExamples class >> testDataRoot [
 ]
 
 { #category : #examples }
+GtEpReplayModelExamples >> behaviorModelMetatraitChange [
+	"Check the behavior of GtEpReplayModel class>>#isBehaviorDefinitionCurrent: for trait changes"
+	<gtExample>
+	| testTrait rgModel |
+
+	testTrait := TAssertable.
+	rgModel := testTrait asEpiceaRingDefinition.
+	self assert: (GtEpReplayModel isBehaviorDefinitionCurrent: rgModel).
+	self assert: (GtEpReplayModel isBehaviorDefinitionCurrent: rgModel classSide).
+	
+	"Add traits to rgModel"
+	rgModel traitCompositionSource: 'TGtGroup + TGtGroupItems'.
+	rgModel classSide traitCompositionSource: 'TGtGroup + TGtGroupItems'.
+	self assert: rgModel traitNames
+		equals: #(#TGtGroup #TGtGroupItems).
+	self deny: (GtEpReplayModel isBehaviorDefinitionCurrent: rgModel).
+	self deny: (GtEpReplayModel isBehaviorDefinitionCurrent: rgModel classSide).
+	
+	^ rgModel
+]
+
+{ #category : #examples }
 GtEpReplayModelExamples >> behaviorModelTraitChange [
 	"Check the behavior of GtEpReplayModel class>>#isBehaviorDefinitionCurrent: for trait changes"
 	<gtExample>
