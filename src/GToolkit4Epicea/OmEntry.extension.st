@@ -52,6 +52,20 @@ OmEntry >> gtActionBrowseEntryFor: anAction [
 ]
 
 { #category : #'*GToolkit4Epicea' }
+OmEntry >> gtActionCopyMethodNameFor: anAction [
+	<gtAction>
+	
+	self content isEpMethodChange ifFalse: [ ^ anAction noAction ].
+
+	^ anAction button
+		icon: BrGlamorousVectorIcons clipboard;
+		priority: 4;
+		tooltip: 'Copy method name';
+		action: [ Clipboard default clipboardText:
+					self content methodAffected printString ].
+]
+
+{ #category : #'*GToolkit4Epicea' }
 OmEntry >> gtActionRevertFor: anAction [
 	<gtAction>
 	self content isCodeChange ifFalse: [ ^ anAction noAction ].
