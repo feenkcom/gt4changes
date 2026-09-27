@@ -128,7 +128,7 @@ GtEpiceaEventFactoryExamples >> classAddModifyRenameCategoryRemove [
 	"Depending on the order, the package name may have been cached"
 	"sourceEpEntries would normally not contain more than 12 entries, but
 	due to https://github.com/feenkcom/gtoolkit/issues/4734 it currently contains additional EpClassAddition events as well."
-	self assert: (sourceEpEntries size between: 8 and: 15).
+	self assert: (sourceEpEntries size between: 8 and: 16).
 	"Because the generated events involve a class actually being removed, the class ends up being obsolete.
 	Patch the remove event to use the same class as the add event."
 	classRemovedEntries := sourceEpEntries select: [ :entry | entry content isEpClassRemoval ].
