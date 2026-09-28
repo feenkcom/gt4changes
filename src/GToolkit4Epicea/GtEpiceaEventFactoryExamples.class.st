@@ -257,7 +257,7 @@ GtEpiceaEventFactoryExamples >> traitAddModifyRenameRemove [
 	"Allow for differences in events between Pharo11 and Pharo12"
 	"sourceEpEntries would normally not contain more than 8 entries, but
 	due to https://github.com/feenkcom/gtoolkit/issues/4734 it currently contains additional EpTraitAddition events as well."
-	self assert: (sourceEpEntries size between: 6 and: 9).
+	self assert: (sourceEpEntries size between: 6 and: 11).
 	"Because the generated events involve a trait actually being removed, the class ends up being obsolete.
 	Patch the remove event to use the same class as the add event."
 	traitAddedEvent := sourceEpEntries detect: [ :each |
