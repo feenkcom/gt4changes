@@ -11,6 +11,18 @@ Class {
 }
 
 { #category : #adding }
+GtEpReplayAbstractBehaviorModel >> addBehaviorChange: anOmEntry [
+
+	entries add: anOmEntry.
+]
+
+{ #category : #adding }
+GtEpReplayAbstractBehaviorModel >> addBehaviorModification: anOmEntry [
+
+	self addBehaviorChange: anOmEntry.
+]
+
+{ #category : #adding }
 GtEpReplayAbstractBehaviorModel >> addMethodAddition: anOmEntry [
 	| method |
 

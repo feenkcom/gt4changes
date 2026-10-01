@@ -29,21 +29,9 @@ GtEpReplayBehaviorModel >> addBehaviorAddition: anOmEntry [
 ]
 
 { #category : #adding }
-GtEpReplayBehaviorModel >> addBehaviorChange: anOmEntry [
-
-	entries add: anOmEntry.
-]
-
-{ #category : #adding }
 GtEpReplayBehaviorModel >> addBehaviorCommentChange: anOmEntry [
 
 	comments add: anOmEntry.
-]
-
-{ #category : #adding }
-GtEpReplayBehaviorModel >> addBehaviorModification: anOmEntry [
-
-	self addBehaviorChange: anOmEntry.
 ]
 
 { #category : #adding }
