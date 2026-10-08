@@ -18,13 +18,10 @@ GtEpiceaPackageFactoryForTesting >> cleanUp [
 GtEpiceaPackageFactoryForTesting >> createNewPackageNamed: aPackageName [
 	| newPackage |
 	newPackage := Package named: aPackageName.
-	self forPharo12AndNewer: 
-		[ self assert: (self class packageOrganizer hasPackage: aPackageName) not
+	self 
+			assert: (self class packageOrganizer hasPackage: aPackageName) not
 			description: [ 'Package ', aPackageName printString, ' already exists' ].
-			self class packageOrganizer addPackage: newPackage ] 
-	forPharo11: 
-		[
-		newPackage register ].
+	self class packageOrganizer addPackage: newPackage .
 	
 	createdPackages add: newPackage.
 
@@ -35,11 +32,7 @@ GtEpiceaPackageFactoryForTesting >> createNewPackageNamed: aPackageName [
 GtEpiceaPackageFactoryForTesting >> createNewTagNamed: aTagName inPackageNamed: aPackageName [
 	| hasTag |
 	
-	hasTag := self forPharo12AndNewer: 
-		[ (self packageNamed: aPackageName) hasTag: aTagName ]
-	forPharo11:
-		[ (self packageNamed: aPackageName) tags anySatisfy:
-			[ :rPackage | rPackage name = aTagName ] ].
+	hasTag := (self packageNamed: aPackageName) hasTag: aTagName.
 	self assert: hasTag not
 		description: [ 'Tag ', aTagName printString, ' already exists in ', aPackageName printString ].
 	(self packageNamed: aPackageName) addClassTag: aTagName
@@ -60,8 +53,4 @@ GtEpiceaPackageFactoryForTesting >> packageNamed: aPackageName [
 { #category : #actions }
 GtEpiceaPackageFactoryForTesting >> removePackage: aPackage [ 
 	self packageOrganizer unregisterPackage: aPackage.
-	self 
-		forPharo12AndNewer: [] 
-		forPharo11: [
-			SystemOrganizer default removeCategory: aPackage name ]
 ]

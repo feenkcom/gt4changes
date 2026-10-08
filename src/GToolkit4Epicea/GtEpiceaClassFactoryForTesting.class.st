@@ -33,9 +33,7 @@ GtEpiceaClassFactoryForTesting >> newClassInPackageNamed: aPackageName withTagNa
 { #category : #'actions - creation' }
 GtEpiceaClassFactoryForTesting >> newClassInTagNamed: aTagName [
 	
-	^ self 
-		forPharo12AndNewer: [ self make: [ :aBuilder | aBuilder tag: aTagName ] ]
-		forPharo11: [ self newClassInCategory: aTagName ]
+	^ self make: [ :aBuilder | aBuilder tag: aTagName ] 
 ]
 
 { #category : #accessing }

@@ -58,8 +58,6 @@ GtEpiceaPackagesHistoryBuilder >> addExtraEventForExtensionMethodFor: anOmbuEntr
 { #category : #'accessing - grouping' }
 GtEpiceaPackagesHistoryBuilder >> addPackageChangeFor: anOmbuEntry toGroups: groupedByPackageName [ 
 
-	self forPharo12AndNewer: [] forPharo11: [ ^ self ].
-
 	anOmbuEntry content isEpPackageChange ifTrue: 
 		[ self 
 			addCodeEntityChange: anOmbuEntry 
