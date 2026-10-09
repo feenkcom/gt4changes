@@ -117,9 +117,7 @@ GtEpHistoryGroupingExamples >> ensureSetup [
 { #category : #accessing }
 GtEpHistoryGroupingExamples >> mainPackageNameForTesting [
 
-	^ self 
-		forPharo12AndNewer: [ #'CategoryForTestToBeDeleted' ]
-		forPharo11: [ #'CategoryForTestToBeDeleted-Default' ]
+	^ #'CategoryForTestToBeDeleted'
 ]
 
 { #category : #'events generation' }
@@ -263,7 +261,7 @@ GtEpHistoryGroupingExamples >> testMoveExtensionMethodBetweetPackagesByPackageGr
 		description: [ self descriptionMessage: 'packageHistories hasNoEffect not' histories: packageHistories items ].
 	"packageHistories would normally contain 3 entries.
 	Due to https://github.com/feenkcom/gtoolkit/issues/4734 it currently contains an unpackage entry as well in Pharo12."
-	expectedSize := self forPharo12AndNewer: [3] forPharo11: [3].
+	expectedSize := 3.
 	self assert: packageHistories size = expectedSize
 		description: [ self descriptionMessage: 'packageHistories size = ', expectedSize asString histories: packageHistories items ].
 

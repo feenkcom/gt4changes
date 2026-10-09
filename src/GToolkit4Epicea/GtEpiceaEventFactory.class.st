@@ -78,18 +78,13 @@ GtEpiceaEventFactory >> addTrait: aTraitDefinition tags: aDictionary [
 { #category : #api }
 GtEpiceaEventFactory >> changeBehaviorFrom: oldCategoryName package: oldPackageName to: newCategoryName in: aBehavior tags: aDictionary [
 
-	^ self forPharo12AndNewer: 
-		[ entries add: (self omEntryFrom: aDictionary content:
+	^ entries add: (self omEntryFrom: aDictionary content:
 		(EpBehaviorRepackagedChange
 			oldPackage: oldPackageName
 			oldTag: (self tagFromCategory: oldCategoryName package: oldPackageName)
 			newPackage: aBehavior packageName
 			newTag: aBehavior packageTag
-			class: aBehavior))] 
-	forPharo11:
-		[ entries add: (self omEntryFrom: aDictionary content:
-		((EpBehaviorCategoryChange oldCategory: oldCategoryName newCategory: newCategoryName class: aBehavior)
-			oldPackageName: oldPackageName)) ]
+			class: aBehavior))
 ]
 
 { #category : #api }
@@ -383,16 +378,9 @@ GtEpiceaEventFactory >> traitDefinitionName: className definitionSource: definit
 	traitDefinition
 		definitionSource: definitionSource;
 		superclassName: superclassName.
-	self forPharo12AndNewer: 
-		[ traitDefinition
+	traitDefinition
 			package: (self packageDefinitionNamed: packageName);
-			packageTag: packageTag ] 
-	forPharo11: 
-		[ traitDefinition 
-			category: (packageTag
-				ifNil: [ packageName ]
-				ifNotNil: [ packageName, '-', packageTag ]);
-			package: packageName ].
+			packageTag: packageTag.
 	traitDefinition comment: anRgCommentDefinition.
 	classVariables do: [ :cv | traitDefinition addClassVariable: cv ].
 	instanceVariables do: [ :iv | traitDefinition addInstanceVariable: iv ].

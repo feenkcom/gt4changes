@@ -111,15 +111,7 @@ GtEpiceaFactoryEventCodeVisitor >> omConstructorFor: anOmReference [
 { #category : #private }
 GtEpiceaFactoryEventCodeVisitor >> packageTagOfClass: aRgClass [
 
-	^ self forPharo12AndNewer: [ aRgClass packageTag ] forPharo11:
-		[ | categoryName packageName |
-		categoryName := aRgClass category.
-		packageName := aRgClass package.
-		categoryName = packageName ifTrue: [ ^ nil ].
-		packageName isString ifFalse:
-			[ packageName := packageName name ].
-		categoryName = packageName ifTrue: [ ^ nil ].
-		(categoryName withoutPrefix: packageName) allButFirst asSymbol ]
+	^ aRgClass packageTag
 ]
 
 { #category : #accessing }

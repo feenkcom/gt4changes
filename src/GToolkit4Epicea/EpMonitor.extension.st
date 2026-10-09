@@ -13,13 +13,8 @@ EpMonitor >> addEvent: anEvent newEntryDo: aBlock triggerReference: triggerRefer
 					at: EpLog triggererReferenceKey
 					put: triggerReference ].
 
-			self 
-				forPharo12AndNewer: [
-					"Ensure we have a time in Pharo 12"
-					tags at: EpLog timeKey put: self time] 
-				forPharo11: [
-					tags at: EpLog authorKey put: self author.
-					tags at: EpLog timeKey put: self time ] ].
+			"Ensure we have a time since Pharo 12"
+			tags at: EpLog timeKey put: self time ].
 
 	aBlock value: newEntry
 ]
@@ -48,21 +43,11 @@ EpMonitor >> behaviorRemoved: aClassRemovedAnnouncement [
 		             ifTrue: [ 'package: ' , '_UnpackagedPackage' printString ]
 		             ifFalse: [ 'package: ' , 'Unclassified' printString ].
 
-	self forPharo12AndNewer: 
-		[ classRemoved definitionSource: (classRemoved definitionSource copyReplaceAll: toReplace with: 'package: ' , aClassRemovedAnnouncement packageTagAffected categoryName printString).
+	classRemoved definitionSource: (classRemoved definitionSource copyReplaceAll: toReplace with: 'package: ' , aClassRemovedAnnouncement packageTagAffected categoryName printString).
 	
-		classRemoved name: aClassRemovedAnnouncement classRemoved originalName.
-		classRemoved package: aClassRemovedAnnouncement packageAffected name.
-		classRemoved packageTag: aClassRemovedAnnouncement packageTagAffected name. ]
-	forPharo11:
-		[ classRemoved definitionSource:
-			(classRemoved definitionSource
-				copyReplaceAll: toReplace
-				with: 'package: ', aClassRemovedAnnouncement categoryName printString).
-
-		classRemoved name: aClassRemovedAnnouncement classRemoved originalName.
-		classRemoved category: aClassRemovedAnnouncement categoryName.
-		classRemoved package: aClassRemovedAnnouncement packageAffected name. ].
+	classRemoved name: aClassRemovedAnnouncement classRemoved originalName.
+	classRemoved package: aClassRemovedAnnouncement packageAffected name.
+	classRemoved packageTag: aClassRemovedAnnouncement packageTagAffected name. 
 
 	aClassRemovedAnnouncement classRemoved methods , aClassRemovedAnnouncement classRemoved classSide metaMethods do: [ :each |
 		self behaviorRemovedImpliesMethodRemoved: each defaultPackageName: classRemoved package ].

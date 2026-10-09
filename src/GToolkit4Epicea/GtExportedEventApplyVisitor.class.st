@@ -35,9 +35,9 @@ GtExportedEventApplyVisitor >> visitMethodUpdateNoSource: aMethodModified [
 				withStamp: nil
 				notifying: nil
 				logSource: false.
-			self 
-				forPharo12AndNewer: [
-					(behavior includesSelector: selector) ifTrue: [
-						(behavior>>selector) removeProperty: #source ] ] 
-				forPharo11: [] ]
+			
+			"For the NoSource compilation we remove the source property
+			of a compiled method if present"
+			(behavior includesSelector: selector) ifTrue: [
+				(behavior>>selector) removeProperty: #source ]  ]
 ]

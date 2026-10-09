@@ -232,9 +232,6 @@ GtStonObjectModelReaderExamples >> defaultMigratorCopiesValues [
 	<gtExample>
 	| reader model target |
 
-	"These examples are only relevant for Pharo 12 and newer"
-	self forPharo12AndNewer: [] forPharo11: [ ^ self ].
-
 	reader := GtStonObjectModelReader new.
 	reader migrator: GtStonObjectMigrator new.
 	model := GtStonObjectModel new.
@@ -251,9 +248,6 @@ GtStonObjectModelReaderExamples >> defaultMigratorCopiesValues [
 GtStonObjectModelReaderExamples >> readPharo11RGClassDefinition [
 	| readStream entries rgClassDefinition |
 	<gtExample>
-
-	"These examples are only relevant for Pharo 12 and newer"
-	self forPharo12AndNewer: [] forPharo11: [ ^ self ].
 
 	readStream := self class omClassDefinition readStream.
 	entries := OrderedCollection streamContents: [ :ocStream |
@@ -282,9 +276,6 @@ GtStonObjectModelReaderExamples >> rgClassDefinitionMigratorAdjustsPackageTag [
 	<gtExample>
 	| reader model target |
 
-	"These examples are only relevant for Pharo 12 and newer"
-	self forPharo12AndNewer: [] forPharo11: [ ^ self ].
-
 	reader := self readerWithRGClassMigrator.
 	model := GtStonObjectModel new.
 	model targetClassName: #RGClassDefinition.
@@ -303,9 +294,6 @@ GtStonObjectModelReaderExamples >> rgClassDefinitionMigratorAdjustsPackageTag [
 GtStonObjectModelReaderExamples >> storeInstanceVariablesCopiesValues [
 	<gtExample>
 	| reader model target |
-
-	"These examples are only relevant for Pharo 12 and newer"
-	self forPharo12AndNewer: [] forPharo11: [ ^ self ].
 
 	reader := GtStonObjectModelReader new.
 	target := GtStonObjectModelReaderGenericStub new.
