@@ -18,7 +18,7 @@ GtEpiceaClassInPackageHistory >> isInitialBehaviourChangeAddition [
 	
 	epEvent := self behaviourChanges initialChange content.
 	^ super isInitialBehaviourChangeAddition or: [
-		(#(EpBehaviorCategoryChange EpBehaviorRepackagedChange) includes: epEvent class name) and: [
+		epEvent isEpBehaviorRepackagedChange and: [
 			epEvent classAffected package = self targetPackageName] ]
 ]
 
@@ -28,8 +28,8 @@ GtEpiceaClassInPackageHistory >> isLatestBehaviourChangeRemoval [
 	
 	epEvent := self behaviourChanges latestChange content.
 	^ super isLatestBehaviourChangeRemoval or: [
-		(#(EpBehaviorCategoryChange EpBehaviorRepackagedChange) includes: epEvent class name) and: [
-			epEvent oldPackageName = self targetPackageName] ]
+			epEvent isEpBehaviorRepackagedChange and: [
+				epEvent oldPackageName = self targetPackageName] ]
 ]
 
 { #category : #accessing }

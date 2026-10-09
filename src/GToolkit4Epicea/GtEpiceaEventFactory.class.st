@@ -13,17 +13,12 @@ Class {
 { #category : #api }
 GtEpiceaEventFactory >> addCategory: categoryName packageName: packageName tags: aDictionary [
 
-	^ self forPharo12AndNewer: 
-		[ entries add: (self omEntryFrom: aDictionary content:
-			(EpPackageAddition packageName: packageName)).
-		(self tagFromCategory: categoryName package: packageName) ifNotNil: [ :tag |
+	 entries add: (self 
+	 	omEntryFrom: aDictionary 
+	 	content:(EpPackageAddition packageName: packageName)).
+	^ (self tagFromCategory: categoryName package: packageName) ifNotNil: [ :tag |
 			entries add: (self omEntryFrom: aDictionary content:
-			(EpPackageTagAddition tagName: tag packageName: packageName)) ] ] 
-	forPharo11:
-		[ entries add: (self omEntryFrom: aDictionary content:
-		(EpCategoryAddition basicNew
-			initializeNamed: categoryName packageName: packageName;
-			yourself )) ]
+			(EpPackageTagAddition tagName: tag packageName: packageName)) ] 
 ]
 
 { #category : #api }
@@ -276,27 +271,12 @@ GtEpiceaEventFactory >> rePackage: aBehaviorDefinition oldPackageName: oldPackag
 
 { #category : #api }
 GtEpiceaEventFactory >> registerCategory: categoryName packageName: packageName tags: aDictionary [
-
-	^ self forPharo12AndNewer:
-		[ entries add: (self omEntryFrom: aDictionary content:
-		(EpPackageAddition packageName: packageName)).
-		(categoryName asString withoutPrefix: packageName asString) ifNotEmpty: [ :tag |
+ 	entries add: (self 
+ 		omEntryFrom: aDictionary 
+ 		content:(EpPackageAddition packageName: packageName)).
+	^ (categoryName asString withoutPrefix: packageName asString) ifNotEmpty: [ :tag |
 			entries add: (self omEntryFrom: aDictionary content:
-			(EpPackageTagAddition tagName: tag asSymbol packageName: packageName)) ] ]
-	forPharo11: 
-		[ entries add: (self omEntryFrom: aDictionary content:
-		(EpCategoryRegistration basicNew
-			initializeNamed: categoryName packageName: packageName;
-			yourself)) ]
-]
-
-{ #category : #api }
-GtEpiceaEventFactory >> removeCategory: categoryName packageName: packageName tags: aDictionary [
-
-	^ entries add: (self omEntryFrom: aDictionary content:
-		(EpCategoryRemoval basicNew
-			initializeNamed: categoryName packageName: packageName;
-			yourself ))
+			(EpPackageTagAddition tagName: tag asSymbol packageName: packageName)) ] 
 ]
 
 { #category : #api }
@@ -339,15 +319,6 @@ GtEpiceaEventFactory >> removeTrait: aTraitDefinition tags: aDictionary [
 
 	^ entries add: (self omEntryFrom: aDictionary content:
 		(EpTraitRemoval trait: aTraitDefinition))
-]
-
-{ #category : #api }
-GtEpiceaEventFactory >> renameCategory: oldCategoryName to: newCategoryName packageName: packageName tags: aDictionary [
-
-	^ entries add: (self omEntryFrom: aDictionary content:
-		(EpCategoryRename basicNew
-			initializeOldName: oldCategoryName newName: newCategoryName packageName: packageName;
-			yourself ))
 ]
 
 { #category : #api }

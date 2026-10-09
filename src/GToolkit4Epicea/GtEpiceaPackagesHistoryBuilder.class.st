@@ -28,7 +28,7 @@ GtEpiceaPackagesHistoryBuilder >> addCodeEntityChange: anOmbuEntry toPackageName
 { #category : #'accessing - grouping' }
 GtEpiceaPackagesHistoryBuilder >> addExtraEventForCategoryChangeFor: anOmbuEntry toGroups: groupedByPackageName [ 
 
-	(#(EpBehaviorCategoryChange EpBehaviorRepackagedChange) includes: anOmbuEntry content class name) ifFalse: [ ^ self ].
+	anOmbuEntry content isEpBehaviorRepackagedChange ifFalse: [ ^ self ].
 	anOmbuEntry content oldPackageName ifNil: [ ^ self ].
 	
 	self 
