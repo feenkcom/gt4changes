@@ -108,17 +108,9 @@ GtEpiceaEventFactory >> classDefinitionName: className definitionSource: definit
 	classDefinition
 		definitionSource: definitionSource;
 		superclassName: superclassName;
-		comment: anRgCommentDefinition.
-	self forPharo12AndNewer: 
-		[ classDefinition
-			package: (self packageDefinitionNamed: packageName);
-			packageTag: packageTag ] 
-	forPharo11: 
-		[ classDefinition 
-			category: (packageTag
-				ifNil: [ packageName ]
-				ifNotNil: [ packageName, '-', packageTag ]);
-			package: packageName ].
+		comment: anRgCommentDefinition;
+		package: (self packageDefinitionNamed: packageName);
+		packageTag: packageTag .
 	classVariables do: [ :cv | classDefinition addClassVariable: cv ].
 	instanceVariables do: [ :iv | classDefinition addInstanceVariable: iv ].
 	sharedPools do: [ :sp | classDefinition addSharedPool: sp ].

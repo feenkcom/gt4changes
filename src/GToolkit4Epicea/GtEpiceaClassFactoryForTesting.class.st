@@ -45,13 +45,8 @@ GtEpiceaClassFactoryForTesting >> packageName [
 { #category : #'actions - editing' }
 GtEpiceaClassFactoryForTesting >> redefineClass: aClass inPackageNamed: aPackageName withTagName: aTagName [
 
-	^ self forPharo12AndNewer: 
-		[ self update: aClass to: [ :aBuilder |
-		aBuilder
-			package: aPackageName;
-			tag: aTagName ] ]
-	forPharo11:
-		[ self 
-		redefineClass: aClass 
-		category: (aPackageName, '-', aTagName) asSymbol ]
+	^ self update: aClass to: [ :aBuilder |
+			aBuilder
+				package: aPackageName;
+				tag: aTagName ] 
 ]
