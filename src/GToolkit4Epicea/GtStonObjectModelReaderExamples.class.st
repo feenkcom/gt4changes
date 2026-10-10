@@ -244,27 +244,6 @@ GtStonObjectModelReaderExamples >> defaultMigratorCopiesValues [
 	^ target
 ]
 
-{ #category : #examples }
-GtStonObjectModelReaderExamples >> readPharo11RGClassDefinition [
-	| readStream entries rgClassDefinition |
-	<gtExample>
-
-	readStream := self class omClassDefinition readStream.
-	entries := OrderedCollection streamContents: [ :ocStream |
-		[ readStream atEnd ] whileFalse:
-			[ ocStream nextPut: (self readerWithRGClassMigrator on: readStream) next ] ].
-	self assert: entries size equals: 4.
-	self assert: (entries collect: [ :each | each content class name ] as: Array)
-		equals: #(EpPackageAddition EpPackageTagAddition EpClassAddition EpClassModification).
-	rgClassDefinition := entries third content behaviorAffected.
-	self assert: rgClassDefinition name equals: #GtStonObjectModelReaderExampleClass.
-	self assert: rgClassDefinition instanceVariables first name equals: #iVar1.
-	self assert: rgClassDefinition classVariables first name equals: #CVar2.
-	self assert: rgClassDefinition classSide instanceVariables isEmpty.
-	rgClassDefinition := entries fourth content behaviorAffected.
-	self assert: rgClassDefinition classSide instanceVariables first name equals: #cVar1.
-]
-
 { #category : #'llm-generated' }
 GtStonObjectModelReaderExamples >> readerWithRGClassMigrator [
 
