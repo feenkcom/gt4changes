@@ -34,10 +34,9 @@ GtEpiceaEventFactoryExamples >> addRemoveClassProtocol [
 	testProtocol := #factoryExampleTestProtocol.
 	self deny: (self class protocols includes: testProtocol).
 	sourceEpEntries := self class epEntriesFrom: 
-		[ self
-			forPharo12AndNewer: [ self class addProtocol: testProtocol ] 
-			forPharo11: [ self class organization addCategory: testProtocol ].
-		self class removeProtocol: testProtocol ].
+		[ 
+			self class addProtocol: testProtocol.
+			self class removeProtocol: testProtocol ].
 	self assert: sourceEpEntries size equals: 2.
 	visitor := GtEpiceaFactoryEventCodeVisitor
 			selector: #classAddModifyRenameRemoveFactoryMethod
@@ -57,10 +56,9 @@ GtEpiceaEventFactoryExamples >> addRemoveInstanceProtocol [
 	testProtocol := #factoryExampleTestProtocol.
 	self deny: (self class protocols includes: testProtocol).
 	sourceEpEntries := self class epEntriesFrom: 
-		[ self
-			forPharo12AndNewer: [ self class addProtocol: testProtocol ] 
-			forPharo11: [ self class organization addCategory: testProtocol ].
-		self class removeProtocol: testProtocol ].
+		[ 
+			self class addProtocol: testProtocol.
+			self class removeProtocol: testProtocol ].
 	self assert: sourceEpEntries size equals: 2.
 	visitor := GtEpiceaFactoryEventCodeVisitor
 			selector: #classAddModifyRenameRemoveFactoryMethod
@@ -188,33 +186,6 @@ GtEpiceaEventFactoryExamples >> packageNamed: aSymbol [
 GtEpiceaEventFactoryExamples >> packageNamed: aSymbol ifAbsent: aBlock [
 
 	^ self packageOrganizer packageNamed: aSymbol ifAbsent: aBlock
-]
-
-{ #category : #examples }
-GtEpiceaEventFactoryExamples >> packageRegisterAddRenameRemove [
-	"Demonstrate the lifecycle of a package"
-	<gtExample>
-	| initialPackageName renamedPackageName sourceEpEntries visitor sourceCode generatedEpEntries |
-
-	self forPharo12AndNewer: [ ^ self ] forPharo11: [].
-	initialPackageName := #PackageOne.
-	renamedPackageName := #RenamedOne.
-	sourceEpEntries := {
-		EpCategoryRegistration named: initialPackageName.
-		EpCategoryAddition named: initialPackageName.
-		EpCategoryRename oldName: initialPackageName newName: renamedPackageName.
-		EpCategoryRemoval named: renamedPackageName. } collect: [ :epEvent | | omEntry |
-			omEntry := OmEntry content: epEvent.
-			omEntry tags
-				at: #time put: DateAndTime now;
-				at: #author put: self class name asString.
-			omEntry ].
-	visitor := GtEpiceaFactoryEventCodeVisitor
-		selector: #packageRegisterAddRenameRemoveMethod
-		entries: sourceEpEntries.
-	sourceCode := visitor sourceCode.
-	generatedEpEntries := self compileAndEvaluate: sourceCode.
-	self assertEntries: generatedEpEntries equals: sourceEpEntries.
 ]
 
 { #category : #'private - helpers' }

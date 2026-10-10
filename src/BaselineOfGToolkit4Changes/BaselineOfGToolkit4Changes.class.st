@@ -33,13 +33,6 @@ BaselineOfGToolkit4Changes >> postLoadChanges: spec [
 { #category : #accessing }
 BaselineOfGToolkit4Changes >> postLoadEpiceaChanges: spec [ 
  	(self class environment 
- 		at: #EpBehaviorCategoryChange 
- 		ifPresent: [ :aClass |
- 			self class environment
- 				at: #TGtEpBehaviorCategoryChangeOldPackageName 
- 				ifPresent: [ :aTrait |
- 					aClass addToComposition: aTrait ] ]).
- 	(self class environment 
  		at: #EpMethodModification 
  		ifPresent: [ :aClass |
  			self class environment
