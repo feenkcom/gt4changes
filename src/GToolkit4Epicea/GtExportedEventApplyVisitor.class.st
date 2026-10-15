@@ -41,3 +41,26 @@ GtExportedEventApplyVisitor >> visitMethodUpdateNoSource: aMethodModified [
 			(behavior includesSelector: selector) ifTrue: [
 				(behavior>>selector) removeProperty: #source ]  ]
 ]
+
+{ #category : #visitor }
+GtExportedEventApplyVisitor >> visitPackageRemoval: aPackageRemoval [
+	| package |
+	package := self packageOrganizer
+		packageNamed: aPackageRemoval packageName
+		ifAbsent: [ ^ self ].
+	package isEmpty ifTrue: [
+		super visitPackageRemoval: aPackageRemoval ]
+]
+
+{ #category : #visitor }
+GtExportedEventApplyVisitor >> visitPackageTagRemoval: aPackageTagRemoval [
+	| package |
+	package := self packageOrganizer
+		packageNamed: aPackageTagRemoval packageName
+		ifAbsent: [ ^ self ].
+	package
+		tagNamed: aPackageTagRemoval tagName
+		ifPresent: [ :tag |
+			tag isEmpty ifTrue: [
+				super visitPackageTagRemoval: aPackageTagRemoval ] ]
+]
