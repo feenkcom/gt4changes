@@ -243,7 +243,7 @@ GtEpicea >> diffElements [
 					element hMatchParent.
 					element vFitContent.
 					element
-						addChild: ((GtEpiceaDiffElement onChange: change)
+						addChild: ((GtDiffElement onChange: change)
 								aptitude: GtDiffFlatAptitude;
 								vFitContent;
 								styler: styler;
