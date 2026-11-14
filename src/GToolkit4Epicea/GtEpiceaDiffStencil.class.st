@@ -24,35 +24,32 @@ GtEpiceaDiffStencil >> constants [
 GtEpiceaDiffStencil >> create [
 	<return: #BlRope>
 	| aBuilder aRopedText |
-	aBuilder := PrettyTextDiffBuilder 
-		from: self from 
-		to: self to.
+	aBuilder := PrettyTextDiffBuilder from: self from to: self to.
 	aRopedText := '' asRopedText.
 	aBuilder
-		patchSequenceDoIfMatch: [ :string | | initialPosition |
-			initialPosition := aRopedText size max: 1.
-			"(aRopedText from: aRopedText size to: aRopedText size)
+		patchSequenceDoIfMatch: [ :string | 
+			| initialPosition |
+			initialPosition := aRopedText size max: 1.	"(aRopedText from: aRopedText size to: aRopedText size)
 				attribute: (Gt2EpiceaDiffAttribute new beMatch)."
 			aRopedText insertString: string at: aRopedText size.
-			(aRopedText from: initialPosition to: aRopedText size)
-				unstyle.
-			aRopedText insertString: String cr at: aRopedText size. ]
-		ifInsert: [ :string | | initialPosition |
-			initialPosition := aRopedText size max: 1.
-			"(aRopedText from: aRopedText size to: aRopedText size)
+			(aRopedText from: initialPosition to: aRopedText size) unstyle.
+			aRopedText insertString: String cr at: aRopedText size ]
+		ifInsert: [ :string | 
+			| initialPosition |
+			initialPosition := aRopedText size max: 1.	"(aRopedText from: aRopedText size to: aRopedText size)
 				attribute: (Gt2EpiceaDiffAttribute new beInsert)."
 			aRopedText insertString: string at: aRopedText size.
 			(aRopedText from: initialPosition to: aRopedText size)
-				highlight: BrGlamorousColors insertLineColor.
-			aRopedText insertString: String cr at: aRopedText size. ]
-		ifRemove: [ :string | | initialPosition |
-			initialPosition := aRopedText size max: 1.
-			"(aRopedText from: aRopedText size to: aRopedText size)
+				highlight: BrGlamorousColors diffAddedTextBackgroundColor.
+			aRopedText insertString: String cr at: aRopedText size ]
+		ifRemove: [ :string | 
+			| initialPosition |
+			initialPosition := aRopedText size max: 1.	"(aRopedText from: aRopedText size to: aRopedText size)
 				attribute: (Gt2EpiceaDiffAttribute new beRemove)."
 			aRopedText insertString: string at: aRopedText size.
 			(aRopedText from: initialPosition to: aRopedText size)
-				highlight: BrGlamorousColors removeLineColor.
-			aRopedText insertString: String cr at: aRopedText size. ].
+				highlight: BrGlamorousColors diffDeletedTextBackgroundColor.
+			aRopedText insertString: String cr at: aRopedText size ].
 	aRopedText isEmpty ifFalse: [ aRopedText glamorousCodeFontAndSize ].
 	^ aRopedText
 ]
