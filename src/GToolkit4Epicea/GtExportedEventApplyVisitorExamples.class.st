@@ -73,7 +73,7 @@ GtExportedEventApplyVisitorExamples >> packageTagRemovalAppliedWhenEmpty [
 
 	package := self packageOrganizer packageNamed: packageName.
 	package ensureTag: tagName.
-	self assert: (package tags anySatisfy: [ :t | t name = tagName ]).
+	self assert: (package tags anySatisfy: [ :t | t name = tagName asSymbol ]).
 
 	tagRemovalEvent := EpPackageTagRemoval
 		tagName: tagName
@@ -82,7 +82,7 @@ GtExportedEventApplyVisitorExamples >> packageTagRemovalAppliedWhenEmpty [
 	visitor := GtExportedEventApplyVisitor new.
 	tagRemovalEvent accept: visitor.
 
-	self assert: (package tags anySatisfy: [ :t | t name = tagName ]) not.
+	self assert: (package tags anySatisfy: [ :t | t name = tagName asSymbol ]) not.
 	^ visitor
 ]
 
