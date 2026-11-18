@@ -481,10 +481,9 @@ GtEpReplayBehaviorModel >> reset [
 
 { #category : #accessing }
 GtEpReplayBehaviorModel >> superclassName [
-
-	^ superclassName ifNil: [ 
-		self asRingDefinition ifNotNil: [ :aClassDefinition | 
-			aClassDefinition superclassName ifNotNil: #asSymbol ] ]
+	^ superclassName
+		ifNil: [ self asRingDefinition
+				ifNotNil: [ :aClassDefinition | aClassDefinition superclassName ifNotNil: [ :v | v asSymbol ] ] ]
 ]
 
 { #category : #accessing }

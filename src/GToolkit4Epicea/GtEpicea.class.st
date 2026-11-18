@@ -432,7 +432,7 @@ GtEpicea >> notifyEpiceaChangedWithImpactState: anImpactStateBoolean impactChang
 { #category : #accessing }
 GtEpicea >> numberOfEvents [
 	<return: #Integer>
-	^ events ifNotNil: #size ifNil: 0
+	^ events ifNotNil: [ :v | v size ] ifNil: 0
 ]
 
 { #category : #accessing }
