@@ -48,8 +48,7 @@ GtEpSequencerEntry >> classification: cSymbol reason: aReason [
 
 { #category : #accessing }
 GtEpSequencerEntry >> content [
-
-	^ omEntry ifNotNil: #content
+	^ omEntry ifNotNil: [ :v | v content ]
 ]
 
 { #category : #ui }
@@ -259,10 +258,7 @@ GtEpSequencerEntry >> reason: aGtEpSequencerEntryReason [
 
 { #category : #accessing }
 GtEpSequencerEntry >> reasonExplanation [
-
-	^ reason
-		ifNil: [ 'Rejected on first pass' ]
-		ifNotNil: #explanation
+	^ reason ifNil: [ 'Rejected on first pass' ] ifNotNil: [ :v | v explanation ]
 ]
 
 { #category : #accessing }
