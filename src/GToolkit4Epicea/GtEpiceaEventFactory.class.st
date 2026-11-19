@@ -327,7 +327,7 @@ GtEpiceaEventFactory >> renameClass: classDefinition from: aSymbol tags: aDictio
 GtEpiceaEventFactory >> tagFromCategory: categoryName package: packageName [
 	"Answer the tag given a category and package names"
 
-	categoryName = packageName ifTrue: [ ^ nil ].
+	(categoryName sameContentAs: packageName) ifTrue: [ ^ nil ].
 	packageName ifNil: [ ^ categoryName ].
 	self notYetTested.
 	^ (categoryName withoutPrefix: packageName) allButFirst asSymbol
