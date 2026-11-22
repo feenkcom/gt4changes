@@ -59,13 +59,6 @@ GtEpEventSequencerExamples >> addRemoveAddClassForExport [
 	^ sequencer
 ]
 
-{ #category : #asserting }
-GtEpEventSequencerExamples >> assert: actual equals: expected [
-	^ self
-		assert: (actual sameContentAs: expected)
-		description: [ self comparingStringBetween: actual and: expected ]
-]
-
 { #category : #examples }
 GtEpEventSequencerExamples >> behaviorRenameWithoutDependentsForExport [
 	"Check that adding a class and method when the required superclass / class is missing is sequenced correctly."
@@ -259,7 +252,7 @@ GtEpEventSequencerExamples >> classAddAndRenameMultipleCompressed1ForExport [
 		disableDuring: [ sequencedEntries do: [ :entry | entry content applyCodeChange ] ].
 	behavior := self class environment classOrTraitNamed: #Issue2936v52.
 	self deny: (self class environment includesKey: #Issue2936v5).
-	self assert: behavior package name equals: 'Issue2936v5'.
+	self assert: behavior package name equals: #Issue2936v5.
 	self assert: behavior instVarNames equals: #(#iv1 #iv2).
 	^ sequencer
 ]
@@ -293,7 +286,7 @@ GtEpEventSequencerExamples >> classAddAndRenameMultipleCompressed1InImage [
 		disableDuring: [ sequencedEntries do: [ :entry | entry content applyCodeChange ] ].
 	behavior := self class environment classOrTraitNamed: #Issue2936v52.
 	self deny: (self class environment includesKey: #Issue2936v5).
-	self assert: behavior package name equals: 'Issue2936v5'.
+	self assert: behavior package name equals: #Issue2936v5.
 	self assert: behavior instVarNames equals: #(#iv1 #iv2).
 	^ sequencer
 ]
@@ -327,7 +320,7 @@ GtEpEventSequencerExamples >> classAddAndRenameMultipleCompressed2ForExport [
 		disableDuring: [ sequencedEntries do: [ :entry | entry content applyCodeChange ] ].
 	behavior := self class environment classOrTraitNamed: #Issue2936v52.
 	self deny: (self class environment includesKey: #Issue2936v5).
-	self assert: behavior package name equals: 'Issue2936v5'.
+	self assert: behavior package name equals: #Issue2936v5.
 	self assert: behavior instVarNames equals: #(#iv1 #iv2).
 	^ sequencer
 ]
@@ -361,7 +354,7 @@ GtEpEventSequencerExamples >> classAddAndRenameMultipleCompressed2InImage [
 		disableDuring: [ sequencedEntries do: [ :entry | entry content applyCodeChange ] ].
 	behavior := self class environment classOrTraitNamed: #Issue2936v52.
 	self deny: (self class environment includesKey: #Issue2936v5).
-	self assert: behavior package name equals: 'Issue2936v5'.
+	self assert: behavior package name equals: #Issue2936v5.
 	self assert: behavior instVarNames equals: #(#iv1 #iv2).
 	^ sequencer
 ]
@@ -398,7 +391,7 @@ GtEpEventSequencerExamples >> classAddAndRenameMultipleForExport [
 	EpMonitor
 		disableDuring: [ sequencedEntries do: [ :entry | entry content applyCodeChange ] ].
 	behavior := self class environment classOrTraitNamed: #Issue2936v43.
-	self assert: behavior package name equals: 'Issue2936v41'.
+	self assert: behavior package name equals: #Issue2936v41.
 	self assert: behavior instVarNames equals: #(#iv1).
 	^ sequencer
 ]
@@ -435,7 +428,7 @@ GtEpEventSequencerExamples >> classAddAndRenameMultipleInImage [
 	EpMonitor
 		disableDuring: [ sequencedEntries do: [ :entry | entry content applyCodeChange ] ].
 	behavior := self class environment classOrTraitNamed: #Issue2936v43.
-	self assert: behavior package name equals: 'Issue2936v41'.
+	self assert: behavior package name equals: #Issue2936v41.
 	self assert: behavior instVarNames equals: #(#iv1).
 	^ sequencer
 ]
@@ -2047,7 +2040,7 @@ GtEpEventSequencerExamples >> superclassAndSubclassSuperclassRenameAndBothChange
 	self deny: (self class environment includesKey: #Issue3398RootClass).
 	self
 		assert: subclassBehavior superclass name
-		equals: 'Issue3398RootClassRenamed'.
+		equals: #Issue3398RootClassRenamed.
 
 	^ sequencer
 ]
@@ -2093,7 +2086,7 @@ GtEpEventSequencerExamples >> superclassAndSubclassSuperclassRenameAndBothChange
 	self deny: (self class environment includesKey: #Issue3398RootClass).
 	self
 		assert: subclassBehavior superclass name
-		equals: 'Issue3398RootClassRenamed'.
+		equals: #Issue3398RootClassRenamed.
 
 	^ sequencer
 ]
