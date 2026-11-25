@@ -461,7 +461,7 @@ GtEpiceaAbstractLog >> packageFilter [
 			aStream
 				filter: [ :anEntry | 
 					anEntry content isCodeChange
-						and: [ anEntry content affectedPackageName = aPackage ] ] ];
+						and: [ anEntry content affectedPackageName sameContentAs: aPackage ] ] ];
 		named: 'In Package';
 		order: 15;
 		completion: [ GtStringsCompletionStrategy new

@@ -14,9 +14,9 @@ GtEpiceaClassesHistoryBuilder >> addMethodsHistory: aMethodHistory toGrouping: b
 
 	aMethodHistory targetMethod isMeta
 		ifTrue: [ (targetClassName endsWith: ' class')
-				ifTrue: [ targetClassName := targetClassName withoutSuffix: ' class' ].
+				ifTrue: [ targetClassName := (targetClassName withoutSuffix: ' class') asSymbol ].
 			(targetClassName endsWith: ' classTrait')
-				ifTrue: [ targetClassName := targetClassName withoutSuffix: ' classTrait' ] ].
+				ifTrue: [ targetClassName := (targetClassName withoutSuffix: ' classTrait') asSymbol ] ].
 
 	classHistory := byClassNameGroups
 			at: targetClassName

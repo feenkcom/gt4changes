@@ -31,7 +31,7 @@ GtEpiceaChangedClassNamesVisitor >> includeSubclasses [
 
 { #category : #accessing }
 GtEpiceaChangedClassNamesVisitor >> processClassName: aClassName [
-	^ aClassName withoutSuffix: ' class'
+	^ (aClassName withoutSuffix: ' class') asSymbol
 ]
 
 { #category : #accessing }
