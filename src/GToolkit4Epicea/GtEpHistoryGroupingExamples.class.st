@@ -65,6 +65,20 @@ GtEpHistoryGroupingExamples >> createAndRemoveClassWithMethodEvents [
 ]
 
 { #category : #'events generation' }
+GtEpHistoryGroupingExamples >> createClassWithInstanceAndClassSideMethodEvents [
+	<gtExample>
+	<after: #tearDown>
+	<return: #GtEpiceaEntriesGroup>
+	| newClass |
+	newClass := self classFactory newClass.
+
+	newClass compile: 'fortyTwo ^42'.
+	newClass class compile: 'fortyThree ^43'.
+
+	^ GtEpiceaEntriesGroup withAll: theMonitor log entries
+]
+
+{ #category : #'events generation' }
 GtEpHistoryGroupingExamples >> createMethodEventsWithNoImpactInNewClass [
 	<gtExample>
 	<after: #tearDown>
@@ -184,6 +198,29 @@ GtEpHistoryGroupingExamples >> testClassMoveBetweenPackagesWithByPackageGrouping
 		description: [ self descriptionMessage: 'mainPackageHistory hasNoEffect' histories: { mainPackageHistory } ].
 
 	^ packageHistories
+]
+
+{ #category : #examples }
+GtEpHistoryGroupingExamples >> testClassWithInstanceAndClassSideMethodsGrouping [
+	"The method histories of both sides of a class are in the history of the class:
+	the class-side methods have the class name with ' class' (removed to a String), the class histories are keyed by Symbols"
+
+	<gtExample>
+	<after: #tearDown>
+	<return: #GtEpiceaEntriesGroup>
+	<shouldLogWithEpicea>
+	| entries classHistories |
+	entries := self createClassWithInstanceAndClassSideMethodEvents.
+
+	classHistories := entries classHistories.
+	self
+		assert: classHistories size = 1
+		description: [ self descriptionMessage: 'classHistories size = 1' histories: classHistories items ].
+	self
+		assert: (classHistories items first methodHistories collect: [ :each | each targetMethod selector ]) asArray sort
+		equals: #(#fortyThree #fortyTwo).
+
+	^ entries
 ]
 
 { #category : #examples }
@@ -314,6 +351,32 @@ GtEpHistoryGroupingExamples >> testMoveExtensionMethodBetweetPackagesByPackageGr
 		description: [ 'methodHistoryInThirdPackage isLatestChangeRemoval not assertion failed' ].
 
 	^ entries
+]
+
+{ #category : #examples }
+GtEpHistoryGroupingExamples >> testPackageFilterWithTypedPackageName [
+	"The In Package filter of a log keeps the changes of the package typed in the filter bar:
+	the typed name is a String, the affected package names are Symbols"
+
+	<gtExample>
+	<after: #tearDown>
+	<return: #GtEpiceaLog>
+	<shouldLogWithEpicea>
+	| packageName log filter bySymbol byString |
+	self createClassWithInstanceAndClassSideMethodEvents.
+	packageName := (theMonitor log entries
+			detect: [ :each | each content isCodeChange ]) content affectedPackageName.
+
+	log := GtEpiceaLog new
+			log: theMonitor log;
+			yourself.
+	filter := log packageFilter creationBlock.
+	bySymbol := (filter cull: log entries asAsyncStream cull: packageName asSymbol) toArray wait.
+	byString := (filter cull: log entries asAsyncStream cull: packageName asString) toArray wait.
+
+	self assert: bySymbol notEmpty.
+	self assert: byString size equals: bySymbol size.
+	^ log
 ]
 
 { #category : #examples }
